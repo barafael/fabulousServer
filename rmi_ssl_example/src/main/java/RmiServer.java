@@ -1,4 +1,3 @@
-import javax.net.ssl.SSLServerSocket;
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 import java.io.IOException;
@@ -12,23 +11,14 @@ public class RmiServer
 
     private static final long serialVersionUID = 5186776461749320975L;
 
-     SSLServerSocket serverSocket;
-    boolean edit = true;
-    String address;
-    Registry registry;
+
     Sensor sen = new Sensor(1, new Integer[]{1, 2, 3, 4, 5});
 
     public void receiveMessage(String x) throws RemoteException {
         System.out.println(x);
     }
 
-    public boolean receiveObject(Sensor o) throws RemoteException {
-        System.out.println(o.attr);
-        return true;
-    }
-
     public void editSensor(int x, Integer[] i) {
-        this.edit=false;
         this.sen.setAttr(x);
         this.sen.array = i;
         System.out.println("set sen.array to: " + sen.printTheInt());
@@ -42,17 +32,7 @@ public class RmiServer
     public RmiServer() throws RemoteException, IOException {
 
         super(35444, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, true));
-
-        /*try{
-            address = (InetAddress.getLocalHost()).toString();
-        }
-        catch(Exception e){
-            System.out.println("can't get inet address.");
-        }*/
-        int port = 35444;
-        System.out.println("this address=" + ",port=" + port);
-
-
+        System.out.println("this address=IP ,port=35444");
     }
 
     @Override
@@ -68,30 +48,20 @@ public class RmiServer
 
             RmiServer server = new RmiServer();
 
-            LocateRegistry.createRegistry(port, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, true));
+            Registry registry =  LocateRegistry.createRegistry(port, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, true));
             System.out.println("RMI registry running on port " + port);
 
+           registry.rebind("rmiServer", server);
 
-            Registry registry = LocateRegistry.createRegistry(port);
-            registry.rebind("rmiServer", server);
-
-            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, port);
-
-            registry.rebind("ServerSensorStub", stub);
-
-        } catch (IOException e) {
-            System.out.println("remote exception" + e);
-        }
+           RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen,35445);
+           registry.rebind("ServerSensorStub", stub);
 
 
 
-/*
-        try {
-            RmiServer server = new RmiServer();
 
-            System.out.println("my Sensor attr is: " + server.sen.attr);
-            System.out.print("array is: "+server.sen.printTheInt());
-int i=0;
+
+
+            int i=0;
             while (true){
                 try {
                     Thread.sleep(3000);
@@ -102,11 +72,14 @@ int i=0;
                 server.editSensor(42, new Integer[]{42,42,i,42,42});
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+        } catch (IOException e) {
+            System.out.println("remote exception" + e);
         }
-        */
+
+
+
+
+
     }
 
     private static void setSettings() {
@@ -115,9 +88,9 @@ int i=0;
 
         System.setProperty("javax.net.ssl.debug", "all");
 
-        System.setProperty("javax.net.ssl.keyStore", "ssl/server-keystore.jks");
+        System.setProperty("javax.net.ssl.keyStore", "./ssl/keystore-server.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
-        System.setProperty("javax.net.ssl.trustStore", "ssl/client-truststore.jks");
+        System.setProperty("javax.net.ssl.trustStore", "./ssl/keystore-client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", pass);
 
 

@@ -6,7 +6,7 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 
 public class RmiClient {
-    //Sensor mySen = new Sensor(0,new Integer[]{0,0,0,0,0});
+    Sensor mySen = new Sensor(0,new Integer[]{0,0,0,0,0});
     RemoteSensorInterface myPointer;
 
     public RmiClient(String serverAddress,String serverPort){
@@ -17,7 +17,7 @@ public class RmiClient {
 
             setSettings();
 
-            registry = LocateRegistry.getRegistry("DAVE-PC", (new Integer(serverPort)).intValue(), new SslRMIClientSocketFactory());
+            registry = LocateRegistry.getRegistry(serverAddress, (new Integer(serverPort)).intValue(), new SslRMIClientSocketFactory());
 
 
 
@@ -28,7 +28,7 @@ public class RmiClient {
             rmiServer.receiveMessage(text); // test ob verbindung steht
 
 
-            System.out.println("listed ojects: "+Arrays.toString(registry.list()));
+            System.out.println("listed objects: "+Arrays.toString(registry.list()));
 
             //System.out.println("on startup: " + myPointer.printTheInt());
 
@@ -67,9 +67,9 @@ public class RmiClient {
 
         String pass = "password";
         System.setProperty("javax.net.ssl.debug", "all");
-        System.setProperty("javax.net.ssl.keyStore", "ssl/client-keystore.jks");
+        System.setProperty("javax.net.ssl.keyStore", "./ssl/keystore-client.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
-        System.setProperty("javax.net.ssl.trustStore", "ssl/server-truststore.jks");
+        System.setProperty("javax.net.ssl.trustStore", "./ssl/keystore-server.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", pass);
 
     }

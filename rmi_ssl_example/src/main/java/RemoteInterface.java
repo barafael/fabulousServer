@@ -7,9 +7,6 @@ public interface RemoteInterface
     void receiveMessage(String x)
             throws RemoteException;
 
-    boolean receiveObject(Sensor o)
-            throws RemoteException;
-
     void editSensor(int x, Integer[] i)
             throws RemoteException;
 
