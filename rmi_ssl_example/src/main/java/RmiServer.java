@@ -47,37 +47,30 @@ public class RmiServer
             setSettings();
 
             RmiServer server = new RmiServer();
-
-            Registry registry =  LocateRegistry.createRegistry(port, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, true));
+            SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
+            SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
+            Registry registry = LocateRegistry.createRegistry(port, csf, ssf);
             System.out.println("RMI registry running on port " + port);
 
-           registry.rebind("rmiServer", server);
+            registry.rebind("rmiServer", server);
 
-           RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen,35445);
-           registry.rebind("ServerSensorStub", stub);
+            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, 35444, csf,ssf); /* TODO: why different ports ? war vorher immer der gleiche*/
+            registry.rebind("ServerSensorStub", stub);
 
-
-
-
-
-
-            int i=0;
-            while (true){
+            int i = 0;
+            while (true) {
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 i++;
-                server.editSensor(42, new Integer[]{42,42,i,42,42});
+                server.editSensor(42, new Integer[]{42, 42, i, 42, 42});
             }
 
         } catch (IOException e) {
             System.out.println("remote exception" + e);
         }
-
-
-
 
 
     }
@@ -92,8 +85,6 @@ public class RmiServer
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
         System.setProperty("javax.net.ssl.trustStore", "./ssl/keystore-client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", pass);
-
-
 
 
     }
