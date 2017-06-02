@@ -6,46 +6,34 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 
 public class RmiClient {
-    Sensor mySen = new Sensor(0,new Integer[]{0,0,0,0,0});
+    Sensor mySen = new Sensor(0, new Integer[]{0, 0, 0, 0, 0});
     RemoteSensorInterface myPointer;
 
-    public RmiClient(String serverAddress,String serverPort){
+    public RmiClient(String serverAddress, int serverPort) {
         RemoteInterface rmiServer;
         Registry registry;
-        String text = "message";
+        String text = "# Some Text here #";
         try {
 
             setSettings();
 
-            registry = LocateRegistry.getRegistry(serverAddress, (new Integer(serverPort)).intValue(), new SslRMIClientSocketFactory());
+            registry = LocateRegistry.getRegistry(serverAddress, serverPort, new SslRMIClientSocketFactory());
 
-
-
-            //registry = LocateRegistry.getRegistry(serverAddress, (new Integer(serverPort)).intValue());
             rmiServer = (RemoteInterface) (registry.lookup("rmiServer"));
-            // call the remote method
+
             System.out.println("sending " + text + " to " + serverAddress + ":" + serverPort);
             rmiServer.receiveMessage(text); // test ob verbindung steht
 
 
-            System.out.println("listed objects: "+Arrays.toString(registry.list()));
-
-            //System.out.println("on startup: " + myPointer.printTheInt());
+            System.out.println("listed objects: " + Arrays.toString(registry.list()));
 
             myPointer = (RemoteSensorInterface) registry.lookup("ServerSensorStub");
-            System.out.println("after lookup: "+ myPointer.printTheInt());
-
-            //mySen = (Sensor) registry.lookup("ServerSensor");
-            //System.out.println("after lookup: " + mySen.printTheInt());
+            System.out.println("after lookup: " + myPointer.printTheInt());
 
             rmiServer.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
             System.out.println("after editSensor: " + myPointer.printTheInt());
 
-
-           // mySen = (Sensor) registry.lookup("ServerSensor");
-           // System.out.println("again lookup: " + mySen.printTheInt());
-
-            while (true){
+            while (true) {
                 try {
                     Thread.sleep(3000);
                     System.out.println("in loop: " + myPointer.printTheInt());
@@ -63,10 +51,11 @@ public class RmiClient {
 
 
     }
+
     private static void setSettings() {
 
         String pass = "password";
-        System.setProperty("javax.net.ssl.debug", "all");
+        //System.setProperty("javax.net.ssl.debug", "all");
         System.setProperty("javax.net.ssl.keyStore", "./ssl/keystore-client.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
         System.setProperty("javax.net.ssl.trustStore", "./ssl/keystore-server.jks");
@@ -75,10 +64,6 @@ public class RmiClient {
     }
 
     static public void main(String args[]) {
-
-
-        RmiClient client = new RmiClient("localhost","35444");
-
-
+        RmiClient client = new RmiClient("localhost", 35444);
     }
 }

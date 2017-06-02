@@ -29,10 +29,10 @@ public class RmiServer
         return this.sen;
     }
 
-    public RmiServer() throws RemoteException, IOException {
+    public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException, IOException {
 
-        super(35444, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, true));
-        System.out.println("this address=IP ,port=35444");
+        super(port, csf,ssf);
+        System.out.println("this address=IP ,port= "+port);
     }
 
     @Override
@@ -46,15 +46,17 @@ public class RmiServer
 
             setSettings();
 
-            RmiServer server = new RmiServer();
             SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
             SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
+
+            RmiServer server = new RmiServer(port,csf,ssf);
+
             Registry registry = LocateRegistry.createRegistry(port, csf, ssf);
             System.out.println("RMI registry running on port " + port);
 
             registry.rebind("rmiServer", server);
 
-            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, 35444, csf,ssf); /* TODO: why different ports ? war vorher immer der gleiche*/
+            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, port, csf,ssf);
             registry.rebind("ServerSensorStub", stub);
 
             int i = 0;
@@ -79,7 +81,7 @@ public class RmiServer
 
         String pass = "password";
 
-        System.setProperty("javax.net.ssl.debug", "all");
+       // System.setProperty("javax.net.ssl.debug", "all");
 
         System.setProperty("javax.net.ssl.keyStore", "./ssl/keystore-server.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
