@@ -1,0 +1,67 @@
+{ 
+  "Arg":"", 
+  "Results": [
+   { 
+    "Name":"global", 
+    "PossibleSets":"", 
+    "PossibleAttrs":"alias  userattr", 
+    "Internals": { 
+      "DEF": "no definition", 
+      "NAME": "global", 
+      "NR": "1", 
+      "STATE": "no definition", 
+      "TYPE": "Global", 
+      "currentlogfile": "./log/fhem-2017-05.log", 
+      "logfile": "./log/fhem-%Y-%m.log" 
+    }, 
+    "Readings": { }, 
+    "Attributes": { 
+      "autoload_undefined_devices": "1", 
+      "configfile": "fhem.cfg", 
+      "logfile": "./log/fhem-%Y-%m.log", 
+      "modpath": ".", 
+      "statefile": "./log/fhem.save", 
+      "updateInBackground": "1", 
+      "userattr": "cmdIcon coordX coordY devStateIcon devStateStyle icon sortby webCmd widgetOverride", 
+      "verbose": "3", 
+      "version": "fhem.pl:14348/2017-05-22" 
+    } 
+  }, 
+   { 
+    "Name":"mySchalter1", 
+    "PossibleSets":" ", 
+    "PossibleAttrs":"alias coordX coordY devStateIcon devStateStyle icon sortby webCmd widgetOverride userattr", 
+    "Internals": { 
+      "NAME": "mySchalter1", 
+      "NR": "24", 
+      "STATE": "off", 
+      "TYPE": "dummy" 
+    }, 
+    "Readings": {      "state": { "Value":"off", "Time":"2017-05-31 16:43:35" } }, 
+    "Attributes": { 
+      "coordX": "10", 
+      "coordY": "20", 
+      "room": "fablab" 
+    } 
+  }, 
+  { 
+    "Name":"telnetPort", 
+    "PossibleSets":"", 
+    "PossibleAttrs":"alias comment:textField-long userattr", 
+    "Internals": { 
+      "CONNECTS": "14", 
+      "DEF": "7072", 
+      "FD": "6", 
+      "NAME": "telnetPort", 
+      "NR": "3", 
+      "NTFY_ORDER": "50-telnetPort", 
+      "PORT": "7072", 
+      "STATE": "Initialized", 
+      "TYPE": "telnet" 
+    }, 
+    "Readings": { }, 
+    "Attributes": { } 
+  }
+  ], 
+  "totalResultsReturned":57 
+}
