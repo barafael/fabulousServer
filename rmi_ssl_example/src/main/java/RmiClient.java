@@ -10,7 +10,7 @@ public class RmiClient {
     RemoteSensorInterface myPointer;
 
     public RmiClient(String serverAddress, int serverPort) {
-        RemoteInterface rmiServer;
+        RemoteServerInterface rmiServer;
         Registry registry;
         String text = "# Some Text here #";
         try {
@@ -19,7 +19,7 @@ public class RmiClient {
 
             registry = LocateRegistry.getRegistry(serverAddress, serverPort, new SslRMIClientSocketFactory());
 
-            rmiServer = (RemoteInterface) (registry.lookup("rmiServer"));
+            rmiServer = (RemoteServerInterface) (registry.lookup("rmiServer"));
 
             System.out.println("sending " + text + " to " + serverAddress + ":" + serverPort);
             rmiServer.receiveMessage(text); // test ob verbindung steht

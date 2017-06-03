@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 
 public class RmiServer
         extends java.rmi.server.UnicastRemoteObject
-        implements RemoteInterface {
+        implements RemoteServerInterface {
 
     private static final long serialVersionUID = 5186776461749320975L;
 
@@ -15,7 +15,7 @@ public class RmiServer
     Sensor sen = new Sensor(1, new Integer[]{1, 2, 3, 4, 5});
 
     public void receiveMessage(String x) throws RemoteException {
-        System.out.println(x);
+        System.out.println("received message: " + x);
     }
 
     public void editSensor(int x, Integer[] i) {
@@ -31,8 +31,7 @@ public class RmiServer
 
     public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException, IOException {
 
-        super(port, csf,ssf);
-        System.out.println("this address=IP ,port= "+port);
+        super(port, csf, ssf);
     }
 
     @Override
@@ -49,14 +48,16 @@ public class RmiServer
             SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
             SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
 
-            RmiServer server = new RmiServer(port,csf,ssf);
+            RmiServer server = new RmiServer(port, csf, ssf);
 
             Registry registry = LocateRegistry.createRegistry(port, csf, ssf);
             System.out.println("RMI registry running on port " + port);
 
             registry.rebind("rmiServer", server);
 
-            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, port, csf,ssf);
+            RemoteSensorInterface stub = (RemoteSensorInterface) server.exportObject(server.sen, port, csf, ssf);
+
+
             registry.rebind("ServerSensorStub", stub);
 
             int i = 0;
@@ -81,7 +82,7 @@ public class RmiServer
 
         String pass = "password";
 
-       // System.setProperty("javax.net.ssl.debug", "all");
+        // System.setProperty("javax.net.ssl.debug", "all");
 
         System.setProperty("javax.net.ssl.keyStore", "./ssl/keystore-server.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);
