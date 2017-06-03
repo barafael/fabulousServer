@@ -2,7 +2,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * Created by jo on 03.06.17.
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 03.06.17
+ * this interface provides data access functionality to the clients
  */
 public interface SessionInterface extends Remote {
     void receiveMessage(String x)

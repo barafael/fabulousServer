@@ -2,7 +2,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- * Created by jo on 03.06.17.
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 03.06.17
+ * checks on user privileges and redirects to data access methods in RmiServer
  */
 public class Session implements SessionInterface {
 
@@ -11,9 +13,9 @@ public class Session implements SessionInterface {
     private ArrayList<String> privileges;
     private RmiServer server;
 
-    public  Session(User u, RmiServer s){
-        this.user=u;
-        this.server=s;
+    public Session(User u, RmiServer s) {
+        this.user = u;
+        this.server = s;
         //this.ID = TODO: database stuff
         //this.privileges
     }
@@ -23,9 +25,9 @@ public class Session implements SessionInterface {
         server.receiveMessage(x);
     }
 
-    public void editSensor(int x, Integer[] i) throws RemoteException{
+    public void editSensor(int x, Integer[] i) throws RemoteException {
         //TODO: check for user permission around calling method
-        server.editSensor(x,i);
+        server.editSensor(x, i);
     }
 
     public String printTheInt() throws RemoteException {

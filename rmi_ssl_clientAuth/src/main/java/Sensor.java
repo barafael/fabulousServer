@@ -1,20 +1,22 @@
 import java.util.Arrays;
 
 /**
- * Created by jo on 02.06.17.
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 03.06.17.
+ * some dummy sensor
  */
-public class Sensor{
+public class Sensor {
 
     public int attr;
     public Integer[] array;
 
-    public Sensor(int x, Integer[] a){
+    public Sensor(int x, Integer[] a) {
         this.attr = x;
         this.array = a;
     }
 
-    public void setAttr(int c){
-       this.attr=c;
+    public void setAttr(int c) {
+        this.attr = c;
     }
 
     public String printTheInt() {

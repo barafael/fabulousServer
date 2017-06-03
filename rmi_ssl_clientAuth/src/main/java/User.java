@@ -1,11 +1,15 @@
 /**
- * Created by jo on 03.06.17.
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 03.06.17.
+ * some dummy user
  */
 public class User {
     private String name;
+    private String password;
 
-    public User(String n){
-        this.name = n;
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
     }
 
     public String getPassword() {
@@ -15,8 +19,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    private String password;
 
     public String getName() {
         return name;
