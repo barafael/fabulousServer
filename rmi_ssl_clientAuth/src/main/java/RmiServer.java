@@ -1,5 +1,5 @@
 /* For SHA-256 implementation */
-//import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
@@ -18,13 +18,13 @@ public class RmiServer
     implements RemoteServerInterface {
 
     private static final long serialVersionUID = 5186776461749320975L;
-    public static final int port = 35444;
+    static final int port = 35444;
 
     private Sensor sen = new Sensor(1, new Integer[] {1, 2, 3, 4, 5});
     private static final SessionManager sessionManager = new SessionManager();
 
-    public static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
-    public static final SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
+    static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
+    static final SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
 
     public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException {
         super(port, csf, ssf);
@@ -32,17 +32,17 @@ public class RmiServer
         //setSettings();
     }
 
-    public void receiveMessage(String x) throws RemoteException {
+    void receiveMessage(String x) throws RemoteException {
         System.out.println("received message: " + x);
     }
 
-    public void editSensor(int x, Integer[] i) {
+    void editSensor(int x, Integer[] i) {
         this.sen.setAttr(x);
         this.sen.setArray(i);
         System.out.println("set sen.array to: " + sen.printTheInt());
     }
 
-    public String printTheInt() throws RemoteException {
+    String printTheInt() throws RemoteException {
         return this.sen.printTheInt();
     }
 
@@ -52,7 +52,7 @@ public class RmiServer
     public SessionInterface login(LoginRequest loginRequest) throws RemoteException {
         //TODO: get user object from database identified by _name_:username
         //TODO: create sha-1 of input password and compare it to database hash from user.getPassword()
-        //DigestUtils.sha256Hex("test");
+        String sha256 = DigestUtils.sha256Hex(loginRequest.getPassword());
         User user = new User(loginRequest.getLoginName(), loginRequest.getPassword());
 
         //TODO: user list needs to be accessed
@@ -91,7 +91,6 @@ public class RmiServer
             /* publish login-server on registry */
             registry.rebind("rmiServer", server);
 
-
             /* infinite loop for testing purpose */
             int i = 0;
             while (true) {
@@ -103,7 +102,6 @@ public class RmiServer
                 i++;
                 server.editSensor(42, new Integer[] {42, 42, i, 42, 42});
             }
-
         } catch (IOException e) {
             System.out.println("remote exception: " + e);
         }
@@ -112,7 +110,7 @@ public class RmiServer
     private static void setSettings() {
         //TODO:currently not used, instead used JVM arguments to pass those files (-> fix path and use again)
         String pass = "password";
-        // if there are errors containing network, activate following output debug rule
+        /* if there are errors containing network, activate following output debug rule */
         // System.setProperty("javax.net.ssl.debug", "all");
         System.setProperty("javax.net.ssl.keyStore", "../resources/ssl/keystore-server.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", pass);

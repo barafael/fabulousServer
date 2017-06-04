@@ -17,7 +17,6 @@ class RmiClient {
     private RemoteServerInterface myPointer;
     private SessionInterface mySession;
 
-
     public RmiClient(String serverAddress, int serverPort) {
         this.mySen = new Sensor(0, new Integer[] {0, 0, 0, 0, 0});
         try {
