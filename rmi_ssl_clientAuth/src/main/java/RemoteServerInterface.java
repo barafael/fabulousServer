@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 public interface RemoteServerInterface
         extends Remote {
 
-    SessionInterface login(String username, String password)
+    SessionInterface login(LoginRequest loginRequest)
             throws RemoteException;
 
     //TODO: register method

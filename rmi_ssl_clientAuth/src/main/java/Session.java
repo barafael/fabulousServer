@@ -16,7 +16,7 @@ public class Session implements SessionInterface {
     public Session(User u, RmiServer s) {
         this.user = u;
         this.server = s;
-        //this.ID = TODO: database stuff
+        //this.ID = TODO: set stuff
         //this.privileges
     }
 
@@ -33,5 +33,9 @@ public class Session implements SessionInterface {
     public String printTheInt() throws RemoteException {
         //TODO: check for user permission around calling method
         return server.printTheInt();
+    }
+
+    public User getUser(){
+        return this.user;
     }
 }

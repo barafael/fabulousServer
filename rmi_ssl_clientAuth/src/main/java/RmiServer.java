@@ -15,15 +15,17 @@ public class RmiServer
         implements RemoteServerInterface {
 
     private static final long serialVersionUID = 5186776461749320975L;
-    private static final int port = 35444;
+    public static final int port = 35444;
 
     private Sensor sen = new Sensor(1, new Integer[]{1, 2, 3, 4, 5});
+    private static final SessionManager sessionManager = new SessionManager(null);
 
-    private static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
-    private static final SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
+    public static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
+    public static final SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
 
     public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException, IOException {
         super(port, csf, ssf);
+
         //setSettings();
     }
 
@@ -44,29 +46,35 @@ public class RmiServer
     /*
         return ether a RMI_pointer to a valid session object to the calling client or throws some _Exceptions_
      */
-    public SessionInterface login(String u, String password) throws RemoteException {
-        boolean registeredUser = false;
-        //TODO: get user object from database identified by _name_:u
-        //TODO: catch already registerd users
+    public SessionInterface login(LoginRequest loginRequest) throws RemoteException {
+        //TODO: get user object from database identified by _name_:username
         //TODO: create sha-1 of input password and compare it to database hash from user.getPassword()
-        User user = new User("hans", "sonne123");
+        User user = new User(loginRequest.getLoginName(), loginRequest.getPassword());
 
-        if (u.equals(user.getName()) && password.equals(user.getPassword())) {
-            registeredUser = true;
-            System.out.println("credentials correct");
-        } else {
-            System.out.println("credentials invalid");
-        }
-
-        if (registeredUser) {
-            Session session = new Session(user, this);
-            SessionInterface session_stub = (SessionInterface) this.exportObject(session, port, csf, ssf);
-            System.out.println("successfully created Session for user: " + user.getName());
-            return session_stub;
+        //TODO: user list needs to be accessed
+        if (checkCredentials(loginRequest, user)) {
+            return sessionManager.getSession(user, this);
         } else {
             //TODO: throw special LoginException (easier to catch in client)
             throw new RemoteException("Username/Password incorrect. Rejected request!");
         }
+    }
+
+    private boolean checkCredentials(LoginRequest request, User user) {
+        if (request.getLoginName().equals(user.getName()) && request.getPassword().equals(user.getPassword())) {
+            System.out.println("credentials correct: " + user.getName());
+            return true;
+        } else {
+            System.out.println("credentials invalid: " + user.getName());
+            return false;
+        }
+    }
+
+    public SessionInterface register(RegisterRequest registerRequest) throws RemoteException {
+        User user = new User(registerRequest.getUsername(),registerRequest.getPassword());
+        //TODO: create user in database if not already registered
+        //TODO: if already registered throw AlreadyRegisteredException € RemoteException
+        return login(new LoginRequest(user.getName(), user.getPassword()));
     }
 
     static public void main(String args[]) {

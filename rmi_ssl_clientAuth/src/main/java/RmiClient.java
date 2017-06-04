@@ -35,7 +35,7 @@ public class RmiClient {
 
         System.out.println("called client login method");
 
-        this.mySession = (SessionInterface) this.myPointer.login(username, password);
+        this.mySession = (SessionInterface) this.myPointer.login(new LoginRequest(username, password));
         if (this.mySession != null) {
             System.out.println("got mySession!");
         } else {
@@ -55,37 +55,55 @@ public class RmiClient {
 
     static public void main(String args[]) throws RemoteException {
 
-        String message = "# Some Text here #";
-        System.out.println("trying to create client");
+        String message1 = "# Some Text1 here #";
+        String message2 = "# Some Text2 here #";
+        System.out.println("trying to create clients");
 
-        RmiClient client = new RmiClient("localhost", 35444);
+        RmiClient client1 = new RmiClient("localhost", 35444);
+        RmiClient client2 = new RmiClient("localhost", 35444);
 
         try {
             System.out.println("trying to login");
-            System.out.println("myPointer is: " + client.myPointer.toString());
+            System.out.println("myPointer1 is: " + client1.myPointer.toString());
+            System.out.println("myPointer2 is: " + client2.myPointer.toString());
 
-            client.login("hans", "sonne123");
+            client1.login("hans", "sonne123");
+            System.out.println("mySession is: "+client1.mySession.toString());
+            client2.login("dieter", "mond123");
+            System.out.println("mySession is: "+client2.mySession.toString());
 
-            System.out.println("sending " + message);
-            client.mySession.receiveMessage(message);
+            System.out.println("sending " + message1);
+            client1.mySession.receiveMessage(message1);
+            System.out.println("sending " + message2);
+            client1.mySession.receiveMessage(message2);
 
 
-            System.out.println("calling editSensor, status: " + client.mySession.printTheInt());
-            client.mySession.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
-            System.out.println("after editSensor: " + client.mySession.printTheInt());
+            System.out.println("calling editSensor, status1: " + client1.mySession.printTheInt());
+            client1.mySession.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
+            System.out.println("after editSensor: " + client1.mySession.printTheInt());
+            System.out.println("calling editSensor, status2: " + client2.mySession.printTheInt());
+            client2.mySession.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
+            System.out.println("after editSensor: " + client2.mySession.printTheInt());
 
             //infinite loop for testing purpose
             while (true) {
                 try {
-                    Thread.sleep(3000);
-                    System.out.println("in loop: " + client.mySession.printTheInt());
+                    Thread.sleep(2000);
+                    System.out.println("in loop1: " + client1.mySession.printTheInt());
+                    System.out.println("in loop2: " + client2.mySession.printTheInt());
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
 
         } catch (RemoteException e) {
-            System.out.println("login failed");
+            //TODO: differentiate various Exceptions
+            // noSuchObject -> session recycled
+            // LoginExceotion -> auth failure
+            System.out.println("login failed or connection lost");
+            e.printStackTrace();
         }
     }
 }
