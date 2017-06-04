@@ -1,9 +1,14 @@
 package parser.fhemJson;
 
-import java.util.HashMap;
-
 /**
  * @author Rafael
+ */
+
+/* Don't change attribute names! They are needed by Gson to parse jsonList2.
+   If you want to rename an attribute, annotate them with:
+
+  @SerializedName("oldname")
+
  */
 
 public class JsonList2 {
@@ -18,4 +23,9 @@ public class JsonList2 {
     public int getTotalResultsReturned() {
         return totalResultsReturned;
     }
+
+    public FHEMDevice[] getResults() {
+        return Results;
+    }
+
 }
