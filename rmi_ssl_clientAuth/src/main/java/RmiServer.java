@@ -1,3 +1,6 @@
+/* For SHA-256 implementation */
+//import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 import java.io.IOException;
@@ -18,12 +21,12 @@ public class RmiServer
     public static final int port = 35444;
 
     private Sensor sen = new Sensor(1, new Integer[]{1, 2, 3, 4, 5});
-    private static final SessionManager sessionManager = new SessionManager(null);
+    private static final SessionManager sessionManager = new SessionManager();
 
     public static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
     public static final SslRMIServerSocketFactory ssf = new SslRMIServerSocketFactory(null, null, true);
 
-    public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException, IOException {
+    public RmiServer(int port, SslRMIClientSocketFactory csf, SslRMIServerSocketFactory ssf) throws RemoteException {
         super(port, csf, ssf);
 
         //setSettings();
@@ -43,12 +46,13 @@ public class RmiServer
         return this.sen.printTheInt();
     }
 
-    /*
-        return ether a RMI_pointer to a valid session object to the calling client or throws some _Exceptions_
+    /**
+     * Return either an RMI_pointer to a valid session object to the calling client or throws some _Exceptions_
      */
     public SessionInterface login(LoginRequest loginRequest) throws RemoteException {
         //TODO: get user object from database identified by _name_:username
         //TODO: create sha-1 of input password and compare it to database hash from user.getPassword()
+        //DigestUtils.sha256Hex("test");
         User user = new User(loginRequest.getLoginName(), loginRequest.getPassword());
 
         //TODO: user list needs to be accessed
@@ -71,7 +75,7 @@ public class RmiServer
     }
 
     public SessionInterface register(RegisterRequest registerRequest) throws RemoteException {
-        User user = new User(registerRequest.getUsername(),registerRequest.getPassword());
+        User user = new User(registerRequest.getUsername(), registerRequest.getPassword());
         //TODO: create user in database if not already registered
         //TODO: if already registered throw AlreadyRegisteredException € RemoteException
         return login(new LoginRequest(user.getName(), user.getPassword()));
