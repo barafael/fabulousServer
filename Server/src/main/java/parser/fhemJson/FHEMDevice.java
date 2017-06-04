@@ -18,8 +18,6 @@ package parser.fhemJson;
 
 public class FHEMDevice {
     private String Name;
-    private String PossibleSets;
-    private String PossibleAttrs;
     private FHEMDeviceInternals Internals;
     private FHEMDeviceAttributes Attributes;
 
