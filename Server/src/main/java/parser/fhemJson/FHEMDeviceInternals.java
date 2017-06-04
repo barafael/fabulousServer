@@ -20,6 +20,7 @@ public class FHEMDeviceInternals {
     private String NAME;
     private String STATE;
     private String REGEXP;
+    private String TYPE;
     private String currentlogfile;
 
     Optional<String> getRegexpPrefix() {
@@ -29,8 +30,8 @@ public class FHEMDeviceInternals {
     Optional<String> getRegexpPrefix(char sep) {
         int index = REGEXP.indexOf(sep);
         if (index >= 0) {
-            REGEXP.subSequence(0, index);
-            return REGEXP != "" ? Optional.of(REGEXP) : Optional.empty();
+            String prefix = REGEXP.substring(0, index);
+            return prefix != "" ? Optional.of(prefix) : Optional.empty();
         } else {
             /* 'sep' not present */
             return Optional.empty();
