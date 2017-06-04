@@ -7,9 +7,11 @@ package parser.fhemJson;
 /* Don't change attribute names! They are needed by Gson to parse jsonList2.
    If you want to rename an attribute, annotate them with:
 
-  @SerializedName("oldname")
+   @SerializedName("oldname")
 
+   javac warns about unused elements because of gson.
  */
+@SuppressWarnings("unused")
 
 public class JsonList2 {
     private String Arg;
