@@ -31,7 +31,7 @@ public class FHEMDeviceInternals {
         int index = REGEXP.indexOf(sep);
         if (index >= 0) {
             String prefix = REGEXP.substring(0, index);
-            return prefix != "" ? Optional.of(prefix) : Optional.empty();
+            return prefix.equals("") ? Optional.empty() : Optional.of(prefix);
         } else {
             /* 'sep' not present */
             return Optional.empty();
