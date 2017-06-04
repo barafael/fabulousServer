@@ -14,6 +14,9 @@ import java.util.HashMap;
  */
 @SuppressWarnings("unused")
 
-class FHEMDeviceReadings {
-
+class FHEMDeviceAttributes {
+    private String coordX;
+    private String coordY;
+    private String model;
+    private String room;
 }
