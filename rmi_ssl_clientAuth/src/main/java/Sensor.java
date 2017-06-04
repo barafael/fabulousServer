@@ -5,10 +5,10 @@ import java.util.Arrays;
  * @date 03.06.17.
  * some dummy sensor
  */
-public class Sensor {
+class Sensor {
+    private int attr;
 
-    public int attr;
-    public Integer[] array;
+    private Integer[] array;
 
     public Sensor(int x, Integer[] a) {
         this.attr = x;
@@ -17,6 +17,10 @@ public class Sensor {
 
     public void setAttr(int c) {
         this.attr = c;
+    }
+
+    public void setArray(Integer[] array) {
+        this.array = array;
     }
 
     public String printTheInt() {

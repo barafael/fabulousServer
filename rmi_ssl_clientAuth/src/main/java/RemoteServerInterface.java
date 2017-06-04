@@ -6,11 +6,11 @@ import java.rmi.RemoteException;
  * @date 03.06.17.
  * this interface provides login functionality to the clients
  */
-public interface RemoteServerInterface
-        extends Remote {
+interface RemoteServerInterface
+    extends Remote {
 
     SessionInterface login(LoginRequest loginRequest)
-            throws RemoteException;
+    throws RemoteException;
 
     //TODO: register method
 

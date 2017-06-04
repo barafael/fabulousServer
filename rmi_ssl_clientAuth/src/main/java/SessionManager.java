@@ -30,7 +30,7 @@ public class SessionManager {
     public SessionInterface getSession(User user, RmiServer server) throws RemoteException {
         Session session;
         Optional<Session> matchingSession = sessions.stream()
-                .filter(s -> s.getUser().getName().equals(user.getName())).findAny();
+                                            .filter(s -> s.getUser().getName().equals(user.getName())).findAny();
         //TODO:
         if (matchingSession.isPresent()) {
             session = matchingSession.get();
@@ -47,7 +47,8 @@ public class SessionManager {
             System.out.println("successfully created new Session for user: " + user.getName());
         }
 
-        return (SessionInterface) server.exportObject(session, server.port, server.csf, server.ssf);
+        return (SessionInterface) UnicastRemoteObject.exportObject
+               (session, RmiServer.port, RmiServer.csf, RmiServer.ssf);
 
     }
 }

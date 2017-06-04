@@ -1,4 +1,4 @@
-group 'de.uni-passau.mesp'
+group 'de.uni-passau.mesp' // TODO unify groupids
 version '0.1.0-SNAPSHOT'
 
 apply plugin: 'java'

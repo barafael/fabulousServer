@@ -35,7 +35,7 @@ public class Session implements SessionInterface {
         return server.printTheInt();
     }
 
-    public User getUser(){
+    public User getUser() {
         return this.user;
     }
 }

@@ -8,11 +8,11 @@ import java.rmi.RemoteException;
  */
 public interface SessionInterface extends Remote {
     void receiveMessage(String x)
-            throws RemoteException;
+    throws RemoteException;
 
     void editSensor(int x, Integer[] i)
-            throws RemoteException;
+    throws RemoteException;
 
     String printTheInt()
-            throws RemoteException;
+    throws RemoteException;
 }

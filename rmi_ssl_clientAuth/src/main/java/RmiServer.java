@@ -14,13 +14,13 @@ import java.rmi.registry.Registry;
  * main RMIserver, publishes login functionality over a RMI_Register
  */
 public class RmiServer
-        extends java.rmi.server.UnicastRemoteObject
-        implements RemoteServerInterface {
+    extends java.rmi.server.UnicastRemoteObject
+    implements RemoteServerInterface {
 
     private static final long serialVersionUID = 5186776461749320975L;
     public static final int port = 35444;
 
-    private Sensor sen = new Sensor(1, new Integer[]{1, 2, 3, 4, 5});
+    private Sensor sen = new Sensor(1, new Integer[] {1, 2, 3, 4, 5});
     private static final SessionManager sessionManager = new SessionManager();
 
     public static final SslRMIClientSocketFactory csf = new SslRMIClientSocketFactory();
@@ -38,7 +38,7 @@ public class RmiServer
 
     public void editSensor(int x, Integer[] i) {
         this.sen.setAttr(x);
-        this.sen.array = i;
+        this.sen.setArray(i);
         System.out.println("set sen.array to: " + sen.printTheInt());
     }
 
@@ -88,11 +88,11 @@ public class RmiServer
             Registry registry = LocateRegistry.createRegistry(port, csf, ssf);
             System.out.println("RMI registry running on port " + port);
 
-            //publish login-server on registry
+            /* publish login-server on registry */
             registry.rebind("rmiServer", server);
 
 
-            //infinite loop for testing purpose
+            /* infinite loop for testing purpose */
             int i = 0;
             while (true) {
                 try {
@@ -101,7 +101,7 @@ public class RmiServer
                     e.printStackTrace();
                 }
                 i++;
-                server.editSensor(42, new Integer[]{42, 42, i, 42, 42});
+                server.editSensor(42, new Integer[] {42, 42, i, 42, 42});
             }
 
         } catch (IOException e) {

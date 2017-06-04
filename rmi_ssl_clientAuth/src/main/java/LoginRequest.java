@@ -4,7 +4,7 @@ import java.io.Serializable;
  * @author Johannes Köstler <github@johanneskoestler.de>
  * @date 04.06.17.
  */
-public class LoginRequest implements Serializable{
+class LoginRequest implements Serializable {
 
     private String loginName;
     private String password;

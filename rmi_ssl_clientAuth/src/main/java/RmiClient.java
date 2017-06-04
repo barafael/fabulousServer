@@ -9,33 +9,32 @@ import java.util.Arrays;
  * @author Johannes Köstler <github@johanneskoestler.de>
  * @date 03.06.17.
  * tries to connect to RMIserver and invokes login with test user
- * after successfull login it calls data access functions on server
+ * after successful login it calls data access functions on server
  */
-public class RmiClient {
+class RmiClient {
+    static final private int SERVER_PORT = 35444;
     private Sensor mySen;
     private RemoteServerInterface myPointer;
     private SessionInterface mySession;
 
 
     public RmiClient(String serverAddress, int serverPort) {
-        this.mySen = new Sensor(0, new Integer[]{0, 0, 0, 0, 0});
+        this.mySen = new Sensor(0, new Integer[] {0, 0, 0, 0, 0});
         try {
             //setSettings();
             Registry registry = LocateRegistry.getRegistry(serverAddress, serverPort, new SslRMIClientSocketFactory());
             System.out.println(Arrays.toString(registry.list()));
             this.myPointer = (RemoteServerInterface) (registry.lookup("rmiServer"));
-        } catch (RemoteException e) {
+        } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
-        } catch (NotBoundException e) {
-            System.err.println(e);
         }
     }
 
-    public void login(String username, String password) throws RemoteException {
+    private void login(String username, String password) throws RemoteException {
 
         System.out.println("called client login method");
 
-        this.mySession = (SessionInterface) this.myPointer.login(new LoginRequest(username, password));
+        this.mySession = this.myPointer.login(new LoginRequest(username, password));
         if (this.mySession != null) {
             System.out.println("got mySession!");
         } else {
@@ -59,8 +58,8 @@ public class RmiClient {
         String message2 = "# Some Text2 here #";
         System.out.println("trying to create clients");
 
-        RmiClient client1 = new RmiClient("localhost", 35444);
-        RmiClient client2 = new RmiClient("localhost", 35444);
+        RmiClient client1 = new RmiClient("localhost", SERVER_PORT);
+        RmiClient client2 = new RmiClient("localhost", SERVER_PORT);
 
         try {
             System.out.println("trying to login");
@@ -79,13 +78,13 @@ public class RmiClient {
 
 
             System.out.println("calling editSensor, status1: " + client1.mySession.printTheInt());
-            client1.mySession.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
+            client1.mySession.editSensor(66, new Integer[] {6, 6, 6, 6, 6});
             System.out.println("after editSensor: " + client1.mySession.printTheInt());
             System.out.println("calling editSensor, status2: " + client2.mySession.printTheInt());
-            client2.mySession.editSensor(66, new Integer[]{6, 6, 6, 6, 6});
+            client2.mySession.editSensor(66, new Integer[] {6, 6, 6, 6, 6});
             System.out.println("after editSensor: " + client2.mySession.printTheInt());
 
-            //infinite loop for testing purpose
+            /* infinite loop for testing purpose */
             while (true) {
                 try {
                     Thread.sleep(2000);
@@ -101,7 +100,7 @@ public class RmiClient {
         } catch (RemoteException e) {
             //TODO: differentiate various Exceptions
             // noSuchObject -> session recycled
-            // LoginExceotion -> auth failure
+            // LoginException -> auth failure
             System.out.println("login failed or connection lost");
             e.printStackTrace();
         }

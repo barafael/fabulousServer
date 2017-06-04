@@ -4,7 +4,7 @@ import java.io.Serializable;
  * @author Johannes Köstler <github@johanneskoestler.de>
  * @date 03.06.17.
  */
-public class RegisterRequest implements Serializable {
+class RegisterRequest implements Serializable {
     private String username;
     private String password;
     private String firstName;
