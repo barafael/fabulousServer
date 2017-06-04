@@ -32,9 +32,8 @@ public class FHEMParser {
         builder.setPrettyPrinting();
 
         Gson gson = builder.create();
-        JsonList2 list = gson.fromJson(jsonString, JsonList2.class);
 
-        return list;
+        return gson.fromJson(jsonString, JsonList2.class);
 
     }
 }

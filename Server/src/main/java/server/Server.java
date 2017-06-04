@@ -12,9 +12,9 @@ import parser.fhemJson.*;
 /**
  * Created by Rafael on 31.05.17.
  */
-public class Server {
+class Server {
 
-    private static FHEMParser parser = FHEMParser.getInstance();
+    private static final FHEMParser parser = FHEMParser.getInstance();
 
     public static void main(String[] args) {
 
