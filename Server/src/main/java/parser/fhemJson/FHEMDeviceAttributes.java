@@ -1,5 +1,9 @@
 package parser.fhemJson;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Optional;
+
 /**
  * Created by ra on 02.06.17.
  * This class represents the relevant attributes of the
@@ -19,7 +23,15 @@ class FHEMDeviceAttributes {
     private String coordX;
     private String coordY;
     private String model;
-    private String room;
+    @SerializedName("room") // More than one room is possible!
+    private String rooms;
     private String name_in_app;
     private String subType;
+
+    public Optional<String> getRooms() {
+        if (rooms != null) {
+            return Optional.of(rooms);
+        }
+        return Optional.empty();
+    }
 }
