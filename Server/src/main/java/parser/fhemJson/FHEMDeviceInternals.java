@@ -42,4 +42,11 @@ public class FHEMDeviceInternals {
     Optional<String> getCurrentLogfileField() {
         return currentlogfile != null ? Optional.of(currentlogfile) : Optional.empty();
     }
+
+    public Optional<String> getType() {
+        if (TYPE != null) {
+            return Optional.of(TYPE);
+        }
+        return Optional.empty();
+    }
 }
