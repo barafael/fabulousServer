@@ -19,7 +19,6 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public class FHEMDeviceInternals {
     private String DEF;
-    private String NAME;
     private String STATE;
     private String REGEXP;
     private String TYPE;
