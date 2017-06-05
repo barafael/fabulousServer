@@ -27,11 +27,29 @@ class FHEMDeviceAttributes {
     private String rooms;
     private String name_in_app;
     private String subType;
+    private String permissions = "";
 
     public Optional<String> getRooms() {
         if (rooms != null) {
             return Optional.of(rooms);
         }
         return Optional.empty();
+    }
+
+    int getCoordX() {
+        if (coordX == null) coordX = "0";
+        if (coordX.isEmpty()) coordX = "0";
+        return Integer.parseInt(coordX);
+    }
+
+    int getCoordY() {
+        if (coordY == null) coordY = "0";
+        if (coordY.isEmpty()) coordY = "0";
+        return Integer.parseInt(coordY);
+    }
+
+    /* Name because getPermissions() sounds weird */
+    public String getPermissionField() {
+        return permissions;
     }
 }

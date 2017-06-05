@@ -21,6 +21,11 @@ class Server {
             String jsonString = new String(Files.readAllBytes(Paths.get("jsonList2.json")));
             JsonList2 list = parser.parse(jsonString);
 
+            for (FHEMDevice d : list.getResults().get()) {
+                d.isSensor();
+                System.out.println(d.getName());
+                System.out.println(d.isFileLog());
+            }
             /* The other way around - just for testing.
             *  (Convert objects to json again and print)
             * */

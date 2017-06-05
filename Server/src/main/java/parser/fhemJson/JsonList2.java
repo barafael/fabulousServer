@@ -1,5 +1,9 @@
 package parser.fhemJson;
 
+import FHEMModel.Model;
+import FHEMModel.sensors.Room;
+
+import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -47,5 +51,21 @@ public class JsonList2 {
     // possible fix: clone
     public Optional<FHEMDevice[]> getResults() {
         return Results == null ? Optional.empty() : Optional.of(Results);
+    }
+
+    public Model toFHEMModel() {
+        HashSet<FHEMSensor> sensors = new HashSet<>();
+        HashSet<Room> rooms = new HashSet<>();
+        HashSet<FHEMFileLog> filelogs = new HashSet<>();
+
+        for (FHEMDevice d : Results) {
+            boolean isSensor = d.isSensor();
+            boolean isFileLog = d.isFileLog();
+            /* Either it is one of filelog or sensor, or it is neither */
+            assert (isSensor ^ isFileLog) | (!isFileLog && !isSensor);
+
+        }
+        //TODO parse sensors and logs, link them, and then map parseToLog/parseToSensor on each entry
+        return null;
     }
 }
