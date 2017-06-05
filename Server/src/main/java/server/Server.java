@@ -17,9 +17,8 @@ class Server {
     private static final FHEMParser parser = FHEMParser.getInstance();
 
     public static void main(String[] args) {
-
         try {
-            String jsonString = new String(Files.readAllBytes(Paths.get("temp.json")));
+            String jsonString = new String(Files.readAllBytes(Paths.get("jsonList2.json")));
             JsonList2 list = parser.parse(jsonString);
 
             /* The other way around - just for testing.
