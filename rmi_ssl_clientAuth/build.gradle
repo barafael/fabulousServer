@@ -2,8 +2,9 @@ group 'MES-Praktikum'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
-
-sourceCompatibility = 1.8
+  compileJava {
+  sourceCompatibility = '1.8'
+}
 
 repositories {
     mavenCentral()
@@ -15,3 +16,11 @@ dependencies {
     compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
 
 }
+
+task compileOne (type: JavaCompile) {
+    source = sourceSets.main.java
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+}
+
+compileOne.options.compilerArgs = ["-sourcepath", "$projectDir/src/main/java"]
