@@ -20,4 +20,6 @@ class FHEMDeviceAttributes {
     private String coordY;
     private String model;
     private String room;
+    private String name_in_app;
+    private String subType;
 }
