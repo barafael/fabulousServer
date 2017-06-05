@@ -1,0 +1,11 @@
+Um einen Sensor in FHEM einzubinden, muss dieser (zum Beispiel über das Web-Frontend)  angelernt werden. Dabei ist das FHEM-Wiki normalerweise ein bisschen hilfreich.
+
+Um den Sensor danach von der App aus bedienen zu können, muss man noch einige Attribute setzen und Einstellungen vornehmen. Das hängt damit zusammen, dass FHEM eine sehr allgemeine Sicht auf Sensoren, Aktuatoren und Logs hat. So ist z.B. ein telnet-login für FHEM ein device, genauso wie ein Log.
+
+Einen Sensor zur App hinzufügen (nach dem Anlernen in FHEM):
+* Attribute coordY und coordX setzen
+* Den Sensor zum room 'app' hinzufügen
+* Das Attribut name_in_app setzen
+
+Ein FileLog zur App exportieren
+* Nach der Definition in FHEM sollte die Zeitreihe nur einen Zahlenwert pro Sample enthalten.
