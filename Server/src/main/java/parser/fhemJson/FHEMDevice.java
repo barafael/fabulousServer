@@ -2,11 +2,19 @@ package parser.fhemJson;
 
 import FHEMModel.sensors.Sensor;
 import FHEMModel.timeserie.Timeserie;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import javax.swing.text.html.Option;
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @author Rafael
@@ -32,9 +40,11 @@ public class FHEMDevice {
     private FHEMDeviceAttributes Attributes;
 
     /* Class Attributes */
-    private HashSet<FHEMDevice> linkedDevices;
+    private HashSet<FHEMDevice> linkedDevices = new HashSet<>();
     /* Used to give filelogs and sensors an ID */
     private static long IDCounter = 0;
+    /* Only ever valid for FileLog devices */
+    private String linkedSensorName;
 
     public String getName() {
         return Name;
@@ -121,14 +131,59 @@ public class FHEMDevice {
         if (!isFileLog()) {
             return Optional.empty();
         }
+        if (!getInternals().getRegexpPrefix().isPresent()) {
+            System.err.println("FileLog has no REGEXP prefix: " + getName());
+        }
         Optional<String> path_opt = Internals.getCurrentLogfileField();
         if (path_opt.isPresent()) {
             String path = path_opt.get();
             path = "log/HM_521A72_brightness-2017-06.log"; // TODO remove this mock later (when running on pi)
-            return Optional.of(
-                    new Timeserie(path)
-            );
+            List<String> lines;
+            try  {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+                lines = new ArrayList<>();
+
+                String line;
+                while((line = bufferedReader.readLine()) != null) {
+                    lines.add(line);
+                }
+                bufferedReader.close();
+
+                /*Optional<String> firstline_opt = flog.findFirst();
+                if (!firstline_opt.isPresent()) {
+                    System.err.println("Encountered empty FileLog: " + path);
+                }
+                String sensorname = firstline_opt.get().split(" ")[1];
+                linkedSensorName = sensorname;
+                */
+                return Optional.of(
+                        new Timeserie(lines, isShowInApp()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
         }
         return Optional.empty();
     }
+
+    boolean associate(FHEMDevice fhemDevice) {
+        return linkedDevices.add(fhemDevice);
+    }
+
+    boolean isLinked(FHEMDevice device) {
+        return linkedDevices.contains(device);
+    }
+
+    boolean associate(Collection<FHEMDevice> linkedFilelogs) {
+        return linkedDevices.addAll(linkedFilelogs);
+    }
+
+    public FHEMDeviceAttributes getAttributes() {
+        return Attributes;
+    }
+
+    // public Optional<String> getLinkedSensorname() {
+    //     Optional<String> regexprefix = Internals.getRegexpPrefix(':');
+    //     Optional
+    // }
 }

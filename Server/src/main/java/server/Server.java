@@ -10,7 +10,7 @@ import parser.FHEMParser;
 import parser.fhemJson.*;
 
 /**
- * Created by Rafael on 31.05.17.
+ * Created by @author Rafael on 31.05.17.
  */
 class Server {
 
@@ -22,15 +22,18 @@ class Server {
             JsonList2 list = parser.parse(jsonString);
 
             for (FHEMDevice d : list.getResults().get()) {
-                d.isSensor();
-                System.out.println(d.getName());
-                System.out.println(d.isFileLog());
+
+                // System.out.println(d.isSensor());
+                // System.out.println(d.getName());
+                // System.out.println(d.isFileLog());
             }
             /* The other way around - just for testing.
             *  (Convert objects to json again and print)
             * */
-            Gson gson = new Gson();
-            System.out.println(gson.toJson(list));
+            // Gson gson = new Gson();
+            // System.out.println(gson.toJson(list));
+
+            list.toFHEMModel();
         } catch (IOException e) {
             e.printStackTrace();
         }

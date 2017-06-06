@@ -35,7 +35,7 @@ public class FHEMDeviceInternals {
             return prefix.equals("") ? Optional.empty() : Optional.of(prefix);
         } else {
             /* 'sep' not present */
-            return Optional.empty();
+            return Optional.of(REGEXP);
         }
     }
 

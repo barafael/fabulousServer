@@ -23,11 +23,13 @@ class FHEMDeviceAttributes {
     private String coordX;
     private String coordY;
     private String model;
-    @SerializedName("room") // More than one room is possible!
+    /* More than one room is possible! */
+    @SerializedName("room")
     private String rooms;
     private String name_in_app;
     private String subType;
-    private String permissions = "";
+    private String permissions;
+    private String alias;
 
     public Optional<String> getRooms() {
         if (rooms != null) {
@@ -49,7 +51,7 @@ class FHEMDeviceAttributes {
     }
 
     /* Name because getPermissions() sounds weird */
-    public String getPermissionField() {
+    String getPermissionField() {
         return permissions;
     }
 }
