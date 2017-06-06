@@ -98,13 +98,12 @@ public class JsonList2 {
         }
 
         HashSet<Sensor> realSensors;
-        HashSet<Timeserie> realTimeserie;
+        HashSet<Timeserie> realTimeseries;
 
         realSensors = sensors.stream().map(FHEMDevice::parseToSensor)
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
-        realTimeserie = filelogs.stream().map(FHEMDevice::parseToLog)
+        realTimeseries = filelogs.stream().map(FHEMDevice::parseToLog)
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
-
 
         Gson gson = new Gson();
 
@@ -113,11 +112,11 @@ public class JsonList2 {
         System.out.println();
         System.out.println();
 
-        System.out.println("All filelogs: " + gson.toJson(realTimeserie));
+        System.out.println("All filelogs: " + gson.toJson(realTimeseries));
 
         // System.out.println(gson.toJson(gson));
 
-        /* TODO parse sensors and logs, link them, and then map parseToLog/parseToSensor on each entry */
-        return null;
+        //TODO find a way to do rooms
+        return new Model(realSensors, null, realTimeseries);
     }
 }
