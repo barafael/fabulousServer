@@ -14,3 +14,9 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version:'2.7'
     compile 'com.intellij:annotations:+@jar'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'server/Server'
+    }
+}
