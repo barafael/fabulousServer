@@ -3,14 +3,10 @@ package FHEMModel.timeserie;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import FHEMModel.sensors.Sensor;
-import com.sun.istack.internal.NotNull;
-import parser.fhemJson.FHEMDevice;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.

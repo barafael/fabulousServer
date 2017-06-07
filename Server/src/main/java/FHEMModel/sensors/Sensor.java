@@ -1,11 +1,9 @@
 package FHEMModel.sensors;
 
 import FHEMModel.timeserie.Timeserie;
-import parser.fhemJson.FHEMDevice;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Optional;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.

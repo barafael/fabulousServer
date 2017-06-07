@@ -1,7 +1,5 @@
 package server;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,7 +8,7 @@ import parser.FHEMParser;
 import parser.fhemJson.*;
 
 /**
- * Created by @author Rafael on 31.05.17.
+ * @author Rafael on 31.05.17.
  */
 class Server {
 
