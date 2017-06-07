@@ -34,7 +34,7 @@ public class Timeserie {
         filelog.forEach(l -> samples.add(this.parseSample(l)));
     }
 
-    Sample parseSample(String line) {
+    private Sample parseSample(String line) {
         String[] items = line.split(" ");
         double value = Double.parseDouble(items[3]);
         LocalDateTime dateTime = LocalDateTime.parse(items[0], formatter);

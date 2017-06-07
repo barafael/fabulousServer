@@ -34,11 +34,11 @@ public class JsonList2 {
     /**
      * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...)
      **/
-    private String Arg = "";
+    private final String Arg = "";
     /**
      * List of all defined FHEM devices matching devicespec (if given; else all of them)
      **/
-    private FHEMDevice[] Results = null;
+    private final FHEMDevice[] Results = null;
     /**
      * Number of devices in FHEM matching the <devicespec> (or all of them if empty)
      **/

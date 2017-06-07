@@ -32,7 +32,7 @@ public class FHEMDevice {
     private FHEMDeviceAttributes Attributes;
 
     /* Class Attributes */
-    private HashSet<FHEMDevice> linkedDevices = new HashSet<>();
+    private final HashSet<FHEMDevice> linkedDevices = new HashSet<>();
     /* Used to give filelogs and sensors an ID */
     private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */

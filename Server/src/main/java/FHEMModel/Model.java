@@ -11,9 +11,9 @@ import java.util.HashSet;
  */
 
 public class Model {
-    private HashSet<Sensor> sensors;
-    private HashSet<Room> rooms;
-    private HashSet<Timeserie> timeseries;
+    private final HashSet<Sensor> sensors;
+    private final HashSet<Room> rooms;
+    private final HashSet<Timeserie> timeseries;
 
     public Model(HashSet<Sensor> sensors, HashSet<Room> rooms, HashSet<Timeserie> timeseries) {
         this.sensors = sensors;

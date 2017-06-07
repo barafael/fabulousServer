@@ -7,7 +7,7 @@ import java.io.File;
  * @author Rafael
  */
 
-public class SVGRoomPlan extends File {
+class SVGRoomPlan extends File {
     public SVGRoomPlan(String path) {
         super(path);
         if (!path.endsWith(".svg")) {
