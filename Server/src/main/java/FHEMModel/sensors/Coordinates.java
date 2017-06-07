@@ -45,4 +45,10 @@ public class Coordinates {
         return coordX == that.coordX && coordY == that.coordY;
     }
 
+    @Override
+    public int hashCode() {
+        int result = coordX;
+        result = 31 * result + coordY;
+        return result;
+    }
 }
