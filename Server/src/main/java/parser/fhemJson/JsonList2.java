@@ -53,6 +53,7 @@ public class JsonList2 {
     //TODO do not ever pass out a pointer to a mutable internal structure (in production).
     // possible fix: clone
     public Optional<FHEMDevice[]> getResults() {
+        /* Ignore static analysis here - Results is populated by gson when generating a FHEM model */
         return Results == null ? Optional.empty() : Optional.of(Results);
     }
 
@@ -61,6 +62,7 @@ public class JsonList2 {
         HashSet<Room> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
+        /* Ignore static analysis: Results is populated by gson */
         for (FHEMDevice d : Results) {
             boolean isSensor = d.isSensor();
             boolean isFileLog = d.isFileLog();

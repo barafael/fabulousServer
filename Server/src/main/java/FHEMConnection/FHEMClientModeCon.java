@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
- * Created by @author Rafael on 09.06.17.
+ * @author Rafael on 09.06.17.
  */
 public class FHEMClientModeCon implements FHEMConnection {
     @Override

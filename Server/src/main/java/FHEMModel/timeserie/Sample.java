@@ -31,8 +31,7 @@ class Sample {
 
         Sample sample = (Sample) o;
 
-        if (Double.compare(sample.value, value) != 0) return false;
-        return date.equals(sample.date);
+        return Double.compare(sample.value, value) == 0 && date.equals(sample.date);
     }
 
     @Override

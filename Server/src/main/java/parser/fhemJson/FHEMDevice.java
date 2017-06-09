@@ -172,9 +172,4 @@ public class FHEMDevice {
     public FHEMDeviceAttributes getAttributes() {
         return Attributes;
     }
-
-    // public Optional<String> getLinkedSensorname() {
-    //     Optional<String> regexprefix = Internals.getRegexpPrefix(':');
-    //     Optional
-    // }
 }
