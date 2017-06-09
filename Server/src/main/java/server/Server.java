@@ -18,14 +18,11 @@ class Server {
 
     public static void main(String[] args) {
         FHEMConnection fhc = new FHEMClientModeCon();
-        String jsonList2;
+        String jsonList2 = "";
         try {
-            jsonList2 = fhc.getJsonList2();
-            System.out.println(jsonList2);
+            jsonList2 = fhc.getJsonList2(7072, "/opt/fhem/fhem.pl");
         } catch (IOException e) {
             e.printStackTrace();
-            jsonList2 = ""; // TODO find a way around this atrocity
-
         }
         JsonList2 list = parser.parse(jsonList2);
 

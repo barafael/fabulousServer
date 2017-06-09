@@ -2,6 +2,7 @@ package parser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.jetbrains.annotations.NotNull;
 import parser.fhemJson.JsonList2;
 
 /**
@@ -29,13 +30,12 @@ public class FHEMParser {
        return FHEMParser.instance;
     }
 
-    public JsonList2 parse(String jsonString) {
+    public @NotNull JsonList2 parse(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
 
         Gson gson = builder.create();
 
         return gson.fromJson(jsonString, JsonList2.class);
-
     }
 }

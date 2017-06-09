@@ -16,18 +16,27 @@ public class FHEMClientModeCon implements FHEMConnection {
 
     @Override
     public String getJsonList2(int port, String pathToPl) throws IOException {
-        Runtime rt = Runtime.getRuntime();
-        String[] commands = {"perl", pathToPl, "localhost:" + port, "jsonList2"};
-        Process proc = rt.exec(commands);
+        String[] command = {"perl", pathToPl, "localhost:" + port, "jsonList2"};
 
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(proc.getInputStream()));
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec(command);
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+
+        BufferedReader stderr = new BufferedReader(new
+                InputStreamReader(process.getErrorStream()));
+
         String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = stdInput.readLine()) != null) {
-            sb.append(line);
+        StringBuilder stringBuilder = new StringBuilder();
+        while ((line = stdin.readLine()) != null) {
+            stringBuilder.append(line);
         }
-        return sb.toString();
+        StringBuilder error = new StringBuilder();
+        while ((line = stderr.readLine()) != null) {
+            error.append(line);
+        }
+        System.out.println(error);
+        return stdin.toString();
     }
 
     @Override
