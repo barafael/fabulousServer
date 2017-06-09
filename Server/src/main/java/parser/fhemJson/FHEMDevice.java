@@ -129,7 +129,6 @@ public class FHEMDevice {
         Optional<String> path_opt = Internals.getCurrentLogfileField();
         if (path_opt.isPresent()) {
             String path = path_opt.get();
-            path = "log/HM_521A72_brightness-2017-06.log"; // TODO remove this mock later (when running on pi)
             List<String> lines;
             try  {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(path));

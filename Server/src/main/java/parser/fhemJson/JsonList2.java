@@ -28,8 +28,6 @@ import java.util.stream.Collectors;
    javac warns about unused elements because of gson.
  */
 
-@SuppressWarnings("unused")
-
 public class JsonList2 {
     /**
      * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...)
