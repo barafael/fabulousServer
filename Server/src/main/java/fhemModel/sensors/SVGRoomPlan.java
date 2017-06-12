@@ -1,4 +1,4 @@
-package FHEMModel.sensors;
+package fhemModel.sensors;
 
 import java.io.File;
 

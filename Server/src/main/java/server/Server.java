@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import FHEMConnection.FHEMConnection;
 import FHEMConnection.FHEMClientModeCon;
-import FHEMModel.Model;
+import com.google.gson.GsonBuilder;
+import fhemModel.Model;
 import com.google.gson.Gson;
 import parser.FHEMParser;
 import parser.fhemJson.JsonList2;
@@ -20,7 +21,7 @@ class Server {
         FHEMConnection fhc = new FHEMClientModeCon();
         String jsonList2 = "";
         try {
-            jsonList2 = fhc.getJsonList2(7072, "/opt/fhem/fhem.pl");
+            jsonList2 = fhc.getJsonList2();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,8 +30,8 @@ class Server {
         /* The other way around - just for testing.
         *  (Convert objects to json again and print)
         * */
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(list));
         Model model = list.toFHEMModel();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(model));
     }
 }

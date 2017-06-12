@@ -1,18 +1,16 @@
-package FHEMModel.timeserie;
-
-import java.time.LocalDateTime;
+package fhemModel.timeserie;
 
 /**
  * This class represents a single sample from a sensor in FHEM.
- * It is basically a Pair<Long, Double>
+ * It is basically a Pair<String, Double>
  * @author Rafael
  */
 
 class Sample {
-    private final LocalDateTime date;
+    private final String date;
     private final double value;
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -20,18 +18,20 @@ class Sample {
         return value;
     }
 
-    Sample(LocalDateTime date, double value) {
+    Sample(String date, double value) {
         this.date = date;
         this.value = value;
-    }    @Override
+    }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Sample sample = (Sample) o;
 
-        return Double.compare(sample.value, value) == 0 && date.equals(sample.date);
+        if (Double.compare(sample.value, value) != 0) return false;
+        return date.equals(sample.date);
     }
 
     @Override

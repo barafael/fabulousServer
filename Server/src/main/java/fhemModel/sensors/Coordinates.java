@@ -1,4 +1,4 @@
-package FHEMModel.sensors;
+package fhemModel.sensors;
 
 /**
  * Class to store coordinates of a sensor in FHEM.

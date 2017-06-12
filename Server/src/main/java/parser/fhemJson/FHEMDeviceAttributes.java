@@ -27,6 +27,11 @@ class FHEMDeviceAttributes {
     @SerializedName("room")
     private String rooms;
     private String name_in_app;
+
+    public Optional<String> getSubType() {
+        return Optional.ofNullable(subType);
+    }
+
     private String subType;
     private String permissions;
     private String alias;

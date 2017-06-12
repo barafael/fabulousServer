@@ -1,6 +1,7 @@
-package FHEMModel.sensors;
+package fhemModel.sensors;
 
-import FHEMModel.timeserie.Timeserie;
+import fhemModel.timeserie.Timeserie;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +32,10 @@ public class Sensor {
         this.status = status;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
+    }
+
+    public void addMeta(@NotNull String key, @NotNull String value) {
+        metaInfo.put(key, value);
     }
 
     public void associateSeries(HashSet<Timeserie> associatedSeries) {

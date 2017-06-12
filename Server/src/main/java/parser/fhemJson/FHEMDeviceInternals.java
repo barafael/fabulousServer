@@ -40,13 +40,14 @@ public class FHEMDeviceInternals {
     }
 
     Optional<String> getCurrentLogfileField() {
-        return currentlogfile != null ? Optional.of(currentlogfile) : Optional.empty();
+        return Optional.ofNullable(currentlogfile);
     }
 
     public Optional<String> getType() {
-        if (TYPE != null) {
-            return Optional.of(TYPE);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(TYPE);
+    }
+
+    public Optional<String> getSTATE(){
+        return Optional.ofNullable(STATE);
     }
 }

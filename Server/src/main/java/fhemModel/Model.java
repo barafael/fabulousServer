@@ -1,8 +1,8 @@
-package FHEMModel;
+package fhemModel;
 
-import FHEMModel.sensors.Room;
-import FHEMModel.sensors.Sensor;
-import FHEMModel.timeserie.Timeserie;
+import fhemModel.sensors.Room;
+import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.Timeserie;
 
 import java.util.HashSet;
 
@@ -19,5 +19,17 @@ public class Model {
         this.sensors = sensors;
         this.rooms = rooms;
         this.timeseries = timeseries;
+    }
+
+    public HashSet<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public HashSet<Room> getRooms() {
+        return rooms;
+    }
+
+    public HashSet<Timeserie> getTimeseries() {
+        return timeseries;
     }
 }

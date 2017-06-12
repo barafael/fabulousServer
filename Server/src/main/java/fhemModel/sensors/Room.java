@@ -1,4 +1,4 @@
-package FHEMModel.sensors;
+package fhemModel.sensors;
 /**
  * This class represents a room which associates a FHEM model.
  * @author Rafael

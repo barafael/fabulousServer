@@ -1,7 +1,8 @@
 package parser.fhemJson;
 
-import FHEMModel.sensors.Sensor;
-import FHEMModel.timeserie.Timeserie;
+import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.Timeserie;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,7 +28,8 @@ import java.util.*;
 
 public class FHEMDevice {
     /* Json Attributes */
-    private String Name;
+    @SerializedName("Name")
+    private String name;
     private FHEMDeviceInternals Internals;
     private FHEMDeviceAttributes Attributes;
 
@@ -36,14 +38,14 @@ public class FHEMDevice {
     /* Used to give filelogs and sensors an ID */
     private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */
-    private String linkedSensorName;
+    private String linkedDeviceName;
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public FHEMDeviceInternals getInternals() {
-        /* ASSERTION of invariant:
+        /* invariant:
            Internals != null
            This would mean that the underlying FHEM device had no Internals section!
         */
@@ -90,14 +92,14 @@ public class FHEMDevice {
             String devType = type_opt.get();
             return devType.equals(type);
         }
-        System.err.println(Name + ": Encountered a FHEM device without TYPE set!");
+        System.err.println(name + ": Encountered a FHEM device without TYPE set!");
         return false;
     }
 
     boolean isShowInApp() {
         if (!isSensor() && !isFileLog()) {
             System.err.println("This might be unintended: " +
-                    "FHEM device " + Name + " is not sensor or log, but is in app room.");
+                    "FHEM device " + name + " is not sensor or log, but is in app room.");
         }
         return this.isInRoom("app");
     }
@@ -114,9 +116,11 @@ public class FHEMDevice {
         boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>(); // TODO: get this from FHEM via some magic
 
-        return Optional.of(
-                new Sensor(coordX, coordY, Name, ID, permissions, status, showInApp, meta)
-        );
+        Sensor s = new Sensor(coordX, coordY, name, ID, permissions, status, showInApp, meta);
+        s.addMeta("State", Internals.getSTATE().orElse("Not supplied"));
+        s.addMeta("Type", Internals.getType().orElse("Not supplied"));
+        s.addMeta("SubType", Internals.getType().orElse("Not supplied"));
+        return Optional.of(s);
     }
 
     Optional<Timeserie> parseToLog() {
@@ -145,7 +149,7 @@ public class FHEMDevice {
                     System.err.println("Encountered empty FileLog: " + path);
                 }
                 String sensorname = firstline_opt.get().split(" ")[1];
-                linkedSensorName = sensorname;
+                linkedDeviceNamelinkedDeviceName = sensorname;
                 */
                 return Optional.of(
                         new Timeserie(lines, isShowInApp()));

@@ -1,9 +1,9 @@
 package parser.fhemJson;
 
-import FHEMModel.Model;
-import FHEMModel.sensors.Room;
-import FHEMModel.sensors.Sensor;
-import FHEMModel.timeserie.Timeserie;
+import fhemModel.Model;
+import fhemModel.sensors.Room;
+import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.Timeserie;
 import com.google.gson.Gson;
 
 import java.util.HashSet;
@@ -50,13 +50,6 @@ public class JsonList2 {
         return totalResultsReturned;
     }
 
-    //TODO do not ever pass out a pointer to a mutable internal structure (in production).
-    // possible fix: clone
-    public Optional<FHEMDevice[]> getResults() {
-        /* Ignore static analysis here - Results is populated by gson when generating a FHEM model */
-        return Results == null ? Optional.empty() : Optional.of(Results);
-    }
-
     public Model toFHEMModel() {
         HashSet<FHEMDevice> sensors = new HashSet<>();
         HashSet<Room> rooms = new HashSet<>();
@@ -72,7 +65,9 @@ public class JsonList2 {
             if (isSensor) {
                 sensors.add(d);
             } else if (isFileLog) {
-                filelogs.add(d);
+                if (d.getInternals().getCurrentLogfileField().get().contains("timeseries")) {
+                    filelogs.add(d);
+                }
             }
         }
 
@@ -88,8 +83,10 @@ public class JsonList2 {
             if (associated.size() != 1) {
                 System.err.println("Found " + associated.size() + " sensors for FileLog " + filelog.getName());
                 break;
+            } else {
+                /* Associate this filelog with it's sensor */
+                filelog.associate(associated.get(0));
             }
-            filelog.associate(associated.get(0));
         }
         for (FHEMDevice sensor: sensors) {
             List<FHEMDevice> linkedFilelogs = filelogs.stream()
@@ -105,14 +102,11 @@ public class JsonList2 {
         realTimeseries = filelogs.stream().map(FHEMDevice::parseToLog)
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
 
-        Gson gson = new Gson();
+        // Gson gson = new Gson();
 
-        System.out.println("All sensors: " + gson.toJson(realSensors));
+        // System.out.println("All sensors: " + gson.toJson(realSensors));
 
-        System.out.println();
-        System.out.println();
-
-        System.out.println("All filelogs: " + gson.toJson(realTimeseries));
+        // System.out.println("All filelogs: " + gson.toJson(realTimeseries));
 
         // System.out.println(gson.toJson(gson));
 
