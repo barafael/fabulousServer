@@ -3,6 +3,8 @@ package FHEMConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -11,7 +13,24 @@ import java.util.*;
 public class FHEMClientModeCon implements FHEMConnection {
     @Override
     public String getJsonList2() throws IOException {
-        return getJsonList2(6062, "/usr/bin/fhem.pl");
+
+        String dir_env = "FHEMPL";
+        String port_env = "FHEMPORT";
+        String path = System.getenv(dir_env);
+        String port_str = System.getenv(port_env);
+        int port;
+        if (path != null) {
+            System.out.format("%s=%s%n",
+                    dir_env, path);
+        } else {
+            path = "/usr/bin/";
+        }
+        if (port_str != null && port_str.matches("\\d+")) {
+            System.out.format("%s=%s%n",
+                    dir_env, port_str);
+            port = Integer.parseInt(port_str);
+        } else { port = 7072; }
+        return getJsonList2(port, path);
     }
 
     @Override
@@ -35,8 +54,8 @@ public class FHEMClientModeCon implements FHEMConnection {
         while ((line = stderr.readLine()) != null) {
             error.append(line);
         }
-        System.out.println(error);
-        return stdin.toString();
+        System.err.println(error);
+        return stringBuilder.toString();
     }
 
     @Override
