@@ -6,6 +6,7 @@ import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.Timeserie;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -97,7 +98,11 @@ public class JsonList2 {
 
         for (FHEMDevice sensor: sensors) {
             String sensorRooms = sensor.getAttributes().getRooms().orElse("");
-            sensor.getRooms();
+            rooms.addAll(sensor.getRooms().orElse(new ArrayList<Room>()));
+        }
+
+        for (Room r : rooms) {
+            System.out.println(r);
         }
 
         HashSet<Sensor> realSensors;
@@ -117,6 +122,6 @@ public class JsonList2 {
         // System.out.println(gson.toJson(gson));
 
         //TODO find a way to do rooms
-        return new Model(realSensors, null, realTimeseries);
+        return new Model(realSensors, rooms, realTimeseries);
     }
 }

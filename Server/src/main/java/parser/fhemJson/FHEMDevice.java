@@ -184,16 +184,19 @@ public class FHEMDevice {
         return attributes;
     }
 
-    public List<Room> getRooms() {
+    public Optional<List<Room>> getRooms() {
         Optional<String> rooms_opt = getAttributes().getRooms();
         if (rooms_opt.isPresent()) {
             String rooms_str = rooms_opt.get();
             String[] rooms = rooms_str.split(",");
-            System.out.println(getName());
-            System.out.println(Arrays.toString(rooms));
-
+            List<Room> roomList = new ArrayList<>();
+            for (String roomname : rooms) {
+                roomList.add(new Room(roomname));
+            }
+            return Optional.of(roomList);
+        } else {
+            return Optional.empty();
         }
-        return null;
     }
 
     public boolean isFakelog() {
