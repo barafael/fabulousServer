@@ -5,13 +5,12 @@ remove %
 
 getRooms
 
-attributes duck typing in attributes
+duck typing in attributes
 
 move rpi/ logs to timeseries
 
 how to best check if timeseries is blessed?
 
-HM_52CC96_Pwr
-Found 0 sensors for FileLog FileLog_HM_52CC96_Pwr_Ventilator
+DONE: HM_52CC96_Pwr Found 0 sensors for FileLog FileLog_HM_52CC96_Pwr_Ventilator
 
-
+Add room_ prefix to app rooms
