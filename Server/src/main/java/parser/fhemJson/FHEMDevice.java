@@ -204,4 +204,9 @@ public class FHEMDevice {
         // TODO check short-circuit logic (is the second part with the get() always executed? It better not
         return regexp.isPresent() && regexp.get().equals("fakelog");
     }
+
+    public boolean isBlessed() {
+        Optional<String> path = getInternals().getCurrentLogfileField();
+        return path.isPresent() && path.get().contains("timeseries");
+    }
 }

@@ -73,6 +73,9 @@ public class JsonList2 {
             if (filelog.isFakelog()) {
                 continue;
             }
+            if (!filelog.isBlessed()) {
+                continue;
+            }
             Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix(':');
             if (!sensorname_opt.isPresent()) {
                 System.err.println("Could not detect which sensor corresponds to this filelog: " + filelog.getName());
