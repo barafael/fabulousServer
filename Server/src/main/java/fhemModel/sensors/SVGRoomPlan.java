@@ -14,4 +14,9 @@ class SVGRoomPlan extends File {
             System.err.println("Possibly constructed an SvgRoomPlan with a non-svg file!");
         }
     }
+
+    /* TODO Bullshit method, do something with this */
+    public static SVGRoomPlan loadFile(String pathToPlan) {
+        return null;
+    }
 }
