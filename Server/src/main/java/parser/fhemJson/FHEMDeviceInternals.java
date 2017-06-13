@@ -47,6 +47,9 @@ public class FHEMDeviceInternals {
     }
 
     Optional<String> getCurrentLogfileField() {
+        if (currentlogfile.startsWith(".")) {
+
+        }
         return Optional.ofNullable(currentlogfile);
     }
 

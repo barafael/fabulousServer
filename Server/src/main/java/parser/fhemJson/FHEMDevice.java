@@ -1,5 +1,6 @@
 package parser.fhemJson;
 
+import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.Timeserie;
 import com.google.gson.annotations.SerializedName;
@@ -171,7 +172,7 @@ public class FHEMDevice {
         return linkedDevices.add(fhemDevice);
     }
 
-    boolean associate(Collection<FHEMDevice> linkedFilelogs) {
+    boolean associate(List<FHEMDevice> linkedFilelogs) {
         return linkedDevices.addAll(linkedFilelogs);
     }
 
@@ -181,5 +182,17 @@ public class FHEMDevice {
 
     public FHEMDeviceAttributes getAttributes() {
         return attributes;
+    }
+
+    public List<Room> getRooms() {
+        Optional<String> rooms_opt = getAttributes().getRooms();
+        if (rooms_opt.isPresent()) {
+            String rooms_str = rooms_opt.get();
+            String[] rooms = rooms_str.split(",");
+            System.out.println(getName());
+            System.out.println(Arrays.toString(rooms));
+
+        }
+        return null;
     }
 }

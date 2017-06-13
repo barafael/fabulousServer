@@ -34,7 +34,7 @@ public class JsonList2 {
      * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...)
      **/
     @SerializedName("Arg")
-    private final String arg = "";
+    private String arg;
     /**
      * List of all defined FHEM devices matching devicespec (if given; else all of them)
      **/
@@ -44,8 +44,8 @@ public class JsonList2 {
      **/
     private int totalResultsReturned;
 
-    public String getArg() {
-        return arg;
+    public Optional<String> getArg() {
+        return Optional.ofNullable(arg);
     }
 
     public Model toFHEMModel() {
@@ -53,19 +53,18 @@ public class JsonList2 {
         HashSet<Room> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
-        /* Ignore static analysis: Results is populated by gson */
+        /* Ignore static analysis warnings here: Results is populated by gson */
         for (FHEMDevice d : Results) {
             boolean isSensor = d.isSensor();
             boolean isFileLog = d.isFileLog();
             /* Either it is one of filelog or sensor, or it is neither */
             assert (isSensor ^ isFileLog) | (!isFileLog && !isSensor);
 
+            /* Add raw devices, parse them into sensors and filelogs later */
             if (isSensor) {
                 sensors.add(d);
             } else if (isFileLog) {
-                if (d.getInternals().getCurrentLogfileField().get().contains("timeseries")) {
-                    filelogs.add(d);
-                }
+                filelogs.add(d);
             }
         }
 
@@ -77,7 +76,7 @@ public class JsonList2 {
             }
             String sensorname = sensorname_opt.get();
             List<FHEMDevice> associated = sensors.stream()
-                    .filter(d -> d.getName().equals(sensorname)).collect(Collectors.toList());
+                    .filter(s -> s.getName().equals(sensorname)).collect(Collectors.toList());
             if (associated.size() != 1) {
                 System.err.println("Found " + associated.size() + " sensors for FileLog " + filelog.getName());
                 break;
@@ -90,6 +89,11 @@ public class JsonList2 {
             List<FHEMDevice> linkedFilelogs = filelogs.stream()
                     .filter(f -> f.isLinked(sensor)).collect(Collectors.toList());
             sensor.associate(linkedFilelogs);
+        }
+
+        for (FHEMDevice sensor: sensors) {
+            String sensorRooms = sensor.getAttributes().getRooms().orElse("");
+            sensor.getRooms();
         }
 
         HashSet<Sensor> realSensors;

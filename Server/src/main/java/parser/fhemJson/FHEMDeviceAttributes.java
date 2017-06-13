@@ -54,7 +54,7 @@ class FHEMDeviceAttributes {
         if (coordY.isEmpty()) coordY = "0";
         return Integer.parseInt(coordY);
     }
-
+    // read all attributes which might be possible
     /* Field because getPermissions() sounds weird */
     Optional<String> getPermissionField() {
         return Optional.ofNullable(permissions);
