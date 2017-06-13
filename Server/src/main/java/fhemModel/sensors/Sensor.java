@@ -23,13 +23,12 @@ public class Sensor {
     private boolean isShowInApp;
     private HashMap<String, String> metaInfo;
 
-    public Sensor(int coordX, int coordY, String name, long ID, String permission, String status,
+    public Sensor(int coordX, int coordY, String name, long ID, String permission,
                   boolean isShowInApp, HashMap<String, String> metaInfo) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
         this.ID = ID;
         this.permission = permission;
-        this.status = status;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
     }

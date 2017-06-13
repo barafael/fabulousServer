@@ -30,8 +30,10 @@ public class FHEMDevice {
     /* Json Attributes */
     @SerializedName("Name")
     private String name;
-    private FHEMDeviceInternals Internals;
-    private FHEMDeviceAttributes Attributes;
+    @SerializedName("Internals")
+    private FHEMDeviceInternals internals;
+    @SerializedName("Attributes")
+    private FHEMDeviceAttributes attributes;
 
     /* Class Attributes */
     private final HashSet<FHEMDevice> linkedDevices = new HashSet<>();
@@ -49,12 +51,12 @@ public class FHEMDevice {
            Internals != null
            This would mean that the underlying FHEM device had no Internals section!
         */
-        if (Internals == null) {
-            /* Explicit assumption validated! */
+        if (internals == null) {
+            /* Explicit assumption violated! */
             System.err.println("Internals was null! We assumed this could never be the case." +
                     "FHEM usually sets this field.");
         }
-        return Internals;
+        return internals;
     }
 
     public boolean isSensor() {
@@ -73,21 +75,21 @@ public class FHEMDevice {
         return false;
     }
 
-    private boolean isInRoom(String roomName) {
-        Optional<String> rooms_opt = Attributes.getRooms();
+    private boolean isInRoom(String name) {
+        Optional<String> rooms_opt = attributes.getRooms();
         if (rooms_opt.isPresent()) {
             String rooms = rooms_opt.get();
-            /* Allow for some commas and whitespace, but include 'roomName' */
+            /* Allow for some commas and whitespace, but include 'name' */
             /* A .contains() is not enough because some room might include it ("app" and "appartment") */
             /* IDEA includes a nifty regex checker (just put cursor in regex). */
-            String pattern = "(.*,\\s?)*" + roomName + "(,\\s?.*)*";
+            String pattern = "(.*,\\s?)*" + name + "(,\\s?.*)*";
             return rooms.matches(pattern);
         }
         return false;
     }
 
     private boolean isOfType(String type) {
-        Optional<String> type_opt = Internals.getType();
+        Optional<String> type_opt = internals.getType();
         if (type_opt.isPresent()) {
             String devType = type_opt.get();
             return devType.equals(type);
@@ -108,18 +110,24 @@ public class FHEMDevice {
         if (!isSensor()) {
             return Optional.empty();
         }
-        int coordX = Attributes.getCoordX();
-        int coordY = Attributes.getCoordY();
+        int coordX = attributes.getCoordX();
+        int coordY = attributes.getCoordY();
         long ID = IDCounter++;
-        String permissions = Attributes.getPermissionField();
-        String status = ""; // TODO: extract this somehow from FHEM (see metaInfo)
+        String permissions = attributes.getPermissionField().orElse("");
+        String status = internals.getState().orElse("Not supplied");
         boolean showInApp = isShowInApp();
-        HashMap<String, String> meta = new HashMap<>(); // TODO: get this from FHEM via some magic
+        HashMap<String, String> meta = new HashMap<>();
 
-        Sensor s = new Sensor(coordX, coordY, name, ID, permissions, status, showInApp, meta);
-        s.addMeta("State", Internals.getSTATE().orElse("Not supplied"));
-        s.addMeta("Type", Internals.getType().orElse("Not supplied"));
-        s.addMeta("SubType", Internals.getType().orElse("Not supplied"));
+        Sensor s = new Sensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
+
+        /* Add metadata which might or might not be supplied for every sensor */
+        s.addMeta("State", internals.getState().orElse("Not supplied"));
+        s.addMeta("Type", internals.getType().orElse("Not supplied"));
+        s.addMeta("SubType", internals.getType().orElse("Not supplied"));
+        /* TODO use those in android app, don't just dump them */
+        s.addMeta("name_in_app", attributes.getNameInApp().orElse("Not supplied"));
+        s.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
+
         return Optional.of(s);
     }
 
@@ -127,53 +135,51 @@ public class FHEMDevice {
         if (!isFileLog()) {
             return Optional.empty();
         }
+        /*  Extract sensor from regex
+         *  FHEM uses this regex internally on a device's filelog to filter events which belong in this filelog.
+         *  A regex must be present, starting with the sensor name this data belongs to.
+         *  */
         if (!getInternals().getRegexpPrefix().isPresent()) {
             System.err.println("FileLog has no REGEXP prefix: " + getName());
+            return Optional.empty();
         }
-        Optional<String> path_opt = Internals.getCurrentLogfileField();
-        if (path_opt.isPresent()) {
-            String path = path_opt.get();
-            List<String> lines;
-            try  {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-                lines = new ArrayList<>();
+        Optional<String> path_opt = internals.getCurrentLogfileField();
+        if (!path_opt.isPresent()) {
+            System.err.println("No logfile specified for log: " + getName());
+            return Optional.empty();
+        }
+        String path = path_opt.get();
+        List<String> lines;
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            lines = new ArrayList<>();
 
-                String line;
-                while((line = bufferedReader.readLine()) != null) {
-                    lines.add(line);
-                }
-                bufferedReader.close();
-
-                /*Optional<String> firstline_opt = flog.findFirst();
-                if (!firstline_opt.isPresent()) {
-                    System.err.println("Encountered empty FileLog: " + path);
-                }
-                String sensorname = firstline_opt.get().split(" ")[1];
-                linkedDeviceNamelinkedDeviceName = sensorname;
-                */
-                return Optional.of(
-                        new Timeserie(lines, isShowInApp()));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return Optional.empty();
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
             }
+            bufferedReader.close();
+
+            return Optional.of((new Timeserie(lines, isShowInApp())));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     boolean associate(FHEMDevice fhemDevice) {
         return linkedDevices.add(fhemDevice);
     }
 
-    boolean isLinked(FHEMDevice device) {
-        return linkedDevices.contains(device);
-    }
-
     boolean associate(Collection<FHEMDevice> linkedFilelogs) {
         return linkedDevices.addAll(linkedFilelogs);
     }
 
+    boolean isLinked(FHEMDevice device) {
+        return linkedDevices.contains(device);
+    }
+
     public FHEMDeviceAttributes getAttributes() {
-        return Attributes;
+        return attributes;
     }
 }

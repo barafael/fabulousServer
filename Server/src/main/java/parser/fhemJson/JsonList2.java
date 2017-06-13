@@ -1,10 +1,10 @@
 package parser.fhemJson;
 
+import com.google.gson.annotations.SerializedName;
 import fhemModel.Model;
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.Timeserie;
-import com.google.gson.Gson;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,10 +29,12 @@ import java.util.stream.Collectors;
  */
 
 public class JsonList2 {
+    /* Json Attributes */
     /**
      * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...)
      **/
-    private final String Arg = "";
+    @SerializedName("Arg")
+    private final String arg = "";
     /**
      * List of all defined FHEM devices matching devicespec (if given; else all of them)
      **/
@@ -43,11 +45,7 @@ public class JsonList2 {
     private int totalResultsReturned;
 
     public String getArg() {
-        return Arg;
-    }
-
-    public int getTotalResultsReturned() {
-        return totalResultsReturned;
+        return arg;
     }
 
     public Model toFHEMModel() {

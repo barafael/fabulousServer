@@ -2,8 +2,8 @@ package server;
 
 import java.io.IOException;
 
-import FHEMConnection.FHEMConnection;
-import FHEMConnection.FHEMClientModeCon;
+import fhemConnection.FHEMConnection;
+import fhemConnection.FHEMClientModeCon;
 import com.google.gson.GsonBuilder;
 import fhemModel.Model;
 import com.google.gson.Gson;

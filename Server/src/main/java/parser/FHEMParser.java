@@ -9,7 +9,7 @@ import parser.fhemJson.JsonList2;
  * @author Rafael
  * @date 31.05.17.
  * Singleton class which provides a method //TODO which
- * to parse all data associated with a FHEM Server given a FHEMConnection.
+ * to parse all data associated with a FHEM Server given a fhemConnection.
  */
 
 public class FHEMParser {

@@ -20,27 +20,27 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 class FHEMDeviceAttributes {
+    /* Json attributes */
     private String coordX;
     private String coordY;
     private String model;
     /* More than one room is possible! */
     @SerializedName("room")
     private String rooms;
-    private String name_in_app;
+    @SerializedName("name_in_app")
+    private String nameInApp;
+
+    private String subType;
+
+    private String permissions;
+    private String alias;
 
     public Optional<String> getSubType() {
         return Optional.ofNullable(subType);
     }
 
-    private String subType;
-    private String permissions;
-    private String alias;
-
     public Optional<String> getRooms() {
-        if (rooms != null) {
-            return Optional.of(rooms);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(rooms);
     }
 
     int getCoordX() {
@@ -55,8 +55,16 @@ class FHEMDeviceAttributes {
         return Integer.parseInt(coordY);
     }
 
-    /* Name because getPermissions() sounds weird */
-    String getPermissionField() {
-        return permissions;
+    /* Field because getPermissions() sounds weird */
+    Optional<String> getPermissionField() {
+        return Optional.ofNullable(permissions);
+    }
+
+    public Optional<String> getNameInApp() {
+        return Optional.ofNullable(nameInApp);
+    }
+
+    public Optional<String> getAlias() {
+        return Optional.ofNullable(alias);
     }
 }

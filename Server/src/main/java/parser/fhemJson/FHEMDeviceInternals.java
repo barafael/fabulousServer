@@ -1,5 +1,7 @@
 package parser.fhemJson;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Optional;
 
 /**
@@ -18,10 +20,15 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class FHEMDeviceInternals {
-    private String DEF;
-    private String STATE;
-    private String REGEXP;
-    private String TYPE;
+    /* Json Attributes */
+    @SerializedName("DEF")
+    private String definition;
+    @SerializedName("STATE")
+    private String state;
+    @SerializedName("REGEXP")
+    private String regexp;
+    @SerializedName("TYPE")
+    private String type;
     private String currentlogfile;
 
     Optional<String> getRegexpPrefix() {
@@ -29,13 +36,13 @@ public class FHEMDeviceInternals {
     }
 
     Optional<String> getRegexpPrefix(char sep) {
-        int index = REGEXP.indexOf(sep);
+        int index = regexp.indexOf(sep);
         if (index >= 0) {
-            String prefix = REGEXP.substring(0, index);
-            return prefix.equals("") ? Optional.empty() : Optional.of(prefix);
+            String prefix = regexp.substring(0, index);
+            return prefix.isEmpty() ? Optional.empty() : Optional.of(prefix);
         } else {
             /* 'sep' not present */
-            return Optional.of(REGEXP);
+            return Optional.of(regexp);
         }
     }
 
@@ -44,10 +51,10 @@ public class FHEMDeviceInternals {
     }
 
     public Optional<String> getType() {
-        return Optional.ofNullable(TYPE);
+        return Optional.ofNullable(type);
     }
 
-    public Optional<String> getSTATE(){
-        return Optional.ofNullable(STATE);
+    public Optional<String> getState(){
+        return Optional.ofNullable(state);
     }
 }
