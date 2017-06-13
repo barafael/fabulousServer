@@ -195,4 +195,10 @@ public class FHEMDevice {
         }
         return null;
     }
+
+    public boolean isFakelog() {
+        Optional<String> regexp = getInternals().getRegexp();
+        // TODO check short-circuit logic
+        return regexp.isPresent() && regexp.get().equals("fakelog");
+    }
 }
