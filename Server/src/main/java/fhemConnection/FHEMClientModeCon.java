@@ -5,50 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import fhemUtils.FHEMUtils;
 /**
  * @author Rafael on 09.06.17.
  */
 public class FHEMClientModeCon implements FHEMConnection {
-    private int getFHEMPort() {
-        String port_env = "FHEMPORT";
-        String port_str = System.getenv(port_env);
-        int port;
-
-        if (port_str != null && port_str.matches("\\d+")) {
-            port = Integer.parseInt(port_str);
-        } else {
-            port = 7072;
-        }
-        return port;
-    }
-
-    private String whereisFHEM() throws IOException {
-        Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\"" });
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-
-        String line = stdin.readLine();
-        return line;
-    }
-
-    private String getFHEMPerlPath() throws IOException {
-        String dir_env = "FHEMPLo";
-        String path_str = System.getenv(dir_env);
-        if (path_str == null) {
-            try {
-                path_str = whereisFHEM();
-            } catch (IOException ioe) {
-                System.err.println("Is FHEM installed?");
-                path_str = "/usr/bin/fhem.pl";
-            }
-        }
-        return path_str;
-
-    }
-
     @Override
     public String getJsonList2() throws IOException, FHEMNotFoundException {
-        return getJsonList2(getFHEMPort(), getFHEMPerlPath());
+        return getJsonList2(fhemUtils.FHEMUtils.getFHEMPort(), FHEMUtils.getFhemScriptPath());
     }
 
     @Override
