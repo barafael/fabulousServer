@@ -1,6 +1,7 @@
 package parser.fhemJson;
 
 import com.google.gson.annotations.SerializedName;
+import fhemUtils.FHEMUtils;
 
 import java.util.Optional;
 
@@ -48,7 +49,10 @@ public class FHEMDeviceInternals {
 
     Optional<String> getCurrentLogfileField() {
         if (currentlogfile.startsWith(".")) {
-
+            Optional<String> fhemPath = FHEMUtils.getFHEMDIR();
+            if (fhemPath.isPresent()) {
+                currentlogfile = currentlogfile.replaceFirst(".", fhemPath.get());
+            }
         }
         return Optional.ofNullable(currentlogfile);
     }
@@ -59,5 +63,9 @@ public class FHEMDeviceInternals {
 
     public Optional<String> getState(){
         return Optional.ofNullable(state);
+    }
+
+    public Optional<String> getRegexp() {
+        return Optional.ofNullable(regexp);
     }
 }
