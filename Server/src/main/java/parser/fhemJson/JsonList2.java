@@ -75,14 +75,15 @@ public class JsonList2 {
             Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix(':');
             if (!sensorname_opt.isPresent()) {
                 System.err.println("Could not detect which sensor corresponds to this filelog: " + filelog.getName());
-                break;
+                continue;
             }
             String sensorname = sensorname_opt.get();
+            // System.out.println(sensorname);
             List<FHEMDevice> associated = sensors.stream()
                     .filter(s -> s.getName().equals(sensorname)).collect(Collectors.toList());
             if (associated.size() != 1) {
                 System.err.println("Found " + associated.size() + " sensors for FileLog " + filelog.getName());
-                break;
+                continue;
             } else {
                 /* Associate this filelog with it's sensor */
                 filelog.associate(associated.get(0));
