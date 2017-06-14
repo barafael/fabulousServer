@@ -12,6 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Base64;
+
 /**
  * Created 09.06.17.
  */
@@ -25,72 +27,39 @@ public class ServerTest {
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
         final Vertx vertx = Vertx.vertx();
-
         vertx.deployVerticle(Server.class.getCanonicalName(), testContext.asyncAssertSuccess());
         httpClient = vertx.createHttpClient();
     }
 
-   // @Test
-  /*  public void testxy(TestContext testContext) {
+    @Test
+    public void testGetData(TestContext testContext) {
         final Async async = testContext.async();
         JsonObject json = new JsonObject();
-        json.put("name", "hans");
-        String msg = json.encodePrettily();
-        httpClient.post(8080, "localhost", "/login/")
-                .putHeader("content-type", "application/json")
-                .putHeader("content-length", Integer.toString(msg.length()))
-                .handler(ans -> {
-                    testContext.assertEquals(200, ans.statusCode());
-                    testContext.assertEquals("ldfksgadsfjseklfjckabsuebdaxuiw", ans.headers().get("Authentification"));
-                    async.complete();
-                })
-                .write(msg)
-                .end();
-    }*/
-    @Test
-    public void testLogin(TestContext testContext){
-        final  Async async = testContext.async();
-        JsonObject json = new JsonObject();
-        json.put("username","karl");
-        json.put("password", "sonne123");
+        json.put("data", "[sensor1, sensor2, sensor3]");
         String msg = json.encode();
-        System.out.println("Client sent [msg, length]: "+msg+", "+msg.length());
-        httpClient.post(8080, "localhost", "/login")
+        System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
+
+        String authHeader = "hans:sonne123"; //"hans"+":"+"sonne123";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        System.out.println("Client sent [authHeader]: " + base64);
+        httpClient.post(8080, "localhost", "/api/getSensorData")
+                .putHeader("Authorization", base64)
                 .putHeader("content-type", "application/json")
                 .putHeader("content-length", Integer.toString(msg.length()))
                 .handler(ans -> {
-                    System.out.println("headers: "+ans.getHeader(""));
+                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    ans.bodyHandler(body -> {
+                        System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
+                        async.complete();
+                    });
                     testContext.assertEquals(200, ans.statusCode());
-                    async.complete();
                 })
                 .write(msg)
                 .end();
     }
-
-    @Test
-    public void testGetData(TestContext testContext){
-        final  Async async = testContext.async();
-        JsonObject json = new JsonObject();
-        json.put("data","[sensor1, sensor2]");
-        String msg = json.encode();
-        System.out.println("Client sent [msg, length]: "+msg+", "+msg.length());
-        httpClient.get(8080, "localhost", "/private/getData")
-                .putHeader("content-type", "application/json")
-                .putHeader("content-length", Integer.toString(msg.length()))
-                .handler(ans -> {
-                    ans.bodyHandler(body -> System.out.println("Client received: [msg, length]: "+body.toJsonObject().toString()+", "+body.toJsonObject().toString().length()));
-                    System.out.println("status: "+ans.statusMessage());
-                    testContext.assertEquals(200, ans.statusCode());
-                    async.complete();
-                })
-                .write(msg)
-                .end();
-    }
-
 
     @org.junit.After
     public void tearDown(TestContext testContext) throws Exception {
         Vertx.vertx().close(testContext.asyncAssertSuccess());
     }
-
 }
