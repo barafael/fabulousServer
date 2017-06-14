@@ -201,7 +201,7 @@ public class FHEMDevice {
 
     boolean isFakelog() {
         Optional<String> regexp = getInternals().getRegexp();
-        // TODO check short-circuit logic (is the second part with the get() always executed? It better not
+        /* Short circuit logic: if !isPresent(), get() will never be evaluated */
         return regexp.isPresent() && regexp.get().equals("fakelog");
     }
 

@@ -104,10 +104,6 @@ public class JsonList2 {
             rooms.addAll(sensor.getRooms().orElse(new ArrayList<Room>()));
         }
 
-        for (Room r : rooms) {
-            System.out.println(r);
-        }
-
         HashSet<Sensor> realSensors;
         HashSet<Timeserie> realTimeseries;
 
@@ -124,7 +120,6 @@ public class JsonList2 {
 
         // System.out.println(gson.toJson(gson));
 
-        //TODO find a way to do rooms
         return new Model(realSensors, rooms, realTimeseries);
     }
 }

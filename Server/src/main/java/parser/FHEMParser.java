@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 import parser.fhemJson.JsonList2;
-
+// TODO rethink design so singleton becomes unnecessary
 /**
  * @author Rafael
  * @date 31.05.17.
- * Singleton class which provides a method //TODO which
+ * Singleton class which provides a method 'parse' which takes a string and parses it to a jsonlist2 object
  * to parse all data associated with a FHEM Server given a fhemConnection.
  */
 
