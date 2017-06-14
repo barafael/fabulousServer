@@ -55,7 +55,7 @@ public class Server extends AbstractVerticle {
         AuthHandler authHandler = BasicAuthHandler.create(authProvider);
         router.route("/api/*").handler(authHandler);
         router.route(HttpMethod.POST, "/register").handler(this::register);
-        router.route(HttpMethod.POST, "/api/getSensorData").handler(this::getSensorData);
+        router.route(HttpMethod.GET, "/api/getSensorData").handler(this::getSensorData);
         /* ################## End Routing ################## */
 
 
@@ -63,7 +63,7 @@ public class Server extends AbstractVerticle {
         HttpServer server = getVertx().createHttpServer();
         server.requestHandler(router::accept);
         Future<HttpServer> serverFuture = Future.future();
-        server.listen(8080, "localhost", serverFuture);
+        server.listen(config().getInteger("PORT"), serverFuture); //config().getString("HOST"),
         /* ################## End Server ################## */
 
         CompositeFuture.join(databaseFuture, serverFuture).setHandler(res -> {
@@ -87,12 +87,26 @@ public class Server extends AbstractVerticle {
     }
 
     private void getSensorData(RoutingContext routingContext) {
+        System.out.println("Server abs uri: "+routingContext.request().absoluteURI());
+        System.out.println("Server params: "+routingContext.request().params());
         System.out.println("Server user: "+routingContext.user().principal());
         routingContext.request().headers().forEach(h -> System.out.println("Server getData_requestHeader: " + h));
 
+
+        routingContext.user().isAuthorised("commit_code", res -> {
+            if (res.succeeded()) {
+                boolean hasPermission = res.result();
+                System.out.println("Server user action is allowed: "+hasPermission);
+            } else {
+                // Failed to
+                System.out.println("Server user.isAuthorised did not succeed");
+            }
+        });
+
         //TODO: call handler to fill answer
         JsonObject sensorData = new JsonObject().put("sensor1","HM_XXXX").put("sensor2","HM_XXXX");
-        String msg = routingContext.getBodyAsJson().put("data", sensorData).toString();
+        //String msg = routingContext.getBodyAsJson().put("data", sensorData).toString();
+        String msg = "some data";
         HttpServerResponse response = routingContext.response();
         response.setStatusCode(200)
                 .putHeader("content-type", "application/json")

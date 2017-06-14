@@ -3,6 +3,7 @@ package WebServer;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -22,13 +23,14 @@ import java.util.Base64;
 public class ServerTest {
     @Rule
     public Timeout timeout = Timeout.seconds(7);
+    private final HttpClientOptions options = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(8080);
     private HttpClient httpClient;
 
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
         final Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(Server.class.getCanonicalName(), testContext.asyncAssertSuccess());
-        httpClient = vertx.createHttpClient();
+        vertx.deployVerticle(Server.class.getCanonicalName(),Main.options, testContext.asyncAssertSuccess());
+        httpClient = vertx.createHttpClient(options);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class ServerTest {
         String authHeader = "hans:sonne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.post(8080, "localhost", "/api/getSensorData")
+        httpClient.get("/api/getSensorData")
                 .putHeader("Authorization", base64)
                 .putHeader("content-type", "application/json")
                 .putHeader("content-length", Integer.toString(msg.length()))
