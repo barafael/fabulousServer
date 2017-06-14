@@ -5,6 +5,8 @@ import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.Timeserie;
 
 import java.util.HashSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
@@ -19,6 +21,10 @@ public class Model {
         this.sensors = sensors;
         this.rooms = rooms;
         this.timeseries = timeseries;
+    }
+
+    public HashSet<Room> getAppRooms() {
+        return rooms.stream().filter(Room::isAppRoom).collect(Collectors.toCollection(HashSet::new));
     }
 
     public HashSet<Sensor> getSensors() {

@@ -22,6 +22,10 @@ public class Room {
         name = roomname;
     }
 
+    public boolean isAppRoom() {
+        return name.startsWith("room_");
+    }
+
     @Override
     public String toString() {
         return "Room{" +
