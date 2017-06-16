@@ -6,7 +6,6 @@ DONE: Handle Readings in percent HOW? Duck Typing again?
 DONE: Possible sensor attributes:
 DONE: binarySensor: boolean
 
-
 DONE: Possible Timeseries attributes:
 DONE: percentreading: boolean
 

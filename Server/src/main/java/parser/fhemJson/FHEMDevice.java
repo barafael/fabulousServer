@@ -148,12 +148,7 @@ public class FHEMDevice {
             return Optional.empty();
         }
         String path = path_opt.get();
-        try {
         return Optional.of(new FHEMFileLog(path, isShowInApp()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
     }
 
     boolean associate(FHEMDevice fhemDevice) {

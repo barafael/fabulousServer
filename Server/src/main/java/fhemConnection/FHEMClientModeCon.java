@@ -41,6 +41,8 @@ public class FHEMClientModeCon implements FHEMConnection {
                     "FHEM not found at " + pathToFhemPL + " on port " + port + "\n" +
                             error);
         }
+        stdin.close();
+        stderr.close();
         return stringBuilder.toString();
     }
 

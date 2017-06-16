@@ -31,7 +31,9 @@ public class FHEMUtils {
         Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\"" });
         BufferedReader stdin = new BufferedReader(new
                 InputStreamReader(process.getInputStream()));
-        return stdin.readLine();
+        String line = stdin.readLine();
+        stdin.close();
+        return line;
     }
 
     public static String getFhemScriptPath() {

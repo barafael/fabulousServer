@@ -12,6 +12,10 @@ import java.util.Optional;
 import fhemModel.sensors.Sensor;
 import org.jetbrains.annotations.NotNull;
 
+import static fhemModel.timeserie.Logtype.DISCRETEVAL;
+import static fhemModel.timeserie.Logtype.PERCENTVAL;
+import static fhemModel.timeserie.Logtype.REALVAL;
+
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.
  *
@@ -75,14 +79,19 @@ public class FHEMFileLog {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();
+            bufferedReader.close();
+            if (line == null) {
+                System.err.println("Could not read line. Presumably there is none.");
+                return Optional.empty();
+            }
             if (line.contains("%")) {
-                return Logtype.PERCENTVAL;
+                return PERCENTVAL;
             } else {
                 String value = getValue(line);
                 if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
-                    return Logtype.REALVAL;
+                    return REALVAL;
                 } else {
-                    return Logtype.DISCRETEVAL;
+                    return DISCRETEVAL;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -120,6 +129,10 @@ public class FHEMFileLog {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();
             bufferedReader.close();
+            if (line == null) {
+                System.err.println("Could not read line. Presumably there is none.");
+                return Optional.empty();
+            }
             String name = line.split(" ")[1];
             return Optional.of(name);
         } catch (FileNotFoundException e) {
@@ -136,6 +149,10 @@ public class FHEMFileLog {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();
             bufferedReader.close();
+            if (line == null) {
+                System.err.println("Could not read line. Presumably there is none.");
+                return Optional.empty();
+            }
             String unit = line.split(" ")[2];
             if (unit.endsWith(":")) {
                 unit = unit.substring(0, unit.length() - 1);
