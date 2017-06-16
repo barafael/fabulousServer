@@ -44,7 +44,7 @@ public class ServerTest {
         String authHeader = "hans:sonne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getSensorData")
+        httpClient.get("/api/getSensorData?ID=HM_XYZ")
                 .putHeader("Authorization", base64)
                 .putHeader("content-type", "application/json")
                 .putHeader("content-length", Integer.toString(msg.length()))
