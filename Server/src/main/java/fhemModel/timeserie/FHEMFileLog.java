@@ -12,9 +12,7 @@ import java.util.Optional;
 import fhemModel.sensors.Sensor;
 import org.jetbrains.annotations.NotNull;
 
-import static fhemModel.timeserie.Logtype.DISCRETEVAL;
-import static fhemModel.timeserie.Logtype.PERCENTVAL;
-import static fhemModel.timeserie.Logtype.REALVAL;
+import static fhemModel.timeserie.Logtype.*;
 
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.
@@ -52,22 +50,18 @@ public class FHEMFileLog {
             }
             bufferedReader.close();
 
-            Optional<Logtype> type_opt = guessLogtype(path);
-            if (type_opt.isPresent()) {
-                switch (type_opt.get()) {
-                    case REALVAL:
-                        return Optional.of(new RealValueTimeserie(filelog));
-                    case PERCENTVAL:
-                        return Optional.of(new PercentTimeserie(filelog));
-                    case DISCRETEVAL:
-                        return Optional.of(new DiscreteTimeserie(filelog));
-                    default:
-                        System.err.println("Unimplemented filelog type!");
-                        return Optional.empty();
-                }
-            } else {
-                System.err.println("Couldn't guess type of log! " + path);
-                return Optional.empty();
+            Logtype type_opt = guessLogtype(path);
+            switch (type_opt) {
+                case REALVAL:
+                    return Optional.of(new RealValueTimeserie(filelog));
+                case PERCENTVAL:
+                    return Optional.of(new PercentTimeserie(filelog));
+                case DISCRETEVAL:
+                    return Optional.of(new DiscreteTimeserie(filelog));
+                case UNKNOWN:
+                default:
+                    System.err.println("Couldn't guess type of log! " + path);
+                    return Optional.empty();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,7 +76,7 @@ public class FHEMFileLog {
             bufferedReader.close();
             if (line == null) {
                 System.err.println("Could not read line. Presumably there is none.");
-                return Optional.empty();
+                return UNKNOWN;
             }
             if (line.contains("%")) {
                 return PERCENTVAL;
