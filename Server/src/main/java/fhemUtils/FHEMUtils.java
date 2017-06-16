@@ -31,11 +31,10 @@ public class FHEMUtils {
         Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\"" });
         BufferedReader stdin = new BufferedReader(new
                 InputStreamReader(process.getInputStream()));
-        String line = stdin.readLine();
-        return line;
+        return stdin.readLine();
     }
 
-    public static String getFhemScriptPath() throws IOException {
+    public static String getFhemScriptPath() {
         Optional<String> fhemdir = getFHEMDIR();
         if (fhemdir.isPresent()) {
             return fhemdir.get() + "fhem.pl";

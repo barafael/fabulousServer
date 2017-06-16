@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class FHEMFileLog {
-    private final Optional<Logtype> type;
+    private final Logtype type;
     private Sensor sensor;
     private String sensorName;
     private String unit;
@@ -29,7 +27,7 @@ public class FHEMFileLog {
     private String path;
     private static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
 
-    public FHEMFileLog(String path, boolean isShowInApp) throws IOException {
+    public FHEMFileLog(String path, boolean isShowInApp) {
         this.path = path;
         this.isShowInApp = isShowInApp;
 
@@ -73,26 +71,26 @@ public class FHEMFileLog {
         }
     }
 
-    public Optional<Logtype> guessLogtype(String path) {
+    public Logtype guessLogtype(String path) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();
             if (line.contains("%")) {
-                return Optional.of(Logtype.PERCENTVAL);
+                return Logtype.PERCENTVAL;
             } else {
                 String value = getValue(line);
                 if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
-                    return Optional.of(Logtype.REALVAL);
+                    return Logtype.REALVAL;
                 } else {
-                    return Optional.of(Logtype.DISCRETEVAL);
+                    return Logtype.DISCRETEVAL;
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return Logtype.UNKNOWN;
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return Logtype.UNKNOWN;
         }
     }
 

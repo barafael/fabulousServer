@@ -50,9 +50,7 @@ public class FHEMDeviceInternals {
     Optional<String> getCurrentLogfileField() {
         if (currentlogfile.startsWith(".")) {
             Optional<String> fhemPath = FHEMUtils.getFHEMDIR();
-            if (fhemPath.isPresent()) {
-                currentlogfile = currentlogfile.replaceFirst(".", fhemPath.get());
-            }
+            fhemPath.ifPresent(s -> currentlogfile = currentlogfile.replaceFirst(".", s));
         }
         return Optional.ofNullable(currentlogfile);
     }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ra on 14.06.17.
+ * @author Rafael on 14.06.17.
  */
 public class RealValueTimeserie extends Timeserie {
     private List<Sample<Double>> samples;

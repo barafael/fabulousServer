@@ -7,7 +7,7 @@ package fhemModel.timeserie;
  */
 
 class Sample<T extends Number> {
-    private long timestamp;
+    private final long timestamp;
     private final T value;
 
     public Sample(long epoch, T value) {
@@ -26,8 +26,7 @@ class Sample<T extends Number> {
 
         Sample<?> sample = (Sample<?>) o;
 
-        if (timestamp != sample.timestamp) return false;
-        return value.equals(sample.value);
+        return timestamp == sample.timestamp && value.equals(sample.value);
     }
 
     @Override

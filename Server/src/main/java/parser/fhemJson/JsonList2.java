@@ -1,11 +1,13 @@
 package parser.fhemJson;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import fhemModel.Model;
+import fhemModel.FHEMModel;
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.FHEMFileLog;
-import fhemModel.timeserie.Timeserie;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -103,15 +105,15 @@ public class JsonList2 {
                 filelog.associate(associated.get(0));
             }
         }
-        for (FHEMDevice sensor: sensors) {
+        for (FHEMDevice sensor : sensors) {
             List<FHEMDevice> linkedFilelogs = filelogs.stream()
                     .filter(f -> f.isLinked(sensor)).collect(Collectors.toList());
             sensor.associate(linkedFilelogs);
         }
 
-        for (FHEMDevice sensor: sensors) {
+        for (FHEMDevice sensor : sensors) {
             String sensorRooms = sensor.getAttributes().getRooms().orElse("");
-            rooms.addAll(sensor.getRooms().orElse(new ArrayList<Room>()));
+            rooms.addAll(sensor.getRooms().orElse(new ArrayList<>()));
         }
 
         HashSet<Sensor> realSensors;
@@ -130,6 +132,6 @@ public class JsonList2 {
 
         // System.out.println(gson.toJson(gson));
 
-        return new Model(realSensors, rooms, realTimeseries);
+        return new FHEMModel(realSensors, rooms, realTimeseries);
     }
 }

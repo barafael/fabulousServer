@@ -1,18 +1,17 @@
 package fhemModel.timeserie;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by ra on 16.06.17.
+ * @author Rafael on 16.06.17.
  */
 public class DiscreteTimeserie extends Timeserie {
     private List<Sample<Integer>> samples;
 
-    private HashMap<Integer, String> legend;
+    private final HashMap<Integer, String> legend;
 
     public DiscreteTimeserie(List<String> samples) {
         this.legend = new HashMap<>();

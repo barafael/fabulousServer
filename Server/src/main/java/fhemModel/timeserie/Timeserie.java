@@ -1,13 +1,7 @@
 package fhemModel.timeserie;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import fhemModel.sensors.Sensor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.

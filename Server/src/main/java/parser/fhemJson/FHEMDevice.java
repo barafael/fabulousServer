@@ -3,11 +3,8 @@ package parser.fhemJson;
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
 import fhemModel.timeserie.FHEMFileLog;
-import fhemModel.timeserie.Timeserie;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 

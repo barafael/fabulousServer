@@ -1,8 +1,8 @@
 package fhemModel.timeserie;
 
 /**
- * Created by ra on 16.06.17.
+ * @author Rafael on 16.06.17.
  */
 public enum Logtype {
-    REALVAL, PERCENTVAL, DISCRETEVAL,
+    REALVAL, PERCENTVAL, DISCRETEVAL, UNKNOWN,
 }

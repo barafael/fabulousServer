@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ra on 16.06.17.
+ * @author Rafael on 16.06.17.
  */
 public class PercentTimeserie extends Timeserie {
     private List<Sample<Double>> samples;
