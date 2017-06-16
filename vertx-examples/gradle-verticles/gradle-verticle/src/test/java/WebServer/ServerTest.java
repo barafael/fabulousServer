@@ -27,7 +27,7 @@ public class ServerTest {
     public Timeout timeout = Timeout.seconds(5);
     private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
-    private JsonObject config;
+    private JsonObject ServerConfig;
     private DeploymentOptions ServerOptions;
     private Vertx vertx;
 
@@ -36,8 +36,8 @@ public class ServerTest {
         vertx = Vertx.vertx();
         int PORT = new Random().nextInt(10000) + 50000;
         System.out.println("Test-PORT: " + PORT);
-        config = new JsonObject().put("PORT", PORT).put("HOST", "localhost");
-        ServerOptions = new DeploymentOptions().setConfig(config);
+        ServerConfig = new JsonObject().put("PORT", PORT).put("HOST", "localhost");
+        ServerOptions = new DeploymentOptions().setConfig(ServerConfig);
         ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
         vertx.deployVerticle(Server.class.getCanonicalName(), ServerOptions, testContext.asyncAssertSuccess());
         httpClient = vertx.createHttpClient(ClientOptions);
@@ -71,11 +71,34 @@ public class ServerTest {
     }
 
     @Test
+    public void testRegister(TestContext testContext) {
+        final Async async = testContext.async();
+        JsonObject json = new JsonObject();
+        int rnd = new Random().nextInt(99999);
+        json.put("username", "test"+rnd);
+        json.put("password", "test"+rnd);
+        json.put("prename","PreTest"+rnd);
+        json.put("surname","SurTest"+rnd);
+        String msg = json.encode();
+        System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
+        httpClient.post("/register")
+                .putHeader("content-type", "application/json")
+                .putHeader("content-length", Integer.toString(msg.length()))
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testRegister_answerHeader: " + h));
+                    async.complete();
+                    testContext.assertEquals(200, ans.statusCode());
+                })
+                .write(msg)
+                .end();
+    }
+
+    @Test
     public void testNotAuthorized(TestContext testContext) {
         final Async async = testContext.async();
         httpClient.get("/api/someStuffNotImplemented")
                 .handler(ans -> {
-                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    ans.headers().forEach(h -> System.out.println("testNotAuthorized_answerHeader: " + h));
                     System.out.println("Response status message: " + ans.statusCode() + ": " + ans.statusMessage());
                     testContext.assertEquals(401, ans.statusCode());
                     async.complete();
@@ -90,7 +113,7 @@ public class ServerTest {
         httpClient.get("/api/someStuffNotImplemented")
                 .putHeader("Authorization", "Basic aGFuczpzb25uZTEyMw==") // user: hans, password: sonne123 in base64
                 .handler(ans -> {
-                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    ans.headers().forEach(h -> System.out.println("testAuthorized_answerHeader: " + h));
                     System.out.println("Response status message: " + ans.statusCode() + ": " + ans.statusMessage());
                     testContext.assertEquals(404, ans.statusCode());
                     async.complete();

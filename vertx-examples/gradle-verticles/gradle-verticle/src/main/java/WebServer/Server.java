@@ -85,30 +85,76 @@ public class Server extends AbstractVerticle {
 
     @Override
     public void stop() throws Exception {
-        //TODO: handle shutdown
-        super.stop();
         router.clear();
         server.close();
+        super.stop();
     }
 
     private void register(RoutingContext routingContext) {
         //TODO: implement using storeInDatabase(...)
-        routingContext.response()
-                .setStatusCode(202)
-                .end("HelloWorld!");
+
+        /* input validation to prevent SQL injections */
+        routingContext.request().params().forEach(pair -> pair.setValue(
+                pair.getValue()
+                        .replace("\"", "")
+                        .replace(";", "")
+                        .replace("\'", "")
+                        .replace("\\", "")
+        ));
+
+
+        if (routingContext.getBodyAsJson().getString("username") == null || routingContext.getBodyAsJson().getString("password") == null) {
+            //TODO: change response code to Bad Request
+            routingContext.response().setStatusCode(405).end("bad request");
+            return;
+        }
+
+
+        /* input validation to prevent SQL injections */
+        String username = routingContext.getBodyAsJson().getString("username")
+                .replace("\"", "")
+                .replace(";", "")
+                .replace("\'", "")
+                .replace("\\", "");
+        String password = routingContext.getBodyAsJson().getString("password")
+                .replace("\"", "")
+                .replace(";", "")
+                .replace("\'", "")
+                .replace("\\", "");
+        /* set optional keys to empty string */
+        String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename")
+                .replace("\"", "")
+                .replace(";", "")
+                .replace("\'", "")
+                .replace("\\", "") : "";
+        String surname = routingContext.getBodyAsJson().getString("surname") != null ? routingContext.getBodyAsJson().getString("surname")
+                .replace("\"", "")
+                .replace(";", "")
+                .replace("\'", "")
+                .replace("\\", "") : "";
+
+
+        Future databaseWriteFuture = Future.future();
+        storeUserInDatabase(username, password, prename, surname, authProvider, jdbcClient, databaseWriteFuture);
+
+        databaseWriteFuture.setHandler(res -> {
+            routingContext.response()
+                    .setStatusCode(200)
+                    .end("registered");
+        });
     }
 
     private void setRoomplan(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(202)
+                .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
     private void setSensorPosition(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(202)
+                .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
@@ -142,14 +188,14 @@ public class Server extends AbstractVerticle {
     private void getPermissions(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(202)
+                .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
     private void getRooms(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(202)
+                .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
@@ -157,7 +203,7 @@ public class Server extends AbstractVerticle {
     private void getTimeSeries(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(202)
+                .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
