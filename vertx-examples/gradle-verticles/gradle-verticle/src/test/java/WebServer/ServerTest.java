@@ -1,6 +1,7 @@
 package WebServer;
 
 
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Base64;
+import java.util.Random;
 
 /**
  * Created 09.06.17.
@@ -22,15 +24,23 @@ import java.util.Base64;
 @RunWith(VertxUnitRunner.class)
 public class ServerTest {
     @Rule
-    public Timeout timeout = Timeout.seconds(7);
-    private final HttpClientOptions options = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(8080);
+    public Timeout timeout = Timeout.seconds(5);
+    private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
+    private JsonObject config;
+    private DeploymentOptions ServerOptions;
+    private Vertx vertx;
 
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
-        final Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(Server.class.getCanonicalName(),Main.options, testContext.asyncAssertSuccess());
-        httpClient = vertx.createHttpClient(options);
+        vertx = Vertx.vertx();
+        int PORT = new Random().nextInt(10000) + 50000;
+        System.out.println("Test-PORT: " + PORT);
+        config = new JsonObject().put("PORT", PORT).put("HOST", "localhost");
+        ServerOptions = new DeploymentOptions().setConfig(config);
+        ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
+        vertx.deployVerticle(Server.class.getCanonicalName(), ServerOptions, testContext.asyncAssertSuccess());
+        httpClient = vertx.createHttpClient(ClientOptions);
     }
 
     @Test
@@ -58,6 +68,34 @@ public class ServerTest {
                 })
                 .write(msg)
                 .end();
+    }
+
+    @Test
+    public void testNotAuthorized(TestContext testContext) {
+        final Async async = testContext.async();
+        httpClient.get("/api/someStuffNotImplemented")
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    System.out.println("Response status message: " + ans.statusCode() + ": " + ans.statusMessage());
+                    testContext.assertEquals(401, ans.statusCode());
+                    async.complete();
+                })
+                .end("trash");
+    }
+
+
+    @Test
+    public void testAuthorized(TestContext testContext) {
+        final Async async = testContext.async();
+        httpClient.get("/api/someStuffNotImplemented")
+                .putHeader("Authorization", "Basic aGFuczpzb25uZTEyMw==") // user: hans, password: sonne123 in base64
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    System.out.println("Response status message: " + ans.statusCode() + ": " + ans.statusMessage());
+                    testContext.assertEquals(404, ans.statusCode());
+                    async.complete();
+                })
+                .end("trash");
     }
 
     @org.junit.After
