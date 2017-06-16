@@ -1,14 +1,14 @@
 energyCalc: 666.6
 2017-06-03_00:06:41 HM_52CC96_Pwr energy:
 
-Handle Readings in percent HOW? Duck Typing again?
+DONE: Handle Readings in percent HOW? Duck Typing again?
 
-Possible sensor attributes:
-binarySensor: boolean
+DONE: Possible sensor attributes:
+DONE: binarySensor: boolean
 
 
-Possible Timeseries attributes:
-percentreading: boolean
+DONE: Possible Timeseries attributes:
+DONE: percentreading: boolean
 
 DONE: getRooms
     PENDING: SVGRoomPlan HOW?
