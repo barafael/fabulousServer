@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import fhemModel.Model;
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.FHEMFileLog;
 import fhemModel.timeserie.Timeserie;
 
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ public class JsonList2 {
         }
 
         HashSet<Sensor> realSensors;
-        HashSet<Timeserie> realTimeseries;
+        HashSet<FHEMFileLog> realTimeseries;
 
         realSensors = sensors.stream().map(FHEMDevice::parseToSensor)
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));

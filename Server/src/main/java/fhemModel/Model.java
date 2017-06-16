@@ -2,10 +2,10 @@ package fhemModel;
 
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.FHEMFileLog;
 import fhemModel.timeserie.Timeserie;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 public class Model {
     private final HashSet<Sensor> sensors;
     private final HashSet<Room> rooms;
-    private final HashSet<Timeserie> timeseries;
+    private final HashSet<FHEMFileLog> timeseries;
 
-    public Model(HashSet<Sensor> sensors, HashSet<Room> rooms, HashSet<Timeserie> timeseries) {
+    public Model(HashSet<Sensor> sensors, HashSet<Room> rooms, HashSet<FHEMFileLog> timeseries) {
         this.sensors = sensors;
         this.rooms = rooms;
         this.timeseries = timeseries;
@@ -35,7 +35,7 @@ public class Model {
         return rooms;
     }
 
-    public HashSet<Timeserie> getTimeseries() {
+    public HashSet<FHEMFileLog> getTimeseries() {
         return timeseries;
     }
 }

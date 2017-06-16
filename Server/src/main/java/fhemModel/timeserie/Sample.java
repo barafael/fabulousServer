@@ -2,25 +2,21 @@ package fhemModel.timeserie;
 
 /**
  * This class represents a single sample from a sensor in FHEM.
- * It is basically a Pair<String, Double>
+ * It is basically a Pair<Long, T>
  * @author Rafael
  */
 
-class Sample {
-    private final String date;
-    private final double value;
+class Sample<T extends Number> {
+    private long timestamp;
+    private final T value;
 
-    public String getDate() {
-        return date;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    Sample(String date, double value) {
-        this.date = date;
+    public Sample(long epoch, T value) {
+        timestamp = epoch;
         this.value = value;
+    }
+
+    public T getValue() {
+        return value;
     }
 
     @Override
@@ -28,26 +24,23 @@ class Sample {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Sample sample = (Sample) o;
+        Sample<?> sample = (Sample<?>) o;
 
-        if (Double.compare(sample.value, value) != 0) return false;
-        return date.equals(sample.date);
+        if (timestamp != sample.timestamp) return false;
+        return value.equals(sample.value);
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = date.hashCode();
-        temp = Double.doubleToLongBits(value);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        int result = (int) (timestamp ^ (timestamp >>> 32));
+        result = 31 * result + value.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "Sample{" +
-                "date=" + date +
+                "timestamp=" + timestamp +
                 ", value=" + value +
                 '}';
     }

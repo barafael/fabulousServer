@@ -6,8 +6,8 @@ import fhemConnection.FHEMConnection;
 import fhemConnection.FHEMClientModeCon;
 import com.google.gson.GsonBuilder;
 import fhemConnection.FHEMNotFoundException;
-import fhemModel.Model;
 import com.google.gson.Gson;
+import fhemModel.Model;
 import parser.FHEMParser;
 import parser.fhemJson.JsonList2;
 

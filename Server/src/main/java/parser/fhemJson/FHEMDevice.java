@@ -2,6 +2,7 @@ package parser.fhemJson;
 
 import fhemModel.sensors.Room;
 import fhemModel.sensors.Sensor;
+import fhemModel.timeserie.FHEMFileLog;
 import fhemModel.timeserie.Timeserie;
 import com.google.gson.annotations.SerializedName;
 
@@ -132,7 +133,7 @@ public class FHEMDevice {
         return Optional.of(s);
     }
 
-    Optional<Timeserie> parseToLog() {
+    Optional<FHEMFileLog> parseToLog() {
         if (!isFileLog()) {
             return Optional.empty();
         }
@@ -150,18 +151,8 @@ public class FHEMDevice {
             return Optional.empty();
         }
         String path = path_opt.get();
-        List<String> lines;
-        String line;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            lines = new ArrayList<>();
-
-            while ((line = bufferedReader.readLine()) != null) {
-                lines.add(line);
-            }
-            bufferedReader.close();
-
-            return Optional.of((new Timeserie(lines, isShowInApp())));
+        return Optional.of(new FHEMFileLog(path, isShowInApp()));
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
