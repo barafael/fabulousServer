@@ -50,7 +50,16 @@ public class JsonList2 {
         return Optional.ofNullable(arg);
     }
 
-    public Model toFHEMModel() {
+    public static @NotNull JsonList2 parseFrom(String jsonString) {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+
+        Gson gson = builder.create();
+
+        return gson.fromJson(jsonString, JsonList2.class);
+    }
+
+    public FHEMModel toFHEMModel() {
         HashSet<FHEMDevice> sensors = new HashSet<>();
         HashSet<Room> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();

@@ -7,8 +7,7 @@ import fhemConnection.FHEMClientModeCon;
 import com.google.gson.GsonBuilder;
 import fhemConnection.FHEMNotFoundException;
 import com.google.gson.Gson;
-import fhemModel.Model;
-import parser.FHEMParser;
+import fhemModel.FHEMModel;
 import parser.fhemJson.JsonList2;
 
 /**
@@ -16,20 +15,18 @@ import parser.fhemJson.JsonList2;
  */
 class Server {
 
-    private static final FHEMParser parser = FHEMParser.getInstance();
-
     public static void main(String[] args) {
         FHEMConnection fhc = new FHEMClientModeCon();
         try {
             String jsonList2_str = fhc.getJsonList2();
-            JsonList2 list = parser.parse(jsonList2_str);
+            JsonList2 list = JsonList2.parseFrom(jsonList2_str);
 
-            Model model = list.toFHEMModel();
+            FHEMModel fhemModel = list.toFHEMModel();
             /* The other way around - just for testing.
             *  (Convert objects to json again and print)
             * */
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(gson.toJson(model));
+            System.out.println(gson.toJson(fhemModel));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FHEMNotFoundException fnfe) {
