@@ -2,19 +2,26 @@ package fhemModel.sensors;
 
 import fhemUtils.FHEMUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents a room which associates a FHEM model.
  * @author Rafael
  */
 
 public class FHEMRoom {
+    public List<FHEMSensor> getSensors() {
+        return sensors;
+    }
+
+    public void setSensors(List<FHEMSensor> sensors) {
+        this.sensors = sensors;
+    }
+
+    List<FHEMSensor> sensors = new ArrayList<>();
     private SVGRoomPlan plan;
     private String name;
-
-    public FHEMRoom(SVGRoomPlan plan, String name) {
-        this.plan = plan;
-        this.name = name;
-    }
 
     public FHEMRoom(String roomname) {
         String pathToPlan = FHEMUtils.getFHEMDIR() + "roomplans/" + roomname + ".svg";
