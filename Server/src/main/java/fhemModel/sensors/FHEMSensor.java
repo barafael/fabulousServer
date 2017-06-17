@@ -18,13 +18,13 @@ public class FHEMSensor {
     private final String name;
     private final long ID;
     private String permission;
-    private final HashSet<Room> rooms = new HashSet<>();
+    private final HashSet<FHEMRoom> rooms = new HashSet<>();
     private HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
     private boolean isShowInApp;
     private HashMap<String, String> metaInfo;
 
     public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
-                      boolean isShowInApp, HashMap<String, String> metaInfo, Collection<Room> rooms) {
+                      boolean isShowInApp, HashMap<String, String> metaInfo, Collection<FHEMRoom> rooms) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
         this.ID = ID;
@@ -42,7 +42,7 @@ public class FHEMSensor {
         associatedLogs.add(log);
     }
 
-    public boolean addRooms(Collection<Room> r) {
+    public boolean addRooms(Collection<FHEMRoom> r) {
         return rooms.addAll(r);
     }
 

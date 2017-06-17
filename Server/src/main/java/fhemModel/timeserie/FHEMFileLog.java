@@ -37,8 +37,6 @@ public class FHEMFileLog {
         this.type = guessLogtype(path);
     }
 
-
-
     public Optional<? extends Timeserie> getTimeserie() {
         List<String> filelog;
         String line;
@@ -155,9 +153,5 @@ public class FHEMFileLog {
             e.printStackTrace();
             return Optional.empty();
         }
-    }
-
-    public String getName() {
-        return name;
     }
 }

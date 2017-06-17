@@ -7,16 +7,16 @@ import fhemUtils.FHEMUtils;
  * @author Rafael
  */
 
-public class Room {
+public class FHEMRoom {
     private SVGRoomPlan plan;
     private String name;
 
-    public Room(SVGRoomPlan plan, String name) {
+    public FHEMRoom(SVGRoomPlan plan, String name) {
         this.plan = plan;
         this.name = name;
     }
 
-    public Room(String roomname) {
+    public FHEMRoom(String roomname) {
         String pathToPlan = FHEMUtils.getFHEMDIR() + "roomplans/" + roomname + ".svg";
         plan = SVGRoomPlan.loadFile(pathToPlan);
         name = roomname;
@@ -28,7 +28,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" +
+        return "FHEMRoom{" +
                 "name='" + name + '\'' +
                 '}';
     }
@@ -38,7 +38,7 @@ public class Room {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Room room = (Room) o;
+        FHEMRoom room = (FHEMRoom) o;
 
         return name.equals(room.name);
     }

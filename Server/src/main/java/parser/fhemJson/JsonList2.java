@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import fhemModel.FHEMModel;
-import fhemModel.sensors.Room;
+import fhemModel.sensors.FHEMRoom;
 import fhemModel.sensors.FHEMSensor;
 import fhemModel.timeserie.FHEMFileLog;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class JsonList2 {
 
     public FHEMModel toFHEMModel() {
         HashSet<FHEMDevice> sensors = new HashSet<>();
-        HashSet<Room> rooms = new HashSet<>();
+        HashSet<FHEMRoom> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
         /* Ignore static analysis warnings here: Results is populated by gson */

@@ -1,6 +1,6 @@
 package parser.fhemJson;
 
-import fhemModel.sensors.Room;
+import fhemModel.sensors.FHEMRoom;
 import fhemModel.sensors.FHEMSensor;
 import fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.annotations.SerializedName;
@@ -114,7 +114,7 @@ public class FHEMDevice {
         String status = internals.getState().orElse("Not supplied");
         boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>();
-        Collection<Room> rooms = getRooms().orElse(new ArrayList<>(0));
+        Collection<FHEMRoom> rooms = getRooms().orElse(new ArrayList<>(0));
 
         FHEMSensor s = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
 
@@ -154,14 +154,14 @@ public class FHEMDevice {
         return attributes;
     }
 
-    public Optional<List<Room>> getRooms() {
+    public Optional<List<FHEMRoom>> getRooms() {
         Optional<String> rooms_opt = getAttributes().getRooms();
         if (rooms_opt.isPresent()) {
             String rooms_str = rooms_opt.get();
             String[] rooms = rooms_str.split(",");
-            List<Room> roomList = new ArrayList<>();
+            List<FHEMRoom> roomList = new ArrayList<>();
             for (String roomname : rooms) {
-                roomList.add(new Room(roomname));
+                roomList.add(new FHEMRoom(roomname));
             }
             return Optional.of(roomList);
         } else {
