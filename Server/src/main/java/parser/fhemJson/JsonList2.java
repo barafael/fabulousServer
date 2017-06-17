@@ -112,7 +112,6 @@ public class JsonList2 {
         }
 
         for (FHEMDevice sensor : sensors) {
-            String sensorRooms = sensor.getAttributes().getRooms().orElse("");
             rooms.addAll(sensor.getRooms().orElse(new ArrayList<>()));
         }
 
