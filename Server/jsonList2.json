@@ -16,15 +16,15 @@
       "TYPE": "CUL_HM"
     },
     "Readings": {
-      "state": { "Value":"alive:6 dead:2 unkn:0 off:0", "Time":"2017-06-17 13:29:05" },
-      "status_HM_521A72": { "Value":"alive", "Time":"2017-06-17 13:29:05" },
-      "status_HM_52CB8E": { "Value":"dead", "Time":"2017-06-17 13:29:05" },
-      "status_HM_52CC96": { "Value":"dead", "Time":"2017-06-17 13:29:05" },
-      "status_HM_56A1E8": { "Value":"alive", "Time":"2017-06-17 13:29:05" },
-      "status_HM_56A1EC": { "Value":"alive", "Time":"2017-06-17 13:29:05" },
-      "status_HM_56A27C": { "Value":"alive", "Time":"2017-06-17 13:29:05" },
-      "status_HM_56A439": { "Value":"alive", "Time":"2017-06-17 13:29:05" },
-      "status_HM_56A86F": { "Value":"alive", "Time":"2017-06-17 13:29:05" }
+      "state": { "Value":"alive:6 dead:2 unkn:0 off:0", "Time":"2017-06-17 14:49:05" },
+      "status_HM_521A72": { "Value":"alive", "Time":"2017-06-17 14:49:05" },
+      "status_HM_52CB8E": { "Value":"dead", "Time":"2017-06-17 14:49:05" },
+      "status_HM_52CC96": { "Value":"dead", "Time":"2017-06-17 14:49:05" },
+      "status_HM_56A1E8": { "Value":"alive", "Time":"2017-06-17 14:49:05" },
+      "status_HM_56A1EC": { "Value":"alive", "Time":"2017-06-17 14:49:05" },
+      "status_HM_56A27C": { "Value":"alive", "Time":"2017-06-17 14:49:05" },
+      "status_HM_56A439": { "Value":"alive", "Time":"2017-06-17 14:49:05" },
+      "status_HM_56A86F": { "Value":"alive", "Time":"2017-06-17 14:49:05" }
     },
     "Attributes": {
       "event-on-change-reading": ".*",
@@ -37,8 +37,8 @@
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 addvaltrigger connectCommand do_not_notify:1,0 dummy:1,0 hmId longids hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger model:CUL,CUN,CUNO,SCC,nanoCUL rfmode:SlowRF,HomeMatic,MAX,WMBus_T,WMBus_S,KOPP_FC sendpool showtime:1,0 event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
       "CMDS": "ABbCeFGhiKkLlMmNRTtUuVWXxYZ",
-      "CUL0_MSGCNT": "4216",
-      "CUL0_TIME": "2017-06-17 13:31:54",
+      "CUL0_MSGCNT": "4288",
+      "CUL0_TIME": "2017-06-17 14:55:05",
       "Clients": ":CUL_HM:HMS:CUL_IR:STACKABLE_CC:TSSTACKED:STACKABLE:",
       "DEF": "/dev/ttyACM0@9600 1034",
       "DeviceName": "/dev/ttyACM0@9600",
@@ -46,10 +46,10 @@
       "FHTID": "1034",
       "NAME": "CUL0",
       "NR": "32",
-      "NR_CMD_LAST_H": "1",
+      "NR_CMD_LAST_H": "2",
       "PARTIAL": "",
-      "RAWMSG": "A0FB48653521A7200000000C10000DB8425",
-      "RSSI": "-55.5",
+      "RAWMSG": "A0FD58653521A7200000000C10000EBCA24",
+      "RSSI": "-56",
       "STATE": "Initialized",
       "TYPE": "CUL",
       "VERSION": "V 1.67 CUL868",
@@ -59,7 +59,7 @@
     "Readings": {
       "cmds": { "Value":" A B b C e F G h i K k L l M m N R T t U u V W X x Y Z", "Time":"2017-06-14 10:02:00" },
       "raw": { "Value":"V 1.67 CUL868", "Time":"2017-05-26 12:43:58" },
-      "state": { "Value":"Initialized", "Time":"2017-06-17 13:31:54" }
+      "state": { "Value":"Initialized", "Time":"2017-06-17 14:55:05" }
     },
     "Attributes": {
       "hmId": "01D1E5",
@@ -102,7 +102,7 @@
       "currentlogfile": "/opt/fhem/log/HM_521A72-2017.log",
       "logfile": "/opt/fhem/log/HM_521A72-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"27382", "Time":"2017-06-17 13:31:54" } },
+    "Readings": {      "linesInTheFile": { "Value":"27481", "Time":"2017-06-17 14:55:05" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM,room_fablab"
@@ -124,7 +124,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/brightness/HM_521A72_brightness-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/brightness/HM_521A72_brightness-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"7469", "Time":"2017-06-17 13:31:54" } },
+    "Readings": {      "linesInTheFile": { "Value":"7502", "Time":"2017-06-17 14:55:05" } },
     "Attributes": {      "room": "app,room_fablab" }
   },
   {
@@ -283,7 +283,7 @@
       "currentlogfile": "/opt/fhem/log/HM_56A1E8-2017.log",
       "logfile": "/opt/fhem/log/HM_56A1E8-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"2484", "Time":"2017-06-17 12:40:55" } },
+    "Readings": {      "linesInTheFile": { "Value":"2494", "Time":"2017-06-17 14:24:28" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM,room_fablab"
@@ -305,7 +305,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A1E8_battery-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A1E8_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"341", "Time":"2017-06-17 12:40:55" } },
+    "Readings": {      "linesInTheFile": { "Value":"343", "Time":"2017-06-17 14:24:28" } },
     "Attributes": { }
   },
   {
@@ -324,7 +324,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A1E8_contact-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A1E8_contact-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"332", "Time":"2017-06-17 12:40:55" } },
+    "Readings": {      "linesInTheFile": { "Value":"334", "Time":"2017-06-17 14:24:28" } },
     "Attributes": { }
   },
   {
@@ -343,7 +343,7 @@
       "currentlogfile": "/opt/fhem/log/HM_56A1EC-2017.log",
       "logfile": "/opt/fhem/log/HM_56A1EC-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"2089", "Time":"2017-06-17 13:20:36" } },
+    "Readings": {      "linesInTheFile": { "Value":"2094", "Time":"2017-06-17 14:16:19" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM"
@@ -365,7 +365,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A1EC_battery-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A1EC_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"324", "Time":"2017-06-17 13:20:36" } },
+    "Readings": {      "linesInTheFile": { "Value":"325", "Time":"2017-06-17 14:16:19" } },
     "Attributes": { }
   },
   {
@@ -384,7 +384,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A1EC_contact-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A1EC_contact-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"313", "Time":"2017-06-17 13:20:36" } },
+    "Readings": {      "linesInTheFile": { "Value":"314", "Time":"2017-06-17 14:16:19" } },
     "Attributes": { }
   },
   {
@@ -403,7 +403,7 @@
       "currentlogfile": "/opt/fhem/log/HM_56A27C-2017.log",
       "logfile": "/opt/fhem/log/HM_56A27C-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"3225", "Time":"2017-06-17 13:12:48" } },
+    "Readings": {      "linesInTheFile": { "Value":"3230", "Time":"2017-06-17 14:09:06" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM"
@@ -425,7 +425,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A27C_battery-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A27C_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"408", "Time":"2017-06-17 13:12:48" } },
+    "Readings": {      "linesInTheFile": { "Value":"409", "Time":"2017-06-17 14:09:06" } },
     "Attributes": { }
   },
   {
@@ -444,7 +444,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A27C_contact-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A27C_contact-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"390", "Time":"2017-06-17 13:12:48" } },
+    "Readings": {      "linesInTheFile": { "Value":"391", "Time":"2017-06-17 14:09:06" } },
     "Attributes": { }
   },
   {
@@ -463,7 +463,7 @@
       "currentlogfile": "/opt/fhem/log/HM_56A439-2017.log",
       "logfile": "/opt/fhem/log/HM_56A439-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"4063", "Time":"2017-06-17 13:23:46" } },
+    "Readings": {      "linesInTheFile": { "Value":"4068", "Time":"2017-06-17 14:14:27" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM"
@@ -485,7 +485,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A439_battery-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A439_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"466", "Time":"2017-06-17 13:23:46" } },
+    "Readings": {      "linesInTheFile": { "Value":"467", "Time":"2017-06-17 14:14:27" } },
     "Attributes": { }
   },
   {
@@ -504,7 +504,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/windows/HM_56A439_contact-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/windows/HM_56A439_contact-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"341", "Time":"2017-06-17 13:23:46" } },
+    "Readings": {      "linesInTheFile": { "Value":"342", "Time":"2017-06-17 14:14:27" } },
     "Attributes": { }
   },
   {
@@ -523,7 +523,7 @@
       "currentlogfile": "/opt/fhem/log/HM_56A86F-2017.log",
       "logfile": "/opt/fhem/log/HM_56A86F-%Y.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"9624", "Time":"2017-06-17 13:04:20" } },
+    "Readings": {      "linesInTheFile": { "Value":"9634", "Time":"2017-06-17 14:52:36" } },
     "Attributes": {
       "logtype": "text",
       "room": "CUL_HM"
@@ -545,7 +545,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/doors/HM_56A86F_battery-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/doors/HM_56A86F_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"1730", "Time":"2017-06-17 13:04:20" } },
+    "Readings": {      "linesInTheFile": { "Value":"1732", "Time":"2017-06-17 14:52:36" } },
     "Attributes": { }
   },
   {
@@ -564,7 +564,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/doors/HM_56A86F_contact-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/doors/HM_56A86F_contact-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"1675", "Time":"2017-06-17 13:04:20" } },
+    "Readings": {      "linesInTheFile": { "Value":"1677", "Time":"2017-06-17 14:52:36" } },
     "Attributes": { }
   },
   {
@@ -583,7 +583,7 @@
       "currentlogfile": "/opt/fhem/log/NetAtmo_Homecoach_log-2017-06.log",
       "logfile": "/opt/fhem/log/NetAtmo_Homecoach_log-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"823", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "linesInTheFile": { "Value":"825", "Time":"2017-06-17 14:03:41" } },
     "Attributes": {      "room": "room_fablab" }
   },
   {
@@ -701,22 +701,22 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "1733",
-      "CUL0_RAWMSG": "A0FB48653521A7200000000C10000DB84::-55.5:CUL0",
-      "CUL0_RSSI": "-55.5",
-      "CUL0_TIME": "2017-06-17 13:31:54",
+      "CUL0_MSGCNT": "1766",
+      "CUL0_RAWMSG": "A0FD58653521A7200000000C10000EBCA::-56:CUL0",
+      "CUL0_RSSI": "-56",
+      "CUL0_TIME": "2017-06-17 14:55:05",
       "DEF": "521A72",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "1733",
+      "MSGCNT": "1766",
       "NAME": "HM_521A72",
       "NOTIFYDEV": "global",
       "NR": "60",
       "NTFY_ORDER": "50-HM_521A72",
-      "STATE": "B: 561.96",
+      "STATE": "B: 603.62",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:B4 - t:53 s:521A72 d:000000 00C10000DB84",
-      "protLastRcv": "2017-06-17 13:31:54",
-      "rssi_at_CUL0": "max:-46.5 avg:-52.94 cnt:1733 lst:-55.5 min:-59 "
+      "lastMsg": "No:D5 - t:53 s:521A72 d:000000 00C10000EBCA",
+      "protLastRcv": "2017-06-17 14:55:05",
+      "rssi_at_CUL0": "max:-46.5 avg:-52.99 cnt:1766 lst:-56 min:-59 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
@@ -731,9 +731,9 @@
       "RegL_01.": { "Value":"02:50 08:00 30:06 7B:08 AC:00 00:00", "Time":"2017-05-30 11:42:05" },
       "aesCommToDev": { "Value":"ok", "Time":"2017-05-30 11:42:04" },
       "aesKeyNbr": { "Value":"06", "Time":"2017-05-30 11:42:04" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:31:54" },
-      "brightness": { "Value":"561.96", "Time":"2017-06-17 13:31:54" },
-      "state": { "Value":"B: 561.96", "Time":"2017-06-17 13:31:54" }
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:55:05" },
+      "brightness": { "Value":"603.62", "Time":"2017-06-17 14:55:05" },
+      "state": { "Value":"B: 603.62", "Time":"2017-06-17 14:55:05" }
     },
     "Attributes": {
       "IODev": "CUL0",
@@ -1176,38 +1176,38 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk peerChan raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "82",
-      "CUL0_RAWMSG": "A0DC9861056A1E80000000601C800::-50:CUL0",
-      "CUL0_RSSI": "-50",
-      "CUL0_TIME": "2017-06-17 12:40:55",
+      "CUL0_MSGCNT": "84",
+      "CUL0_RAWMSG": "A0DCB861056A1E80000000601C800::-49.5:CUL0",
+      "CUL0_RSSI": "-49.5",
+      "CUL0_TIME": "2017-06-17 14:24:28",
       "DEF": "56A1E8",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "82",
+      "MSGCNT": "84",
       "NAME": "HM_56A1E8",
       "NOTIFYDEV": "global",
       "NR": "51",
       "NTFY_ORDER": "50-HM_56A1E8",
       "STATE": "open",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:C9 - t:10 s:56A1E8 d:000000 0601C800",
+      "lastMsg": "No:CB - t:10 s:56A1E8 d:000000 0601C800",
       "protCmdDel": "4",
-      "protLastRcv": "2017-06-17 12:40:55",
+      "protLastRcv": "2017-06-17 14:24:28",
       "protResnd": "3 last_at:2017-06-14 12:20:56",
       "protResndFail": "1 last_at:2017-06-14 13:11:58",
       "protSnd": "4 last_at:2017-06-14 13:11:53",
       "protState": "CMDs_done_Errors:1",
-      "rssi_at_CUL0": "max:-45 avg:-52.85 cnt:82 min:-80 lst:-50 "
+      "rssi_at_CUL0": "max:-45 avg:-52.77 cnt:84 min:-80 lst:-49.5 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
       "D-firmware": { "Value":"1.0", "Time":"2017-05-30 09:13:40" },
       "D-serialNr": { "Value":"OEQ0227112", "Time":"2017-05-30 09:13:40" },
-      "alive": { "Value":"yes", "Time":"2017-06-17 12:40:55" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 12:40:55" },
-      "contact": { "Value":"open (to broadcast)", "Time":"2017-06-17 12:40:55" },
-      "recentStateType": { "Value":"info", "Time":"2017-06-17 12:40:55" },
-      "sabotageError": { "Value":"off", "Time":"2017-06-17 12:40:55" },
-      "state": { "Value":"open", "Time":"2017-06-17 12:40:55" },
+      "alive": { "Value":"yes", "Time":"2017-06-17 14:24:28" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:24:28" },
+      "contact": { "Value":"open (to broadcast)", "Time":"2017-06-17 14:24:28" },
+      "recentStateType": { "Value":"info", "Time":"2017-06-17 14:24:28" },
+      "sabotageError": { "Value":"off", "Time":"2017-06-17 14:24:28" },
+      "state": { "Value":"open", "Time":"2017-06-17 14:24:28" },
       "trigDst_broadcast": { "Value":"noConfig", "Time":"2017-06-14 17:43:50" },
       "trigger_cnt": { "Value":"147", "Time":"2017-06-14 17:43:50" }
     },
@@ -1231,22 +1231,22 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk peerChan raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "75",
-      "CUL0_RAWMSG": "A0D3B861056A1EC00000006010000::-54:CUL0",
+      "CUL0_MSGCNT": "76",
+      "CUL0_RAWMSG": "A0D3C861056A1EC00000006010000::-54:CUL0",
       "CUL0_RSSI": "-54",
-      "CUL0_TIME": "2017-06-17 13:20:36",
+      "CUL0_TIME": "2017-06-17 14:16:19",
       "DEF": "56A1EC",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "75",
+      "MSGCNT": "76",
       "NAME": "HM_56A1EC",
       "NOTIFYDEV": "global",
       "NR": "49",
       "NTFY_ORDER": "50-HM_56A1EC",
       "STATE": "closed",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:3B - t:10 s:56A1EC d:000000 06010000",
-      "protLastRcv": "2017-06-17 13:20:36",
-      "rssi_at_CUL0": "lst:-54 min:-74 avg:-58.72 cnt:75 max:-41 "
+      "lastMsg": "No:3C - t:10 s:56A1EC d:000000 06010000",
+      "protLastRcv": "2017-06-17 14:16:19",
+      "rssi_at_CUL0": "lst:-54 min:-74 avg:-58.66 cnt:76 max:-41 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
@@ -1260,12 +1260,12 @@
       "R-sign": { "Value":"on", "Time":"2017-05-30 09:13:41" },
       "RegL_00.": { "Value":"02:00 09:01 0A:00 0B:00 0C:00 10:01 14:06 00:00", "Time":"2017-05-30 09:13:41" },
       "RegL_01.": { "Value":"08:01 20:9C 21:00 30:06 00:00", "Time":"2017-05-30 09:13:41" },
-      "alive": { "Value":"yes", "Time":"2017-06-17 13:20:36" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:20:36" },
-      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 13:20:36" },
-      "recentStateType": { "Value":"info", "Time":"2017-06-17 13:20:36" },
-      "sabotageError": { "Value":"off", "Time":"2017-06-17 13:20:36" },
-      "state": { "Value":"closed", "Time":"2017-06-17 13:20:36" },
+      "alive": { "Value":"yes", "Time":"2017-06-17 14:16:19" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:16:19" },
+      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 14:16:19" },
+      "recentStateType": { "Value":"info", "Time":"2017-06-17 14:16:19" },
+      "sabotageError": { "Value":"off", "Time":"2017-06-17 14:16:19" },
+      "state": { "Value":"closed", "Time":"2017-06-17 14:16:19" },
       "trigDst_broadcast": { "Value":"noConfig", "Time":"2017-05-30 09:12:49" },
       "trigger_cnt": { "Value":"53", "Time":"2017-06-14 17:06:01" }
     },
@@ -1288,24 +1288,24 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk peerChan raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "86",
-      "CUL0_RAWMSG": "A0DBCA61056A27C01D1E506010000::-69.5:CUL0",
-      "CUL0_RSSI": "-69.5",
-      "CUL0_TIME": "2017-06-17 13:12:48",
+      "CUL0_MSGCNT": "87",
+      "CUL0_RAWMSG": "A0DBDA61056A27C01D1E506010000::-75:CUL0",
+      "CUL0_RSSI": "-75",
+      "CUL0_TIME": "2017-06-17 14:09:06",
       "DEF": "56A27C",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "86",
+      "MSGCNT": "87",
       "NAME": "HM_56A27C",
       "NOTIFYDEV": "global",
       "NR": "37",
       "NTFY_ORDER": "50-HM_56A27C",
       "STATE": "closed",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:BC - t:10 s:56A27C d:01D1E5 06010000",
-      "protLastRcv": "2017-06-17 13:12:48",
-      "protSnd": "86 last_at:2017-06-17 13:12:48",
+      "lastMsg": "No:BD - t:10 s:56A27C d:01D1E5 06010000",
+      "protLastRcv": "2017-06-17 14:09:06",
+      "protSnd": "87 last_at:2017-06-17 14:09:06",
       "protState": "CMDs_done",
-      "rssi_at_CUL0": "avg:-57.99 cnt:86 max:-41 lst:-69.5 min:-77 "
+      "rssi_at_CUL0": "avg:-58.19 cnt:87 max:-41 lst:-75 min:-77 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
@@ -1316,12 +1316,12 @@
       "RegL_00.": { "Value":"", "Time":"2017-05-30 09:13:43" },
       "aesCommToDev": { "Value":"ok", "Time":"2017-05-26 14:02:41" },
       "aesKeyNbr": { "Value":"00", "Time":"2017-05-26 14:02:41" },
-      "alive": { "Value":"yes", "Time":"2017-06-17 13:12:48" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:12:48" },
-      "contact": { "Value":"closed (to VCCU)", "Time":"2017-06-17 13:12:48" },
-      "recentStateType": { "Value":"info", "Time":"2017-06-17 13:12:48" },
-      "sabotageError": { "Value":"off", "Time":"2017-06-17 13:12:48" },
-      "state": { "Value":"closed", "Time":"2017-06-17 13:12:48" },
+      "alive": { "Value":"yes", "Time":"2017-06-17 14:09:06" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:09:06" },
+      "contact": { "Value":"closed (to VCCU)", "Time":"2017-06-17 14:09:06" },
+      "recentStateType": { "Value":"info", "Time":"2017-06-17 14:09:06" },
+      "sabotageError": { "Value":"off", "Time":"2017-06-17 14:09:06" },
+      "state": { "Value":"closed", "Time":"2017-06-17 14:09:06" },
       "trigger_cnt": { "Value":"121", "Time":"2017-06-14 17:06:01" }
     },
     "Attributes": {
@@ -1343,39 +1343,39 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk peerChan raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "84",
-      "CUL0_RAWMSG": "A0D95861056A43900000006010000::-49:CUL0",
-      "CUL0_RSSI": "-49",
-      "CUL0_TIME": "2017-06-17 13:23:46",
+      "CUL0_MSGCNT": "85",
+      "CUL0_RAWMSG": "A0D96861056A43900000006010000::-49.5:CUL0",
+      "CUL0_RSSI": "-49.5",
+      "CUL0_TIME": "2017-06-17 14:14:27",
       "DEF": "56A439",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "84",
+      "MSGCNT": "85",
       "NAME": "HM_56A439",
       "NOTIFYDEV": "global",
       "NR": "53",
       "NTFY_ORDER": "50-HM_56A439",
       "STATE": "closed",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:95 - t:10 s:56A439 d:000000 06010000",
+      "lastMsg": "No:96 - t:10 s:56A439 d:000000 06010000",
       "protCmdDel": "4",
-      "protLastRcv": "2017-06-17 13:23:46",
+      "protLastRcv": "2017-06-17 14:14:27",
       "protResnd": "3 last_at:2017-06-14 12:16:30",
       "protResndFail": "1 last_at:2017-06-14 13:13:10",
       "protSnd": "4 last_at:2017-06-14 13:13:06",
       "protState": "CMDs_done_Errors:1",
-      "rssi_at_CUL0": "min:-75 lst:-49 max:-49 cnt:84 avg:-53.73 "
+      "rssi_at_CUL0": "min:-75 lst:-49.5 max:-49 cnt:85 avg:-53.68 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
       "D-firmware": { "Value":"1.0", "Time":"2017-05-30 09:13:43" },
       "D-serialNr": { "Value":"OEQ0226518", "Time":"2017-05-30 09:13:43" },
-      "alive": { "Value":"yes", "Time":"2017-06-17 13:23:46" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:23:46" },
-      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 13:23:46" },
-      "recentStateType": { "Value":"info", "Time":"2017-06-17 13:23:46" },
+      "alive": { "Value":"yes", "Time":"2017-06-17 14:14:27" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:14:27" },
+      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 14:14:27" },
+      "recentStateType": { "Value":"info", "Time":"2017-06-17 14:14:27" },
       "sabotageAttackId_ErrIoId_56A86F": { "Value":"cnt:6", "Time":"2017-05-30 09:13:50" },
-      "sabotageError": { "Value":"off", "Time":"2017-06-17 13:23:46" },
-      "state": { "Value":"closed", "Time":"2017-06-17 13:23:46" },
+      "sabotageError": { "Value":"off", "Time":"2017-06-17 14:14:27" },
+      "state": { "Value":"closed", "Time":"2017-06-17 14:14:27" },
       "trigDst_HM_56A86F": { "Value":"noConfig", "Time":"2017-06-02 15:51:03" },
       "trigDst_broadcast": { "Value":"noConfig", "Time":"2017-06-14 17:06:00" },
       "trigger_cnt": { "Value":"19", "Time":"2017-06-14 17:06:00" }
@@ -1398,27 +1398,27 @@
     "PossibleSets":"assignHmKey:noArg clear:readings,trigger,register,oldRegs,rssi,msgEvents,attack,all deviceRename fwUpdate getConfig:noArg getRegRaw peerBulk peerChan raw regBulk regSet reset:noArg sign:on,off unpair:noArg",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "334",
-      "CUL0_RAWMSG": "A0DD8861056A86F00000006010000::-49:CUL0",
-      "CUL0_RSSI": "-49",
-      "CUL0_TIME": "2017-06-17 13:04:20",
+      "CUL0_MSGCNT": "336",
+      "CUL0_RAWMSG": "A0DDA861056A86F00000006010000::-48.5:CUL0",
+      "CUL0_RSSI": "-48.5",
+      "CUL0_TIME": "2017-06-17 14:52:36",
       "DEF": "56A86F",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "334",
+      "MSGCNT": "336",
       "NAME": "HM_56A86F",
       "NOTIFYDEV": "global",
       "NR": "55",
       "NTFY_ORDER": "50-HM_56A86F",
       "STATE": "closed",
       "TYPE": "CUL_HM",
-      "lastMsg": "No:D8 - t:10 s:56A86F d:000000 06010000",
+      "lastMsg": "No:DA - t:10 s:56A86F d:000000 06010000",
       "protCmdDel": "4",
-      "protLastRcv": "2017-06-17 13:04:20",
+      "protLastRcv": "2017-06-17 14:52:36",
       "protResnd": "3 last_at:2017-06-14 10:12:25",
       "protResndFail": "1 last_at:2017-06-14 10:28:13",
       "protSnd": "5 last_at:2017-06-14 10:28:09",
       "protState": "CMDs_done_Errors:1",
-      "rssi_at_CUL0": "cnt:334 avg:-55.83 max:-47 lst:-49 min:-76 "
+      "rssi_at_CUL0": "cnt:336 avg:-55.79 max:-47 lst:-48.5 min:-76 "
     },
     "Readings": {
       "Activity": { "Value":"alive", "Time":"2017-06-14 10:02:01" },
@@ -1431,14 +1431,14 @@
       "R-sabotageMsg": { "Value":"on", "Time":"2017-05-30 09:38:02" },
       "aesCommToDev": { "Value":"ok", "Time":"2017-05-30 09:37:47" },
       "aesKeyNbr": { "Value":"00", "Time":"2017-05-30 14:27:04" },
-      "alive": { "Value":"yes", "Time":"2017-06-17 13:04:20" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:04:20" },
-      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 13:04:20" },
+      "alive": { "Value":"yes", "Time":"2017-06-17 14:52:36" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:52:36" },
+      "contact": { "Value":"closed (to broadcast)", "Time":"2017-06-17 14:52:36" },
       "powerOn": { "Value":"2017-05-30 14:26:00", "Time":"2017-05-30 14:26:00" },
-      "recentStateType": { "Value":"info", "Time":"2017-06-17 13:04:20" },
+      "recentStateType": { "Value":"info", "Time":"2017-06-17 14:52:36" },
       "sabotageAttackId_ErrIoId_56A439": { "Value":"cnt:6", "Time":"2017-05-30 09:13:48" },
-      "sabotageError": { "Value":"off", "Time":"2017-06-17 13:04:20" },
-      "state": { "Value":"closed", "Time":"2017-06-17 13:04:20" },
+      "sabotageError": { "Value":"off", "Time":"2017-06-17 14:52:36" },
+      "state": { "Value":"closed", "Time":"2017-06-17 14:52:36" },
       "trigDst_HM_56A439": { "Value":"noConfig", "Time":"2017-05-30 09:30:00" },
       "trigDst_broadcast": { "Value":"noConfig", "Time":"2017-06-16 18:05:52" },
       "trigger_cnt": { "Value":"184", "Time":"2017-06-16 18:05:52" }
@@ -1538,17 +1538,17 @@
       "DEF": "+*00:01 { fhem(\u0022set RPi_temp_dummy \u0022.RpiTemp(\u0022\u0022)) }",
       "NAME": "RPi_temp_at",
       "NR": "65",
-      "NTM": "13:34:00",
+      "NTM": "14:56:00",
       "PERIODIC": "yes",
       "RELATIVE": "yes",
       "REP": "-1",
-      "STATE": "Next: 13:34:00",
+      "STATE": "Next: 14:56:00",
       "TIMESPEC": "00:01",
-      "TRIGGERTIME": "1497699240.95469",
-      "TRIGGERTIME_FMT": "2017-06-17 13:34:00",
+      "TRIGGERTIME": "1497704160.95469",
+      "TRIGGERTIME_FMT": "2017-06-17 14:56:00",
       "TYPE": "at"
     },
-    "Readings": {      "state": { "Value":"Next: 13:34:00", "Time":"2017-06-17 13:33:00" } },
+    "Readings": {      "state": { "Value":"Next: 14:56:00", "Time":"2017-06-17 14:55:00" } },
     "Attributes": {      "room": "room_fablab" }
   },
   {
@@ -1558,10 +1558,10 @@
     "Internals": {
       "NAME": "RPi_temp_dummy",
       "NR": "63",
-      "STATE": "Temperature: 53.69",
+      "STATE": "Temperature: 53.15",
       "TYPE": "dummy"
     },
-    "Readings": {      "state": { "Value":"Temperature: 53.69", "Time":"2017-06-17 13:33:00" } },
+    "Readings": {      "state": { "Value":"Temperature: 53.15", "Time":"2017-06-17 14:55:00" } },
     "Attributes": {      "room": "room_fablab" }
   },
   {
@@ -1580,7 +1580,7 @@
       "currentlogfile": "/opt/fhem/log/timeseries/rpi/RPi_temp_log-2017-06.log",
       "logfile": "/opt/fhem/log/timeseries/rpi/RPi_temp_log-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"23561", "Time":"2017-06-17 13:33:00" } },
+    "Readings": {      "linesInTheFile": { "Value":"23643", "Time":"2017-06-17 14:55:00" } },
     "Attributes": {      "room": "app,room_fablab,sensors" }
   },
   {
@@ -1694,13 +1694,13 @@
     "PossibleSets":"assignIO clear:readings,rssi,msgEvents,unknownDev defIgnUnknown:noArg hmPairForSec hmPairSerial update:noArg virtual:slider,1,1,50",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 do_not_notify:1,0 showtime:1,0 rawToReadable unit expert:0_defReg,1_allReg,2_defReg+raw,3_allReg+raw,4_off,8_templ+default,12_templOnly,251_anything param actAutoTry:0_off,1_on aesCommReq:1,0 ignore:1,0 dummy:1,0 IODev IOList IOgrp rssiLog:1,0 actCycle hmKey hmKey2 hmKey3 serialNr firmware .stc .devInfo actStatus autoReadReg:0_off,1_restart,2_pon-restart,3_onChange,4_reqStatus,5_readMissing,8_stateOnly burstAccess:0_off,1_auto msgRepeat hmProtocolEvents:0_off,1_dump,2_dumpFull,3_dumpTrigger aesKey:5,4,3,2,1,0  repPeers peerIDs tempListTmpl:none,defaultWeekplan, levelRange levelMap cyclicMsgOffset event-on-change-reading event-on-update-reading event-aggregator event-min-interval stateFormat:textField-long timestamp-on-change-reading model:ASH550,ASH550I,CCU-FHEM,CMM,DORMA_BRC-H,DORMA_RC-H,DORMA_atent,HM-CC-RT-DN,HM-CC-RT-DN-BoM,HM-CC-SCD,HM-CC-TC,HM-CC-VD,HM-Dis-EP-WM55,HM-Dis-TD-T,HM-Dis-WM55,HM-ES-PMSw1-DR,HM-ES-PMSw1-Pl,HM-ES-PMSw1-Pl-DN-R1,HM-ES-PMSw1-Pl-DN-R2,HM-ES-PMSw1-Pl-DN-R3,HM-ES-PMSw1-Pl-DN-R4,HM-ES-PMSw1-Pl-DN-R5,HM-ES-PMSw1-SM,HM-ES-TX-WM,HM-LC-AO-SM,HM-LC-BL1-FM,HM-LC-BL1-PB-FM,HM-LC-BL1-SM,HM-LC-Bl1-FM-2,HM-LC-Bl1-SM-2,HM-LC-Bl1PBU-FM,HM-LC-DDC1-PCB,HM-LC-DIM1L-CV,HM-LC-DIM1L-PL,HM-LC-DIM1T-CV,HM-LC-DIM1T-FM,HM-LC-DIM1T-PL,HM-LC-DIM2L-CV,HM-LC-DIM2L-SM,HM-LC-DIM2T-SM,HM-LC-Dim1L-CV-2,HM-LC-Dim1L-CV-644,HM-LC-Dim1L-Pl-2,HM-LC-Dim1L-Pl-3,HM-LC-Dim1L-Pl-644,HM-LC-Dim1PWM-CV,HM-LC-Dim1PWM-CV-2,HM-LC-Dim1T-CV-2,HM-LC-Dim1T-CV-644,HM-LC-Dim1T-DR,HM-LC-Dim1T-FM-2,HM-LC-Dim1T-FM-644,HM-LC-Dim1T-FM-LF,HM-LC-Dim1T-Pl-2,HM-LC-Dim1T-Pl-3,HM-LC-Dim1T-Pl-644,HM-LC-Dim1TPBU-FM,HM-LC-Dim1TPBU-FM-2,HM-LC-Dim2L-SM-2,HM-LC-Dim2L-SM-644,HM-LC-Dim2T-SM,HM-LC-Dim2T-SM-2,HM-LC-Ja1PBU-FM,HM-LC-RGBW-WM,HM-LC-SW1-BA-PCB,HM-LC-SW1-FM,HM-LC-SW1-PB-FM,HM-LC-SW1-PL,HM-LC-SW1-PL-OM54,HM-LC-SW1-PL2,HM-LC-SW1-SM,HM-LC-SW1-SM-ATMEGA168,HM-LC-SW2-DR,HM-LC-SW2-FM,HM-LC-SW2-PB-FM,HM-LC-SW2-SM,HM-LC-SW4-BA-PCB,HM-LC-SW4-DR,HM-LC-SW4-PCB,HM-LC-SW4-SM,HM-LC-SW4-SM-ATMEGA168,HM-LC-SW4-WM,HM-LC-Sw1-DR,HM-LC-Sw1-FM-2,HM-LC-Sw1-PCB,HM-LC-Sw1-Pl-3,HM-LC-Sw1-Pl-CT-R1,HM-LC-Sw1-Pl-CT-R2,HM-LC-Sw1-Pl-CT-R3,HM-LC-Sw1-Pl-CT-R4,HM-LC-Sw1-Pl-CT-R5,HM-LC-Sw1-Pl-DN-R1,HM-LC-Sw1-Pl-DN-R2,HM-LC-Sw1-Pl-DN-R3,HM-LC-Sw1-Pl-DN-R4,HM-LC-Sw1-Pl-DN-R5,HM-LC-Sw1-SM-2,HM-LC-Sw1PBU-FM,HM-LC-Sw2-DR-2,HM-LC-Sw2-FM-2,HM-LC-Sw2PBU-FM,HM-LC-Sw4-DR-2,HM-LC-Sw4-PCB-2,HM-LC-Sw4-SM-2,HM-LC-Sw4-WM-2,HM-MOD-EM-8Bit,HM-MOD-Em-8,HM-MOD-Re-8,HM-OU-CF-PL,HM-OU-CFM-PL,HM-OU-CFM-TW,HM-OU-CM-PCB,HM-OU-LED16,HM-PB-2-FM,HM-PB-2-WM,HM-PB-2-WM55,HM-PB-2-WM55-2,HM-PB-4-WM,HM-PB-4DIS-WM,HM-PB-4DIS-WM-2,HM-PB-6-WM55,HM-PBI-4-FM,HM-RC-12,HM-RC-12-B,HM-RC-12-SW,HM-RC-19,HM-RC-19-B,HM-RC-19-SW,HM-RC-2-PBU-FM,HM-RC-4,HM-RC-4-2,HM-RC-4-3,HM-RC-4-3-D,HM-RC-4-B,HM-RC-8,HM-RC-Dis-H-x-EU,HM-RC-KEY3,HM-RC-KEY3-B,HM-RC-Key4-2,HM-RC-Key4-3,HM-RC-P1,HM-RC-SEC3,HM-RC-SEC3-B,HM-RC-Sec4-2,HM-RC-Sec4-3,HM-SCI-3-FM,HM-SEC-KEY,HM-SEC-KEY-O,HM-SEC-KEY-S,HM-SEC-MDIR,HM-SEC-MDIR-2,HM-SEC-MDIR-3,HM-SEC-RHS,HM-SEC-RHS-2,HM-SEC-SC,HM-SEC-SC-2,HM-SEC-SCo,HM-SEC-SD,HM-SEC-SD-2,HM-SEC-SFA-SM,HM-SEC-TIS,HM-SEC-WDS,HM-SEC-WDS-2,HM-SEC-WIN,HM-SEN-EP,HM-SEN-MDIR-SM,HM-SWI-3-FM,HM-Sec-Cen,HM-Sec-Sir-WM,HM-Sen-DB-PCB,HM-Sen-LI-O,HM-Sen-MDIR-O,HM-Sen-MDIR-O-2,HM-Sen-MDIR-WM55,HM-Sen-RD-O,HM-Sen-Wa-Od,HM-Sys-sRP-Pl,HM-TC-IT-WM-W-EU,HM-WDC7000,HM-WDS10-TH-O,HM-WDS100-C6-O,HM-WDS100-C6-O-2,HM-WDS20-TH-O,HM-WDS30-OT2-SM,HM-WDS30-OT2-SM-2,HM-WDS30-T-O,HM-WDS40-TH-I,HM-WDS40-TH-I-2,HM-WS550,HM-WS550LCB,HM-WS550LCW,HM-WS550Tech,IS-WDS-TH-OD-S-R3,KFM-Display,KFM-Sensor,KS550,KS550LC,KS550TECH,KS888,OLIGO-smart-iq-HM,PS-Th-Sens,PS-switch,ROTO_ZEL-STG-RM-DWT-10,ROTO_ZEL-STG-RM-FDK,ROTO_ZEL-STG-RM-FEP-230V,ROTO_ZEL-STG-RM-FSA,ROTO_ZEL-STG-RM-FST-UP4,ROTO_ZEL-STG-RM-FWT,ROTO_ZEL-STG-RM-FZS,ROTO_ZEL-STG-RM-FZS-2,ROTO_ZEL-STG-RM-HS-4,ROTO_ZEL-STG-RM-WT-2,Roto_ZEL-STG-RM-FFK,Roto_ZEL-STG-RM-FSS-UP3,S550IA,Schueco_263-130,Schueco_263-131,Schueco_263-132,Schueco_263-133,Schueco_263-134,Schueco_263-135,Schueco_263-144,Schueco_263-145,Schueco_263-146,Schueco_263-147,Schueco_263-155,Schueco_263-157,Schueco_263-158,Schueco_263-160,Schueco_263-162,Schueco_263-167,Schueco_263-xxx,SensoTimer-ST-6,WDF-solar,WS888 subType:AlarmControl,KFM100,THSensor,blindActuator,blindActuatorSol,dimmer,display,keyMatic,motionAndBtn,motionDetector,outputUnit,powerMeter,powerSensor,pushButton,remote,repeater,rgb,senBright,sensRain,sensor,singleButton,siren,smokeDetector,swi,switch,thermostat,threeStateSensor,timer,tipTronic,virtual,winMatic cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CUL0_MSGCNT": "1604",
-      "CUL0_RAWMSG": "A1446845E52CABC000000800000000000000008E8FE::-34.5:CUL0",
+      "CUL0_MSGCNT": "1636",
+      "CUL0_RAWMSG": "A1466845E52CABC000000800000000000000008DC01::-34.5:CUL0",
       "CUL0_RSSI": "-34.5",
-      "CUL0_TIME": "2017-06-17 13:31:33",
+      "CUL0_TIME": "2017-06-17 14:53:17",
       "DEF": "01D1E5",
       "LASTInputDev": "CUL0",
-      "MSGCNT": "1604",
+      "MSGCNT": "1636",
       "NAME": "VCCU",
       "NOTIFYDEV": "global",
       "NR": "34",
@@ -1714,7 +1714,7 @@
       "state": { "Value":"CUL0:ok,", "Time":"2017-06-14 10:02:01" },
       "unknown_4F5DAA": { "Value":"received", "Time":"2017-05-30 10:35:45" },
       "unknown_521A72": { "Value":"received", "Time":"2017-05-30 11:39:36" },
-      "unknown_52CABC": { "Value":"received", "Time":"2017-06-17 13:31:33" },
+      "unknown_52CABC": { "Value":"received", "Time":"2017-06-17 14:53:17" },
       "unknown_52CB59": { "Value":"received", "Time":"2017-06-14 17:21:19" },
       "unknown_52CC96": { "Value":"received", "Time":"2017-05-26 14:14:29" },
       "unknown_56A1E8": { "Value":"received", "Time":"2017-05-30 09:13:38" },
@@ -1914,12 +1914,12 @@
       "SUBTYPE": "ACCOUNT",
       "TYPE": "netatmo",
       "access_token": "53b664751877592ddabdb1f0|bc544ad64543f5a7a2e825b72bf8cec8",
-      "expires_at": "1497700531",
+      "expires_at": "1497709171",
       "network": "ok",
       "refresh_token": "53b664751877592ddabdb1f0|460f8402f2bbef33bbd09d92cc8f54a7",
       "status": "ok"
     },
-    "Readings": {      "active": { "Value":"ok", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "active": { "Value":"ok", "Time":"2017-06-17 14:03:41" } },
     "Attributes": {      "room": "app,room_fablab,sensors" }
   },
   {
@@ -1938,7 +1938,7 @@
       "currentlogfile": "./log/homecoach_aussen-2017-06.log",
       "logfile": "./log/homecoach_aussen-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"3331", "Time":"2017-06-17 13:27:38" } },
+    "Readings": {      "linesInTheFile": { "Value":"3369", "Time":"2017-06-17 14:52:51" } },
     "Attributes": { }
   },
   {
@@ -1957,7 +1957,7 @@
       "currentlogfile": "./log/timeseries/homecoach/aussen_battery-2017-06.log",
       "logfile": "./log/timeseries/homecoach/aussen_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"108", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "linesInTheFile": { "Value":"109", "Time":"2017-06-17 14:03:41" } },
     "Attributes": { }
   },
   {
@@ -1976,7 +1976,7 @@
       "currentlogfile": "./log/timeseries/homecoach/aussen_battery_percent-2017-06.log",
       "logfile": "./log/timeseries/homecoach/aussen_battery_percent-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"108", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "linesInTheFile": { "Value":"109", "Time":"2017-06-17 14:03:41" } },
     "Attributes": { }
   },
   {
@@ -1995,7 +1995,7 @@
       "currentlogfile": "./log/timeseries/homecoach/aussen_humidity-2017-06.log",
       "logfile": "./log/timeseries/homecoach/aussen_humidity-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"908", "Time":"2017-06-17 13:27:38" } },
+    "Readings": {      "linesInTheFile": { "Value":"921", "Time":"2017-06-17 14:52:51" } },
     "Attributes": { }
   },
   {
@@ -2014,7 +2014,7 @@
       "currentlogfile": "./log/timeseries/homecoach/aussen_temperature-2017-06.log",
       "logfile": "./log/timeseries/homecoach/aussen_temperature-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"911", "Time":"2017-06-17 13:27:38" } },
+    "Readings": {      "linesInTheFile": { "Value":"924", "Time":"2017-06-17 14:52:51" } },
     "Attributes": { }
   },
   {
@@ -2033,7 +2033,7 @@
       "currentlogfile": "./log/homecoach_innen-2017-06.log",
       "logfile": "./log/homecoach_innen-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"4319", "Time":"2017-06-17 13:27:35" } },
+    "Readings": {      "linesInTheFile": { "Value":"4366", "Time":"2017-06-17 14:52:47" } },
     "Attributes": { }
   },
   {
@@ -2052,7 +2052,7 @@
       "currentlogfile": "./log/timeseries/homecoach/innen_battery-2017-06.log",
       "logfile": "./log/timeseries/homecoach/innen_battery-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"108", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "linesInTheFile": { "Value":"109", "Time":"2017-06-17 14:03:41" } },
     "Attributes": { }
   },
   {
@@ -2071,7 +2071,7 @@
       "currentlogfile": "./log/timeseries/homecoach/innen_battery_percent-2017-06.log",
       "logfile": "./log/timeseries/homecoach/innen_battery_percent-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"108", "Time":"2017-06-17 13:03:41" } },
+    "Readings": {      "linesInTheFile": { "Value":"109", "Time":"2017-06-17 14:03:41" } },
     "Attributes": { }
   },
   {
@@ -2090,7 +2090,7 @@
       "currentlogfile": "./log/timeseries/homecoach/innen_co2-2017-06.log",
       "logfile": "./log/timeseries/homecoach/innen_co2-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"878", "Time":"2017-06-17 13:27:35" } },
+    "Readings": {      "linesInTheFile": { "Value":"890", "Time":"2017-06-17 14:52:47" } },
     "Attributes": { }
   },
   {
@@ -2109,7 +2109,7 @@
       "currentlogfile": "./log/timeseries/homecoach/innen_humidity-2017-06.log",
       "logfile": "./log/timeseries/homecoach/innen_humidity-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"878", "Time":"2017-06-17 13:27:35" } },
+    "Readings": {      "linesInTheFile": { "Value":"890", "Time":"2017-06-17 14:52:47" } },
     "Attributes": { }
   },
   {
@@ -2128,7 +2128,7 @@
       "currentlogfile": "./log/timeseries/homecoach/innen_temperature-2017-06.log",
       "logfile": "./log/timeseries/homecoach/innen_temperature-%Y-%m.log"
     },
-    "Readings": {      "linesInTheFile": { "Value":"878", "Time":"2017-06-17 13:27:35" } },
+    "Readings": {      "linesInTheFile": { "Value":"890", "Time":"2017-06-17 14:52:47" } },
     "Attributes": { }
   },
   {
@@ -2173,12 +2173,12 @@
       "DEF": "70:ee:50:02:b8:20",
       "Device": "70:ee:50:02:b8:20",
       "INTERVAL": "900",
-      "LAST_POLL": "2017-06-17 13:32:12",
+      "LAST_POLL": "2017-06-17 14:52:26",
       "NAME": "netatmo_D70_ee_50_02_b8_20",
       "NOTIFYDEV": "global",
       "NR": "72",
       "NTFY_ORDER": "50-netatmo_D70_ee_50_02_b8_20",
-      "STATE": "T: 27.4 H: 38",
+      "STATE": "T: 27.7 H: 37",
       "SUBTYPE": "DEVICE",
       "TYPE": "netatmo",
       "altitude": "301",
@@ -2188,7 +2188,7 @@
       "date_setup": "2014-02-04 16:48:36",
       "firmware": "124",
       "last_setup": "2014-02-04 16:48:36",
-      "last_status_store": "2017-06-17 13:27:02",
+      "last_status_store": "2017-06-17 14:47:27",
       "last_upgrade": "2015-08-23 18:21:17",
       "location": "48.565668399102,13.450351953506",
       "model": "NAMain",
@@ -2196,20 +2196,20 @@
       "openRequests": "0",
       "stationName": "EISLab",
       "status": "ok",
-      "wifi_status": "45"
+      "wifi_status": "46"
     },
     "Readings": {
-      "active": { "Value":"ok", "Time":"2017-06-17 13:32:12" },
-      "co2": { "Value":"492", "Time":"2017-06-17 13:27:02" },
-      "humidity": { "Value":"38", "Time":"2017-06-17 13:27:02" },
-      "noise": { "Value":"36", "Time":"2017-06-17 13:27:02" },
-      "pressure": { "Value":"1025", "Time":"2017-06-17 13:27:02" },
-      "pressure_abs": { "Value":"989", "Time":"2017-06-17 12:56:51" },
-      "pressure_trend": { "Value":"up", "Time":"2017-06-17 12:56:51" },
-      "temp_max": { "Value":"27.3", "Time":"2017-06-17 12:41:47" },
+      "active": { "Value":"ok", "Time":"2017-06-17 14:52:26" },
+      "co2": { "Value":"494", "Time":"2017-06-17 14:47:27" },
+      "humidity": { "Value":"37", "Time":"2017-06-17 14:47:27" },
+      "noise": { "Value":"35", "Time":"2017-06-17 14:47:27" },
+      "pressure": { "Value":"1024.6", "Time":"2017-06-17 14:47:27" },
+      "pressure_abs": { "Value":"988.9", "Time":"2017-06-17 13:57:11" },
+      "pressure_trend": { "Value":"up", "Time":"2017-06-17 13:57:11" },
+      "temp_max": { "Value":"27.5", "Time":"2017-06-17 13:52:10" },
       "temp_min": { "Value":"25.8", "Time":"2017-06-17 05:34:30" },
-      "temp_trend": { "Value":"stable", "Time":"2017-06-17 12:56:51" },
-      "temperature": { "Value":"27.4", "Time":"2017-06-17 13:27:02" }
+      "temp_trend": { "Value":"stable", "Time":"2017-06-17 13:57:11" },
+      "temperature": { "Value":"27.7", "Time":"2017-06-17 14:47:27" }
     },
     "Attributes": {
       "IODev": "homecoach",
@@ -2227,22 +2227,22 @@
       "DEF": "MODULE 70:ee:50:02:b8:20 02:00:00:02:d6:c4",
       "Device": "70:ee:50:02:b8:20",
       "INTERVAL": "900",
-      "LAST_POLL": "2017-06-17 13:27:38",
+      "LAST_POLL": "2017-06-17 14:52:51",
       "Module": "02:00:00:02:d6:c4",
       "NAME": "netatmo_M02_00_00_02_d6_c4",
       "NOTIFYDEV": "global",
       "NR": "73",
       "NTFY_ORDER": "50-netatmo_M02_00_00_02_d6_c4",
-      "STATE": "T: 28.7 H: 32",
+      "STATE": "T: 29.3 H: 31",
       "SUBTYPE": "MODULE",
       "TYPE": "netatmo",
-      "battery_vp": "4394",
+      "battery_vp": "4392",
       "dataTypes": "Temperature,Humidity",
       "firmware": "44",
-      "last_message": "2017-06-17 12:57:02",
-      "last_seen": "2017-06-17 12:56:17",
+      "last_message": "2017-06-17 13:57:23",
+      "last_seen": "2017-06-17 13:56:57",
       "last_setup": "2014-03-26 00:01:40",
-      "last_status_store": "2017-06-17 13:26:11",
+      "last_status_store": "2017-06-17 14:47:22",
       "model": "NAModule1",
       "moduleName": "EISLab-Außen",
       "openRequests": "0",
@@ -2250,14 +2250,14 @@
       "status": "ok"
     },
     "Readings": {
-      "active": { "Value":"ok", "Time":"2017-06-17 13:27:38" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:03:41" },
-      "battery_percent": { "Value":"33", "Time":"2017-06-17 13:03:41" },
-      "humidity": { "Value":"32", "Time":"2017-06-17 13:26:11" },
-      "temp_max": { "Value":"28.5", "Time":"2017-06-17 12:51:09" },
+      "active": { "Value":"ok", "Time":"2017-06-17 14:52:51" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:03:41" },
+      "battery_percent": { "Value":"33", "Time":"2017-06-17 14:03:41" },
+      "humidity": { "Value":"31", "Time":"2017-06-17 14:47:22" },
+      "temp_max": { "Value":"28.9", "Time":"2017-06-17 13:51:49" },
       "temp_min": { "Value":"24.7", "Time":"2017-06-17 05:14:04" },
-      "temp_trend": { "Value":"up", "Time":"2017-06-17 12:56:17" },
-      "temperature": { "Value":"28.7", "Time":"2017-06-17 13:26:11" }
+      "temp_trend": { "Value":"up", "Time":"2017-06-17 13:56:57" },
+      "temperature": { "Value":"29.3", "Time":"2017-06-17 14:47:22" }
     },
     "Attributes": {
       "IODev": "homecoach",
@@ -2275,38 +2275,38 @@
       "DEF": "MODULE 70:ee:50:02:b8:20 03:00:00:00:df:de",
       "Device": "70:ee:50:02:b8:20",
       "INTERVAL": "900",
-      "LAST_POLL": "2017-06-17 13:32:26",
+      "LAST_POLL": "2017-06-17 14:52:47",
       "Module": "03:00:00:00:df:de",
       "NAME": "netatmo_M03_00_00_00_df_de",
       "NOTIFYDEV": "global",
       "NR": "74",
       "NTFY_ORDER": "50-netatmo_M03_00_00_00_df_de",
-      "STATE": "T: 26.6 H: 36",
+      "STATE": "T: 26.8 H: 35",
       "SUBTYPE": "MODULE",
       "TYPE": "netatmo",
-      "battery_vp": "5829",
+      "battery_vp": "5822",
       "dataTypes": "Temperature,CO2,Humidity",
       "firmware": "44",
-      "last_message": "2017-06-17 12:57:02",
-      "last_seen": "2017-06-17 12:56:23",
+      "last_message": "2017-06-17 13:57:23",
+      "last_seen": "2017-06-17 13:57:03",
       "last_setup": "2014-07-04 11:09:57",
-      "last_status_store": "2017-06-17 13:26:18",
+      "last_status_store": "2017-06-17 14:46:37",
       "model": "NAModule4",
       "moduleName": "EISLab-Innen",
       "openRequests": "0",
       "rf_status": "49",
-      "status": "no data"
+      "status": "ok"
     },
     "Readings": {
-      "active": { "Value":"ok", "Time":"2017-06-17 13:27:35" },
-      "battery": { "Value":"ok", "Time":"2017-06-17 13:03:41" },
-      "battery_percent": { "Value":"91", "Time":"2017-06-17 13:03:41" },
-      "co2": { "Value":"458", "Time":"2017-06-17 13:26:18" },
-      "humidity": { "Value":"36", "Time":"2017-06-17 13:26:18" },
-      "temp_max": { "Value":"26.5", "Time":"2017-06-17 12:36:45" },
+      "active": { "Value":"ok", "Time":"2017-06-17 14:52:47" },
+      "battery": { "Value":"ok", "Time":"2017-06-17 14:03:41" },
+      "battery_percent": { "Value":"90", "Time":"2017-06-17 14:03:41" },
+      "co2": { "Value":"441", "Time":"2017-06-17 14:46:37" },
+      "humidity": { "Value":"35", "Time":"2017-06-17 14:46:37" },
+      "temp_max": { "Value":"26.7", "Time":"2017-06-17 13:36:33" },
       "temp_min": { "Value":"25.5", "Time":"2017-06-17 05:59:27" },
-      "temp_trend": { "Value":"stable", "Time":"2017-06-17 12:56:23" },
-      "temperature": { "Value":"26.6", "Time":"2017-06-17 13:26:18" }
+      "temp_trend": { "Value":"stable", "Time":"2017-06-17 13:57:03" },
+      "temperature": { "Value":"26.8", "Time":"2017-06-17 14:46:37" }
     },
     "Attributes": {
       "IODev": "homecoach",
@@ -2339,7 +2339,7 @@
     "PossibleSets":"",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 globalpassword password prompt allowedCommands allowfrom SSL connectTimeout connectInterval encoding:utf8,latin1 sslVersion cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
-      "CONNECTS": "11",
+      "CONNECTS": "20",
       "DEF": "7072",
       "FD": "6",
       "NAME": "telnetPort",
@@ -2353,17 +2353,17 @@
     "Attributes": { }
   },
   {
-    "Name":"telnetPort_127.0.0.1_39144",
+    "Name":"telnetPort_127.0.0.1_39288",
     "PossibleSets":"",
     "PossibleAttrs":"alias comment:textField-long eventMap group room suppressReading userReadings:textField-long verbose:0,1,2,3,4,5 globalpassword password prompt allowedCommands allowfrom SSL connectTimeout connectInterval encoding:utf8,latin1 sslVersion cmdIcon coordX coordY devStateIcon devStateStyle icon icon_in_app sortby webCmd widgetOverride userattr",
     "Internals": {
       "Authenticated": "0",
       "BUF": "",
       "FD": "20",
-      "NAME": "telnetPort_127.0.0.1_39144",
-      "NR": "269",
+      "NAME": "telnetPort_127.0.0.1_39288",
+      "NR": "278",
       "PEER": "127.0.0.1",
-      "PORT": "39144",
+      "PORT": "39288",
       "SNAME": "telnetPort",
       "SSL": "null",
       "STATE": "Connected",
