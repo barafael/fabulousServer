@@ -67,7 +67,7 @@ public class FHEMFileLog {
         }
     }
 
-    public Logtype guessLogtype(String path) {
+    private Logtype guessLogtype(String path) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();

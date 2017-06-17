@@ -116,17 +116,18 @@ public class FHEMDevice {
         HashMap<String, String> meta = new HashMap<>();
         Collection<FHEMRoom> rooms = getRooms().orElse(new ArrayList<>(0));
 
-        FHEMSensor s = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
+        sensor.setIcon(getAttributes().getIcon());
 
         /* Add metadata which might or might not be supplied for every sensor */
-        s.addMeta("State", internals.getState().orElse("Not supplied"));
-        s.addMeta("Type", internals.getType().orElse("Not supplied"));
-        s.addMeta("SubType", internals.getType().orElse("Not supplied"));
+        sensor.addMeta("State", internals.getState().orElse("Not supplied"));
+        sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
+        sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         /* TODO use those in android app, don't just dump them */
-        s.addMeta("name_in_app", attributes.getNameInApp().orElse("Not supplied"));
-        s.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
+        sensor.addMeta("name_in_app", attributes.getNameInApp().orElse("Not supplied"));
+        sensor.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
 
-        return Optional.of(s);
+        return Optional.of(sensor);
     }
 
     Optional<FHEMFileLog> parseToLog() {
