@@ -23,6 +23,12 @@ class Server {
         FHEMConnection fhc = new FHEMClientModeCon();
         try {
             String jsonList2_str = fhc.getJsonList2();
+
+            /* Mock jsonlist2! */
+            jsonList2_str = new String(Files.readAllBytes(Paths.get("jsonList2.json")));
+            jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", "/home/ra/fhemlog/");
+            jsonList2_str = jsonList2_str.replaceAll("./log/", "/home/ra/fhemlog/");
+
             JsonList2 list = JsonList2.parseFrom(jsonList2_str);
 
             FHEMModel fhemModel = list.toFHEMModel();
