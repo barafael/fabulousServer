@@ -1,11 +1,10 @@
 package parser.fhemJson;
 
 import fhemModel.sensors.Room;
-import fhemModel.sensors.Sensor;
+import fhemModel.sensors.FHEMSensor;
 import fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -105,7 +104,7 @@ public class FHEMDevice {
         return this.isInRoom("app");
     }
 
-    Optional<Sensor> parseToSensor() {
+    Optional<FHEMSensor> parseToSensor() {
         if (!isSensor()) {
             return Optional.empty();
         }
@@ -117,7 +116,7 @@ public class FHEMDevice {
         boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>();
 
-        Sensor s = new Sensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
+        FHEMSensor s = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
 
         /* Add metadata which might or might not be supplied for every sensor */
         s.addMeta("State", internals.getState().orElse("Not supplied"));

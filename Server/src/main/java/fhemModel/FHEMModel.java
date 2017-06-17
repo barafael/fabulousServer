@@ -1,7 +1,7 @@
 package fhemModel;
 
 import fhemModel.sensors.Room;
-import fhemModel.sensors.Sensor;
+import fhemModel.sensors.FHEMSensor;
 import fhemModel.timeserie.FHEMFileLog;
 
 import java.util.HashSet;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 
 public class FHEMModel {
-    private final HashSet<Sensor> sensors;
+    private final HashSet<FHEMSensor> sensors;
     private final HashSet<Room> rooms;
     private final HashSet<FHEMFileLog> timeseries;
 
@@ -26,7 +26,7 @@ public class FHEMModel {
         return rooms.stream().filter(Room::isAppRoom).collect(Collectors.toCollection(HashSet::new));
     }
 
-    public HashSet<Sensor> getSensors() {
+    public HashSet<FHEMSensor> getSensors() {
         return sensors;
     }
 

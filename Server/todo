@@ -16,7 +16,7 @@ duck typing in attributes/Readings
 
 DONE: move rpi/ logs to timeseries
 
-how to best check if timeseries is blessed?
+how to best check if fileLogs is blessed?
 
 DONE: HM_52CC96_Pwr Found 0 sensors for FileLog FileLog_HM_52CC96_Pwr_Ventilator
 

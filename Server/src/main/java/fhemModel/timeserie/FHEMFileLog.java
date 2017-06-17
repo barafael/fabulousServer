@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fhemModel.sensors.Sensor;
+import fhemModel.sensors.FHEMSensor;
 import org.jetbrains.annotations.NotNull;
 
 import static fhemModel.timeserie.Logtype.*;

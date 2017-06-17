@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import fhemModel.FHEMModel;
 import fhemModel.sensors.Room;
-import fhemModel.sensors.Sensor;
+import fhemModel.sensors.FHEMSensor;
 import fhemModel.timeserie.FHEMFileLog;
 import org.jetbrains.annotations.NotNull;
 

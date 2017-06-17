@@ -1,8 +1,9 @@
 package fhemModel.sensors;
 
-import fhemModel.timeserie.Timeserie;
+import fhemModel.timeserie.FHEMFileLog;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -12,36 +13,40 @@ import java.util.HashSet;
  * @author Rafael
  */
 
-public class Sensor {
+public class FHEMSensor {
     private Coordinates coord;
     private final String name;
     private final long ID;
     private String permission;
     private final HashSet<Room> rooms = new HashSet<>();
-    private String status;
-    private HashSet<Timeserie> associatedSeries = new HashSet<>();
+    private HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
     private boolean isShowInApp;
     private HashMap<String, String> metaInfo;
 
-    public Sensor(int coordX, int coordY, String name, long ID, String permission,
-                  boolean isShowInApp, HashMap<String, String> metaInfo) {
+    public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
+                      boolean isShowInApp, HashMap<String, String> metaInfo, Collection<Room> rooms) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
         this.ID = ID;
         this.permission = permission;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
+        addRooms(rooms);
     }
 
     public void addMeta(@NotNull String key, @NotNull String value) {
         metaInfo.put(key, value);
     }
 
-    public void associateSeries(HashSet<Timeserie> associatedSeries) {
-        this.associatedSeries.addAll(associatedSeries);
+    public void addLog(FHEMFileLog log) {
+        associatedLogs.add(log);
     }
 
-    public boolean addRoom(Room r) {
-        return rooms.add(r);
+    public boolean addRooms(Collection<Room> r) {
+        return rooms.addAll(r);
+    }
+
+    public String getName() {
+        return name;
     }
 }

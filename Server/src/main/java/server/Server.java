@@ -1,6 +1,8 @@
 package server;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import fhemConnection.FHEMConnection;
 import fhemConnection.FHEMClientModeCon;
@@ -11,6 +13,8 @@ import fhemModel.FHEMModel;
 import parser.fhemJson.JsonList2;
 
 /**
+ * // TODO: when deployed, remove mocking code and debug output. You should also set pretty printing of in
+ * // TODO Gson because otherwise the network might drown in pretty, useless whitespace.
  * @author Rafael on 31.05.17.
  */
 class Server {
