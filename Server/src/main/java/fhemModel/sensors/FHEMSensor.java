@@ -22,6 +22,7 @@ public class FHEMSensor {
     private HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
     private boolean isShowInApp;
     private HashMap<String, String> metaInfo;
+    private String icon;
 
     public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
                       boolean isShowInApp, HashMap<String, String> metaInfo, Collection<FHEMRoom> rooms) {
@@ -48,5 +49,13 @@ public class FHEMSensor {
 
     public String getName() {
         return name;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }

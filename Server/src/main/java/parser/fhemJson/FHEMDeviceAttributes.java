@@ -29,9 +29,9 @@ class FHEMDeviceAttributes {
     private String rooms;
     @SerializedName("name_in_app")
     private String nameInApp;
+    private String app_icon;
 
     private String subType;
-
     private String permissions;
     private String alias;
 
@@ -66,5 +66,9 @@ class FHEMDeviceAttributes {
 
     public Optional<String> getAlias() {
         return Optional.ofNullable(alias);
+    }
+
+    public String getIcon() {
+        return app_icon;
     }
 }
