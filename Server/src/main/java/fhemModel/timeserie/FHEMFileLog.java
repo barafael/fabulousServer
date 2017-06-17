@@ -21,22 +21,23 @@ import static fhemModel.timeserie.Logtype.*;
 
 public class FHEMFileLog {
     private final Logtype type;
-    private Sensor sensor;
+    private final String name;
     private String sensorName;
     private String unit;
     private boolean isShowInApp;
     private String path;
-    private static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
 
-    public FHEMFileLog(String path, boolean isShowInApp) {
+    public FHEMFileLog(String path, String name, boolean isShowInApp) {
         this.path = path;
         this.isShowInApp = isShowInApp;
-
+        this.name = name;
         this.unit = getUnit().orElse("No unit given");
         this.sensorName = getSensorName().orElse("No sensor name given");
         System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
     }
+
+
 
     public Optional<? extends Timeserie> getTimeserie() {
         List<String> filelog;
@@ -105,10 +106,6 @@ public class FHEMFileLog {
         }
     }
 
-    public void setSensor(@NotNull Sensor s) {
-        sensor = s;
-    }
-
     private Optional<String> getSensorName() {
         return FHEMFileLog.getSensorInFileLog(path);
     }
@@ -158,5 +155,9 @@ public class FHEMFileLog {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    public String getName() {
+        return name;
     }
 }

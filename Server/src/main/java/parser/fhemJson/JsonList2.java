@@ -52,7 +52,8 @@ public class JsonList2 {
         return Optional.ofNullable(arg);
     }
 
-    public static @NotNull JsonList2 parseFrom(String jsonString) {
+    public static @NotNull
+    JsonList2 parseFrom(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
 
@@ -73,64 +74,51 @@ public class JsonList2 {
             /* Either it is one of filelog or sensor, or it is neither */
             assert (isSensor ^ isFileLog) | (!isFileLog && !isSensor);
 
+            if (!isSensor && !isFileLog) {
+                continue;
+            }
+
+            //todo cleanup and put sensors in rooms
+
             /* Add raw devices, parse them into sensors and filelogs later */
             if (isSensor) {
                 sensors.add(d);
-            } else if (isFileLog) {
+            } else if (d.isFileLog()) {
+                if (d.isFakelog()) {
+                    continue;
+                }
+                if (!d.isBlessed()) {
+                    continue;
+                }
                 filelogs.add(d);
             }
         }
+        HashSet<FHEMSensor> realSensors;
+
+        realSensors = sensors.stream().map(FHEMDevice::parseToSensor)
+                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
 
         for (FHEMDevice filelog : filelogs) {
-            if (filelog.isFakelog()) {
-                continue;
-            }
-            if (!filelog.isBlessed()) {
-                continue;
-            }
             Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix(':');
             if (!sensorname_opt.isPresent()) {
                 System.err.println("Could not detect which sensor corresponds to this filelog: " + filelog.getName());
                 continue;
             }
             String sensorname = sensorname_opt.get();
-            // System.out.println(sensorname);
-            List<FHEMDevice> associated = sensors.stream()
+            List<FHEMSensor> associated = realSensors.stream()
                     .filter(s -> s.getName().equals(sensorname)).collect(Collectors.toList());
             if (associated.size() != 1) {
                 System.err.println("Found " + associated.size() + " sensors for FileLog " + filelog.getName());
-                continue;
             } else {
-                /* Associate this filelog with it's sensor */
-                filelog.associate(associated.get(0));
+                FHEMSensor sensor = associated.get(0);
+                Optional<FHEMFileLog> log = filelog.parseToLog();
+                log.ifPresent(sensor::addLog);
             }
         }
-        for (FHEMDevice sensor : sensors) {
-            List<FHEMDevice> linkedFilelogs = filelogs.stream()
-                    .filter(f -> f.isLinked(sensor)).collect(Collectors.toList());
-            sensor.associate(linkedFilelogs);
-        }
-
         for (FHEMDevice sensor : sensors) {
             rooms.addAll(sensor.getRooms().orElse(new ArrayList<>()));
         }
 
-        HashSet<Sensor> realSensors;
-        HashSet<FHEMFileLog> realTimeseries;
-
-        realSensors = sensors.stream().map(FHEMDevice::parseToSensor)
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
-        realTimeseries = filelogs.stream().map(FHEMDevice::parseToLog)
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
-
-        // Gson gson = new Gson();
-
-        // System.out.println("All sensors: " + gson.toJson(realSensors));
-
-        // System.out.println("All filelogs: " + gson.toJson(realTimeseries));
-
-        // System.out.println(gson.toJson(gson));
-
-        return new FHEMModel(realSensors, rooms, realTimeseries);
+        return new FHEMModel(realSensors, rooms);
     }
 }

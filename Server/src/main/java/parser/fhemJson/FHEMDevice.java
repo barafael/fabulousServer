@@ -34,7 +34,6 @@ public class FHEMDevice {
     private FHEMDeviceAttributes attributes;
 
     /* Class Attributes */
-    private final HashSet<FHEMDevice> linkedDevices = new HashSet<>();
     /* Used to give filelogs and sensors an ID */
     private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */
@@ -115,6 +114,7 @@ public class FHEMDevice {
         String status = internals.getState().orElse("Not supplied");
         boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>();
+        Collection<Room> rooms = getRooms().orElse(new ArrayList<>(0));
 
         FHEMSensor s = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
 
@@ -147,19 +147,7 @@ public class FHEMDevice {
             return Optional.empty();
         }
         String path = path_opt.get();
-        return Optional.of(new FHEMFileLog(path, isShowInApp()));
-    }
-
-    boolean associate(FHEMDevice fhemDevice) {
-        return linkedDevices.add(fhemDevice);
-    }
-
-    boolean associate(List<FHEMDevice> linkedFilelogs) {
-        return linkedDevices.addAll(linkedFilelogs);
-    }
-
-    boolean isLinked(FHEMDevice device) {
-        return linkedDevices.contains(device);
+        return Optional.of(new FHEMFileLog(path, name, isShowInApp()));
     }
 
     public FHEMDeviceAttributes getAttributes() {
@@ -182,13 +170,14 @@ public class FHEMDevice {
     }
 
     boolean isFakelog() {
-        Optional<String> regexp = getInternals().getRegexp();
-        /* Short circuit logic: if !isPresent(), get() will never be evaluated */
-        return regexp.isPresent() && regexp.get().equals("fakelog");
+        return getInternals().getRegexp().orElse("").equals("fakelog");
     }
 
     public boolean isBlessed() {
-        Optional<String> path = getInternals().getCurrentLogfileField();
-        return path.isPresent() && path.get().contains("timeseries");
+        return getInternals().getCurrentLogfileField().orElse("").contains("timeseries");
+    }
+
+    public boolean isLinked(FHEMSensor s) {
+        return linkedDeviceName.equals(s.getName());
     }
 }

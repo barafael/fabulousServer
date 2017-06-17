@@ -14,12 +14,10 @@ import java.util.stream.Collectors;
 public class FHEMModel {
     private final HashSet<FHEMSensor> sensors;
     private final HashSet<Room> rooms;
-    private final HashSet<FHEMFileLog> timeseries;
 
-    public FHEMModel(HashSet<Sensor> sensors, HashSet<Room> rooms, HashSet<FHEMFileLog> timeseries) {
+    public FHEMModel(HashSet<FHEMSensor> sensors, HashSet<Room> rooms) {
         this.sensors = sensors;
         this.rooms = rooms;
-        this.timeseries = timeseries;
     }
 
     public HashSet<Room> getAppRooms() {
@@ -32,9 +30,5 @@ public class FHEMModel {
 
     public HashSet<Room> getRooms() {
         return rooms;
-    }
-
-    public HashSet<FHEMFileLog> getTimeseries() {
-        return timeseries;
     }
 }
