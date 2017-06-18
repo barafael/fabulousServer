@@ -36,9 +36,9 @@ public class FHEMDevice {
 
     /* Class Attributes */
     /* Used to give filelogs and sensors an ID */
-    private static long IDCounter = 0;
+    transient private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */
-    private String linkedDeviceName;
+    transient private String linkedDeviceName;
 
     public String getName() {
         return name;
