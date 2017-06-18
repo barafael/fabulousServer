@@ -25,11 +25,12 @@ public class Server extends AbstractVerticle {
     private JDBCClient jdbcClient;
     private AuthHandler authHandler;
     private HttpServer server;
+    private JsonObject jdbcClientConfig;
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
         /* ################## Authentification ################## */
-        JsonObject jdbcClientConfig = new JsonObject()
+        jdbcClientConfig = new JsonObject()
                 .put("url", "jdbc:mysql://localhost:3306/test?useSSL=false")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("initial_pool_size", 5)
@@ -103,9 +104,11 @@ public class Server extends AbstractVerticle {
         ));
 
 
-        if (routingContext.getBodyAsJson().getString("username") == null || routingContext.getBodyAsJson().getString("password") == null) {
-            //TODO: change response code to Bad Request
-            routingContext.response().setStatusCode(405).end("bad request");
+        if (routingContext.getBodyAsJson().getString("username") == null ||
+                routingContext.getBodyAsJson().getString("username").isEmpty() ||
+                routingContext.getBodyAsJson().getString("password") == null ||
+                routingContext.getBodyAsJson().getString("password").isEmpty()) {
+            routingContext.response().setStatusCode(400).end("bad request");
             return;
         }
 
@@ -136,11 +139,16 @@ public class Server extends AbstractVerticle {
 
         Future databaseWriteFuture = Future.future();
         storeUserInDatabase(username, password, prename, surname, authProvider, jdbcClient, databaseWriteFuture);
-
         databaseWriteFuture.setHandler(res -> {
-            routingContext.response()
-                    .setStatusCode(200)
-                    .end("registered");
+            if (databaseWriteFuture.succeeded()) {
+                routingContext.response()
+                        .setStatusCode(200)
+                        .end("registered");
+            } else {
+                routingContext.response()
+                        .setStatusCode(400)
+                        .end("bad request");
+            }
         });
     }
 
@@ -166,7 +174,11 @@ public class Server extends AbstractVerticle {
             //return data from sensor with $ID
         }
 
-        checkPermissions(routingContext.user(), "somePermission");
+        Future permissionFuture = Future.future();
+        checkPermissions(routingContext.user(), "somePermission", permissionFuture);
+        permissionFuture.setHandler(res -> {
+            //TODO unchecked something ??
+        });
 
         //TODO: remove debug print
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
@@ -207,15 +219,21 @@ public class Server extends AbstractVerticle {
                 .end("HelloWorld!");
     }
 
-    private void checkPermissions(User user, String permission) {
-        //TODO: implement
+    private void checkPermissions(User user, String permission, Handler<AsyncResult<UpdateResult>> resultHandler) {
+        //TODO: implement -> call with Future.future() to get result
         user.isAuthorised(permission, res -> {
             if (res.succeeded()) {
                 boolean hasPermission = res.result();
                 System.out.println("Server user action: " + permission + " is allowed: " + hasPermission);
+                if (hasPermission) {
+                    resultHandler.handle(Future.succeededFuture());
+                } else {
+                    resultHandler.handle(Future.failedFuture("no permission"));
+                }
             } else {
                 System.out.println("Server user.isAuthorised did not succeed");
                 System.out.println(res.cause());
+                resultHandler.handle(Future.failedFuture("database error"));
             }
         });
     }

@@ -94,6 +94,28 @@ public class ServerTest {
     }
 
     @Test
+    public void testRegisterFail(TestContext testContext) {
+        final Async async = testContext.async();
+        JsonObject json = new JsonObject();
+        json.put("username", "hans");
+        json.put("password", "380");
+        json.put("prename","PreTest");
+        json.put("surname","SurTest");
+        String msg = json.encode();
+        System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
+        httpClient.post("/register")
+                .putHeader("content-type", "application/json")
+                .putHeader("content-length", Integer.toString(msg.length()))
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testRegisterFail_answerHeader: " + h));
+                    testContext.assertEquals(400, ans.statusCode());
+                    async.complete();
+                })
+                .write(msg)
+                .end();
+    }
+
+    @Test
     public void testNotAuthorized(TestContext testContext) {
         final Async async = testContext.async();
         httpClient.get("/api/someStuffNotImplemented")
