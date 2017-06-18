@@ -1,6 +1,7 @@
 package fhemModel.sensors;
 
 import fhemUtils.FHEMUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,24 +12,27 @@ import java.util.List;
  */
 
 public class FHEMRoom {
-    public List<FHEMSensor> getSensors() {
-        return sensors;
-    }
-
-    public void setSensors(List<FHEMSensor> sensors) {
-        this.sensors = sensors;
-    }
-
     List<FHEMSensor> sensors = new ArrayList<>();
     private SVGRoomPlan plan;
     private String name;
 
     public FHEMRoom(String roomname) {
-        String pathToPlan = FHEMUtils.getFHEMDIR() + "roomplans/" + roomname + ".svg";
-        plan = SVGRoomPlan.loadFile(pathToPlan);
+        if (roomname.startsWith("room_")) {
+            String pathToPlan = FHEMUtils.getFHEMDIR() + "roomplans/" + roomname + ".svg";
+            plan = SVGRoomPlan.loadFile(pathToPlan);
+        } else {
+            plan = null; // Null Plan.
+        }
         name = roomname;
     }
 
+    public List<FHEMSensor> getSensors() {
+        return sensors;
+    }
+
+    public void addSensor(@NotNull FHEMSensor sensor) {
+        sensors.add(sensor);
+    }
     public boolean isAppRoom() {
         return name.startsWith("room_");
     }

@@ -1,8 +1,11 @@
 package fhemModel.timeserie;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -11,10 +14,17 @@ import java.util.regex.Pattern;
  * @author Rafael
  */
 
-public class Timeserie {
-    protected static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
-    protected static final ZoneId zoneId = ZoneId.systemDefault();
-    protected List<Long> xs;
+public abstract class Timeserie<T extends Number> {
+    transient protected static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+    transient protected static final ZoneId zoneId = ZoneId.systemDefault();
+    protected final BiMap<Integer, String> legend;
 
-    Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
+    protected List<Long> xs;
+    protected List<T> ys;
+
+    transient protected static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
+
+    public Timeserie() {
+        this.legend = HashBiMap.create();
+    }
 }

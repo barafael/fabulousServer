@@ -25,14 +25,13 @@ public class FHEMSensor {
     private String icon;
 
     public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
-                      boolean isShowInApp, HashMap<String, String> metaInfo, Collection<FHEMRoom> rooms) {
+                      boolean isShowInApp, HashMap<String, String> metaInfo) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
         this.ID = ID;
         this.permission = permission;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
-        addRooms(rooms);
     }
 
     public void addMeta(@NotNull String key, @NotNull String value) {
@@ -41,10 +40,6 @@ public class FHEMSensor {
 
     public void addLog(FHEMFileLog log) {
         associatedLogs.add(log);
-    }
-
-    public boolean addRooms(Collection<FHEMRoom> r) {
-        return rooms.addAll(r);
     }
 
     public String getName() {

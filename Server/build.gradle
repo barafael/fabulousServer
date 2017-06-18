@@ -30,4 +30,5 @@ dependencies {
     runtime group: 'com.google.code.gson', name: 'gson', version:'2.7'
     compile group: 'com.google.code.gson', name: 'gson', version:'2.7'
     compile 'com.udojava:EvalEx:1.0'
+    compile group: 'com.google.guava', name: 'guava', version: '22.0-android'
 }

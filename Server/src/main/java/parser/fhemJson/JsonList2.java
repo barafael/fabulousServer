@@ -63,27 +63,35 @@ public class JsonList2 {
     }
 
     public FHEMModel toFHEMModel() {
-        HashSet<FHEMDevice> sensors = new HashSet<>();
+        HashSet<FHEMSensor> realSensors = new HashSet<>();
         HashSet<FHEMRoom> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
+
 
         /* Ignore static analysis warnings here: Results is populated by gson */
         for (FHEMDevice d : Results) {
             boolean isSensor = d.isSensor();
             boolean isFileLog = d.isFileLog();
-            /* Either it is one of filelog or sensor, or it is neither */
-            assert (isSensor ^ isFileLog) | (!isFileLog && !isSensor);
-
-            if (!isSensor && !isFileLog) {
-                continue;
-            }
-
-            //todo cleanup and put sensors in rooms
-
             /* Add raw devices, parse them into sensors and filelogs later */
             if (isSensor) {
-                sensors.add(d);
-            } else if (d.isFileLog()) {
+                Optional<FHEMSensor> parsedSensor_opt = d.parseToSensor();
+                if (!parsedSensor_opt.isPresent()) {
+                    System.err.println("Could not parse sensor! " + d.getName());
+                    continue;
+                }
+                FHEMSensor sensor = parsedSensor_opt.get();
+                FHEMRoom appRoom = d.getAppRoom();
+                if (rooms.contains(appRoom)) {
+                    for (FHEMRoom room : rooms) {
+                        if (room.equals(appRoom)) {
+                            room.addSensor(sensor);
+                        }
+                    }
+                } else {
+                    appRoom.addSensor(sensor);
+                    rooms.add(appRoom);
+                }
+            } else if (isFileLog) {
                 if (d.isFakelog()) {
                     continue;
                 }
@@ -91,12 +99,10 @@ public class JsonList2 {
                     continue;
                 }
                 filelogs.add(d);
+            } else {
+                continue;
             }
         }
-        HashSet<FHEMSensor> realSensors;
-
-        realSensors = sensors.stream().map(FHEMDevice::parseToSensor)
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
 
         for (FHEMDevice filelog : filelogs) {
             Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix(':');
@@ -115,10 +121,6 @@ public class JsonList2 {
                 log.ifPresent(sensor::addLog);
             }
         }
-        for (FHEMDevice sensor : sensors) {
-            rooms.addAll(sensor.getRooms().orElse(new ArrayList<>()));
-        }
-
-        return new FHEMModel(realSensors, rooms);
+        return new FHEMModel(rooms);
     }
 }

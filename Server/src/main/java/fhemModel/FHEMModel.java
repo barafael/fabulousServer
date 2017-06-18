@@ -11,20 +11,14 @@ import java.util.stream.Collectors;
  */
 
 public class FHEMModel {
-    private final HashSet<FHEMSensor> sensors;
     private final HashSet<FHEMRoom> rooms;
 
-    public FHEMModel(HashSet<FHEMSensor> sensors, HashSet<FHEMRoom> rooms) {
-        this.sensors = sensors;
+    public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
     }
 
     public HashSet<FHEMRoom> getAppRooms() {
         return rooms.stream().filter(FHEMRoom::isAppRoom).collect(Collectors.toCollection(HashSet::new));
-    }
-
-    public HashSet<FHEMSensor> getSensors() {
-        return sensors;
     }
 
     public HashSet<FHEMRoom> getRooms() {

@@ -22,6 +22,8 @@ import static fhemModel.timeserie.Logtype.*;
 public class FHEMFileLog {
     private final Logtype type;
     private final String name;
+    // todo remove or change to non-opt type
+    private final Optional<? extends Timeserie> timeserie;
     private String sensorName;
     private String unit;
     private boolean isShowInApp;
@@ -35,6 +37,7 @@ public class FHEMFileLog {
         this.sensorName = getSensorName().orElse("No sensor name given");
         System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
+        this.timeserie = getTimeserie();
     }
 
     public Optional<? extends Timeserie> getTimeserie() {

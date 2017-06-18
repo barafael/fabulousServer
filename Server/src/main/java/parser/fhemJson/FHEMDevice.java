@@ -6,6 +6,7 @@ import fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
@@ -114,9 +115,8 @@ public class FHEMDevice {
         String status = internals.getState().orElse("Not supplied");
         boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>();
-        Collection<FHEMRoom> rooms = getRooms().orElse(new ArrayList<>(0));
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta, rooms);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
         sensor.setIcon(getAttributes().getIcon());
 
         /* Add metadata which might or might not be supplied for every sensor */
@@ -155,21 +155,6 @@ public class FHEMDevice {
         return attributes;
     }
 
-    public Optional<List<FHEMRoom>> getRooms() {
-        Optional<String> rooms_opt = getAttributes().getRooms();
-        if (rooms_opt.isPresent()) {
-            String rooms_str = rooms_opt.get();
-            String[] rooms = rooms_str.split(",");
-            List<FHEMRoom> roomList = new ArrayList<>();
-            for (String roomname : rooms) {
-                roomList.add(new FHEMRoom(roomname));
-            }
-            return Optional.of(roomList);
-        } else {
-            return Optional.empty();
-        }
-    }
-
     boolean isFakelog() {
         return getInternals().getRegexp().orElse("").equals("fakelog");
     }
@@ -180,5 +165,30 @@ public class FHEMDevice {
 
     public boolean isLinked(FHEMSensor s) {
         return linkedDeviceName.equals(s.getName());
+    }
+
+    public FHEMRoom getAppRoom() {
+        Optional<String> rooms_opt = getAttributes().getRooms();
+        if (!rooms_opt.isPresent()) {
+            System.err.println("Found a device which is not in any room. Adding it to orphan room. " + getName());
+            return new FHEMRoom("room_orphaned");
+        }
+        String rooms_str = rooms_opt.get();
+        String[] rooms = rooms_str.split(",");
+        /* Only app rooms start with room_ */
+        List<FHEMRoom> appRooms =
+                Arrays.stream(rooms).filter(roomname -> roomname.startsWith("room_"))
+                        .map(FHEMRoom::new).collect(Collectors.toList());
+        FHEMRoom appRoom;
+        if (appRooms.size() > 1) {
+            System.err.println("Found device which belongs to multiple rooms in the app. Choosing the first one.");
+            appRoom = appRooms.get(0);
+        } else if (appRooms.size() == 0) {
+            System.err.println("Found a device which belongs to no app room. Adding it to orphan room. " + getName());
+            appRoom = new FHEMRoom("room_orphaned");
+        } else {
+            appRoom = appRooms.get(0);
+        }
+        return appRoom;
     }
 }

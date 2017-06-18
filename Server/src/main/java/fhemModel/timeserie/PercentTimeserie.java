@@ -9,9 +9,7 @@ import java.util.regex.Pattern;
 /**
  * @author Rafael on 16.06.17.
  */
-public class PercentTimeserie extends Timeserie {
-    private List<Double> ys;
-
+public class PercentTimeserie extends Timeserie<Double> {
     public PercentTimeserie(List<String> samples) {
         /* avoid realloc */
         xs = new ArrayList<>(samples.size() + 5);

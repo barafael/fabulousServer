@@ -12,5 +12,3 @@ Ein FileLog zur App exportieren
 * Das output-Verzeichnis für Zeitreihen, die innerhalb der App angezeigt werden sollen, muss innerhalb von
 $FHEM_DIR/log/timeseries liegen
 
-
-//TODO absolute pfade in currentlogfile

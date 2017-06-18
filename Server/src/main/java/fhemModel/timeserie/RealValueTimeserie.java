@@ -8,8 +8,7 @@ import java.util.regex.Matcher;
 /**
  * @author Rafael on 14.06.17.
  */
-public class RealValueTimeserie extends Timeserie {
-    private List<Double> ys;
+public class RealValueTimeserie extends Timeserie<Double> {
 
     public RealValueTimeserie(List<String> samples) {
         /* avoid realloc */
