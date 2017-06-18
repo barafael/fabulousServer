@@ -37,7 +37,7 @@ public class FHEMFileLog {
         this.timeserie = getTimeserie();
     }
 
-    public Optional<? extends Timeserie> getTimeserie() {
+    private Optional<? extends Timeserie> getTimeserie() {
         List<String> filelog;
         String line;
         try {

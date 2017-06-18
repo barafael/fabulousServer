@@ -39,7 +39,7 @@ class FHEMDeviceAttributes {
         return Optional.ofNullable(subType);
     }
 
-    public Optional<String> getRooms() {
+    Optional<String> getRooms() {
         return Optional.ofNullable(rooms);
     }
 
@@ -60,15 +60,15 @@ class FHEMDeviceAttributes {
         return Optional.ofNullable(permissions);
     }
 
-    public Optional<String> getNameInApp() {
+    Optional<String> getNameInApp() {
         return Optional.ofNullable(nameInApp);
     }
 
-    public Optional<String> getAlias() {
+    Optional<String> getAlias() {
         return Optional.ofNullable(alias);
     }
 
-    public String getIcon() {
+    String getIcon() {
         return app_icon;
     }
 }

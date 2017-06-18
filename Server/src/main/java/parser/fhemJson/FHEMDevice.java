@@ -40,11 +40,11 @@ public class FHEMDevice {
     /* Only ever valid for FileLog devices */
     transient private String linkedDeviceName;
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public FHEMDeviceInternals getInternals() {
+    FHEMDeviceInternals getInternals() {
         /* invariant:
            Internals != null
            This would mean that the underlying FHEM device had no Internals section!
@@ -57,11 +57,11 @@ public class FHEMDevice {
         return internals;
     }
 
-    public boolean isSensor() {
+    boolean isSensor() {
         return isInRoom("sensors");
     }
 
-    public boolean isFileLog() {
+    boolean isFileLog() {
         if (isOfType("FileLog")) {
             /* Consistency check: A FileLog must have a currentlogfile attribute too */
             if (!this.getInternals().getCurrentLogfileField().isPresent()) {
@@ -96,7 +96,7 @@ public class FHEMDevice {
         return false;
     }
 
-    boolean isShowInApp() {
+    private boolean isShowInApp() {
         if (!isSensor() && !isFileLog()) {
             System.err.println("This might be unintended: " +
                     "FHEM device " + name + " is not sensor or log, but is in app room.");
@@ -112,8 +112,6 @@ public class FHEMDevice {
         int coordY = attributes.getCoordY();
         long ID = IDCounter++;
         String permissions = attributes.getPermissionField().orElse("");
-        String status = internals.getState().orElse("Not supplied");
-        boolean showInApp = isShowInApp();
         HashMap<String, String> meta = new HashMap<>();
 
         FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
@@ -151,7 +149,7 @@ public class FHEMDevice {
         return Optional.of(new FHEMFileLog(path, name, isShowInApp()));
     }
 
-    public FHEMDeviceAttributes getAttributes() {
+    private FHEMDeviceAttributes getAttributes() {
         return attributes;
     }
 
@@ -159,7 +157,7 @@ public class FHEMDevice {
         return getInternals().getRegexp().orElse("").equals("fakelog");
     }
 
-    public boolean isBlessed() {
+    boolean isBlessed() {
         return getInternals().getCurrentLogfileField().orElse("").contains("timeseries");
     }
 
@@ -167,7 +165,7 @@ public class FHEMDevice {
         return linkedDeviceName.equals(s.getName());
     }
 
-    public FHEMRoom getAppRoom() {
+    FHEMRoom getAppRoom() {
         Optional<String> rooms_opt = getAttributes().getRooms();
         if (!rooms_opt.isPresent()) {
             System.err.println("Found a device which is not in any room. Adding it to orphan room. " + getName());
