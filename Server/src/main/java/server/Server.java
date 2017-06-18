@@ -25,7 +25,7 @@ class Server {
             String jsonList2_str = fhc.getJsonList2();
 
             /* Mock jsonlist2! */
-            jsonList2_str = new String(Files.readAllBytes(Paths.get("jsonList2.json")));
+            jsonList2_str = new String(Files.readAllBytes(Paths.get("/home/ra/Uni/4.Semester/MESP/fabulousServer/Server/jsonList2.json")));
             jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", "/home/ra/fhemlog/");
             jsonList2_str = jsonList2_str.replaceAll("./log/", "/home/ra/fhemlog/");
 
@@ -42,7 +42,7 @@ class Server {
         } catch (FHEMNotFoundException fnfe) {
             System.err.println("FHEM might not be running.");
             System.err.println
-                    ("You also might have to set global variables FHEMPL (path to fhem.pl) and " +
+                    ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
                             "FHEMPORT (fhem telnet port) in your $HOME/.profile");
             System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
                     "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
