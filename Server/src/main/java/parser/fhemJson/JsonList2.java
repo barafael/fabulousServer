@@ -91,6 +91,7 @@ public class JsonList2 {
                     appRoom.addSensor(sensor);
                     rooms.add(appRoom);
                 }
+                realSensors.add(sensor);
             } else if (isFileLog) {
                 if (d.isFakelog()) {
                     continue;
