@@ -5,7 +5,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Created 09.06.17.
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 16.06.17.
  */
 public final class Main {
     static final JsonObject config = new JsonObject().put("PORT", 8080).put("HOST", "localhost");

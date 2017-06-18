@@ -17,6 +17,11 @@ import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 
+/**
+ * @author Johannes Köstler <github@johanneskoestler.de>
+ * @date 16.06.17.
+ */
+
 public class Server extends AbstractVerticle {
 
 
@@ -92,18 +97,6 @@ public class Server extends AbstractVerticle {
     }
 
     private void register(RoutingContext routingContext) {
-        //TODO: implement using storeInDatabase(...)
-
-        /* input validation to prevent SQL injections */
-        routingContext.request().params().forEach(pair -> pair.setValue(
-                pair.getValue()
-                        .replace("\"", "")
-                        .replace(";", "")
-                        .replace("\'", "")
-                        .replace("\\", "")
-        ));
-
-
         if (routingContext.getBodyAsJson().getString("username") == null ||
                 routingContext.getBodyAsJson().getString("username").isEmpty() ||
                 routingContext.getBodyAsJson().getString("password") == null ||
@@ -111,7 +104,6 @@ public class Server extends AbstractVerticle {
             routingContext.response().setStatusCode(400).end("bad request");
             return;
         }
-
 
         /* input validation to prevent SQL injections */
         String username = routingContext.getBodyAsJson().getString("username")
@@ -124,7 +116,7 @@ public class Server extends AbstractVerticle {
                 .replace(";", "")
                 .replace("\'", "")
                 .replace("\\", "");
-        /* set optional keys to empty string */
+        /* set optional keys to empty string if not given */
         String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename")
                 .replace("\"", "")
                 .replace(";", "")
@@ -136,9 +128,8 @@ public class Server extends AbstractVerticle {
                 .replace("\'", "")
                 .replace("\\", "") : "";
 
-
         Future databaseWriteFuture = Future.future();
-        storeUserInDatabase(username, password, prename, surname, authProvider, jdbcClient, databaseWriteFuture);
+        storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
         databaseWriteFuture.setHandler(res -> {
             if (databaseWriteFuture.succeeded()) {
                 routingContext.response()
@@ -153,6 +144,17 @@ public class Server extends AbstractVerticle {
     }
 
     private void setRoomplan(RoutingContext routingContext) {
+        /* input validation to prevent SQL injections */
+        routingContext.request().params().forEach(pair -> pair.setValue(
+                pair.getValue()
+                        .replace("\"", "")
+                        .replace(";", "")
+                        .replace("\'", "")
+                        .replace("\\", "")
+        ));
+
+
+
         //TODO: implement
         routingContext.response()
                 .setStatusCode(200)
@@ -174,9 +176,11 @@ public class Server extends AbstractVerticle {
             //return data from sensor with $ID
         }
 
+        //TODO: get permission from query
         Future permissionFuture = Future.future();
         checkPermissions(routingContext.user(), "somePermission", permissionFuture);
         permissionFuture.setHandler(res -> {
+
             //TODO unchecked something ??
         });
 
@@ -238,11 +242,11 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void storeUserInDatabase(String username, String password, String prename, String surname, JDBCAuth auth, JDBCClient client,
+    private void storeUserInDatabase(String username, String password, String prename, String surname,
                                      Handler<AsyncResult<UpdateResult>> resultHandler) {
-        String salt = auth.generateSalt();
-        String hash = auth.computeHash(password, salt);
-        client.getConnection(res -> {
+        String salt = authProvider.generateSalt();
+        String hash = authProvider.computeHash(password, salt);
+        jdbcClient.getConnection(res -> {
             if (res.failed()) {
                 System.err.println("storeInDatabase-FAIL: " + res.cause().getMessage());
                 res.cause().printStackTrace();

@@ -1,8 +1,0 @@
-# Generate a keystore
-
-keytool -genkey -keystore mySrvKeystore -keyalg RSA
-
-## (keytool is a part of java somehow)
-
-# Start the program
-java -Djavax.net.debug=all -Djavax.net.ssl.keyStore="/home/ra/Code/SSLSocketExample/out/production/SSLSocketExample/mySrvKeystore"  -Djavax.net.ssl.keyStorePassword=12345678 -Djavax.net.ssl.trustStore="/home/ra/Code/SSLSocketExample/out/production/SSLSocketExample/mySrvKeystore"  -Djavax.net.ssl.trustStorePassword=12345678 SSLSocketExample
