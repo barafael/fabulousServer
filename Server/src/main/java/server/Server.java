@@ -22,7 +22,7 @@ class Server {
     public static void main(String[] args) {
         FHEMConnection fhc = new FHEMClientModeCon();
         try {
-            String jsonList2_str = fhc.getJsonList2();
+            @SuppressWarnings("UnusedAssignment") String jsonList2_str = fhc.getJsonList2();
 
             /* Mock jsonlist2! */
             jsonList2_str = new String(Files.readAllBytes(Paths.get("/home/ra/Uni/4.Semester/MESP/fabulousServer/Server/jsonList2.json")));

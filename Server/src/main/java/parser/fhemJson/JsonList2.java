@@ -48,12 +48,7 @@ public class JsonList2 {
      **/
     private int totalResultsReturned;
 
-    public Optional<String> getArg() {
-        return Optional.ofNullable(arg);
-    }
-
-    public static @NotNull
-    JsonList2 parseFrom(String jsonString) {
+    public static @NotNull JsonList2 parseFrom(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
 

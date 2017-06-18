@@ -1,5 +1,7 @@
 package fhemModel.sensors;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Class to store coordinates of a sensor in FHEM.
  * Coordinates may be positive integer values.
@@ -7,28 +9,11 @@ package fhemModel.sensors;
  */
 
 public class Coordinates {
+    @SerializedName("x")
     private int coordX;
+
+    @SerializedName("y")
     private int coordY;
-
-    boolean setCoordX(int coordX) {
-        if (coordX >= 0) {
-            this.coordX = coordX;
-            return true;
-        }
-        return false;
-    }
-
-    boolean setCoordY(int coordY) {
-        if (coordY >= 0) {
-            this.coordY = coordY;
-            return true;
-        }
-        return false;
-    }
-
-    boolean setCoord(int coordX, int coordY) {
-        return setCoordX(coordX) && setCoordY(coordY);
-    }
 
     Coordinates(int coordX, int coordY) {
         if (coordX >= 0 && coordY >= 0) {

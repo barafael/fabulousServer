@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fhemModel.sensors.FHEMSensor;
-import org.jetbrains.annotations.NotNull;
-
 import static fhemModel.timeserie.Logtype.*;
 
 /**
@@ -24,10 +21,10 @@ public class FHEMFileLog {
     private final String name;
     // todo remove or change to non-opt type
     private final Optional<? extends Timeserie> timeserie;
-    private String sensorName;
-    private String unit;
-    private boolean isShowInApp;
-    private String path;
+    private final String sensorName;
+    private final String unit;
+    private final boolean isShowInApp;
+    private final String path;
 
     public FHEMFileLog(String path, String name, boolean isShowInApp) {
         this.path = path;
@@ -89,9 +86,6 @@ public class FHEMFileLog {
                     return DISCRETEVAL;
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return Logtype.UNKNOWN;
         } catch (IOException e) {
             e.printStackTrace();
             return Logtype.UNKNOWN;
@@ -126,9 +120,6 @@ public class FHEMFileLog {
             }
             String name = line.split(" ")[1];
             return Optional.of(name);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return Optional.empty();
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -149,9 +140,6 @@ public class FHEMFileLog {
                 unit = unit.substring(0, unit.length() - 1);
             }
             return Optional.of(unit);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return Optional.empty();
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();

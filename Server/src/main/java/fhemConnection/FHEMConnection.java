@@ -11,5 +11,5 @@ public interface FHEMConnection {
 
     String getJsonList2(int port, String pathToPl) throws IOException, FHEMNotFoundException;
 
-    Optional<String> sendPerlCommand(String commmand);
+    Optional<String> sendPerlCommand(String command);
 }

@@ -13,8 +13,8 @@ import java.util.List;
 
 public class FHEMRoom {
     List<FHEMSensor> sensors = new ArrayList<>();
-    private SVGRoomPlan plan;
-    private String name;
+    private final SVGRoomPlan plan;
+    private final String name;
 
     public FHEMRoom(String roomname) {
         if (roomname.startsWith("room_")) {

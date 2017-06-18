@@ -16,12 +16,4 @@ public class FHEMModel {
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
     }
-
-    public HashSet<FHEMRoom> getAppRooms() {
-        return rooms.stream().filter(FHEMRoom::isAppRoom).collect(Collectors.toCollection(HashSet::new));
-    }
-
-    public HashSet<FHEMRoom> getRooms() {
-        return rooms;
-    }
 }

@@ -14,14 +14,14 @@ import java.util.HashSet;
  */
 
 public class FHEMSensor {
-    private Coordinates coord;
+    private final Coordinates coord;
     private final String name;
     private final long ID;
-    private String permission;
+    private final String permission;
     private final HashSet<FHEMRoom> rooms = new HashSet<>();
-    private HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
-    private boolean isShowInApp;
-    private HashMap<String, String> metaInfo;
+    private final HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
+    private final boolean isShowInApp;
+    private final HashMap<String, String> metaInfo;
     private String icon;
 
     public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
