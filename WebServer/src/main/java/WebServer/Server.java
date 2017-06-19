@@ -185,7 +185,7 @@ public class Server extends AbstractVerticle {
         System.out.println("Server says: " + model);
         //TODO: get permission from query
         Future permissionFuture = Future.future();
-        checkPermissions(routingContext.user(), "some3Permission", permissionFuture);
+        checkPermissions(routingContext.user(), "somePermission", permissionFuture);
         permissionFuture.setHandler(res -> {
             if (permissionFuture.succeeded()) {
                 //TODO: call handler to fill answer
