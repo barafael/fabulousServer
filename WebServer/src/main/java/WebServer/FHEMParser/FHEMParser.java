@@ -17,6 +17,8 @@ import WebServer.FHEMParser.fhemJson.JsonList2;
  *
  * @author Rafael on 31.05.17.
  */
+
+/* TODO whats up with HM_52CC96_Pwr values? */
 public class FHEMParser {
     private static FHEMParser instance;
 

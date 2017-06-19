@@ -10,6 +10,7 @@ import java.util.HashSet;
  * @author Rafael
  */
 
+/* TODO would it make sense to inherit from vertx jsonObject? */
 public class FHEMModel {
     private final HashSet<FHEMRoom> rooms;
 
