@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import fhemConnection.FHEMConnection;
 import fhemConnection.FHEMClientModeCon;
@@ -10,25 +11,32 @@ import com.google.gson.GsonBuilder;
 import fhemConnection.FHEMNotFoundException;
 import com.google.gson.Gson;
 import fhemModel.FHEMModel;
+import fhemUtils.FHEMUtils;
 import parser.fhemJson.JsonList2;
 
 /**
  * // TODO: when deployed, remove mocking code and debug output. You should also set pretty printing of in
  * // TODO Gson because otherwise the network might drown in pretty, useless whitespace.
+ *
  * @author Rafael on 31.05.17.
  */
 class Server {
-
     public static void main(String[] args) {
         FHEMConnection fhc = new FHEMClientModeCon();
         try {
-            @SuppressWarnings("UnusedAssignment") String jsonList2_str = fhc.getJsonList2();
-
+            String jsonList2_str = fhc.getJsonList2();
             /* Mock jsonlist2! */
-            jsonList2_str = new String(Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Uni/4.Semester/MESP/fabulousServer/Server/jsonList2.json")));
-            jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", System.getProperty("user.home") + "/fhemlog/");
-            jsonList2_str = jsonList2_str.replaceAll("./log/", System.getProperty("user.home") + "/fhemlog/");
-
+            if (!System.getProperty("user.home").contains("pi")) {
+                Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
+                if (mockdir_opt.isPresent()) {
+                    String path = mockdir_opt.get();
+                    jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
+                    jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
+                    jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");
+                } else {
+                    System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
+                }
+            }
             JsonList2 list = JsonList2.parseFrom(jsonList2_str);
 
             FHEMModel fhemModel = list.toFHEMModel();

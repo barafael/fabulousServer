@@ -18,7 +18,7 @@ public class FHEMRoom {
 
     public FHEMRoom(String roomname) {
         if (roomname.startsWith("room_")) {
-            String pathToPlan = FHEMUtils.getFHEMDIR() + "roomplans/" + roomname + ".svg";
+            String pathToPlan = FHEMUtils.getGlobVar("FHEMDIR") + "roomplans/" + roomname + ".svg";
             plan = SVGRoomPlan.loadFile(pathToPlan);
         } else {
             plan = null; // Null Plan.

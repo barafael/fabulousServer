@@ -22,9 +22,8 @@ public class FHEMUtils {
         return port;
     }
 
-    public static Optional<String> getFHEMDIR() {
-        String dir_env = "FHEMDIR";
-        return Optional.ofNullable(System.getenv(dir_env));
+    public static Optional<String> getGlobVar(String var) {
+        return Optional.ofNullable(System.getenv(var));
     }
 
     public static String whereisFhemDotPl() throws IOException {
@@ -37,7 +36,7 @@ public class FHEMUtils {
     }
 
     public static String getFhemScriptPath() {
-        Optional<String> fhemdir = getFHEMDIR();
+        Optional<String> fhemdir = getGlobVar("FHEMDIR");
         if (fhemdir.isPresent()) {
             return fhemdir.get() + "fhem.pl";
         } else {
