@@ -49,17 +49,17 @@ public class FHEMFileLog {
             }
             bufferedReader.close();
 
-            Logtype type_opt = guessLogtype(path);
-            switch (type_opt) {
+            Logtype logtype = guessLogtype(path);
+            switch (logtype) {
                 case REALVAL:
-                    return Optional.of(new RealValueTimeserie(filelog));
                 case PERCENTVAL:
-                    return Optional.of(new PercentTimeserie(filelog));
                 case DISCRETEVAL:
-                    return Optional.of(new DiscreteTimeserie(filelog));
+                    return Optional.of(new Timeserie(filelog, logtype));
                 case UNKNOWN:
-                default:
                     System.err.println("Couldn't guess type of log! " + path);
+                    return Optional.of(new Timeserie(filelog, logtype));
+                default:
+                    System.err.println("Unimplemented logtype! " + logtype.name());
                     return Optional.empty();
             }
         } catch (IOException e) {
