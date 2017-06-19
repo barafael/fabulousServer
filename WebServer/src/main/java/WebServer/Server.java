@@ -1,6 +1,5 @@
 package WebServer;
 
-import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
@@ -18,8 +17,6 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
-
-import java.util.Optional;
 
 /**
  * @author Johannes Köstler <github@johanneskoestler.de>

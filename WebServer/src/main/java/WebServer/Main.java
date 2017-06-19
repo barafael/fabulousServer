@@ -2,8 +2,6 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -26,7 +24,7 @@ public final class Main {
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(Server.class.getCanonicalName(),options);
 
-        long parserTimerID = vertx.setPeriodic(5000, id -> {
+        long parserTimerID = vertx.setPeriodic(20000, id -> {
             Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
             if (!fhemModel_opt.isPresent()) {
                 System.err.println("FHEM could not parsed.");
