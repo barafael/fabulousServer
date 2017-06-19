@@ -19,7 +19,7 @@ import static fhemModel.timeserie.Logtype.*;
 public class FHEMFileLog {
     private final Logtype type;
     private final String name;
-    // todo remove or change to non-opt type
+    // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
     private final Optional<? extends Timeserie> timeserie;
     private final String sensorName;
     private final String unit;
@@ -34,6 +34,8 @@ public class FHEMFileLog {
         this.sensorName = getSensorName().orElse("No sensor name given");
         System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
+
+        // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
         this.timeserie = getTimeserie();
     }
 
