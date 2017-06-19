@@ -13,16 +13,23 @@ import java.util.Optional;
  * @date 16.06.17.
  */
 public final class Main {
-    static FHEMParser parser = FHEMParser.getInstance();
-    static FHEMModel fhemModel = parser.getFHEMModel().get();
-
     static final JsonObject config = new JsonObject().put("PORT", 8080).put("HOST", "localhost");
     public static final DeploymentOptions options = new DeploymentOptions().setConfig(config);
+    static FHEMParser parser = FHEMParser.getInstance();
+    static FHEMModel fhemModel;
+    static {
+        Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
+        if (!fhemModel_opt.isPresent()) {
+            System.err.println("FHEM could not be parsed.");
+            System.exit(1337);
+        }
+        fhemModel = fhemModel_opt.get();
+    }
 
-    public static void main(String[] args){
-        System.out.println("Server config: "+options.toJson());
+    public static void main(String[] args) {
+        System.out.println("Server config: " + options.toJson());
         final Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(Server.class.getCanonicalName(),options);
+        vertx.deployVerticle(Server.class.getCanonicalName(), options);
 
         long parserTimerID = vertx.setPeriodic(20000, id -> {
             Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
@@ -32,6 +39,5 @@ public final class Main {
             }
             fhemModel = fhemModel_opt.get();
         });
-
     }
 }
