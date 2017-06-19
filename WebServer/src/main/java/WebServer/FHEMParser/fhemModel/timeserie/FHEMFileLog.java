@@ -31,7 +31,7 @@ public class FHEMFileLog {
         this.name = name;
         this.unit = getUnit().orElse("No unit given");
         this.sensorName = getSensorName().orElse("No sensor name given");
-        System.out.println("constructing filelog: " + path);
+        // System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
 
         // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
