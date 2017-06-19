@@ -13,8 +13,8 @@ import java.util.Optional;
  * @date 16.06.17.
  */
 public final class Main {
-    static FHEMModel fhemModel;
     static FHEMParser parser = FHEMParser.getInstance();
+    static FHEMModel fhemModel = parser.getFHEMModel().get();
 
     static final JsonObject config = new JsonObject().put("PORT", 8080).put("HOST", "localhost");
     public static final DeploymentOptions options = new DeploymentOptions().setConfig(config);

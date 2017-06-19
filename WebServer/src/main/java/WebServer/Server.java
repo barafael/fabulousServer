@@ -24,14 +24,12 @@ import io.vertx.ext.web.handler.BodyHandler;
  */
 
 public class Server extends AbstractVerticle {
-
     private JDBCAuth authProvider;
     private Router router;
     private JDBCClient jdbcClient;
     private AuthHandler authHandler;
     private HttpServer server;
     private JsonObject jdbcClientConfig;
-
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {

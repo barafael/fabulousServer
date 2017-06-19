@@ -58,4 +58,8 @@ public class FHEMRoom {
     public int hashCode() {
         return name.hashCode();
     }
+
+    public String getName() {
+        return name;
+    }
 }

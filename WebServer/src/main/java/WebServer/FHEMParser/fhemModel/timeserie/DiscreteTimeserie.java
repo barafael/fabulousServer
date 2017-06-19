@@ -1,7 +1,5 @@
 package WebServer.FHEMParser.fhemModel.timeserie;
 
-import WebServer.FHEMParser.fhemModel.timeserie.Timeserie;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
