@@ -13,14 +13,14 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'FHEMParser.server/Server'
+        attributes 'Main-Class': 'WebServer.Main'
     }
 }
 
 task fatJar(type: Jar) {
     baseName = project.name + '-all'
     manifest {
-        attributes 'Main-Class': 'FHEMParser.server/Server'
+        attributes 'Main-Class': 'WebServer/Main'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
