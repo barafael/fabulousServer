@@ -25,9 +25,9 @@ class Server {
             @SuppressWarnings("UnusedAssignment") String jsonList2_str = fhc.getJsonList2();
 
             /* Mock jsonlist2! */
-            jsonList2_str = new String(Files.readAllBytes(Paths.get("/home/ra/Uni/4.Semester/MESP/fabulousServer/Server/jsonList2.json")));
-            jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", "/home/ra/fhemlog/");
-            jsonList2_str = jsonList2_str.replaceAll("./log/", "/home/ra/fhemlog/");
+            jsonList2_str = new String(Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Uni/4.Semester/MESP/fabulousServer/Server/jsonList2.json")));
+            jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", System.getProperty("user.home") + "/fhemlog/");
+            jsonList2_str = jsonList2_str.replaceAll("./log/", System.getProperty("user.home") + "/fhemlog/");
 
             JsonList2 list = JsonList2.parseFrom(jsonList2_str);
 
