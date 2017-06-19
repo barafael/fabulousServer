@@ -20,7 +20,12 @@ public class FHEMModel {
 
     @Override
     public String toString() {
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
         return gson.toJson(this);
         //JsonObject json = new JsonObject().put("test","test2");
         //return json.encode();
