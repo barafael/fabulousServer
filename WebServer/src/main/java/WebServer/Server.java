@@ -4,7 +4,6 @@ import WebServer.FHEMParser.fhemModel.FHEMModel;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
@@ -178,22 +177,20 @@ public class Server extends AbstractVerticle {
         } else {
             //return data from sensor with $ID
         }
-
-        FHEMModel model = Main.fhemModel;
-        System.out.println("Server says: " + model);
         //TODO: get permission from query
         Future permissionFuture = Future.future();
         checkPermissions(routingContext.user(), "somePermission", permissionFuture);
         permissionFuture.setHandler(res -> {
             if (permissionFuture.succeeded()) {
                 //TODO: call handler to fill answer
-                JsonObject sensorData = new JsonObject().put("sensor1", "sfsfsfTE").put("sensor2", "HM_XXXX");
-                String msg = routingContext.getBodyAsJson().put("data", sensorData).toString();
-                HttpServerResponse response = routingContext.response();
-                response.setStatusCode(200)
+
+                FHEMModel model = Main.fhemModel;
+                //System.out.println("Server says: " + model);
+                String sensorData = model.toString();
+                routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
-                        .putHeader("content-length", Integer.toString(msg.length()))
-                        .write(msg)
+                        .putHeader("content-length", Integer.toString(sensorData.length()))
+                        .write(sensorData)
                         .end();
                 System.out.println("user has permission");
             } else {

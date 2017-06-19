@@ -1,7 +1,6 @@
 package WebServer;
 
 
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
@@ -25,28 +24,26 @@ import java.util.Random;
 @RunWith(VertxUnitRunner.class)
 public class ServerTest {
     @Rule
-    public Timeout timeout = Timeout.seconds(50);
+    public Timeout timeout = Timeout.seconds(5000);
     private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
     private JsonObject ServerConfig;
-    private DeploymentOptions ServerOptions;
     private Vertx vertx;
 
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
-        vertx = Vertx.vertx();
         int PORT = new Random().nextInt(10000) + 50000;
+        Main.main(new String[]{""+PORT});
+        Thread.sleep(4000);
         System.out.println("Test-PORT: " + PORT);
-        ServerConfig = new JsonObject().put("PORT", PORT).put("HOST", "localhost");
-        ServerOptions = new DeploymentOptions().setConfig(ServerConfig);
-        ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(8080);//PORT
-        //vertx.deployVerticle(Server.class.getCanonicalName(), ServerOptions, testContext.asyncAssertSuccess());
-        Main.main(new String[]{""});
+        ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
+        vertx = Vertx.vertx();
         httpClient = vertx.createHttpClient(ClientOptions);
     }
 
     @Test
     public void testGetData(TestContext testContext) {
+        final Async async = testContext.async();
         JsonObject json = new JsonObject();
         json.put("data", "[sensor1, sensor2, sensor3]");
         String msg = json.encode();
@@ -54,21 +51,17 @@ public class ServerTest {
 
         String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
-        try {
-            System.out.println("Server: sleep...");
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         System.out.println("Client sent [authHeader]: " + base64);
-        final Async async = testContext.async();
-        httpClient.get("/api/getSensorData?ID=HM_XYZ")
+        httpClient.get("/api/getSensorData")
                 .putHeader("Authorization", base64)
                 .putHeader("content-type", "application/json")
                 .putHeader("content-length", Integer.toString(msg.length()))
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
                     ans.bodyHandler(body -> {
+                        System.out.println("handle body");
+                        //System.out.println(body.toJsonArray());
+                        //System.out.println(Arrays.toString(body.getBytes()));
                         System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
                         async.complete();
                     });
