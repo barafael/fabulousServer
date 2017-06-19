@@ -52,7 +52,7 @@ public class ServerTest {
         String msg = json.encode();
         System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
 
-        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader = "hans:sonne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
         httpClient.get("/api/getSensorData?ID=HM_XYZ")

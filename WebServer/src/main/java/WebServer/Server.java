@@ -1,5 +1,7 @@
 package WebServer;
 
+import WebServer.FHEMParser.FHEMParser;
+import WebServer.FHEMParser.fhemModel.FHEMModel;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -17,6 +19,8 @@ import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 
+import java.util.Optional;
+
 /**
  * @author Johannes Köstler <github@johanneskoestler.de>
  * @date 16.06.17.
@@ -24,13 +28,13 @@ import io.vertx.ext.web.handler.BodyHandler;
 
 public class Server extends AbstractVerticle {
 
-
     private JDBCAuth authProvider;
     private Router router;
     private JDBCClient jdbcClient;
     private AuthHandler authHandler;
     private HttpServer server;
     private JsonObject jdbcClientConfig;
+
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -180,6 +184,8 @@ public class Server extends AbstractVerticle {
             //return data from sensor with $ID
         }
 
+        FHEMModel model = Main.fhemModel;
+        System.out.println("Server says: " + model);
         //TODO: get permission from query
         Future permissionFuture = Future.future();
         checkPermissions(routingContext.user(), "some3Permission", permissionFuture);

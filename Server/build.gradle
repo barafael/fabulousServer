@@ -7,14 +7,14 @@ sourceCompatibility = 1.8
 
 jar {
     manifest {
-        attributes 'Main-Class': 'server/Server'
+        attributes 'Main-Class': 'FHEMParser.server/Server'
     }
 }
 
 task fatJar(type: Jar) {
     baseName = project.name + '-all'
     manifest {
-        attributes 'Main-Class': 'server/Server'
+        attributes 'Main-Class': 'FHEMParser.server/Server'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
