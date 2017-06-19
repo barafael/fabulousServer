@@ -16,5 +16,7 @@ public final class Main {
         System.out.println("Server config: "+options.toJson());
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(Server.class.getCanonicalName(),options);
+
+
     }
 }

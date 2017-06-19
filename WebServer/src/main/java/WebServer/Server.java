@@ -72,7 +72,7 @@ public class Server extends AbstractVerticle {
         server.requestHandler(router::accept);
         Future<HttpServer> serverFuture = Future.future();
         //TODO: read hostname from config and  serve only to localnet
-        server.listen(config().getInteger("PORT"), config().getString("HOST"), serverFuture); //config().getString("HOST"),
+        server.listen(config().getInteger("PORT"), config().getString("HOST"), serverFuture);
         /* ################## End Server ################## */
 
         CompositeFuture.join(databaseFuture, serverFuture).setHandler(res -> {
@@ -153,8 +153,6 @@ public class Server extends AbstractVerticle {
                         .replace("\\", "")
         ));
 
-
-
         //TODO: implement
         routingContext.response()
                 .setStatusCode(200)
@@ -169,6 +167,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void getSensorData(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal());
+        routingContext.request().headers().forEach(h -> System.out.println("Server getData_requestHeader: " + h));
+
         //TODO: check for query param ID, if empty getAll, else get this sensor only
         if (routingContext.request().getParam("ID") == null) {
             // return sensor data from all sensors
@@ -178,27 +182,24 @@ public class Server extends AbstractVerticle {
 
         //TODO: get permission from query
         Future permissionFuture = Future.future();
-        checkPermissions(routingContext.user(), "somePermission", permissionFuture);
+        checkPermissions(routingContext.user(), "some3Permission", permissionFuture);
         permissionFuture.setHandler(res -> {
-
-            //TODO unchecked something ??
+            if (permissionFuture.succeeded()) {
+                //TODO: call handler to fill answer
+                JsonObject sensorData = new JsonObject().put("sensor1", "sfsfsfTE").put("sensor2", "HM_XXXX");
+                String msg = routingContext.getBodyAsJson().put("data", sensorData).toString();
+                HttpServerResponse response = routingContext.response();
+                response.setStatusCode(200)
+                        .putHeader("content-type", "application/json")
+                        .putHeader("content-length", Integer.toString(msg.length()))
+                        .write(msg)
+                        .end();
+                System.out.println("user has permission");
+            } else {
+                routingContext.response().setStatusCode(401).end("Unauthorized");
+                return;
+            }
         });
-
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal());
-        routingContext.request().headers().forEach(h -> System.out.println("Server getData_requestHeader: " + h));
-
-        //TODO: call handler to fill answer
-        JsonObject sensorData = new JsonObject().put("sensor1", " ").put("sensor2", "HM_XXXX");
-        String msg = routingContext.getBodyAsJson().put("data", sensorData).toString();
-        HttpServerResponse response = routingContext.response();
-        response.setStatusCode(200)
-                .putHeader("content-type", "application/json")
-                .putHeader("content-length", Integer.toString(msg.length()))
-                .write(msg)
-                .end();
     }
 
     private void getPermissions(RoutingContext routingContext) {
@@ -214,7 +215,6 @@ public class Server extends AbstractVerticle {
                 .setStatusCode(200)
                 .end("HelloWorld!");
     }
-
 
     private void getTimeSeries(RoutingContext routingContext) {
         //TODO: implement
