@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author Rafael
  */
 
-class Timeserie {
+public class Timeserie {
     transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
     transient static final ZoneId zoneId = ZoneId.systemDefault();
 

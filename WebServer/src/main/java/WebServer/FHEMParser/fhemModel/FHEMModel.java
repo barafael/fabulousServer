@@ -1,6 +1,8 @@
 package WebServer.FHEMParser.fhemModel;
 
 import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
+import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -11,12 +13,23 @@ import java.util.Optional;
  * @author Rafael
  */
 
-/* TODO would it make sense to inherit from vertx jsonObject? */
 public class FHEMModel {
     private final HashSet<FHEMRoom> rooms;
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
+    }
+
+    public Optional getTimeserie(String filelogName) {
+        for (FHEMRoom room : rooms) {
+            for (FHEMSensor sensor : room.getSensors()) {
+                Optional<FHEMFileLog> log = sensor.getLogByName(filelogName);
+                if (log.isPresent()) {
+                    return log.get().getTimeserie();
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public Optional<FHEMRoom> getRoom(String roomname) {

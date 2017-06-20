@@ -16,13 +16,13 @@ import static WebServer.FHEMParser.fhemModel.timeserie.Logtype.*;
  */
 
 public class FHEMFileLog {
-    private final Logtype type;
+    transient private final Logtype type;
     private final String name;
     // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
     // private Optional<? extends Timeserie> timeserie = Optional.empty();
     private final String sensorName;
     private final String unit;
-    private final boolean isShowInApp;
+    transient private final boolean isShowInApp;
     transient private final String path;
 
     public FHEMFileLog(String path, String name, boolean isShowInApp) {
@@ -38,7 +38,11 @@ public class FHEMFileLog {
         // this.timeserie = getTimeserie();
     }
 
-    private Optional<? extends Timeserie> getTimeserie() {
+    public String getName() {
+        return name;
+    }
+
+    public Optional getTimeserie() {
         List<String> filelog;
         String line;
         try {
@@ -80,7 +84,7 @@ public class FHEMFileLog {
             if (line.contains("%")) {
                 return PERCENT;
             } else {
-                String value = getValue(line);
+                String value = getLineValue(line);
                 if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
                     return REAL;
                 } else {
@@ -93,7 +97,7 @@ public class FHEMFileLog {
         }
     }
 
-    private String getValue(String line) {
+    private String getLineValue(String line) {
         String[] splitted = line.split(" ");
         if (splitted.length > 3) {
             return splitted[3];

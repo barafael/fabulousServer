@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.
@@ -17,7 +18,7 @@ public class FHEMSensor {
     private final String name;
     private final long ID;
     private final String permission;
-    private final HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
+    private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
     private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
@@ -37,7 +38,7 @@ public class FHEMSensor {
     }
 
     public void addLog(FHEMFileLog log) {
-        associatedLogs.add(log);
+        fileLogs.add(log);
     }
 
     public String getName() {
@@ -50,5 +51,14 @@ public class FHEMSensor {
 
     public String getIcon() {
         return icon;
+    }
+
+    public Optional<FHEMFileLog> getLogByName(String filelogName) {
+        for (FHEMFileLog log : fileLogs) {
+            if (log.getName().equals(filelogName)) {
+                return Optional.of(log);
+            }
+        }
+        return Optional.empty();
     }
 }
