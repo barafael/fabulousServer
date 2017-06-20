@@ -1,8 +1,6 @@
 package WebServer;
 
 
-import WebServer.FHEMParser.FHEMParser;
-import WebServer.FHEMParser.fhemModel.FHEMModel;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
@@ -15,10 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.Base64;
-import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -46,16 +41,7 @@ public class ServerTest {
         httpClient = vertx.createHttpClient(ClientOptions);
     }
 
-    @Test
-    public void testModelPrint() {
-        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        try {
-            PrintWriter pw = new PrintWriter("fhemmodel.json");
-            model.ifPresent(pw::println);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     @Test
     public void testGetData(TestContext testContext) {
