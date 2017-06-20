@@ -51,9 +51,9 @@ public class FHEMFileLog {
 
             Logtype logtype = guessLogtype(path);
             switch (logtype) {
-                case REALVAL:
-                case PERCENTVAL:
-                case DISCRETEVAL:
+                case REAL:
+                case PERCENT:
+                case DISCRETE:
                     return Optional.of(new Timeserie(filelog, logtype));
                 case UNKNOWN:
                     System.err.println("Couldn't guess type of log! " + path);
@@ -78,13 +78,13 @@ public class FHEMFileLog {
                 return UNKNOWN;
             }
             if (line.contains("%")) {
-                return PERCENTVAL;
+                return PERCENT;
             } else {
                 String value = getValue(line);
                 if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
-                    return REALVAL;
+                    return REAL;
                 } else {
-                    return DISCRETEVAL;
+                    return DISCRETE;
                 }
             }
         } catch (IOException e) {

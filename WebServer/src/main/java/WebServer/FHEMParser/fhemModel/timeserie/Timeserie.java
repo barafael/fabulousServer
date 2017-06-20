@@ -34,7 +34,7 @@ class Timeserie {
         this.legend = HashBiMap.create();
         switch (logtype) {
             case UNKNOWN:
-            case DISCRETEVAL:
+            case DISCRETE:
                 /* avoid realloc */
                 xs = new ArrayList<>(samples.size() + 5);
                 ys = new ArrayList<>(samples.size() + 5);
@@ -52,8 +52,8 @@ class Timeserie {
                     xs.add(epoch);
                 }
                 break;
-            case REALVAL:
-            case PERCENTVAL:
+            case REAL:
+            case PERCENT:
                 /* avoid realloc */
                 xs = new ArrayList<>(samples.size() + 5);
                 ys = new ArrayList<>(samples.size() + 5);
