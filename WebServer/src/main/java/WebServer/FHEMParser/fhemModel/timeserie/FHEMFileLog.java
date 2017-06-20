@@ -23,7 +23,7 @@ public class FHEMFileLog {
     private final String sensorName;
     private final String unit;
     private final boolean isShowInApp;
-    private final String path;
+    transient private final String path;
 
     public FHEMFileLog(String path, String name, boolean isShowInApp) {
         this.path = path;

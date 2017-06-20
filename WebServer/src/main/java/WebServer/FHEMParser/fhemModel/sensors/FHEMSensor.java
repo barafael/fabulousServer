@@ -17,7 +17,6 @@ public class FHEMSensor {
     private final String name;
     private final long ID;
     private final String permission;
-    private final HashSet<FHEMRoom> rooms = new HashSet<>();
     private final HashSet<FHEMFileLog> associatedLogs = new HashSet<>();
     private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
