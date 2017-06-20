@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 /**
  * @author Rafael
@@ -16,6 +17,10 @@ public class FHEMModel {
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
+    }
+
+    public Optional<FHEMRoom> getRoom(String roomname) {
+        return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
     }
 
     @Override
