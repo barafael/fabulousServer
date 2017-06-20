@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,8 +68,10 @@ class Timeserie {
                     long epoch = dateTime.atZone(zoneId).toEpochSecond();
                     xs.add(epoch);
                     ys.add(value);
-
                 }
+                legend.inverse().put("Max", Collections.max(ys));
+                legend.inverse().put("Min", Collections.min(ys));
+                legend.inverse().put("Center", (Collections.min(ys) + Collections.max(ys)) / 2);
                 break;
             default:
                 xs = new ArrayList<>();
