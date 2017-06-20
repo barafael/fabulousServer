@@ -1,0 +1,48 @@
+CREATE DATABASE fhem_userdata;
+USE fhem_userdata;
+
+CREATE TABLE `USER` (
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `password_salt` VARCHAR(255) NOT NULL,
+  `prename` VARCHAR(255),
+  `surname` VARCHAR(255)
+);
+
+CREATE TABLE `USER_ROLES` (
+  `username` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `ROLES_PERMS` (
+  `role` VARCHAR(255) NOT NULL,
+  `perm` VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE USER ADD CONSTRAINT `pk_username` PRIMARY KEY (username);
+ALTER TABLE USER_ROLES ADD CONSTRAINT `pk_user_roles` PRIMARY KEY (username, role);
+ALTER TABLE ROLES_PERMS ADD CONSTRAINT `pk_roles_perms` PRIMARY KEY (role);
+
+ALTER TABLE USER_ROLES ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES USER(username);
+ALTER TABLE USER_ROLES ADD CONSTRAINT fk_roles FOREIGN KEY (role) REFERENCES ROLES_PERMS(role);
+
+CREATE USER java IDENTIFIED BY 'ialsevlhdakkyllosnmnilk';
+UPDATE mysql.user SET Host='localhost' WHERE User='java';
+
+GRANT ALL PRIVILEGES ON fhem_userdata.* TO 'java'@'localhost';
+
+FLUSH PRIVILEGES;
+
+SET GLOBAL time_zone = '+02:00';
+
+
+
+
+in /etc/my.cnf: 
+[mysqld]
+default-time-zone = '+02:00'
+
+sudo systemctl	restart mysql.service
+
+
+

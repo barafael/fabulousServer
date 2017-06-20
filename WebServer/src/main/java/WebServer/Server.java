@@ -34,11 +34,11 @@ public class Server extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
         /* ################## Authentification ################## */
         jdbcClientConfig = new JsonObject()
-                .put("url", "jdbc:mysql://localhost:3306/test?useSSL=false")
+                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("initial_pool_size", 5)
                 .put("user", "java")
-                .put("password", "mydatabasepw");
+                .put("password", "ialsevlhdakkyllosnmnilk");
 
         jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
         authProvider = JDBCAuth.create(vertx, jdbcClient);
@@ -47,7 +47,7 @@ public class Server extends AbstractVerticle {
 
         //TODO: remove
         Future<UpdateResult> databaseFuture = Future.succeededFuture(); //future()
-        //storeUserInDatabase("peter", "sterne123","Peter","Lustig", authProvider, jdbcClient, databaseFuture);
+        //storeUserInDatabase("hans", "sonne123","Hans","Hut", databaseFuture);
 
 
         /* ################## Routing ################## */
@@ -168,7 +168,7 @@ public class Server extends AbstractVerticle {
         //TODO: remove debug print
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
         System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username  "));
         routingContext.request().headers().forEach(h -> System.out.println("Server getData_requestHeader: " + h));
 
         //TODO: check for query param ID, if empty getAll, else get this sensor only
@@ -186,13 +186,12 @@ public class Server extends AbstractVerticle {
 
                 FHEMModel model = Main.fhemModel;
                 //System.out.println("Server says: " + model);
-                String sensorData = model.toString();
+                String sensorData = model.toJson();
                 routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
                         .putHeader("content-length", Integer.toString(sensorData.length()))
                         .write(sensorData)
                         .end();
-                System.out.println("user has permission");
             } else {
                 routingContext.response().setStatusCode(401).end("Unauthorized");
                 return;
@@ -222,11 +221,10 @@ public class Server extends AbstractVerticle {
     }
 
     private void checkPermissions(User user, String permission, Handler<AsyncResult<UpdateResult>> resultHandler) {
-        //TODO: implement -> call with Future.future() to get result
         user.isAuthorised(permission, res -> {
             if (res.succeeded()) {
                 boolean hasPermission = res.result();
-                System.out.println("Server user action: " + permission + " is allowed: " + hasPermission);
+                System.out.println("Server action: " + permission + " is allowed for user: "+user.principal().getString("username")+" ? " + hasPermission);
                 if (hasPermission) {
                     resultHandler.handle(Future.succeededFuture());
                 } else {
