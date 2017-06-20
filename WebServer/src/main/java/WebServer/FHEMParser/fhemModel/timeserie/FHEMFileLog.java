@@ -19,7 +19,7 @@ public class FHEMFileLog {
     private final Logtype type;
     private final String name;
     // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
-    private final Optional<? extends Timeserie> timeserie;
+    // private Optional<? extends Timeserie> timeserie = Optional.empty();
     private final String sensorName;
     private final String unit;
     private final boolean isShowInApp;
@@ -35,7 +35,7 @@ public class FHEMFileLog {
         this.type = guessLogtype(path);
 
         // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
-        this.timeserie = getTimeserie();
+        // this.timeserie = getTimeserie();
     }
 
     private Optional<? extends Timeserie> getTimeserie() {
