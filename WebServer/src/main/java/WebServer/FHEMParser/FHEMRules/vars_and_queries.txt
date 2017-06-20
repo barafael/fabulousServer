@@ -1,0 +1,41 @@
+Variables:
+Fenster offen := Fenster1 offen oder Fenster2 offen ...
+# Time in unix timestamps
+sunset := getSunset()
+sunrise := getSunrise()
+time := currentTime()
+isDarkOutside := time isBetween sunset sunrise
+starttime := 06:00
+endtime := 20:00
+NonWorkinghours := time isBetween endtime starttime
+CO2limit := 200
+
+Queries:
+
+Fenster offen AND Regen
+Fenster offen AND NonWorkinghours
+Tür offen AND NonWorkinghours
+isDarkOutside AND Brightness above criticalBrightness
+NetAtmoCO2 status > CO2limit
+
+Sensor123 status battery != "ok"
+...
+
+netAtmoTemp > criticalHighTemp
+netAtmoTemp < criticalLowTemp
+
+Lasercutter status on AND netAtmoTemp > criticalTempForLC
+Lasercutter status on AND NonWorkinghours
+
+Kompressor status passive AND Lasercutter status active
+
+
+# Idee
+Ein notify-Event hinterlegt ein event im log/event.log. Wenn der Server das nächste Mal nachschaut, liest er alles aus und trunkiert die Datei. Dann populiert er eine Map mit Variablen:
+doorOpen: true
+time: 01593247529
+isDarkOutside: true
+CO2Limit: 223
+usw.
+
+Dann parst der Server die queries. 
