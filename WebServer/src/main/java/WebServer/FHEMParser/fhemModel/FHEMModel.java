@@ -5,18 +5,17 @@ import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * @author Rafael
  */
 
-public class FHEMModel {
+public class FHEMModel implements Iterable<FHEMSensor> {
     private final HashSet<FHEMRoom> rooms;
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {
@@ -57,5 +56,24 @@ public class FHEMModel {
         return gson.toJson(this);
         //JsonObject json = new JsonObject().put("test","test2");
         //return json.encode();
+    }
+
+    @NotNull
+    @Override
+    public Iterator<FHEMSensor> iterator() {
+        HashSet<FHEMSensor> sensors = new HashSet<>();
+        for (FHEMRoom room : rooms) {
+            sensors.addAll(room.getSensors());
+        }
+        return sensors.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super FHEMSensor> action) {
+        HashSet<FHEMSensor> sensors = new HashSet<>();
+        for (FHEMRoom room : rooms) {
+            sensors.addAll(room.getSensors());
+        }
+        sensors.forEach(action);
     }
 }
