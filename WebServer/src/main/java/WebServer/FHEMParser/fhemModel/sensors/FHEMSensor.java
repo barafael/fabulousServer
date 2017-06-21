@@ -1,10 +1,9 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
-import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;

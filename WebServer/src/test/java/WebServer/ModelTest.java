@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -37,6 +38,17 @@ public class ModelTest {
         if (model.isPresent()) {
             for (FHEMRoom room : model.get()) {
                 System.out.println(room);
+            }
+        }
+    }
+
+    @Test
+    public void testModelLogIterator() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        if (model.isPresent()) {
+            for (Iterator<FHEMFileLog> it = model.get().eachLog(); it.hasNext(); ) {
+                FHEMFileLog log = it.next();
+                System.out.println(log);
             }
         }
     }
