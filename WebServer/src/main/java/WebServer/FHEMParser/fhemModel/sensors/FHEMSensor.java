@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.
