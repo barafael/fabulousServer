@@ -41,10 +41,9 @@ public class FHEMModel {
 
     public String subModel(List<String> permissions) {
         HashSet<FHEMRoom> subrooms = rooms.stream()
-            .map(room -> room.getSubSensors(permissions))
-            .collect(Collectors.toCollection(HashSet::new));
-        
-        }
+                .map(room -> room.getSubSensors(permissions))
+                .collect(Collectors.toCollection(HashSet::new));
+        return "";
     }
 
     @Override

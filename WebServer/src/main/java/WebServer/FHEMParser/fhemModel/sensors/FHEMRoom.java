@@ -64,10 +64,10 @@ public class FHEMRoom {
     }
 
     public FHEMRoom getSubSensors(List<String> permissions) {
-        fo
         FHEMRoom room = new FHEMRoom(this.getName());
         for (FHEMSensor sensor : getSensors()) {
-            if (sensor.hasPermission())
+            // if (sensor.hasPermission())
         }
+        return null;
     }
 }
