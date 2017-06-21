@@ -12,7 +12,6 @@ import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
-import io.vertx.ext.sql.UpdateResult;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.AuthHandler;
@@ -141,14 +140,13 @@ public class Server extends AbstractVerticle {
     }
 
     private void setRoomplan(RoutingContext routingContext) {
-        /* input validation to prevent SQL injections */
-        routingContext.request().params().forEach(pair -> pair.setValue(
-                pair.getValue()
-                        .replace("\"", "")
-                        .replace(";", "")
-                        .replace("\'", "")
-                        .replace("\\", "")
-        ));
+        if (routingContext.request().getParam("room") == null || routingContext.request().getParam("room").isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(400)
+                    .end("bad request");
+            return;
+        }
+
 
         //TODO: implement
         routingContext.response()
@@ -184,7 +182,7 @@ public class Server extends AbstractVerticle {
             if (future.succeeded()) {
                 List<String> perm = future.result();
                 //TODO: remove hotfix
-                String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson();
+                String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson(); //model.getSubmodel(perm)
                 routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
                         .putHeader("content-length", Integer.toString(answerData.length()))
@@ -227,25 +225,23 @@ public class Server extends AbstractVerticle {
 
     private void getTimeSeries(RoutingContext routingContext) {
         //TODO: implement
+
+
         routingContext.response()
                 .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
-    private void checkPermissions(User user, String permission, Handler<AsyncResult<UpdateResult>> resultHandler) {
-        user.isAuthorised(permission, res -> {
-            if (res.succeeded()) {
-                boolean hasPermission = res.result();
-                System.out.println("Server action: " + permission + " is allowed for user: " + user.principal().getString("username") + " ? " + hasPermission);
-                if (hasPermission) {
-                    resultHandler.handle(Future.succeededFuture());
-                } else {
-                    resultHandler.handle(Future.failedFuture("no permission"));
-                }
+    private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
+        Future<List<String>> future = Future.future();
+        getListOfPermissions(user.principal(), future.completer());
+        future.setHandler(res -> {
+            if (future.succeeded() && future.result().contains(permission)) {
+                resultHandler.handle(Future.succeededFuture(true));
             } else {
-                System.out.println("Server user.isAuthorised did not succeed");
-                System.out.println(res.cause());
-                resultHandler.handle(Future.failedFuture("database error"));
+                System.out.println("Server failed darferdas");
+                resultHandler.handle(Future.failedFuture(res.cause()));
+                return;
             }
         });
     }
