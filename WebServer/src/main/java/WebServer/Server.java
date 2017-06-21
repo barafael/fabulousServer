@@ -1,6 +1,6 @@
 package WebServer;
 
-import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.FHEMParser;
 import com.google.gson.Gson;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
@@ -35,6 +35,7 @@ public class Server extends AbstractVerticle {
     private HttpServer server;
     private JsonObject jdbcClientConfig;
     private SQLConnection connection;
+    private FHEMParser parser = Main.parser;
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -62,11 +63,14 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.POST, "/register").handler(this::register);
 
         router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
-        router.route(HttpMethod.POST, "/api/setSensorPosition").handler(this::setSensorPosition);
-        router.route(HttpMethod.GET, "/api/getSensorData").handler(this::getSensorData);
+        router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
+        // get mutex
+        router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
-        router.route(HttpMethod.GET, "/api/getRooms").handler(this::getRooms);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
+        router.route(HttpMethod.GET, "/api/getRooms").handler(this::getRooms);
+
+
         /* ################## End Routing ################## */
 
 
@@ -153,43 +157,42 @@ public class Server extends AbstractVerticle {
     }
 
     private void setSensorPosition(RoutingContext routingContext) {
+        /* input validation to prevent SQL injections */
+        routingContext.request().params().forEach(pair -> pair.setValue(
+                pair.getValue()
+                        .replace("\"", "")
+                        .replace(";", "")
+                        .replace("\'", "")
+                        .replace("\\", "")
+        ));
         //TODO: implement
         routingContext.response()
                 .setStatusCode(200)
                 .end("HelloWorld!");
     }
 
-    private void getSensorData(RoutingContext routingContext) {
+    private void getModel(RoutingContext routingContext) {
         //TODO: remove debug print
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
         System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username  "));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getData_requestHeader: " + h));
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
-        //TODO: check for query param ID, if empty getAll, else get this sensor only
-        if (routingContext.request().getParam("ID") == null) {
-            // return sensor data from all sensors
-        } else {
-            //return data from sensor with $ID
-        }
-        //TODO: get permission from query
-        Future permissionFuture = Future.future();
-        checkPermissions(routingContext.user(), "somePermission", permissionFuture);
-
-        permissionFuture.setHandler(res -> {
-            if (permissionFuture.succeeded()) {
-                //TODO: call handler to fill answer
-
-                FHEMModel model = Main.fhemModel;
-                //System.out.println("Server says: " + model);
-                String sensorData = model.toJson();
+        Future<List<String>> future = Future.future();
+        getListOfPermissions(routingContext.user().principal(), future);
+        future.setHandler(res -> {
+            if (future.succeeded()) {
+                List<String> perm = future.result();
+                //TODO: remove hotfix
+                String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson();
                 routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
-                        .putHeader("content-length", Integer.toString(sensorData.length()))
-                        .write(sensorData)
+                        .putHeader("content-length", Integer.toString(answerData.length()))
+                        .write(answerData)
                         .end();
             } else {
-                routingContext.response().setStatusCode(401).end("Unauthorized");
+                routingContext.response().setStatusCode(400).end("bad request");
+                System.out.println(res.cause());
                 return;
             }
         });
@@ -197,7 +200,7 @@ public class Server extends AbstractVerticle {
 
     private void getPermissions(RoutingContext routingContext) {
         Future<List<String>> future = Future.future();
-        getListOfPermissions(routingContext.user().principal(),future);
+        getListOfPermissions(routingContext.user().principal(), future);
         future.setHandler(res -> {
             if (future.succeeded()) {
                 List<String> perm = future.result();

@@ -44,32 +44,21 @@ public class ServerTest {
 
 
     @Test
-    public void testGetData(TestContext testContext) {
+    public void testGetModel(TestContext testContext) {
         final Async async = testContext.async();
-        JsonObject json = new JsonObject();
-        json.put("data", "[sensor1, sensor2, sensor3]");
-        String msg = json.encode();
-        System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
-
         String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getSensorData")
+        httpClient.get("/api/getModel")
                 .putHeader("Authorization", base64)
-                .putHeader("content-type", "application/json")
-                .putHeader("content-length", Integer.toString(msg.length()))
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
                     ans.bodyHandler(body -> {
-                        System.out.println("handle body");
-                        //System.out.println(body.toJsonArray());
-                        //System.out.println(Arrays.toString(body.getBytes()));
-                        System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
+                        System.out.println("Client received: " + body.toString());//body.toJsonArray());
                         async.complete();
                     });
                     testContext.assertEquals(200, ans.statusCode());
                 })
-                .write(msg)
                 .end();
     }
 
@@ -85,10 +74,9 @@ public class ServerTest {
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetPermissions_answerHeader: " + h));
                     ans.bodyHandler(body -> {
-                        System.out.println("handle body");
-                        System.out.println("Client received: "+body.toJsonArray());
+                        System.out.println("Client received: " + body.toJsonArray());
                         //System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
-                        testContext.assertEquals(body.toJsonArray(),jsonAns);
+                        testContext.assertEquals(body.toJsonArray(), jsonAns);
                         async.complete();
                     });
                     testContext.assertEquals(200, ans.statusCode());
