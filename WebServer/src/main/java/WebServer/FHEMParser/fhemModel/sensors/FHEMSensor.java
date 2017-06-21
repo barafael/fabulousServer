@@ -1,6 +1,7 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
 import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -60,5 +61,10 @@ public class FHEMSensor {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

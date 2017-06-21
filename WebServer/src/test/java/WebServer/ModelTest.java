@@ -2,6 +2,7 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -25,6 +26,16 @@ public class ModelTest {
                 writer.write(model.get().toString());
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void testModelSensorIterator() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        if (model.isPresent()) {
+            for (FHEMSensor sensor : model.get()) {
+                System.out.println(sensor);
             }
         }
     }

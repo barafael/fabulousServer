@@ -38,11 +38,9 @@ public class FHEMModel implements Iterable<FHEMSensor> {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
     }
 
-    public String subModel(List<String> permissions) {
-        HashSet<FHEMRoom> subrooms = rooms.stream()
-                .map(room -> room.getSubSensors(permissions))
-                .collect(Collectors.toCollection(HashSet::new));
-        return "";
+    public FHEMModel subModel(List<String> permissions) {
+
+        return null;
     }
 
     @Override
