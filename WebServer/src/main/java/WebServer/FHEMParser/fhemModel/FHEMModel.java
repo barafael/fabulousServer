@@ -6,8 +6,11 @@ import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
@@ -34,6 +37,14 @@ public class FHEMModel {
 
     public Optional<FHEMRoom> getRoom(String roomname) {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
+    }
+
+    public String subModel(List<String> permissions) {
+        HashSet<FHEMRoom> subrooms = rooms.stream()
+            .map(room -> room.getSubSensors(permissions))
+            .collect(Collectors.toCollection(HashSet::new));
+        
+        }
     }
 
     @Override

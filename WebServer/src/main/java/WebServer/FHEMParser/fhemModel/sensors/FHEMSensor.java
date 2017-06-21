@@ -16,10 +16,10 @@ import java.util.Optional;
 public class FHEMSensor {
     private final Coordinates coord;
     private final String name;
-    private final long ID;
-    private final String permission;
+    transient private final long ID;
+    transient private final String permission;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
-    private final boolean isShowInApp;
+    transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
 

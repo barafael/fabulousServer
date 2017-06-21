@@ -24,8 +24,10 @@ import java.util.stream.Collectors;
  */
 
 @SuppressWarnings("unused")
-
 public class FHEMDevice {
+    /* Class Attributes */
+    /* Used to give filelogs and sensors an ID */
+    transient private static long IDCounter = 0;
     /* Json Attributes */
     @SerializedName("Name")
     private String name;
@@ -33,10 +35,6 @@ public class FHEMDevice {
     private FHEMDeviceInternals internals;
     @SerializedName("Attributes")
     private FHEMDeviceAttributes attributes;
-
-    /* Class Attributes */
-    /* Used to give filelogs and sensors an ID */
-    transient private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */
     transient private String linkedDeviceName;
 
@@ -115,6 +113,7 @@ public class FHEMDevice {
         HashMap<String, String> meta = new HashMap<>();
 
         FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
+
         sensor.setIcon(getAttributes().getIcon());
 
         /* Add metadata which might or might not be supplied for every sensor */
@@ -122,7 +121,6 @@ public class FHEMDevice {
         sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         /* TODO use those in android app, don't just dump them */
-        sensor.addMeta("name_in_app", attributes.getNameInApp().orElse("Not supplied"));
         sensor.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
 
         return Optional.of(sensor);

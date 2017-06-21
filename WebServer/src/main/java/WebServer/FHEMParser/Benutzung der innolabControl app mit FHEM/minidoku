@@ -19,3 +19,7 @@ export FHEMPORT="6062"
 
 Und falls mocken der Daten via pull.sh erwünscht ist:
 export FHEMMOCKDIR="/home/ra/"
+
+Andere Umgebungsvariablen:
+FHEMDIR
+FHEMPL

@@ -27,9 +27,7 @@ class FHEMDeviceAttributes {
     /* More than one room is possible! */
     @SerializedName("room")
     private String rooms;
-    @SerializedName("name_in_app")
-    private String nameInApp;
-    private String app_icon;
+    private String icon_in_app;
 
     private String subType;
     private String permissions;
@@ -54,14 +52,11 @@ class FHEMDeviceAttributes {
         if (coordY.isEmpty()) coordY = "0";
         return Integer.parseInt(coordY);
     }
+
     // TODO read all attributes which might be possible
     /* Field because getPermissions() sounds weird */
     Optional<String> getPermissionField() {
         return Optional.ofNullable(permissions);
-    }
-
-    Optional<String> getNameInApp() {
-        return Optional.ofNullable(nameInApp);
     }
 
     Optional<String> getAlias() {
@@ -69,6 +64,6 @@ class FHEMDeviceAttributes {
     }
 
     String getIcon() {
-        return app_icon;
+        return icon_in_app;
     }
 }
