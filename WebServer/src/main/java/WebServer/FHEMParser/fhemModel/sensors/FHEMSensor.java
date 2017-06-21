@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * @author Rafael
  */
 
-public class FHEMSensor {
+public class FHEMSensor implements Iterable<FHEMFileLog> {
     private final Coordinates coord;
     private final String name;
     transient private final long ID;
@@ -72,5 +72,16 @@ public class FHEMSensor {
 
     public HashSet<FHEMFileLog> getLogs() {
         return fileLogs;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<FHEMFileLog> iterator() {
+        return fileLogs.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super FHEMFileLog> action) {
+        fileLogs.forEach(action);
     }
 }
