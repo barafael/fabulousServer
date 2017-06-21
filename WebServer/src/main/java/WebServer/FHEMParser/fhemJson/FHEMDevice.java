@@ -2,7 +2,7 @@ package WebServer.FHEMParser.fhemJson;
 
 import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
-import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package WebServer.FHEMParser.fhemModel.timeserie;
+package WebServer.FHEMParser.fhemModel.log;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static WebServer.FHEMParser.fhemModel.timeserie.Logtype.*;
+import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
 
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.
@@ -19,7 +19,7 @@ public class FHEMFileLog {
     transient private final Logtype type;
     private final String name;
     // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
-    // private Optional<? extends Timeserie> timeserie = Optional.empty();
+    // private Optional<? extends Timeserie> log = Optional.empty();
     private final String sensorName;
     private final String unit;
     transient private final boolean isShowInApp;

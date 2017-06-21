@@ -1,4 +1,4 @@
-package WebServer.FHEMParser.fhemModel.timeserie;
+package WebServer.FHEMParser.fhemModel.log;
 
 /**
  * @author Rafael on 16.06.17.

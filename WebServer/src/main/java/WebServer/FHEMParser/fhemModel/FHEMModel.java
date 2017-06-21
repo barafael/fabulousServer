@@ -2,20 +2,19 @@ package WebServer.FHEMParser.fhemModel;
 
 import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
-import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * @author Rafael
  */
 
-public class FHEMModel implements Iterable<FHEMRoom>{
+public class FHEMModel implements Iterable<FHEMRoom> {
     private final HashSet<FHEMRoom> rooms;
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {

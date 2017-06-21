@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
-import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;

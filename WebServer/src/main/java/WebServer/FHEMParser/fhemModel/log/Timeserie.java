@@ -1,4 +1,4 @@
-package WebServer.FHEMParser.fhemModel.timeserie;
+package WebServer.FHEMParser.fhemModel.log;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

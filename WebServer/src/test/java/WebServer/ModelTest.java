@@ -3,7 +3,7 @@ package WebServer;
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
