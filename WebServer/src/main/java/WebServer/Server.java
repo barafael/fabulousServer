@@ -1,6 +1,7 @@
 package WebServer;
 
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import com.google.gson.Gson;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -9,6 +10,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
 import io.vertx.ext.sql.UpdateResult;
 import io.vertx.ext.web.Router;
@@ -16,6 +18,9 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Johannes Köstler <github@johanneskoestler.de>
@@ -29,6 +34,7 @@ public class Server extends AbstractVerticle {
     private AuthHandler authHandler;
     private HttpServer server;
     private JsonObject jdbcClientConfig;
+    private SQLConnection connection;
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -45,10 +51,8 @@ public class Server extends AbstractVerticle {
         authHandler = BasicAuthHandler.create(authProvider);
         /* ################## End Authentification ################## */
 
-        //TODO: remove
-        Future<UpdateResult> databaseFuture = Future.succeededFuture(); //future()
-        //storeUserInDatabase("hans", "sonne123","Hans","Hut", databaseFuture);
-
+        Future<SQLConnection> databaseFuture = Future.future();
+        jdbcClient.getConnection(databaseFuture.completer());
 
         /* ################## Routing ################## */
         router = Router.router(getVertx());
@@ -56,6 +60,7 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/api/*").handler(authHandler);
         router.route(HttpMethod.POST, "/register").handler(this::register);
+
         router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
         router.route(HttpMethod.POST, "/api/setSensorPosition").handler(this::setSensorPosition);
         router.route(HttpMethod.GET, "/api/getSensorData").handler(this::getSensorData);
@@ -69,16 +74,23 @@ public class Server extends AbstractVerticle {
         server = getVertx().createHttpServer();
         server.requestHandler(router::accept);
         Future<HttpServer> serverFuture = Future.future();
-        //TODO: read hostname from config and  serve only to localnet
-        server.listen(config().getInteger("PORT"), config().getString("HOST"), serverFuture);
+        server.listen(config().getInteger("PORT"), config().getString("HOST"), serverFuture.completer());
         /* ################## End Server ################## */
 
         CompositeFuture.join(databaseFuture, serverFuture).setHandler(res -> {
             if (res.failed()) {
                 startFuture.fail(res.cause());
             } else {
+                connection = (SQLConnection) res.result().resultAt(0);
                 startFuture.complete();
                 System.out.println("server started");
+
+/*
+                Future<Void> testFuture = Future.future();
+                Future<Void> testFuture2 = Future.future();
+                storeUserInDatabase("hans", "sonne123","Hans","Hut", testFuture);
+                storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);
+          */
             }
         });
     }
@@ -103,30 +115,13 @@ public class Server extends AbstractVerticle {
             return;
         }
 
-        /* input validation to prevent SQL injections */
-        String username = routingContext.getBodyAsJson().getString("username")
-                .replace("\"", "")
-                .replace(";", "")
-                .replace("\'", "")
-                .replace("\\", "");
-        String password = routingContext.getBodyAsJson().getString("password")
-                .replace("\"", "")
-                .replace(";", "")
-                .replace("\'", "")
-                .replace("\\", "");
+        String username = routingContext.getBodyAsJson().getString("username");
+        String password = routingContext.getBodyAsJson().getString("password");
         /* set optional keys to empty string if not given */
-        String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename")
-                .replace("\"", "")
-                .replace(";", "")
-                .replace("\'", "")
-                .replace("\\", "") : "";
-        String surname = routingContext.getBodyAsJson().getString("surname") != null ? routingContext.getBodyAsJson().getString("surname")
-                .replace("\"", "")
-                .replace(";", "")
-                .replace("\'", "")
-                .replace("\\", "") : "";
+        String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename") : "";
+        String surname = routingContext.getBodyAsJson().getString("surname") != null ? routingContext.getBodyAsJson().getString("surname") : "";
 
-        Future databaseWriteFuture = Future.future();
+        Future<Void> databaseWriteFuture = Future.future();
         storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
         databaseWriteFuture.setHandler(res -> {
             if (databaseWriteFuture.succeeded()) {
@@ -180,6 +175,7 @@ public class Server extends AbstractVerticle {
         //TODO: get permission from query
         Future permissionFuture = Future.future();
         checkPermissions(routingContext.user(), "somePermission", permissionFuture);
+
         permissionFuture.setHandler(res -> {
             if (permissionFuture.succeeded()) {
                 //TODO: call handler to fill answer
@@ -200,10 +196,23 @@ public class Server extends AbstractVerticle {
     }
 
     private void getPermissions(RoutingContext routingContext) {
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(200)
-                .end("HelloWorld!");
+        Future<List<String>> future = Future.future();
+        getListOfPermissions(routingContext.user().principal(),future);
+        future.setHandler(res -> {
+            if (future.succeeded()) {
+                List<String> perm = future.result();
+                String permString = new Gson().toJson(perm);
+                routingContext.response().setStatusCode(200)
+                        .putHeader("content-type", "application/json")
+                        .putHeader("content-length", Integer.toString(permString.length()))
+                        .write(permString)
+                        .end();
+            } else {
+                routingContext.response().setStatusCode(400).end("bad request");
+                System.out.println(res.cause());
+                return;
+            }
+        });
     }
 
     private void getRooms(RoutingContext routingContext) {
@@ -224,7 +233,7 @@ public class Server extends AbstractVerticle {
         user.isAuthorised(permission, res -> {
             if (res.succeeded()) {
                 boolean hasPermission = res.result();
-                System.out.println("Server action: " + permission + " is allowed for user: "+user.principal().getString("username")+" ? " + hasPermission);
+                System.out.println("Server action: " + permission + " is allowed for user: " + user.principal().getString("username") + " ? " + hasPermission);
                 if (hasPermission) {
                     resultHandler.handle(Future.succeededFuture());
                 } else {
@@ -238,22 +247,37 @@ public class Server extends AbstractVerticle {
         });
     }
 
+    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+        String username = user.getString("username");
+        if (username == null) {
+            next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
+            return;
+        }
+        String query = "SELECT perm FROM `ROLE_PERM` INNER JOIN `USER_ROLE` ON `ROLE_PERM`.role=`USER_ROLE`.role where `user`=?";
+        JsonArray params = new JsonArray().add(username);
+        connection.queryWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                ResultSet result = res.result();
+                List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
+                next.handle(Future.succeededFuture(list));
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+            }
+        });
+    }
+
     private void storeUserInDatabase(String username, String password, String prename, String surname,
-                                     Handler<AsyncResult<UpdateResult>> resultHandler) {
+                                     Handler<AsyncResult<Void>> next) {
         String salt = authProvider.generateSalt();
         String hash = authProvider.computeHash(password, salt);
-        jdbcClient.getConnection(res -> {
-            if (res.failed()) {
-                System.err.println("storeInDatabase-FAIL: " + res.cause().getMessage());
-                res.cause().printStackTrace();
-                resultHandler.handle(Future.failedFuture(res.cause()));
-                return;
+        JsonArray params = new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname);
+        connection.updateWithParams("INSERT INTO USER VALUES (?, ?, ?, ?, ?)", params, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
             }
-            SQLConnection conn = res.result();
-            System.out.println("DB connection: " + conn.toString());
-            conn.updateWithParams("INSERT INTO USER VALUES (?, ?, ?, ?, ?)", new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname),
-                    resultHandler);
-            conn.close();
         });
+
     }
 }

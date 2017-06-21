@@ -4,6 +4,7 @@ package WebServer;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -33,14 +34,13 @@ public class ServerTest {
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
         int PORT = new Random().nextInt(10000) + 50000;
-        Main.main(new String[]{""+PORT});
+        Main.main(new String[]{"" + PORT});
         Thread.sleep(4000);
         System.out.println("Test-PORT: " + PORT);
         ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
         vertx = Vertx.vertx();
         httpClient = vertx.createHttpClient(ClientOptions);
     }
-
 
 
     @Test
@@ -74,14 +74,37 @@ public class ServerTest {
     }
 
     @Test
+    public void testGetPermissions(TestContext testContext) {
+        final Async async = testContext.async();
+        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        System.out.println("Client sent [authHeader]: " + base64);
+        JsonArray jsonAns = new JsonArray().add("S_Fenster_4");
+        httpClient.get("/api/getPermissions")
+                .putHeader("Authorization", base64)
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetPermissions_answerHeader: " + h));
+                    ans.bodyHandler(body -> {
+                        System.out.println("handle body");
+                        System.out.println("Client received: "+body.toJsonArray());
+                        //System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
+                        testContext.assertEquals(body.toJsonArray(),jsonAns);
+                        async.complete();
+                    });
+                    testContext.assertEquals(200, ans.statusCode());
+                })
+                .end();
+    }
+
+    @Test
     public void testRegister(TestContext testContext) {
         final Async async = testContext.async();
         JsonObject json = new JsonObject();
         int rnd = new Random().nextInt(99999);
-        json.put("username", "test"+rnd);
-        json.put("password", "test"+rnd);
-        json.put("prename","PreTest"+rnd);
-        json.put("surname","SurTest"+rnd);
+        json.put("username", "test" + rnd);
+        json.put("password", "test" + rnd);
+        json.put("prename", "PreTest" + rnd);
+        json.put("surname", "SurTest" + rnd);
         String msg = json.encode();
         System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
         httpClient.post("/register")
@@ -102,8 +125,8 @@ public class ServerTest {
         JsonObject json = new JsonObject();
         json.put("username", "hans");
         json.put("password", "380");
-        json.put("prename","PreTest");
-        json.put("surname","SurTest");
+        json.put("prename", "PreTest");
+        json.put("surname", "SurTest");
         String msg = json.encode();
         System.out.println("Client sent [msg, length]: " + msg + ", " + msg.length());
         httpClient.post("/register")
