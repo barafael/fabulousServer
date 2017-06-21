@@ -4,6 +4,7 @@ import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -66,5 +67,9 @@ public class FHEMSensor {
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    public HashSet<FHEMFileLog> getLogs() {
+        return fileLogs;
     }
 }

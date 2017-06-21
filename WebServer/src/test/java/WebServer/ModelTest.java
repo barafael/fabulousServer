@@ -2,6 +2,7 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import org.junit.Test;
 
@@ -31,11 +32,11 @@ public class ModelTest {
     }
 
     @Test
-    public void testModelSensorIterator() {
+    public void testModelRoomIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         if (model.isPresent()) {
-            for (FHEMSensor sensor : model.get()) {
-                System.out.println(sensor);
+            for (FHEMRoom room : model.get()) {
+                System.out.println(room);
             }
         }
     }

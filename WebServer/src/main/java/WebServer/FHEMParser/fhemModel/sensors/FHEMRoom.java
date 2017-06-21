@@ -1,20 +1,22 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
+import WebServer.FHEMParser.fhemModel.timeserie.FHEMFileLog;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class represents a room which associates a FHEM model.
+ *
  * @author Rafael
  */
 
-public class FHEMRoom {
+public class FHEMRoom implements Iterable<FHEMSensor> {
     List<FHEMSensor> sensors = new ArrayList<>();
     private final SVGRoomPlan plan;
     private final String name;
+    private Collection<? extends FHEMFileLog> logs;
 
     public FHEMRoom(String roomname) {
         if (roomname.startsWith("room_")) {
@@ -33,8 +35,15 @@ public class FHEMRoom {
     public void addSensor(@NotNull FHEMSensor sensor) {
         sensors.add(sensor);
     }
+
     public boolean isAppRoom() {
         return name.startsWith("room_");
+    }
+
+    @NotNull
+    @Override
+    public Iterator<FHEMSensor> iterator() {
+        return sensors.iterator();
     }
 
     @Override
@@ -69,5 +78,9 @@ public class FHEMRoom {
             // if (sensor.hasPermission())
         }
         return null;
+    }
+
+    public Collection<? extends FHEMFileLog> getLogs() {
+        return logs;
     }
 }

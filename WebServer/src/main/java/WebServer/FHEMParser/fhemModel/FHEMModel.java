@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @author Rafael
  */
 
-public class FHEMModel implements Iterable<FHEMSensor> {
+public class FHEMModel implements Iterable<FHEMRoom>{
     private final HashSet<FHEMRoom> rooms;
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {
@@ -58,20 +58,20 @@ public class FHEMModel implements Iterable<FHEMSensor> {
 
     @NotNull
     @Override
-    public Iterator<FHEMSensor> iterator() {
-        HashSet<FHEMSensor> sensors = new HashSet<>();
-        for (FHEMRoom room : rooms) {
-            sensors.addAll(room.getSensors());
-        }
-        return sensors.iterator();
+    public Iterator<FHEMRoom> iterator() {
+        return rooms.iterator();
+    }
+
+    public Iterator<FHEMFileLog> eachLog() {
+        HashSet<FHEMFileLog> logs = new HashSet<>();
+        forEach(fhemSensor -> {
+            logs.addAll(fhemSensor.getLogs());
+        });
+        return logs.iterator();
     }
 
     @Override
-    public void forEach(Consumer<? super FHEMSensor> action) {
-        HashSet<FHEMSensor> sensors = new HashSet<>();
-        for (FHEMRoom room : rooms) {
-            sensors.addAll(room.getSensors());
-        }
-        sensors.forEach(action);
+    public void forEach(Consumer<? super FHEMRoom> action) {
+        rooms.forEach(action);
     }
 }
