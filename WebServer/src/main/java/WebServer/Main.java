@@ -3,6 +3,7 @@ package WebServer;
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -23,7 +24,7 @@ public final class Main {
         Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
         if (!fhemModel_opt.isPresent()) {
             System.err.println("FHEM could not be parsed.");
-            System.exit(1337);
+            System.exit(42);
         }
         fhemModel = fhemModel_opt.get();
     }
@@ -42,15 +43,22 @@ public final class Main {
         vertx.deployVerticle(Server.class.getCanonicalName(), options);
 
         long parserTimerID = vertx.setPeriodic(5000, id -> {
-            Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
-            if (!fhemModel_opt.isPresent()) {
-                System.err.println("FHEM could not parsed.");
-                vertx.close();
-            } else {
-                fhemModel = fhemModel_opt.get();
-                // System.out.println(fhemModel);
-            }
+            vertx.executeBlocking(future -> {
+                Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
+                if (!fhemModel_opt.isPresent()) {
+                    System.err.println("FHEM could not parsed.");
+                    future.handle(Future.failedFuture(future.cause()));
+                } else {
+                    future.complete(fhemModel_opt.get());
+                }
+            }, res -> {
+                if (res.succeeded()) {
+                    fhemModel = (FHEMModel) res.result();
+                } else {
+                    System.out.println("System exiting: Periodic Parser returned with error!");
+                    vertx.close();
+                }
+            });
         });
-
     }
 }
