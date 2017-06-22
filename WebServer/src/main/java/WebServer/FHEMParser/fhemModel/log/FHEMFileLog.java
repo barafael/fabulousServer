@@ -16,7 +16,7 @@ import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
  */
 
 public class FHEMFileLog {
-    transient private final Logtype type;
+    private final Logtype type;
     private final String name;
     // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
     // private Optional<? extends Timeserie> log = Optional.empty();
