@@ -109,7 +109,8 @@ public class FHEMDevice {
         int coordX = attributes.getCoordX();
         int coordY = attributes.getCoordY();
         long ID = IDCounter++;
-        String permissions = attributes.getPermissionField().orElse("");
+        String permissionfield = attributes.getPermissionField().orElse("");
+        List<String> permissions = Arrays.asList(permissionfield.split(","));
         HashMap<String, String> meta = new HashMap<>();
 
         FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);

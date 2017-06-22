@@ -4,10 +4,7 @@ import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -20,18 +17,18 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     private final Coordinates coord;
     private final String name;
     transient private final long ID;
-    transient private final String permission;
+    transient private final List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
     transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
 
-    public FHEMSensor(int coordX, int coordY, String name, long ID, String permission,
+    public FHEMSensor(int coordX, int coordY, String name, long ID, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
         this.ID = ID;
-        this.permission = permission;
+        this.permissions = permissions;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
     }
