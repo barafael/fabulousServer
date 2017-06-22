@@ -81,4 +81,13 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     public void forEach(Consumer<? super FHEMFileLog> action) {
         fileLogs.forEach(action);
     }
+
+    public boolean hasPermittedLogs(List<String> permissions) {
+        for (FHEMFileLog log : this) {
+            if (log.isPermitted(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -13,6 +13,7 @@ import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
 import WebServer.FHEMParser.fhemConnection.FHEMNotFoundException;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import WebServer.FHEMParser.fhemJson.JsonList2;
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ public class FHEMParser {
     public Optional<String> getFHEMModel(List<String> permissions) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
+                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
                 .create();
         return getFHEMModel().map(gson::toJson);
     }
