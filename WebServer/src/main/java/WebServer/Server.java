@@ -24,20 +24,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * serves a stateless REST-Api secured with BasicAuth and backed with JDBC
+ * handles user permissions for different actions
+ *
  * @author Johannes Köstler <github@johanneskoestler.de>
- * @date 16.06.17.
+ * @since 16.06.17.
  */
-
-// TODO: routing mit Future in methode auslagern
-
-
 public class Server extends AbstractVerticle {
     private JDBCAuth authProvider;
     private Router router;
-    private JDBCClient jdbcClient;
-    private AuthHandler authHandler;
     private HttpServer server;
-    private JsonObject jdbcClientConfig;
     private SQLConnection connection;
     private FHEMParser parser = Main.parser;
 
@@ -75,23 +71,22 @@ public class Server extends AbstractVerticle {
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
-        /* ################## Authentification ################## */
-        jdbcClientConfig = new JsonObject()
+        /* Authentication */
+        JsonObject jdbcClientConfig = new JsonObject()
                 .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("initial_pool_size", 5)
                 .put("user", "java")
                 .put("password", "ialsevlhdakkyllosnmnilk");
-
-        jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
+        JDBCClient jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
         authProvider = JDBCAuth.create(vertx, jdbcClient);
-        authHandler = BasicAuthHandler.create(authProvider);
-        /* ################## End Authentification ################## */
+        AuthHandler authHandler = BasicAuthHandler.create(authProvider);
 
+        /* Database  */
         Future<SQLConnection> databaseFuture = Future.future();
         jdbcClient.getConnection(databaseFuture.completer());
 
-        /* ################## Routing ################## */
+        /* Routing */
         router = Router.router(getVertx());
         router.exceptionHandler(this::exceptionHandler);
         router.route().handler(BodyHandler.create());
@@ -105,30 +100,26 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
-        /* ################## End Routing ################## */
 
-
-        /* ################## Server ################## */
+        /* Server */
         server = getVertx().createHttpServer();
         server.requestHandler(router::accept);
         Future<HttpServer> serverFuture = Future.future();
         server.listen(config().getInteger("PORT"), config().getString("HOST"), serverFuture.completer());
-        /* ################## End Server ################## */
 
+        /* wait for all components to start*/
         CompositeFuture.join(databaseFuture, serverFuture).setHandler(res -> {
             if (res.failed()) {
                 startFuture.fail(res.cause());
             } else {
-                connection = (SQLConnection) res.result().resultAt(0);
+                connection = res.result().resultAt(0);
                 startFuture.complete();
-                System.out.println("Server started successfully!    ");
-
-/*
-                Future<Void> testFuture = Future.future();
+                System.out.println("Server started successfully!");
+                //TODO: remove debug databse insert
+                /*Future<Void> testFuture = Future.future();
                 Future<Void> testFuture2 = Future.future();
                 storeUserInDatabase("hans", "sonne123","Hans","Hut", testFuture);
-                storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);
-          */
+                storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);*/
             }
         });
     }
@@ -217,7 +208,7 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
                     if (status) {
-                        future.handle(Future.succeededFuture(status));
+                        future.handle(Future.succeededFuture(true));
                     } else {
                         future.handle(Future.failedFuture(future.cause()));
                     }
@@ -272,7 +263,7 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
                     if (result) {
-                        future.handle(Future.succeededFuture(result));
+                        future.handle(Future.succeededFuture(true));
                     } else {
                         future.handle(Future.failedFuture(future.cause()));
                     }
@@ -326,12 +317,12 @@ public class Server extends AbstractVerticle {
                                 .end(OK_SERVER_RESPONSE);
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause());
+                        System.out.println(res.cause().getMessage());
                     }
                 });
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -359,8 +350,7 @@ public class Server extends AbstractVerticle {
                         .end(OK_SERVER_RESPONSE);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause());
-                return;
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -423,7 +413,7 @@ public class Server extends AbstractVerticle {
                                 .end(OK_SERVER_RESPONSE);
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause());
+                        System.out.println(res.cause().getMessage());
                     }
                 });
             } else {
@@ -490,7 +480,7 @@ public class Server extends AbstractVerticle {
      * @param user the user given by the RoutingContext on a route
      * @param next Handler which gets called, whenever the database action has been finished
      */
-    public void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+     private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
         String username = user.getString(Username_PARAM);
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));

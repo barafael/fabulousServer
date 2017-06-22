@@ -45,27 +45,6 @@ public class ServerTest {
     }
 
     @Test
-    public  void testServerListUserPermissions(TestContext testContext) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        final Async async = testContext.async();
-        Server server = new Server();
-        Future<List<String>> future = Future.future();
-        server.getListOfPermissions(new JsonObject().put("username", "hans"), future);
-        future.setHandler(res -> {
-            if (future.succeeded() ){
-                System.out.println(res.result());
-            } else {
-                System.out.println("Server failed darferdas");
-            }
-        });
-
-    }
-
-    @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
