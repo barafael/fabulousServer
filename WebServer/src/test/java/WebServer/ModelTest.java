@@ -14,7 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -62,6 +64,15 @@ public class ModelTest {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         if (model.isPresent()) {
             System.out.println(Duration.between(now, Instant.now()).toMillis());
+        }
+    }
+
+    @Test
+    public void testFilelogSerialization() {
+        List<String> permissions = Arrays.asList("permission1","23414");
+        Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
+        if (json.isPresent()) {
+            System.out.println(json);
         }
     }
 }

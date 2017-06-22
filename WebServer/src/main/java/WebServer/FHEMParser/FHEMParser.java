@@ -12,16 +12,16 @@ import WebServer.FHEMParser.fhemConnection.FHEMConnection;
 import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
 import WebServer.FHEMParser.fhemConnection.FHEMNotFoundException;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import WebServer.FHEMParser.fhemJson.JsonList2;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
- * TODO: You should also set pretty printing off in Gson because otherwise the network might drown in pretty, useless whitespace.
- *
  * @author Rafael on 31.05.17.
  */
 
-/* TODO whats up with HM_52CC96_Pwr values? */
 public class FHEMParser {
     private static FHEMParser instance;
 
@@ -37,8 +37,10 @@ public class FHEMParser {
     }
 
     public Optional<String> getFHEMModel(List<String> permissions) {
-        // TODO implement gson exclusionstrategies
-        return getFHEMModel().map(FHEMModel::toJson);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
+                .create();
+        return getFHEMModel().map(gson::toJson);
     }
 
     public Optional<FHEMModel> getFHEMModel() {
