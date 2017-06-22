@@ -152,4 +152,13 @@ public class FHEMFileLog {
             return Optional.empty();
         }
     }
+
+    public boolean isPermitted(List<String> allPermissions) {
+        for (String perm : permissions) {
+            if (allPermissions.contains(perm)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
