@@ -1,7 +1,6 @@
 package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
-import WebServer.FHEMParser.fhemModel.FHEMModel;
 import com.google.gson.Gson;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
@@ -29,7 +28,8 @@ import java.util.stream.Collectors;
  */
 
 // TODO: response.end-Strings in fields auslagern
-// TODO: routering mit Future in methode auslagern
+// TODO: routeing mit Future in methode auslagern
+// TODO: harcoded perm strings in fields auslagern
 
 
 public class Server extends AbstractVerticle {
@@ -41,7 +41,6 @@ public class Server extends AbstractVerticle {
     private JsonObject jdbcClientConfig;
     private SQLConnection connection;
     private FHEMParser parser = Main.parser;
-    private FHEMModel fhemModel = Main.fhemModel;
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -75,8 +74,6 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRooms").handler(this::getRooms);
-
-
         /* ################## End Routing ################## */
 
 
@@ -124,13 +121,11 @@ public class Server extends AbstractVerticle {
             routingContext.response().setStatusCode(400).end("bad request");
             return;
         }
-
         String username = routingContext.getBodyAsJson().getString("username");
         String password = routingContext.getBodyAsJson().getString("password");
         /* set optional keys to empty string if not given */
         String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename") : "";
         String surname = routingContext.getBodyAsJson().getString("surname") != null ? routingContext.getBodyAsJson().getString("surname") : "";
-
         Future<Void> databaseWriteFuture = Future.future();
         storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
         databaseWriteFuture.setHandler(res -> {
@@ -153,22 +148,34 @@ public class Server extends AbstractVerticle {
                     .end("bad request");
             return;
         }
-
         Future<Boolean> darfErDasFuture = Future.future();
         //TODO: permission string auslagern
-        darfErDas(routingContext.user(), "E_Raumänderung", darfErDasFuture.completer());
+        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
                 //TODO: check body (file) for errors
                 String file = routingContext.getBodyAsString();
 
-
-                //TODO: implement: call setRoomplan in fhemModel with id and svg
-
-                routingContext.response()
-                        .setStatusCode(200)
-                        .end("room changed");
+                vertx.executeBlocking(future -> {
+                    Boolean status = parser.setRoomplan(routingContext.request().getParam("room"), file);
+                    if (status) {
+                        future.handle(Future.succeededFuture(status));
+                    } else {
+                        future.handle(Future.failedFuture(future.cause()));
+                    }
+                }, res2 -> {
+                    System.out.println("The setRoomplan result is: " + res2.result());
+                    if (res2.succeeded()) {
+                        routingContext.response()
+                                .setStatusCode(200)
+                                .end("changed roomplan of room: "+routingContext.request().getParam("room"));
+                    } else {
+                        routingContext.response()
+                                .setStatusCode(503)
+                                .end("service temporarily not available");
+                    }
+                });
             } else {
                 routingContext.response().setStatusCode(401).end("not authorized");
             }
@@ -199,9 +206,7 @@ public class Server extends AbstractVerticle {
         int coordX = Integer.parseInt(routingContext.request().getParam("coordX"));
         int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
         vertx.executeBlocking(future -> {
-            //TODO: call fhemModel set Sensor Position
-            // Call some blocking API that takes a significant amount of time to return
-            Boolean result = true;// fhemModel.setSensorPosition(sensorName, coordX, coordY);
+            Boolean result = parser.setSensorPosition(coordX,coordY,sensorName);
             if (result) {
                 future.handle(Future.succeededFuture(result));
             } else {
