@@ -102,6 +102,7 @@ public class Server extends AbstractVerticle {
         });
     }
 
+
     private void exceptionHandler(Throwable throwable) {
         throwable.printStackTrace();
     }
@@ -110,17 +111,23 @@ public class Server extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         router.clear();
+        connection.close();
         server.close();
         super.stop();
     }
 
-    private void register(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
+    /**
+     * handles the REST-Api call for Route /api/register
+     * needs parameter username and password
+     * optional parameter prename and surname
+     * all parameter should be embedded in the request body as Json
+     * calls the database to store an new user
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void register(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         if (routingContext.getBodyAsJson().getString("username") == null ||
                 routingContext.getBodyAsJson().getString("username").isEmpty() ||
                 routingContext.getBodyAsJson().getString("password") == null ||
@@ -131,8 +138,10 @@ public class Server extends AbstractVerticle {
         String username = routingContext.getBodyAsJson().getString("username");
         String password = routingContext.getBodyAsJson().getString("password");
         /* set optional keys to empty string if not given */
-        String prename = routingContext.getBodyAsJson().getString("prename") != null ? routingContext.getBodyAsJson().getString("prename") : "";
-        String surname = routingContext.getBodyAsJson().getString("surname") != null ? routingContext.getBodyAsJson().getString("surname") : "";
+        String prename = routingContext.getBodyAsJson().getString("prename") != null
+                ? routingContext.getBodyAsJson().getString("prename") : "";
+        String surname = routingContext.getBodyAsJson().getString("surname") != null
+                ? routingContext.getBodyAsJson().getString("surname") : "";
         Future<Void> databaseWriteFuture = Future.future();
         storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
         databaseWriteFuture.setHandler(res -> {
@@ -148,14 +157,19 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void setRoomplan(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
-        if (routingContext.request().getParam("room") == null || routingContext.request().getParam("room").isEmpty()) {
+    /**
+     * handles the REST-Api call for Route /api/setRoomplan
+     * needs parameter room which should be embedded in the request URI
+     * needs parameter svg file as text which should be embedded in the request body
+     * checks for users permission and calls the model to set the roomplan
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void setRoomplan(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
+        if (routingContext.request().getParam("room") == null
+                || routingContext.request().getParam("room").isEmpty()) {
             routingContext.response()
                     .setStatusCode(400)
                     .end("bad request");
@@ -182,7 +196,8 @@ public class Server extends AbstractVerticle {
                     if (res2.succeeded()) {
                         routingContext.response()
                                 .setStatusCode(200)
-                                .end("changed roomplan of room: " + routingContext.request().getParam("room"));
+                                .end("changed roomplan of room: " +
+                                        routingContext.request().getParam("room"));
                     } else {
                         routingContext.response()
                                 .setStatusCode(503)
@@ -195,13 +210,17 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void setSensorPosition(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
+    /**
+     * handles the REST-Api call for Route /api/setSensorPosition
+     * needs parameter SensorName, coordX and coordY
+     * all parameter should be embedded in the request URI
+     * checks for users permission and calls the model to set the sensors position
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void setSensorPosition(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         /* input validation to prevent SQL injections */
         //TODO: remove?
         routingContext.request().params().forEach(pair -> pair.setValue(
@@ -211,9 +230,12 @@ public class Server extends AbstractVerticle {
                         .replace("\'", "")
                         .replace("\\", "")
         ));
-        if (routingContext.request().getParam("SensorName") == null || routingContext.request().getParam("SensorName").isEmpty()
-                || routingContext.request().getParam("coordX") == null || routingContext.request().getParam("coordX").isEmpty()
-                || routingContext.request().getParam("coordY") == null || routingContext.request().getParam("coordY").isEmpty()) {
+        if (routingContext.request().getParam("SensorName") == null
+                || routingContext.request().getParam("SensorName").isEmpty()
+                || routingContext.request().getParam("coordX") == null
+                || routingContext.request().getParam("coordX").isEmpty()
+                || routingContext.request().getParam("coordY") == null
+                || routingContext.request().getParam("coordY").isEmpty()) {
             routingContext.response()
                     .setStatusCode(400)
                     .end("bad request");
@@ -254,13 +276,16 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void getModel(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
+    /**
+     * handles the REST-Api call for Route /api/getModel
+     * lists the users permission and hands it to the model, to build a user-specific view
+     * which is returned as Json in the response body
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void getModel(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         Future<List<String>> permissionFuture = Future.future();
         getListOfPermissions(routingContext.user().principal(), permissionFuture);
         permissionFuture.setHandler(res -> {
@@ -294,13 +319,16 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void getPermissions(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
+    /**
+     * handles the REST-Api call for Route /api/getPermissions
+     * lists all permissions an user has to a List<String>
+     * which is returned as Json in the response body
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void getPermissions(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         Future<List<String>> future = Future.future();
         getListOfPermissions(routingContext.user().principal(), future);
         future.setHandler(res -> {
@@ -320,27 +348,21 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void getEditMutex(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
-
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(501)
-                .end("HelloWorld!");
-    }
-
+    /**
+     * handles the REST-Api call for Route /api/getRoomplan
+     * needs parameter room
+     * optional parameter hash
+     * all parameter should be embedded in the request URI
+     * checks for users permission and reads the models room data for the given id
+     * which are returned as Json in the response body
+     *
+     * @param routingContext the context in a route given by the router
+     */
     private void getRoomplan(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
-        if (routingContext.request().getParam("room") == null || routingContext.request().getParam("room").isEmpty()) {
+        printRequestHeaders(routingContext);
+        if (routingContext.request().getParam("room") == null
+                || routingContext.request().getParam("room").isEmpty()) {
             routingContext.response()
                     .setStatusCode(400)
                     .end("bad request");
@@ -349,7 +371,8 @@ public class Server extends AbstractVerticle {
         String room = routingContext.request().getParam("room");
         boolean hasHash;
         long hash;
-        if (routingContext.request().getParam("hash") != null && !(routingContext.request().getParam("hash").isEmpty())) {
+        if (routingContext.request().getParam("hash") != null
+                && !(routingContext.request().getParam("hash").isEmpty())) {
             hash = Long.parseLong(routingContext.request().getParam("hash"));
             hasHash = true;
         } else {
@@ -393,13 +416,28 @@ public class Server extends AbstractVerticle {
         });
     }
 
-    private void getTimeSeries(RoutingContext routingContext) {
-        //TODO: remove debug print
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
-        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
+    /**
+     * handles the REST-Api call for Route /api/getEditMutex
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void getEditMutex(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
+        //TODO: implement
+        routingContext.response()
+                .setStatusCode(501)
+                .end("HelloWorld!");
+    }
+
+
+    /**
+     * handles the REST-Api call for Route /api/getTimeSeries
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void getTimeSeries(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         //TODO: implement
         //TODO: optional startTime, endTime query param
 
@@ -408,6 +446,14 @@ public class Server extends AbstractVerticle {
                 .end("HelloWorld!");
     }
 
+
+    /**
+     * checks if an user is authorized to perform an action
+     *
+     * @param user          the user given by the RoutingContext on a route
+     * @param permission    the needed permission, which should already be stored in the database
+     * @param resultHandler Handler which gets called, whenever the database action has been finished
+     */
     private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
         Future<List<String>> future = Future.future();
         getListOfPermissions(user.principal(), future.completer());
@@ -421,6 +467,13 @@ public class Server extends AbstractVerticle {
         });
     }
 
+
+    /**
+     * lists all permissions an user has from the database to a List<String>
+     *
+     * @param user the user given by the RoutingContext on a route
+     * @param next Handler which gets called, whenever the database action has been finished
+     */
     public void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
         String username = user.getString("username");
         if (username == null) {
@@ -440,6 +493,16 @@ public class Server extends AbstractVerticle {
         });
     }
 
+
+    /**
+     * stores an unregistered user with hashed and salted password to the database
+     *
+     * @param username the unique username of the new user
+     * @param password the clear text password
+     * @param prename  the Prename of the new user
+     * @param surname  the Surname of the new user
+     * @param next     Handler which gets called, whenever the database action has been finished
+     */
     private void storeUserInDatabase(String username, String password, String prename, String surname,
                                      Handler<AsyncResult<Void>> next) {
         String salt = authProvider.generateSalt();
@@ -452,6 +515,20 @@ public class Server extends AbstractVerticle {
                 next.handle(Future.failedFuture(res.cause()));
             }
         });
+    }
 
+
+    /**
+     * prints useful information of an request to the server
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void printRequestHeaders(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("---");
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
     }
 }
