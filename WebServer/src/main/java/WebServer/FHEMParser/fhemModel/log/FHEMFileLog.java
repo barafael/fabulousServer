@@ -24,6 +24,7 @@ public class FHEMFileLog {
     private final String unit;
     transient private final boolean isShowInApp;
     transient private final String path;
+    transient private final List<String> permissions;
 
     public FHEMFileLog(String path, String name, boolean isShowInApp) {
         this.path = path;

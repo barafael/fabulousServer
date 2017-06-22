@@ -21,7 +21,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         this.rooms = rooms;
     }
 
-    public Optional getTimeserie(String filelogName) {
+    private Optional getTimeserie(String filelogName) {
         for (FHEMRoom room : rooms) {
             for (FHEMSensor sensor : room.getSensors()) {
                 Optional<FHEMFileLog> log = sensor.getLogByName(filelogName);
@@ -33,13 +33,8 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return Optional.empty();
     }
 
-    public Optional<FHEMRoom> getRoom(String roomname) {
+    private Optional<FHEMRoom> getRoom(String roomname) {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
-    }
-
-    public FHEMModel subModel(List<String> permissions) {
-
-        return null;
     }
 
     @Override
