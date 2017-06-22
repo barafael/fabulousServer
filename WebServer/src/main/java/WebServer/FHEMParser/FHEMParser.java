@@ -49,13 +49,14 @@ public class FHEMParser {
             try {
                 jsonList2_str = fhc.getJsonList2();
             } catch (FHEMNotFoundException e) {
-                System.err.println("FHEM might not be running.");
+                System.err.println("FHEM might not be running or the logs might not be there.");
                 System.err.println
                         ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
                                 "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                 System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
                         "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
-                e.printStackTrace();
+                //e.printStackTrace();
+                return Optional.empty();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -74,7 +75,14 @@ public class FHEMParser {
                 try {
                     jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println("FHEM might not be running or the logs might not be there.");
+                    System.err.println
+                            ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
+                                    "FHEMPORT (fhem telnet port) in your $HOME/.profile");
+                    System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
+                            "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
+                    // e.printStackTrace();
+                    return Optional.empty();
                 };
                 System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
                 jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
