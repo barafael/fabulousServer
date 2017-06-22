@@ -73,7 +73,7 @@ public class Server extends AbstractVerticle {
 
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
-        router.route(HttpMethod.GET, "/api/getRooms").handler(this::getRooms);
+        router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
         /* ################## End Routing ################## */
 
 
@@ -328,25 +328,69 @@ public class Server extends AbstractVerticle {
         routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
 
-
-        
         //TODO: implement
         routingContext.response()
                 .setStatusCode(501)
                 .end("HelloWorld!");
     }
 
-    private void getRooms(RoutingContext routingContext) {
+    private void getRoomplan(RoutingContext routingContext) {
         //TODO: remove debug print
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
         System.out.println("Server params: " + routingContext.request().params());
         System.out.println("Server user: " + routingContext.user().principal().getString("username"));
         routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
-
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(501)
-                .end("HelloWorld!");
+        if (routingContext.request().getParam("room") == null || routingContext.request().getParam("room").isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(400)
+                    .end("bad request");
+            return;
+        }
+        String room = routingContext.request().getParam("room");
+        boolean hasHash;
+        long hash;
+        if (routingContext.request().getParam("hash") != null && !(routingContext.request().getParam("hash").isEmpty())) {
+            hash = Long.parseLong(routingContext.request().getParam("hash"));
+            hasHash = true;
+        } else {
+            hash = 0;
+            hasHash = false;
+        }
+        Future<Boolean> darfErDasFuture = Future.future();
+        //TODO: permission string auslagern
+        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
+        darfErDasFuture.setHandler(res -> {
+            if (res.succeeded() && darfErDasFuture.result()) {
+                vertx.executeBlocking(future -> {
+                    Optional<String> answerData_opt;
+                    if (hasHash) {
+                        answerData_opt = parser.getRoomplan(room, hash);
+                    } else {
+                        answerData_opt = parser.getRoomplan(room);
+                    }
+                    if (!answerData_opt.isPresent()) {
+                        System.err.println("getRoomplan: AnswerData is not present");
+                        future.handle(Future.failedFuture(future.cause()));
+                    } else {
+                        future.complete(answerData_opt.get());
+                    }
+                }, res2 -> {
+                    if (res2.succeeded()) {
+                        String answerData = (String) res2.result();
+                        routingContext.response().setStatusCode(200)
+                                .putHeader("content-type", "application/json")
+                                .putHeader("content-length", Integer.toString(answerData.length()))
+                                .write(answerData)
+                                .end();
+                    } else {
+                        routingContext.response().setStatusCode(503).end("service temporarily not available");
+                        System.out.println(res.cause());
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(401).end("not authorized");
+            }
+        });
     }
 
     private void getTimeSeries(RoutingContext routingContext) {
@@ -357,7 +401,7 @@ public class Server extends AbstractVerticle {
         routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
         //TODO: implement
-
+        //TODO: optional startTime, endTime query param
 
         routingContext.response()
                 .setStatusCode(501)
