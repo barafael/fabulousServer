@@ -28,8 +28,7 @@ import java.util.stream.Collectors;
  * @date 16.06.17.
  */
 
-// TODO: routeing mit Future in methode auslagern
-//TODO: URI param names auslagern
+// TODO: routing mit Future in methode auslagern
 
 
 public class Server extends AbstractVerticle {
@@ -55,10 +54,23 @@ public class Server extends AbstractVerticle {
     private static final int Unauthorized_HTTP_CODE = 401;
     private static final int Unavailable_HTTP_CODE = 503;
 
+    private static final String ContentType_HEADER = "content-type";
+    private static final String ContentLength_HEADER = "content-length";
+    private static final String ContentType_VALUE = "application/json";
+
     private static final String SetRoomplan_PERMISSION = "S_Fenster_4";
     private static final String SetSensorPosition_PERMISSION = "S_Fenster_4";
     private static final String GetRoomplan_PERMISSION = "S_Fenster_4";
 
+    private static final String Username_PARAM = "username";
+    private static final String Password_PARAM = "password";
+    private static final String Prename_PARAM = "prename";
+    private static final String Surname_PARAM = "surname";
+    private static final String Room_PARAM = "room";
+    private static final String SensorName_PARAM = "sensorname";
+    private static final String coordX_PARAM = "coordX";
+    private static final String coordY_PARAM = "coordY";
+    private static final String Hash_PARAM = "hash";
 
 
     @Override
@@ -147,20 +159,20 @@ public class Server extends AbstractVerticle {
      */
     private void register(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.getBodyAsJson().getString("username") == null ||
-                routingContext.getBodyAsJson().getString("username").isEmpty() ||
-                routingContext.getBodyAsJson().getString("password") == null ||
-                routingContext.getBodyAsJson().getString("password").isEmpty()) {
+        if (routingContext.getBodyAsJson().getString(Username_PARAM) == null ||
+                routingContext.getBodyAsJson().getString(Username_PARAM).isEmpty() ||
+                routingContext.getBodyAsJson().getString(Password_PARAM) == null ||
+                routingContext.getBodyAsJson().getString(Password_PARAM).isEmpty()) {
             routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String username = routingContext.getBodyAsJson().getString("username");
-        String password = routingContext.getBodyAsJson().getString("password");
+        String username = routingContext.getBodyAsJson().getString(Username_PARAM);
+        String password = routingContext.getBodyAsJson().getString(Password_PARAM);
         /* set optional keys to empty string if not given */
-        String prename = routingContext.getBodyAsJson().getString("prename") != null
-                ? routingContext.getBodyAsJson().getString("prename") : "";
-        String surname = routingContext.getBodyAsJson().getString("surname") != null
-                ? routingContext.getBodyAsJson().getString("surname") : "";
+        String prename = routingContext.getBodyAsJson().getString(Prename_PARAM) != null
+                ? routingContext.getBodyAsJson().getString(Prename_PARAM) : "";
+        String surname = routingContext.getBodyAsJson().getString(Surname_PARAM) != null
+                ? routingContext.getBodyAsJson().getString(Surname_PARAM) : "";
         Future<Void> databaseWriteFuture = Future.future();
         storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
         databaseWriteFuture.setHandler(res -> {
@@ -187,8 +199,8 @@ public class Server extends AbstractVerticle {
      */
     private void setRoomplan(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam("room") == null
-                || routingContext.request().getParam("room").isEmpty()) {
+        if (routingContext.request().getParam(Room_PARAM) == null
+                || routingContext.request().getParam(Room_PARAM).isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
@@ -203,14 +215,13 @@ public class Server extends AbstractVerticle {
                 String file = routingContext.getBodyAsString();
 
                 vertx.executeBlocking(future -> {
-                    Boolean status = parser.setRoomplan(routingContext.request().getParam("room"), file);
+                    Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
                     if (status) {
                         future.handle(Future.succeededFuture(status));
                     } else {
                         future.handle(Future.failedFuture(future.cause()));
                     }
                 }, res2 -> {
-                    System.out.println("The setRoomplan result is: " + res2.result());
                     if (res2.succeeded()) {
                         routingContext.response()
                                 .setStatusCode(OK_HTTP_CODE)
@@ -238,20 +249,20 @@ public class Server extends AbstractVerticle {
      */
     private void setSensorPosition(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam("SensorName") == null
-                || routingContext.request().getParam("SensorName").isEmpty()
-                || routingContext.request().getParam("coordX") == null
-                || routingContext.request().getParam("coordX").isEmpty()
-                || routingContext.request().getParam("coordY") == null
-                || routingContext.request().getParam("coordY").isEmpty()) {
+        if (routingContext.request().getParam(SensorName_PARAM) == null
+                || routingContext.request().getParam(SensorName_PARAM).isEmpty()
+                || routingContext.request().getParam(coordX_PARAM) == null
+                || routingContext.request().getParam(coordX_PARAM).isEmpty()
+                || routingContext.request().getParam(coordY_PARAM) == null
+                || routingContext.request().getParam(coordY_PARAM).isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String sensorName = routingContext.request().getParam("SensorName");
-        int coordX = Integer.parseInt(routingContext.request().getParam("coordX"));
-        int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
+        String sensorName = routingContext.request().getParam(SensorName_PARAM);
+        int coordX = Integer.parseInt(routingContext.request().getParam(coordX_PARAM));
+        int coordY = Integer.parseInt(routingContext.request().getParam(coordY_PARAM));
 
         Future<Boolean> darfErDasFuture = Future.future();
         darfErDas(routingContext.user(), SetSensorPosition_PERMISSION, darfErDasFuture.completer());
@@ -266,7 +277,6 @@ public class Server extends AbstractVerticle {
                         future.handle(Future.failedFuture(future.cause()));
                     }
                 }, res2 -> {
-                    System.out.println("The setSensorPosition result is: " + res2.result());
                     if (res2.succeeded()) {
                         routingContext.response()
                                 .setStatusCode(OK_HTTP_CODE)
@@ -310,8 +320,8 @@ public class Server extends AbstractVerticle {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
-                                .putHeader("content-type", "application/json")
-                                .putHeader("content-length", Integer.toString(answerData.length()))
+                                .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
                                 .write(answerData)
                                 .end(OK_SERVER_RESPONSE);
                     } else {
@@ -343,8 +353,8 @@ public class Server extends AbstractVerticle {
                 List<String> perm = future.result();
                 String permString = new Gson().toJson(perm);
                 routingContext.response().setStatusCode(OK_HTTP_CODE)
-                        .putHeader("content-type", "application/json")
-                        .putHeader("content-length", Integer.toString(permString.length()))
+                        .putHeader(ContentType_HEADER, ContentType_VALUE)
+                        .putHeader(ContentLength_HEADER, Integer.toString(permString.length()))
                         .write(permString)
                         .end(OK_SERVER_RESPONSE);
             } else {
@@ -368,19 +378,19 @@ public class Server extends AbstractVerticle {
      */
     private void getRoomplan(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam("room") == null
-                || routingContext.request().getParam("room").isEmpty()) {
+        if (routingContext.request().getParam(Room_PARAM) == null
+                || routingContext.request().getParam(Room_PARAM).isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String room = routingContext.request().getParam("room");
+        String room = routingContext.request().getParam(Room_PARAM);
         boolean hasHash;
         long hash;
-        if (routingContext.request().getParam("hash") != null
-                && !(routingContext.request().getParam("hash").isEmpty())) {
-            hash = Long.parseLong(routingContext.request().getParam("hash"));
+        if (routingContext.request().getParam(Hash_PARAM) != null
+                && !(routingContext.request().getParam(Hash_PARAM).isEmpty())) {
+            hash = Long.parseLong(routingContext.request().getParam(Hash_PARAM));
             hasHash = true;
         } else {
             hash = 0;
@@ -407,8 +417,8 @@ public class Server extends AbstractVerticle {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
-                                .putHeader("content-type", "application/json")
-                                .putHeader("content-length", Integer.toString(answerData.length()))
+                                .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
                                 .write(answerData)
                                 .end(OK_SERVER_RESPONSE);
                     } else {
@@ -481,7 +491,7 @@ public class Server extends AbstractVerticle {
      * @param next Handler which gets called, whenever the database action has been finished
      */
     public void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
-        String username = user.getString("username");
+        String username = user.getString(Username_PARAM);
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
             return;
@@ -534,7 +544,7 @@ public class Server extends AbstractVerticle {
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
         System.out.println("Server params: " + routingContext.request().params());
-        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        System.out.println("Server user: " + routingContext.user().principal().getString(Username_PARAM));
         routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
     }
 }
