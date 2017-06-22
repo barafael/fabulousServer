@@ -26,7 +26,7 @@ public class FHEMFileLog {
     transient private final String path;
     transient private final List<String> permissions;
 
-    public FHEMFileLog(String path, String name, boolean isShowInApp) {
+    public FHEMFileLog(String path, String name, boolean isShowInApp, List<String> permissions) {
         this.path = path;
         this.isShowInApp = isShowInApp;
         this.name = name;
@@ -34,6 +34,7 @@ public class FHEMFileLog {
         this.sensorName = getSensorName().orElse("No sensor name given");
         // System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
+        this.permissions = permissions;
 
         // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
         // this.timeserie = getTimeserie();
