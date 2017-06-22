@@ -198,6 +198,9 @@ public class Server extends AbstractVerticle {
                     .end("bad request");
             return;
         }
+
+        //TODO: check user permission
+
         String sensorName = routingContext.request().getParam("SensorName");
         int coordX = Integer.parseInt(routingContext.request().getParam("coordX"));
         int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
@@ -236,7 +239,7 @@ public class Server extends AbstractVerticle {
         future.setHandler(res -> {
             if (future.succeeded()) {
                 List<String> perm = future.result();
-                //TODO: remove hotfix, bolcking?
+                //TODO: remove hotfix, blocking?
                 String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson(); //model.getSubmodel(perm)
                 routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
@@ -274,7 +277,7 @@ public class Server extends AbstractVerticle {
     private void getRooms(RoutingContext routingContext) {
         //TODO: implement
         routingContext.response()
-                .setStatusCode(200)
+                .setStatusCode(501)
                 .end("HelloWorld!");
     }
 
@@ -283,7 +286,7 @@ public class Server extends AbstractVerticle {
 
 
         routingContext.response()
-                .setStatusCode(200)
+                .setStatusCode(501)
                 .end("HelloWorld!");
     }
 
