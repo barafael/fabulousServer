@@ -75,4 +75,14 @@ public class ModelTest {
             System.out.println(json);
         }
     }
+
+    @Test
+    public void serdeRoundtrip() {
+        List<String> permissions = Arrays.asList("permission1","23414");
+        Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
+        if (json.isPresent()) {
+            FHEMModel model2 = new Gson().fromJson(json.get(), FHEMModel.class);
+            System.out.println(new Gson().toJson(model2));
+        }
+    }
 }
