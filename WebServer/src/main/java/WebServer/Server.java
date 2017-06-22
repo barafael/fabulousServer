@@ -8,6 +8,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.ResultSet;
@@ -99,15 +100,6 @@ public class Server extends AbstractVerticle {
                 storeUserInDatabase("hans", "sonne123","Hans","Hut", testFuture);
                 storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);
           */
-                Future<Boolean> darfErDas = Future.future();
-                darfErDas("hans","S_Fenster_3",darfErDas);
-                darfErDas.setHandler(res2 -> {
-                    if (res2.succeeded() && darfErDas.result()) {
-                        System.out.println("er darf das");
-                    } else {
-                        System.out.println("er darf das nicht");
-                    }
-                });
             }
         });
     }
@@ -162,7 +154,7 @@ public class Server extends AbstractVerticle {
         }
 
         Future<Boolean> darfErDasFuture = Future.future();
-        //darfErDas(routingContext.user(), "E_Raumänderung", darfErDasFuture.completer());
+        darfErDas(routingContext.user(), "E_Raumänderung", darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
@@ -290,11 +282,9 @@ public class Server extends AbstractVerticle {
                 .end("HelloWorld!");
     }
 
-    //private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
-    private void darfErDas(String user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
+    private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
         Future<List<String>> future = Future.future();
-        //getListOfPermissions(user.principal(), future.completer());
-        getListOfPermissions(new JsonObject().put("username",user), future.completer());
+        getListOfPermissions(user.principal(), future.completer());
         future.setHandler(res -> {
             if (future.succeeded()) {
                 resultHandler.handle(Future.succeededFuture(future.result().contains(permission)));
