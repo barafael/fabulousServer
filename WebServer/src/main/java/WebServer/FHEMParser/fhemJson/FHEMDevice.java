@@ -144,8 +144,11 @@ public class FHEMDevice {
             System.err.println("No logfile specified for log: " + getName());
             return Optional.empty();
         }
+        String permissionfield = attributes.getPermissionField().orElse("");
+        List<String> permissions = Arrays.asList(permissionfield.split(","));
+
         String path = path_opt.get();
-        return Optional.of(new FHEMFileLog(path, name, isShowInApp()));
+        return Optional.of(new FHEMFileLog(path, name, isShowInApp(), permissions));
     }
 
     private FHEMDeviceAttributes getAttributes() {
