@@ -1,6 +1,7 @@
 package WebServer;
 
 
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -42,6 +44,26 @@ public class ServerTest {
         httpClient = vertx.createHttpClient(ClientOptions);
     }
 
+    @Test
+    public  void testServerListUserPermissions(TestContext testContext) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        final Async async = testContext.async();
+        Server server = new Server();
+        Future<List<String>> future = Future.future();
+        server.getListOfPermissions(new JsonObject().put("username", "hans"), future);
+        future.setHandler(res -> {
+            if (future.succeeded() ){
+                System.out.println(res.result());
+            } else {
+                System.out.println("Server failed darferdas");
+            }
+        });
+
+    }
 
     @Test
     public void testGetModel(TestContext testContext) {

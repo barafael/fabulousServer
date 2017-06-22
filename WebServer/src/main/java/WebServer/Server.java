@@ -1,13 +1,13 @@
 package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
+import WebServer.FHEMParser.fhemModel.FHEMModel;
 import com.google.gson.Gson;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.ResultSet;
@@ -26,6 +26,10 @@ import java.util.stream.Collectors;
  * @date 16.06.17.
  */
 
+// TODO: response.end-Strings in fields auslagern
+// TODO: routering mit Future in methode auslagern
+
+
 public class Server extends AbstractVerticle {
     private JDBCAuth authProvider;
     private Router router;
@@ -35,6 +39,7 @@ public class Server extends AbstractVerticle {
     private JsonObject jdbcClientConfig;
     private SQLConnection connection;
     private FHEMParser parser = Main.parser;
+    private FHEMModel fhemModel = Main.fhemModel;
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -86,7 +91,7 @@ public class Server extends AbstractVerticle {
             } else {
                 connection = (SQLConnection) res.result().resultAt(0);
                 startFuture.complete();
-                System.out.println("server started");
+                System.out.println("Server started successfully!    ");
 
 /*
                 Future<Void> testFuture = Future.future();
@@ -94,6 +99,15 @@ public class Server extends AbstractVerticle {
                 storeUserInDatabase("hans", "sonne123","Hans","Hut", testFuture);
                 storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);
           */
+                Future<Boolean> darfErDas = Future.future();
+                darfErDas("hans","S_Fenster_3",darfErDas);
+                darfErDas.setHandler(res2 -> {
+                    if (res2.succeeded() && darfErDas.result()) {
+                        System.out.println("er darf das");
+                    } else {
+                        System.out.println("er darf das nicht");
+                    }
+                });
             }
         });
     }
@@ -147,11 +161,24 @@ public class Server extends AbstractVerticle {
             return;
         }
 
+        Future<Boolean> darfErDasFuture = Future.future();
+        //darfErDas(routingContext.user(), "E_Raumänderung", darfErDasFuture.completer());
 
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(200)
-                .end("HelloWorld!");
+        darfErDasFuture.setHandler(res -> {
+            if (res.succeeded() && darfErDasFuture.result()) {
+                //TODO: check body (file) for errors
+                String file = routingContext.getBodyAsString();
+
+
+                //TODO: implement: call setRoomplan in fhemModel with id and svg
+
+                routingContext.response()
+                        .setStatusCode(200)
+                        .end("room changed");
+            } else {
+                routingContext.response().setStatusCode(401).end("not authorized");
+            }
+        });
     }
 
     private void setSensorPosition(RoutingContext routingContext) {
@@ -163,10 +190,38 @@ public class Server extends AbstractVerticle {
                         .replace("\'", "")
                         .replace("\\", "")
         ));
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(200)
-                .end("HelloWorld!");
+        if (routingContext.request().getParam("SensorName") == null || routingContext.request().getParam("SensorName").isEmpty()
+                || routingContext.request().getParam("coordX") == null || routingContext.request().getParam("coordX").isEmpty()
+                || routingContext.request().getParam("coordY") == null || routingContext.request().getParam("coordY").isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(400)
+                    .end("bad request");
+            return;
+        }
+        String sensorName = routingContext.request().getParam("SensorName");
+        int coordX = Integer.parseInt(routingContext.request().getParam("coordX"));
+        int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
+        vertx.executeBlocking(future -> {
+            //TODO: call fhemModel set Sensor Position
+            // Call some blocking API that takes a significant amount of time to return
+            Boolean result = true;// fhemModel.setSensorPosition(sensorName, coordX, coordY);
+            if (result) {
+                future.handle(Future.succeededFuture(result));
+            } else {
+                future.handle(Future.failedFuture(future.cause()));
+            }
+        }, res -> {
+            System.out.println("The setSensorPosition result is: " + res.result());
+            if (res.succeeded()) {
+                routingContext.response()
+                        .setStatusCode(200)
+                        .end("changed sensor position");
+            } else {
+                routingContext.response()
+                        .setStatusCode(503)
+                        .end("service temporarily not available");
+            }
+        });
     }
 
     private void getModel(RoutingContext routingContext) {
@@ -181,7 +236,7 @@ public class Server extends AbstractVerticle {
         future.setHandler(res -> {
             if (future.succeeded()) {
                 List<String> perm = future.result();
-                //TODO: remove hotfix
+                //TODO: remove hotfix, bolcking?
                 String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson(); //model.getSubmodel(perm)
                 routingContext.response().setStatusCode(200)
                         .putHeader("content-type", "application/json")
@@ -232,21 +287,22 @@ public class Server extends AbstractVerticle {
                 .end("HelloWorld!");
     }
 
-    private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
+    //private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
+    private void darfErDas(String user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
         Future<List<String>> future = Future.future();
-        getListOfPermissions(user.principal(), future.completer());
+        //getListOfPermissions(user.principal(), future.completer());
+        getListOfPermissions(new JsonObject().put("username",user), future.completer());
         future.setHandler(res -> {
-            if (future.succeeded() && future.result().contains(permission)) {
-                resultHandler.handle(Future.succeededFuture(true));
+            if (future.succeeded()) {
+                resultHandler.handle(Future.succeededFuture(future.result().contains(permission)));
             } else {
                 System.out.println("Server failed darferdas");
                 resultHandler.handle(Future.failedFuture(res.cause()));
-                return;
             }
         });
     }
 
-    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+    public void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
         String username = user.getString("username");
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
