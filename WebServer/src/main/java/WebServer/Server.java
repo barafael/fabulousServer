@@ -20,6 +20,7 @@ import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -154,6 +155,7 @@ public class Server extends AbstractVerticle {
         }
 
         Future<Boolean> darfErDasFuture = Future.future();
+        //TODO: permission string auslagern
         darfErDas(routingContext.user(), "E_Raumänderung", darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
@@ -226,22 +228,35 @@ public class Server extends AbstractVerticle {
         System.out.println("Server user: " + routingContext.user().principal().getString("username"));
         routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
 
-        Future<List<String>> future = Future.future();
-        getListOfPermissions(routingContext.user().principal(), future);
-        future.setHandler(res -> {
-            if (future.succeeded()) {
-                List<String> perm = future.result();
-                //TODO: remove hotfix, blocking?
-                String answerData = "hotfix"; //parser.getFHEMModel(perm).toJson(); //model.getSubmodel(perm)
-                routingContext.response().setStatusCode(200)
-                        .putHeader("content-type", "application/json")
-                        .putHeader("content-length", Integer.toString(answerData.length()))
-                        .write(answerData)
-                        .end();
+        Future<List<String>> permissionFuture = Future.future();
+        getListOfPermissions(routingContext.user().principal(), permissionFuture);
+        permissionFuture.setHandler(res -> {
+            if (permissionFuture.succeeded()) {
+                List<String> perm = permissionFuture.result();
+                vertx.executeBlocking(future -> {
+                    Optional<String> answerData_opt = parser.getFHEMModel(perm);
+                    if (!answerData_opt.isPresent()) {
+                        System.err.println("getModel: AnswerData is not present");
+                        future.handle(Future.failedFuture(future.cause()));
+                    } else {
+                        future.complete(answerData_opt.get());
+                    }
+                }, res2 -> {
+                    if (res2.succeeded()) {
+                        String answerData = (String) res2.result();
+                        routingContext.response().setStatusCode(200)
+                                .putHeader("content-type", "application/json")
+                                .putHeader("content-length", Integer.toString(answerData.length()))
+                                .write(answerData)
+                                .end();
+                    } else {
+                        routingContext.response().setStatusCode(503).end("service temporarily not available");
+                        System.out.println(res.cause());
+                    }
+                });
             } else {
                 routingContext.response().setStatusCode(400).end("bad request");
                 System.out.println(res.cause());
-                return;
             }
         });
     }
