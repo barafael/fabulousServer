@@ -1,4 +1,4 @@
-package WebServer.FHEMParser.fhemModel.sensors;
+package WebServer.FHEMParser.fhemModel.room;
 
 import java.io.File;
 

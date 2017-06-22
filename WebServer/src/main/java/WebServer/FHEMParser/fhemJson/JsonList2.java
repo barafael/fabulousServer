@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
+import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import org.jetbrains.annotations.NotNull;

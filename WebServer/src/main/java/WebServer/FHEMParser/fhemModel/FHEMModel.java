@@ -1,6 +1,6 @@
 package WebServer.FHEMParser.fhemModel;
 
-import WebServer.FHEMParser.fhemModel.sensors.FHEMRoom;
+import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;

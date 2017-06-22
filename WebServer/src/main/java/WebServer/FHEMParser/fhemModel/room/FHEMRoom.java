@@ -1,5 +1,6 @@
-package WebServer.FHEMParser.fhemModel.sensors;
+package WebServer.FHEMParser.fhemModel.room;
 
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import org.jetbrains.annotations.NotNull;
 
