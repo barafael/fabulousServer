@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  */
 
 // TODO: routeing mit Future in methode auslagern
-// TODO: harcoded perm strings in fields auslagern
+//TODO: URI param names auslagern
 
 
 public class Server extends AbstractVerticle {
@@ -42,18 +42,23 @@ public class Server extends AbstractVerticle {
     private SQLConnection connection;
     private FHEMParser parser = Main.parser;
 
-    private final static String OK_SERVER_RESPONSE = "OK";
-    private final static String Registered_SERVER_RESPONSE = "Registered";
-    private final static String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
-    private final static String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
-    private final static String BadRequest_SERVER_RESPONSE = "Bad Request";
-    private final static String Unauthorized_SERVER_RESPONSE = "Unauthorized";
-    private final static String Unavailable_SERVER_RESPONSE = "Service Unavailable";
+    private static final String OK_SERVER_RESPONSE = "OK";
+    private static final String Registered_SERVER_RESPONSE = "Registered";
+    private static final String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
+    private static final String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
+    private static final String BadRequest_SERVER_RESPONSE = "Bad Request";
+    private static final String Unauthorized_SERVER_RESPONSE = "Unauthorized";
+    private static final String Unavailable_SERVER_RESPONSE = "Service Unavailable";
 
     private static final int OK_HTTP_CODE = 200;
     private static final int BadRequest_HTTP_CODE = 400;
     private static final int Unauthorized_HTTP_CODE = 401;
     private static final int Unavailable_HTTP_CODE = 503;
+
+    private static final String SetRoomplan_PERMISSION = "S_Fenster_4";
+    private static final String SetSensorPosition_PERMISSION = "S_Fenster_4";
+    private static final String GetRoomplan_PERMISSION = "S_Fenster_4";
+
 
 
     @Override
@@ -190,8 +195,7 @@ public class Server extends AbstractVerticle {
             return;
         }
         Future<Boolean> darfErDasFuture = Future.future();
-        //TODO: permission string auslagern
-        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
+        darfErDas(routingContext.user(), SetRoomplan_PERMISSION, darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
@@ -234,15 +238,6 @@ public class Server extends AbstractVerticle {
      */
     private void setSensorPosition(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        /* input validation to prevent SQL injections */
-        //TODO: remove?
-        routingContext.request().params().forEach(pair -> pair.setValue(
-                pair.getValue()
-                        .replace("\"", "")
-                        .replace(";", "")
-                        .replace("\'", "")
-                        .replace("\\", "")
-        ));
         if (routingContext.request().getParam("SensorName") == null
                 || routingContext.request().getParam("SensorName").isEmpty()
                 || routingContext.request().getParam("coordX") == null
@@ -259,8 +254,7 @@ public class Server extends AbstractVerticle {
         int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
 
         Future<Boolean> darfErDasFuture = Future.future();
-        //TODO: permission string auslagern
-        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
+        darfErDas(routingContext.user(), SetSensorPosition_PERMISSION, darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
@@ -393,8 +387,7 @@ public class Server extends AbstractVerticle {
             hasHash = false;
         }
         Future<Boolean> darfErDasFuture = Future.future();
-        //TODO: permission string auslagern
-        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
+        darfErDas(routingContext.user(), GetRoomplan_PERMISSION, darfErDasFuture.completer());
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
                 vertx.executeBlocking(future -> {
