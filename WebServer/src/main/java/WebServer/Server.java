@@ -169,7 +169,7 @@ public class Server extends AbstractVerticle {
                     if (res2.succeeded()) {
                         routingContext.response()
                                 .setStatusCode(200)
-                                .end("changed roomplan of room: "+routingContext.request().getParam("room"));
+                                .end("changed roomplan of room: " + routingContext.request().getParam("room"));
                     } else {
                         routingContext.response()
                                 .setStatusCode(503)
@@ -184,6 +184,7 @@ public class Server extends AbstractVerticle {
 
     private void setSensorPosition(RoutingContext routingContext) {
         /* input validation to prevent SQL injections */
+        //TODO: remove?
         routingContext.request().params().forEach(pair -> pair.setValue(
                 pair.getValue()
                         .replace("\"", "")
@@ -199,29 +200,37 @@ public class Server extends AbstractVerticle {
                     .end("bad request");
             return;
         }
-
-        //TODO: check user permission
-
         String sensorName = routingContext.request().getParam("SensorName");
         int coordX = Integer.parseInt(routingContext.request().getParam("coordX"));
         int coordY = Integer.parseInt(routingContext.request().getParam("coordY"));
-        vertx.executeBlocking(future -> {
-            Boolean result = parser.setSensorPosition(coordX,coordY,sensorName);
-            if (result) {
-                future.handle(Future.succeededFuture(result));
+
+        Future<Boolean> darfErDasFuture = Future.future();
+        //TODO: permission string auslagern
+        darfErDas(routingContext.user(), "S_Fenster_4", darfErDasFuture.completer());
+
+        darfErDasFuture.setHandler(res -> {
+            if (res.succeeded() && darfErDasFuture.result()) {
+                vertx.executeBlocking(future -> {
+                    Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
+                    if (result) {
+                        future.handle(Future.succeededFuture(result));
+                    } else {
+                        future.handle(Future.failedFuture(future.cause()));
+                    }
+                }, res2 -> {
+                    System.out.println("The setSensorPosition result is: " + res2.result());
+                    if (res2.succeeded()) {
+                        routingContext.response()
+                                .setStatusCode(200)
+                                .end("changed sensor position");
+                    } else {
+                        routingContext.response()
+                                .setStatusCode(503)
+                                .end("service temporarily not available");
+                    }
+                });
             } else {
-                future.handle(Future.failedFuture(future.cause()));
-            }
-        }, res -> {
-            System.out.println("The setSensorPosition result is: " + res.result());
-            if (res.succeeded()) {
-                routingContext.response()
-                        .setStatusCode(200)
-                        .end("changed sensor position");
-            } else {
-                routingContext.response()
-                        .setStatusCode(503)
-                        .end("service temporarily not available");
+                routingContext.response().setStatusCode(401).end("not authorized");
             }
         });
     }
