@@ -118,6 +118,10 @@ public class FHEMParser {
         return Optional.empty();
     }
 
+    public Optional<String> getTimeserie(String fileLogID) {
+        return Optional.empty();
+    }
+
     public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
         return Optional.empty();
     }
