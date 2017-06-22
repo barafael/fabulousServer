@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import WebServer.FHEMParser.fhemConnection.FHEMConnection;
@@ -33,6 +34,11 @@ public class FHEMParser {
             FHEMParser.instance = new FHEMParser();
         }
         return FHEMParser.instance;
+    }
+
+    public Optional<String> getFHEMModel(List<String> permissions) {
+        // TODO implement gson exclusionstrategies
+        return getFHEMModel().map(FHEMModel::toJson);
     }
 
     public Optional<FHEMModel> getFHEMModel() {
@@ -85,6 +91,26 @@ public class FHEMParser {
                 System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
             }
         }
+        return Optional.empty();
+    }
+
+    public boolean setSensorPosition(int x, int y, String sensorName) {
+        return false;
+    }
+
+    public boolean setRoomplan(String roomName, String svg) {
+        return false;
+    }
+
+    public Optional<String> getRoomplan(String roomName) {
+        return Optional.empty();
+    }
+
+    public Optional<String> getRoomplan(String roomName, long hash) {
+        return Optional.empty();
+    }
+
+    public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
         return Optional.empty();
     }
 }
