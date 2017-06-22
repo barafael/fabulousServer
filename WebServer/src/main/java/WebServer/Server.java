@@ -2,6 +2,7 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import com.google.gson.Gson;
+
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
  * @date 16.06.17.
  */
 
-// TODO: response.end-Strings in fields auslagern
 // TODO: routeing mit Future in methode auslagern
 // TODO: harcoded perm strings in fields auslagern
 
@@ -41,6 +41,20 @@ public class Server extends AbstractVerticle {
     private JsonObject jdbcClientConfig;
     private SQLConnection connection;
     private FHEMParser parser = Main.parser;
+
+    private final static String OK_SERVER_RESPONSE = "OK";
+    private final static String Registered_SERVER_RESPONSE = "Registered";
+    private final static String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
+    private final static String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
+    private final static String BadRequest_SERVER_RESPONSE = "Bad Request";
+    private final static String Unauthorized_SERVER_RESPONSE = "Unauthorized";
+    private final static String Unavailable_SERVER_RESPONSE = "Service Unavailable";
+
+    private static final int OK_HTTP_CODE = 200;
+    private static final int BadRequest_HTTP_CODE = 400;
+    private static final int Unauthorized_HTTP_CODE = 401;
+    private static final int Unavailable_HTTP_CODE = 503;
+
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
@@ -132,7 +146,7 @@ public class Server extends AbstractVerticle {
                 routingContext.getBodyAsJson().getString("username").isEmpty() ||
                 routingContext.getBodyAsJson().getString("password") == null ||
                 routingContext.getBodyAsJson().getString("password").isEmpty()) {
-            routingContext.response().setStatusCode(400).end("bad request");
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
             return;
         }
         String username = routingContext.getBodyAsJson().getString("username");
@@ -147,12 +161,12 @@ public class Server extends AbstractVerticle {
         databaseWriteFuture.setHandler(res -> {
             if (databaseWriteFuture.succeeded()) {
                 routingContext.response()
-                        .setStatusCode(200)
-                        .end("registered");
+                        .setStatusCode(OK_HTTP_CODE)
+                        .end(Registered_SERVER_RESPONSE);
             } else {
                 routingContext.response()
-                        .setStatusCode(400)
-                        .end("bad request");
+                        .setStatusCode(BadRequest_HTTP_CODE)
+                        .end(BadRequest_SERVER_RESPONSE);
             }
         });
     }
@@ -171,8 +185,8 @@ public class Server extends AbstractVerticle {
         if (routingContext.request().getParam("room") == null
                 || routingContext.request().getParam("room").isEmpty()) {
             routingContext.response()
-                    .setStatusCode(400)
-                    .end("bad request");
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
             return;
         }
         Future<Boolean> darfErDasFuture = Future.future();
@@ -195,17 +209,16 @@ public class Server extends AbstractVerticle {
                     System.out.println("The setRoomplan result is: " + res2.result());
                     if (res2.succeeded()) {
                         routingContext.response()
-                                .setStatusCode(200)
-                                .end("changed roomplan of room: " +
-                                        routingContext.request().getParam("room"));
+                                .setStatusCode(OK_HTTP_CODE)
+                                .end(ChangedRoomplan_SERVER_RESPONSE);
                     } else {
                         routingContext.response()
-                                .setStatusCode(503)
-                                .end("service temporarily not available");
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(401).end("not authorized");
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
             }
         });
     }
@@ -237,8 +250,8 @@ public class Server extends AbstractVerticle {
                 || routingContext.request().getParam("coordY") == null
                 || routingContext.request().getParam("coordY").isEmpty()) {
             routingContext.response()
-                    .setStatusCode(400)
-                    .end("bad request");
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
             return;
         }
         String sensorName = routingContext.request().getParam("SensorName");
@@ -262,16 +275,16 @@ public class Server extends AbstractVerticle {
                     System.out.println("The setSensorPosition result is: " + res2.result());
                     if (res2.succeeded()) {
                         routingContext.response()
-                                .setStatusCode(200)
-                                .end("changed sensor position");
+                                .setStatusCode(OK_HTTP_CODE)
+                                .end(ChangedSensorPosition_SERVER_RESPONSE);
                     } else {
                         routingContext.response()
-                                .setStatusCode(503)
-                                .end("service temporarily not available");
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(401).end("not authorized");
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
             }
         });
     }
@@ -302,18 +315,18 @@ public class Server extends AbstractVerticle {
                 }, res2 -> {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
-                        routingContext.response().setStatusCode(200)
+                        routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader("content-type", "application/json")
                                 .putHeader("content-length", Integer.toString(answerData.length()))
                                 .write(answerData)
-                                .end();
+                                .end(OK_SERVER_RESPONSE);
                     } else {
-                        routingContext.response().setStatusCode(503).end("service temporarily not available");
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
                         System.out.println(res.cause());
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(400).end("bad request");
+                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                 System.out.println(res.cause());
             }
         });
@@ -335,13 +348,13 @@ public class Server extends AbstractVerticle {
             if (future.succeeded()) {
                 List<String> perm = future.result();
                 String permString = new Gson().toJson(perm);
-                routingContext.response().setStatusCode(200)
+                routingContext.response().setStatusCode(OK_HTTP_CODE)
                         .putHeader("content-type", "application/json")
                         .putHeader("content-length", Integer.toString(permString.length()))
                         .write(permString)
-                        .end();
+                        .end(OK_SERVER_RESPONSE);
             } else {
-                routingContext.response().setStatusCode(400).end("bad request");
+                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                 System.out.println(res.cause());
                 return;
             }
@@ -364,8 +377,8 @@ public class Server extends AbstractVerticle {
         if (routingContext.request().getParam("room") == null
                 || routingContext.request().getParam("room").isEmpty()) {
             routingContext.response()
-                    .setStatusCode(400)
-                    .end("bad request");
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
             return;
         }
         String room = routingContext.request().getParam("room");
@@ -400,18 +413,18 @@ public class Server extends AbstractVerticle {
                 }, res2 -> {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
-                        routingContext.response().setStatusCode(200)
+                        routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader("content-type", "application/json")
                                 .putHeader("content-length", Integer.toString(answerData.length()))
                                 .write(answerData)
-                                .end();
+                                .end(OK_SERVER_RESPONSE);
                     } else {
-                        routingContext.response().setStatusCode(503).end("service temporarily not available");
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
                         System.out.println(res.cause());
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(401).end("not authorized");
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
             }
         });
     }
