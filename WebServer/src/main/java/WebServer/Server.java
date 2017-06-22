@@ -66,12 +66,12 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/api/*").handler(authHandler);
         router.route(HttpMethod.POST, "/register").handler(this::register);
-
         router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
         router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
-        // get mutex
         router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
+
+        router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRooms").handler(this::getRooms);
         /* ################## End Routing ################## */
@@ -106,6 +106,7 @@ public class Server extends AbstractVerticle {
         throwable.printStackTrace();
     }
 
+
     @Override
     public void stop() throws Exception {
         router.clear();
@@ -114,6 +115,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void register(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         if (routingContext.getBodyAsJson().getString("username") == null ||
                 routingContext.getBodyAsJson().getString("username").isEmpty() ||
                 routingContext.getBodyAsJson().getString("password") == null ||
@@ -142,6 +149,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void setRoomplan(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         if (routingContext.request().getParam("room") == null || routingContext.request().getParam("room").isEmpty()) {
             routingContext.response()
                     .setStatusCode(400)
@@ -183,6 +196,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void setSensorPosition(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         /* input validation to prevent SQL injections */
         //TODO: remove?
         routingContext.request().params().forEach(pair -> pair.setValue(
@@ -276,6 +295,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void getPermissions(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         Future<List<String>> future = Future.future();
         getListOfPermissions(routingContext.user().principal(), future);
         future.setHandler(res -> {
@@ -295,7 +320,29 @@ public class Server extends AbstractVerticle {
         });
     }
 
+    private void getEditMutex(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
+
+
+        
+        //TODO: implement
+        routingContext.response()
+                .setStatusCode(501)
+                .end("HelloWorld!");
+    }
+
     private void getRooms(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         //TODO: implement
         routingContext.response()
                 .setStatusCode(501)
@@ -303,6 +350,12 @@ public class Server extends AbstractVerticle {
     }
 
     private void getTimeSeries(RoutingContext routingContext) {
+        //TODO: remove debug print
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        System.out.println("Server user: " + routingContext.user().principal().getString("username"));
+        routingContext.request().headers().forEach(h -> System.out.println("Server getModel_requestHeader: " + h));
+
         //TODO: implement
 
 
