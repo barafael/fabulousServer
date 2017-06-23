@@ -67,6 +67,9 @@ public class Server extends AbstractVerticle {
     private static final String coordX_PARAM = "coordX";
     private static final String coordY_PARAM = "coordY";
     private static final String Hash_PARAM = "hash";
+    private static final String TimeSeries_PARAM = "ID";
+    private static final String startTime_PARAM = "startTime";
+    private static final String endTime_PARAM = "endTime";
 
 
     @Override
@@ -439,17 +442,72 @@ public class Server extends AbstractVerticle {
 
     /**
      * handles the REST-Api call for Route /api/getTimeSeries
+     * needs parameter ID
+     * optional parameter startTime and endTime
+     * all parameter should be embedded in the request URI
      *
      * @param routingContext the context in a route given by the router
      */
     private void getTimeSeries(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        //TODO: implement
-        //TODO: optional startTime, endTime query param
-
-        routingContext.response()
-                .setStatusCode(501)
-                .end("HelloWorld!");
+        if (routingContext.request().getParam(TimeSeries_PARAM) == null
+                || routingContext.request().getParam(TimeSeries_PARAM).isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+        String ID = routingContext.request().getParam(TimeSeries_PARAM);
+        boolean hasTargetTime;
+        long startTime;
+        long endTime;
+        if (routingContext.request().getParam(startTime_PARAM) == null
+                || routingContext.request().getParam(startTime_PARAM).isEmpty()
+                || routingContext.request().getParam(endTime_PARAM) == null
+                || routingContext.request().getParam(endTime_PARAM).isEmpty()) {
+            hasTargetTime = false;
+            startTime = 0;
+            endTime = 0;
+        } else {
+            startTime = Long.parseLong(routingContext.request().getParam(startTime_PARAM));
+            endTime = Long.parseLong(routingContext.request().getParam(endTime_PARAM));
+            hasTargetTime = true;
+        }
+        Future<Boolean> darfErDasFuture = Future.future();
+        // TODO: permission check?? no idea about the specific permissions here
+        darfErDas(routingContext.user(), "", darfErDasFuture.completer());
+        darfErDasFuture.setHandler(res -> {
+            if (res.succeeded() && darfErDasFuture.result()) {
+                vertx.executeBlocking(future -> {
+                    Optional<String> answerData_opt;
+                    if (hasTargetTime) {
+                        answerData_opt = parser.getTimeserie(startTime, endTime, ID);
+                    } else {
+                        answerData_opt = parser.getTimeserie(ID);
+                    }
+                    if (!answerData_opt.isPresent()) {
+                        System.err.println("getTimeseries: AnswerData is not present");
+                        future.handle(Future.failedFuture(future.cause()));
+                    } else {
+                        future.complete(answerData_opt.get());
+                    }
+                }, res2 -> {
+                    if (res2.succeeded()) {
+                        String answerData = (String) res2.result();
+                        routingContext.response().setStatusCode(OK_HTTP_CODE)
+                                .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
+                                .write(answerData)
+                                .end(OK_SERVER_RESPONSE);
+                    } else {
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                        System.out.println(res.cause());
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+            }
+        });
     }
 
 
@@ -480,7 +538,7 @@ public class Server extends AbstractVerticle {
      * @param user the user given by the RoutingContext on a route
      * @param next Handler which gets called, whenever the database action has been finished
      */
-     private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
         String username = user.getString(Username_PARAM);
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
