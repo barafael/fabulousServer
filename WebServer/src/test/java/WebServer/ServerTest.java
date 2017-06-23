@@ -89,7 +89,7 @@ public class ServerTest {
         httpClient.get("/api/getModel")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
-                    ans.headers().forEach(h -> System.out.println("testGetData_answerHeader: " + h));
+                    ans.headers().forEach(h -> System.out.println("testGetModel_answerHeader: " + h));
                     ans.bodyHandler(body -> {
                         System.out.println("Client received: " + body.toString());//body.toJsonArray());
                         async.complete();
