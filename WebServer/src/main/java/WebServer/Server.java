@@ -304,7 +304,8 @@ public class Server extends AbstractVerticle {
             if (permissionFuture.succeeded()) {
                 List<String> perm = permissionFuture.result();
                 vertx.executeBlocking(future -> {
-                    Optional<String> answerData_opt = parser.getFHEMModel(perm);
+                    //TODO: remove hotfix
+                    Optional<String> answerData_opt = Optional.of(parser.getFHEMModel().get().toJson());//getFHEMModel(perm);
                     if (!answerData_opt.isPresent()) {
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
