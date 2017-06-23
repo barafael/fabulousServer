@@ -1,14 +1,9 @@
 package WebServer.FHEMParser.fhemModel.log;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +18,7 @@ public class Timeserie {
     transient static final ZoneId zoneId = ZoneId.systemDefault();
 
     /* TODO: Maybe completely disregard floating point values? Int everything. */
-    final BiMap<Double, String> legend;
+    Map<Double, String> legend = new HashMap<>();
 
     List<Long> xs;
     List<Double> ys;
@@ -31,7 +26,7 @@ public class Timeserie {
     transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
 
     Timeserie(List<String> samples, Logtype logtype) {
-        this.legend = HashBiMap.create();
+        this.legend = new HashMap<>();
         switch (logtype) {
             case UNKNOWN:
             case DISCRETE:
@@ -44,9 +39,14 @@ public class Timeserie {
                     String value = items[3];
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
+                        ys.add(currentKey);
                         currentKey++;
+                    } else {
+                        // get() ok because legend.containsvalue(value)
+                        ys.add(legend.entrySet().stream()
+                                .filter(e -> e.getValue()
+                                        .equals(value)).findFirst().get().getKey());
                     }
-                    ys.add(legend.inverse().get(value));
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
                     long epoch = dateTime.atZone(zoneId).toEpochSecond();
                     xs.add(epoch);
@@ -69,9 +69,9 @@ public class Timeserie {
                     xs.add(epoch);
                     ys.add(value);
                 }
-                legend.inverse().put("Max", Collections.max(ys));
-                legend.inverse().put("Min", Collections.min(ys));
-                legend.inverse().put("Center", (Collections.min(ys) + Collections.max(ys)) / 2);
+                legend.put(Collections.max(ys), "Max");
+                legend.put(Collections.min(ys), "Min");
+                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
                 xs = new ArrayList<>();
