@@ -11,14 +11,15 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
+ * main class to launch the APP-Backend
+ *
  * @author Johannes Köstler <github@johanneskoestler.de>
- * @date 16.06.17.
+ * @since 16.06.17.
  */
 public final class Main {
     static FHEMParser parser = FHEMParser.getInstance();
-    static JsonObject config;
-    static DeploymentOptions options;
     static FHEMModel fhemModel;
+    static long parserTimerID;
 
     static {
         Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
@@ -29,20 +30,22 @@ public final class Main {
         fhemModel = fhemModel_opt.get();
     }
 
+    /**
+     * starts an REST web-server and searches periodically for new data
+     *
+     * @param args optional argument: the server port
+     */
     public static void main(String[] args) {
-        System.out.println("Server args: " + Arrays.toString(args));
-        int port = 8080;
+        int defaultPORT = 8080;
         if (args.length > 0) {
-            port = Integer.parseInt(args[0]);
-            System.out.println("Server port: " + port);
+            defaultPORT = Integer.parseInt(args[0]);
         }
-        config = new JsonObject().put("PORT", port).put("HOST", "localhost");
-        options = new DeploymentOptions().setConfig(config);
-        System.out.println("Server config: " + options.toJson());
+        JsonObject config = new JsonObject().put("PORT", defaultPORT).put("HOST", "localhost");
+        DeploymentOptions options = new DeploymentOptions().setConfig(config);
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(Server.class.getCanonicalName(), options);
 
-        long parserTimerID = vertx.setPeriodic(5000, id -> {
+        parserTimerID = vertx.setPeriodic(5000, id -> {
             vertx.executeBlocking(future -> {
                 Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
                 if (!fhemModel_opt.isPresent()) {

@@ -132,6 +132,7 @@ public class Server extends AbstractVerticle {
 
     @Override
     public void stop() throws Exception {
+        vertx.cancelTimer(Main.parserTimerID);
         router.clear();
         connection.close();
         server.close();
@@ -302,7 +303,6 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Optional<String> answerData_opt = parser.getFHEMModel(perm);
                     if (!answerData_opt.isPresent()) {
-                        System.err.println("getModel: AnswerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
                         future.complete(answerData_opt.get());
