@@ -84,4 +84,17 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     public void forEach(Consumer<? super FHEMSensor> action) {
         sensors.forEach(action);
     }
+
+    public boolean hasPermittedSensors(List<String> permissions) {
+        for (FHEMSensor sensor : this) {
+            if (sensor.hasPermittedLogs(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPermitted(List<String> permissions) {
+        return hasPermittedSensors(permissions);
+    }
 }

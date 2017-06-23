@@ -46,8 +46,6 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-        //JsonObject json = new JsonObject().put("test","test2");
-        //return json.encode();
     }
 
     @NotNull
@@ -66,4 +64,14 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     public void forEach(Consumer<? super FHEMRoom> action) {
         rooms.forEach(action);
     }
+
+    public boolean hasPermittedRooms(List<String> permissions) {
+        for (FHEMRoom room : this) {
+            if (room.isPermitted(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

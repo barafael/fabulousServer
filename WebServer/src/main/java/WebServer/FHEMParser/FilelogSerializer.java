@@ -17,9 +17,11 @@ public class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
 
     @Override
     public JsonElement serialize(FHEMFileLog fileLog, Type type, JsonSerializationContext jsc) {
-        JsonObject jObj = (JsonObject) new GsonBuilder().create().toJsonTree(fileLog);
+        JsonObject jObj = (JsonObject) new GsonBuilder()
+                .create().toJsonTree(fileLog);
         if (!fileLog.isPermitted(permissions)) {
-            return null;
+            return JsonNull.INSTANCE;
+            // return null;
         }
         System.out.println("test filelog " + fileLog + " against permissions here");
         return jObj;
