@@ -317,12 +317,12 @@ public class Server extends AbstractVerticle {
                                 .end(OK_SERVER_RESPONSE);
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause().getMessage());
+                        System.out.println(res.cause());
                     }
                 });
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause().getMessage());
+                System.out.println(res.cause());
             }
         });
     }
@@ -350,7 +350,7 @@ public class Server extends AbstractVerticle {
                         .end(OK_SERVER_RESPONSE);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause().getMessage());
+                System.out.println(res.cause());
             }
         });
     }
@@ -413,7 +413,7 @@ public class Server extends AbstractVerticle {
                                 .end(OK_SERVER_RESPONSE);
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause().getMessage());
+                        System.out.println(res.cause());
                     }
                 });
             } else {
