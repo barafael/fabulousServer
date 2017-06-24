@@ -134,6 +134,12 @@ public class FHEMParser {
     }
 
     public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
+        for (Iterator<FHEMFileLog> it = model.eachLog(); it.hasNext(); ) {
+            FHEMFileLog log = it.next();
+            if (log.getName().equals(fileLogID)) {
+                return log.subSection(startTime, endTime);
+            }
+        }
         return Optional.empty();
     }
 }

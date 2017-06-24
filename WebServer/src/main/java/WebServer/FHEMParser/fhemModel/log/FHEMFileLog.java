@@ -1,5 +1,7 @@
 package WebServer.FHEMParser.fhemModel.log;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -40,11 +42,48 @@ public class FHEMFileLog {
         // this.timeserie = getTimeserie();
     }
 
+    private static Optional<String> getSensorInFileLog(String path) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            String line = bufferedReader.readLine();
+            bufferedReader.close();
+            if (line == null) {
+                System.err.println("Could not read line. Presumably there is none.");
+                return Optional.empty();
+            }
+            String name = line.split(" ")[1];
+            return Optional.of(name);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    private static Optional<String> getUnitInFileLog(String path) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            String line = bufferedReader.readLine();
+            bufferedReader.close();
+            if (line == null) {
+                System.err.println("Could not read line. Presumably there is none.");
+                return Optional.empty();
+            }
+            String unit = line.split(" ")[2];
+            if (unit.endsWith(":")) {
+                unit = unit.substring(0, unit.length() - 1);
+            }
+            return Optional.of(unit);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
     public String getName() {
         return name;
     }
 
-    public Optional getTimeserie() {
+    public Optional<Timeserie> getTimeserie() {
         List<String> filelog;
         String line;
         try {
@@ -54,24 +93,54 @@ public class FHEMFileLog {
                 filelog.add(line);
             }
             bufferedReader.close();
-
-            Logtype logtype = guessLogtype(path);
-            switch (logtype) {
-                case REAL:
-                case PERCENT:
-                case DISCRETE:
-                    return Optional.of(new Timeserie(filelog, logtype));
-                case UNKNOWN:
-                    System.err.println("Couldn't guess type of log! " + path);
-                    return Optional.of(new Timeserie(filelog, logtype));
-                default:
-                    System.err.println("Unimplemented logtype! " + logtype.name());
-                    return Optional.empty();
-            }
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
         }
+        Logtype logtype = guessLogtype(path);
+        switch (logtype) {
+            case REAL:
+            case PERCENT:
+            case DISCRETE:
+                return Optional.of(new Timeserie(filelog, logtype));
+            case UNKNOWN:
+                System.err.println("Couldn't guess type of log! " + path);
+                return Optional.of(new Timeserie(filelog, logtype));
+            default:
+                System.err.println("Unimplemented logtype! " + logtype.name());
+                return Optional.empty();
+        }
+
+    }
+
+    private Optional<Timeserie> getTimeserie(long start, long end) {
+        List<String> filelog;
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            filelog = new ArrayList<>();
+            while ((line = bufferedReader.readLine()) != null) {
+                filelog.add(line);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        Logtype logtype = guessLogtype(path);
+        switch (logtype) {
+            case REAL:
+            case PERCENT:
+            case DISCRETE:
+                return Optional.of(new Timeserie(filelog, logtype, start, end));
+            case UNKNOWN:
+                System.err.println("Couldn't guess type of log! " + path);
+                return Optional.of(new Timeserie(filelog, logtype, start, end));
+            default:
+                System.err.println("Unimplemented logtype! " + logtype.name());
+                return Optional.empty();
+        }
+
     }
 
     private Logtype guessLogtype(String path) {
@@ -116,43 +185,6 @@ public class FHEMFileLog {
         return FHEMFileLog.getUnitInFileLog(path);
     }
 
-    private static Optional<String> getSensorInFileLog(String path) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line = bufferedReader.readLine();
-            bufferedReader.close();
-            if (line == null) {
-                System.err.println("Could not read line. Presumably there is none.");
-                return Optional.empty();
-            }
-            String name = line.split(" ")[1];
-            return Optional.of(name);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-    }
-
-    private static Optional<String> getUnitInFileLog(String path) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line = bufferedReader.readLine();
-            bufferedReader.close();
-            if (line == null) {
-                System.err.println("Could not read line. Presumably there is none.");
-                return Optional.empty();
-            }
-            String unit = line.split(" ")[2];
-            if (unit.endsWith(":")) {
-                unit = unit.substring(0, unit.length() - 1);
-            }
-            return Optional.of(unit);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-    }
-
     public boolean isPermitted(List<String> allPermissions) {
         for (String perm : permissions) {
             if (allPermissions.contains(perm)) {
@@ -160,5 +192,13 @@ public class FHEMFileLog {
             }
         }
         return false;
+    }
+
+    public Optional<String> subSection(long startTime, long endTime) {
+        Optional<Timeserie> ts = getTimeserie(startTime, endTime);
+        if (ts.isPresent()) {
+            return Optional.of(new Gson().toJson(ts));
+        }
+        return Optional.empty();
     }
 }

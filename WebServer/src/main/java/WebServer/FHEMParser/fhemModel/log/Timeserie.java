@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author Rafael
  */
 
-public class Timeserie {
+class Timeserie {
     private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
     private transient static final ZoneId zoneId = ZoneId.systemDefault();
 
@@ -36,6 +36,11 @@ public class Timeserie {
                 double currentKey = 0;
                 for (String entry : samples) {
                     String[] items = entry.split(" ");
+
+                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
+                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    xs.add(epoch);
+
                     String value = items[3];
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
@@ -47,9 +52,67 @@ public class Timeserie {
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
+               }
+                break;
+            case REAL:
+            case PERCENT:
+                /* avoid realloc */
+                xs = new ArrayList<>(samples.size() + 5);
+                ys = new ArrayList<>(samples.size() + 5);
+                for (String entry : samples) {
+                    String[] items = entry.split(" ");
+
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
                     long epoch = dateTime.atZone(zoneId).toEpochSecond();
                     xs.add(epoch);
+
+                    double value = 0.0;
+                    Matcher numberMatch = number.matcher(items[3]);
+                    if (numberMatch.matches()) {
+                        value = Double.parseDouble(items[3]);
+                    }
+                    ys.add(value);
+                }
+                legend.put(Collections.max(ys), "Max");
+                legend.put(Collections.min(ys), "Min");
+                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
+                break;
+            default:
+                xs = new ArrayList<>();
+                ys = new ArrayList<>();
+        }
+    }
+
+    public Timeserie(List<String> samples, Logtype logtype, long start, long end) {
+        this.legend = new HashMap<>();
+        switch (logtype) {
+            case UNKNOWN:
+            case DISCRETE:
+                /* avoid realloc */
+                xs = new ArrayList<>(samples.size() + 5);
+                ys = new ArrayList<>(samples.size() + 5);
+                double currentKey = 0;
+                for (String entry : samples) {
+                    String[] items = entry.split(" ");
+
+                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
+                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    if (epoch < start || epoch > end) {
+                        continue;
+                    }
+                    xs.add(epoch);
+
+                    String value = items[3];
+                    if (!legend.containsValue(value)) {
+                        legend.put(currentKey, value);
+                        ys.add(currentKey);
+                        currentKey++;
+                    } else {
+                        // get() ok because legend.containsvalue(value)
+                        ys.add(legend.entrySet().stream()
+                                .filter(e -> e.getValue()
+                                        .equals(value)).findFirst().get().getKey());
+                    }
                 }
                 break;
             case REAL:
@@ -59,14 +122,19 @@ public class Timeserie {
                 ys = new ArrayList<>(samples.size() + 5);
                 for (String entry : samples) {
                     String[] items = entry.split(" ");
+
+                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
+                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    if (epoch < start || epoch > end) {
+                        continue;
+                    }
+                    xs.add(epoch);
+
                     double value = 0.0;
                     Matcher numberMatch = number.matcher(items[3]);
                     if (numberMatch.matches()) {
                         value = Double.parseDouble(items[3]);
                     }
-                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
-                    xs.add(epoch);
                     ys.add(value);
                 }
                 legend.put(Collections.max(ys), "Max");
