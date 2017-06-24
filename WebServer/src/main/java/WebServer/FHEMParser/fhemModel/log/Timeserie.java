@@ -14,16 +14,16 @@ import java.util.regex.Pattern;
  */
 
 public class Timeserie {
-    transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
-    transient static final ZoneId zoneId = ZoneId.systemDefault();
+    private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+    private transient static final ZoneId zoneId = ZoneId.systemDefault();
 
     /* TODO: Maybe completely disregard floating point values? Int everything. */
-    Map<Double, String> legend = new HashMap<>();
+    private Map<Double, String> legend = new HashMap<>();
 
-    List<Long> xs;
-    List<Double> ys;
+    private final List<Long> xs;
+    private final List<Double> ys;
 
-    transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
+    private transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
 
     Timeserie(List<String> samples, Logtype logtype) {
         this.legend = new HashMap<>();

@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Rafael on 22.06.17.
  */
 
-public class ModelSerializer implements JsonSerializer<FHEMModel> {
+class ModelSerializer implements JsonSerializer<FHEMModel> {
     private final List<String> permissions;
 
     public ModelSerializer(List<String> permissions) {

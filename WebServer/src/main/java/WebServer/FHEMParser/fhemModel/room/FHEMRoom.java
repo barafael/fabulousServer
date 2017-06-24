@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  */
 
 public class FHEMRoom implements Iterable<FHEMSensor> {
-    Set<FHEMSensor> sensors = new HashSet<>();
+    private final Set<FHEMSensor> sensors = new HashSet<>();
     private final SVGRoomPlan plan;
     private final String name;
 

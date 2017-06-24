@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Rafael on 22.06.17.
  */
-public class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
+class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
     private final List<String> permissions;
 
     public FilelogSerializer(List<String> permissions) {

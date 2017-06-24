@@ -12,7 +12,7 @@ import java.util.List;
  * @author Rafael on 22.06.17.
  */
 
-public class RoomSerializer implements JsonSerializer<FHEMRoom> {
+class RoomSerializer implements JsonSerializer<FHEMRoom> {
     private final List<String> permissions;
 
     public RoomSerializer(List<String> permissions) {

@@ -11,7 +11,7 @@ import java.util.List;
  * @author Rafael on 22.06.17.
  */
 
-public class SensorSerializer implements JsonSerializer<FHEMSensor> {
+class SensorSerializer implements JsonSerializer<FHEMSensor> {
     private final List<String> permissions;
 
     public SensorSerializer(List<String> permissions) {

@@ -35,7 +35,7 @@ public class Server extends AbstractVerticle {
     private Router router;
     private HttpServer server;
     private SQLConnection connection;
-    private FHEMParser parser = Main.parser;
+    private final FHEMParser parser = Main.parser;
 
     private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";

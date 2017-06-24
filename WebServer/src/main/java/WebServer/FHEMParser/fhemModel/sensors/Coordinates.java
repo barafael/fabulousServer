@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Rafael
  */
 
-public class Coordinates {
+class Coordinates {
     @SerializedName("x")
     private int coordX;
 

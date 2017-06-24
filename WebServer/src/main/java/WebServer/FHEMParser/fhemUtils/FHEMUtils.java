@@ -26,7 +26,7 @@ public class FHEMUtils {
         return Optional.ofNullable(System.getenv(var));
     }
 
-    public static String whereisFhemDotPl() throws IOException {
+    private static String whereisFhemDotPl() throws IOException {
         Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\"" });
         BufferedReader stdin = new BufferedReader(new
                 InputStreamReader(process.getInputStream()));
