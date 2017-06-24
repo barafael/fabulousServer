@@ -72,14 +72,6 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return name;
     }
 
-    public FHEMRoom getSubSensors(List<String> permissions) {
-        FHEMRoom room = new FHEMRoom(this.getName());
-        for (FHEMSensor sensor : getSensors()) {
-            // if (sensor.hasPermission())
-        }
-        return null;
-    }
-
     @Override
     public void forEach(Consumer<? super FHEMSensor> action) {
         sensors.forEach(action);

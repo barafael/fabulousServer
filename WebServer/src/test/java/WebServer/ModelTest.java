@@ -27,44 +27,42 @@ public class ModelTest {
     @Test
     public void testModelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        if (model.isPresent()) {
+        model.ifPresent(fhemRooms -> {
             Path path = Paths.get("fhemmodel.json");
             try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                writer.write(model.get().toString());
+                writer.write(fhemRooms.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        });
     }
 
     @Test
     public void testModelRoomIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        if (model.isPresent()) {
-            for (FHEMRoom room : model.get()) {
+        model.ifPresent(fhemRooms -> {
+            for (FHEMRoom room : fhemRooms) {
                 System.out.println(room);
             }
-        }
+        });
     }
 
     @Test
     public void testModelLogIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        if (model.isPresent()) {
-            for (Iterator<FHEMFileLog> it = model.get().eachLog(); it.hasNext(); ) {
+        model.ifPresent(fhemRooms -> {
+            for (Iterator<FHEMFileLog> it = fhemRooms.eachLog(); it.hasNext(); ) {
                 FHEMFileLog log = it.next();
                 System.out.println(log);
             }
-        }
+        });
     }
 
     @Test
     public void testModelParseTime() {
         Instant now = Instant.now();
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        if (model.isPresent()) {
-            System.out.println(Duration.between(now, Instant.now()).toMillis());
-        }
+        model.ifPresent(fhemRooms -> System.out.println(Duration.between(now, Instant.now()).toMillis()));
     }
 
     @Test
@@ -80,9 +78,9 @@ public class ModelTest {
     public void serdeRoundtrip() {
         List<String> permissions = Arrays.asList("permission1","23414");
         Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
-        if (json.isPresent()) {
-            FHEMModel model2 = new Gson().fromJson(json.get(), FHEMModel.class);
+        json.ifPresent(s -> {
+            FHEMModel model2 = new Gson().fromJson(s, FHEMModel.class);
             System.out.println(new Gson().toJson(model2));
-        }
+        });
     }
 }
