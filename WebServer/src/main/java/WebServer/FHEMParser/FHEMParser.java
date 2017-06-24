@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
  */
 
 public class FHEMParser {
+    private static boolean timePrint = false;
     private static FHEMParser instance;
 
     /* Prevent construction */
@@ -62,16 +63,15 @@ public class FHEMParser {
                                 "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                 System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
                         "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
-                //e.printStackTrace();
                 return Optional.empty();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
+            if (timePrint) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
             JsonList2 list = JsonList2.parseFrom(jsonList2_str);
-            System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
+            if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
             FHEMModel fhemModel = list.toFHEMModel();
-            System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+            if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
             return Optional.ofNullable(fhemModel);
         } else {
             /* Mock jsonlist2! */
@@ -88,19 +88,18 @@ public class FHEMParser {
                                     "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                     System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
                             "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
-                    // e.printStackTrace();
                     return Optional.empty();
                 }
-                System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
                 jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
                 jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");
 
-                System.out.println("Replaced stuff at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint) System.out.println("Replaced stuff at: " + Duration.between(one, Instant.now()).toMillis());
 
                 JsonList2 list = JsonList2.parseFrom(jsonList2_str);
-                System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
                 FHEMModel fhemModel = list.toFHEMModel();
-                System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
                 return Optional.ofNullable(fhemModel);
             } else {
                 System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
