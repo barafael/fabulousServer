@@ -50,9 +50,12 @@ public class FHEMClientModeCon implements FHEMConnection {
         return stringBuilder.toString();
     }
 
-    @Override
-    public Optional<String> sendPerlCommand(String command) throws IOException {
-        /* todo: maybe verify command here */
+    /**
+     * Runs a FHEM command, currently assuming it is not malicious
+     * maybe add whitelisting later
+    */
+    public boolean sendPerlCommand(String command) throws IOException {
+        /* TODO: maybe verify command here */
         boolean permitted = true;
         if (permitted) {
             Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
@@ -60,9 +63,9 @@ public class FHEMClientModeCon implements FHEMConnection {
                     InputStreamReader(process.getInputStream()));
             String line = stdin.readLine();
             stdin.close();
-            return Optional.ofNullable(line);
-        } else {
-            return Optional.of(command + ": ACCESS DENIED!!!");
+            /* No news is good news */
+            return line == null || line.isEmpty();
         }
+        return false;
     }
 }

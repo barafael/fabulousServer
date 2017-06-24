@@ -114,7 +114,14 @@ public class FHEMParser {
     }
 
     public boolean setSensorPosition(int x, int y, String sensorName) {
-        return false;
+        FHEMClientModeCon con = new FHEMClientModeCon();
+        try {
+            return  con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
+                    con.sendPerlCommand("attr " + sensorName + " coordY " + y);
+        } catch (IOException e) {
+            System.err.println("Couldn't talk to FHEM via Client Mode!");
+            return false;
+        }
     }
 
     public boolean setRoomplan(String roomName, String svg) {
