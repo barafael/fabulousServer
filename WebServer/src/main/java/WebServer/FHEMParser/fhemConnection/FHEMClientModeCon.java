@@ -18,6 +18,7 @@ public class FHEMClientModeCon implements FHEMConnection {
         return getJsonList2(getFHEMPort(), FHEMUtils.getFhemScriptPath());
     }
 
+    /* maybe keep a copy of jsonlist here and just refresh it once in a while ? */
     @Override
     public String getJsonList2(int port, String pathToFhemPL) throws IOException, FHEMNotFoundException {
         String[] command = {"perl", pathToFhemPL, "localhost:" + port, "jsonList2"};
@@ -50,7 +51,18 @@ public class FHEMClientModeCon implements FHEMConnection {
     }
 
     @Override
-    public Optional<String> sendPerlCommand(String command) {
-        return Optional.of(command + ": ACCESS DENIED!!!");
+    public Optional<String> sendPerlCommand(String command) throws IOException {
+        /* todo: maybe verify command here */
+        boolean permitted = true;
+        if (permitted) {
+            Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
+            BufferedReader stdin = new BufferedReader(new
+                    InputStreamReader(process.getInputStream()));
+            String line = stdin.readLine();
+            stdin.close();
+            return Optional.ofNullable(line);
+        } else {
+            return Optional.of(command + ": ACCESS DENIED!!!");
+        }
     }
 }
