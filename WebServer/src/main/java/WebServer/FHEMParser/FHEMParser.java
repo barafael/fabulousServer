@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ import com.google.gson.GsonBuilder;
 public class FHEMParser {
     private static boolean timePrint = false;
     private static FHEMParser instance;
+
+    private FHEMModel model;
 
     /* Prevent construction */
     private FHEMParser() {
@@ -72,6 +75,7 @@ public class FHEMParser {
             if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
             FHEMModel fhemModel = list.toFHEMModel();
             if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+            model = fhemModel;
             return Optional.ofNullable(fhemModel);
         } else {
             /* Mock jsonlist2! */
@@ -100,6 +104,7 @@ public class FHEMParser {
                 if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
                 FHEMModel fhemModel = list.toFHEMModel();
                 if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+                model = fhemModel;
                 return Optional.ofNullable(fhemModel);
             } else {
                 System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");

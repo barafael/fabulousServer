@@ -48,6 +48,11 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return gson.toJson(this);
     }
 
+    /** Iterator over the contained rooms.
+     * This is necessary to encapsulate the rooms collection -
+     * Otherwise it would be necessary to give out mutable access to the internal structure.
+     * @return an iterator over the rooms in this model
+     */
     @NotNull
     @Override
     public Iterator<FHEMRoom> iterator() {
