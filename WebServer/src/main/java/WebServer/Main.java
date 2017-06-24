@@ -7,7 +7,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 /**

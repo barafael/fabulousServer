@@ -75,7 +75,7 @@ public class FHEMParser {
             return Optional.ofNullable(fhemModel);
         } else {
             /* Mock jsonlist2! */
-            String jsonList2_str = "";
+            String jsonList2_str;
             Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
             if (mockdir_opt.isPresent()) {
                 String path = mockdir_opt.get();
@@ -90,7 +90,7 @@ public class FHEMParser {
                             "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
                     // e.printStackTrace();
                     return Optional.empty();
-                };
+                }
                 System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
                 jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
                 jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");

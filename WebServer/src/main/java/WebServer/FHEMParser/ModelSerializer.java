@@ -34,7 +34,6 @@ public class ModelSerializer implements JsonSerializer<FHEMModel> {
 
         if (!model.hasPermittedRooms(permissions)) {
             return JsonNull.INSTANCE;
-            // return null;
         }
         cleanNull(jObj);
         return jObj;
@@ -42,7 +41,7 @@ public class ModelSerializer implements JsonSerializer<FHEMModel> {
 
     private void cleanNull(JsonElement element) {
         if (element.isJsonNull()) {
-            System.err.println("JsonElement which is instance of JsonNull was not removed! " + element);
+            System.err.println("JsonElement which is instance of JsonNull was not removed!");
         } else if (element.isJsonArray()) {
             JsonArray arr = element.getAsJsonArray();
             ArrayList<JsonElement> toDelete = new ArrayList<>();

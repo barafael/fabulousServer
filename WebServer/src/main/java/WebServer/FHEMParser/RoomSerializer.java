@@ -27,9 +27,6 @@ public class RoomSerializer implements JsonSerializer<FHEMRoom> {
                 .create().toJsonTree(room);
         if (!room.hasPermittedSensors(permissions)) {
             return JsonNull.INSTANCE;
-            // return null;
-        } else {
-
         }
         return jObj;
     }
