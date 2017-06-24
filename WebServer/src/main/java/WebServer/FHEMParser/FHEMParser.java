@@ -130,7 +130,8 @@ public class FHEMParser {
     }
 
     public Optional<String> getTimeserie(String fileLogID) {
-        return Optional.empty();
+        long now = System.currentTimeMillis() / 1000L;
+        return getTimeserie(0, now, fileLogID);
     }
 
     public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
