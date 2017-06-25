@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class FHEMDevice {
     /* Class Attributes */
-    /* Used to give filelogs and sensors an ID, could be removed */
-    transient private static long IDCounter = 0;
     /* Only ever valid for FileLog devices */
     transient private String linkedDeviceName;
     /* Json Attributes */
@@ -139,12 +137,11 @@ public class FHEMDevice {
         }
         int coordX = attributes.getCoordX();
         int coordY = attributes.getCoordY();
-        long ID = IDCounter++;
         String permissionfield = attributes.getPermissionField().orElse("");
         List<String> permissions = Arrays.asList(permissionfield.split(","));
         HashMap<String, String> meta = new HashMap<>();
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, ID, permissions, isShowInApp(), meta);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, permissions, isShowInApp(), meta);
 
         sensor.setIcon(getAttributes().getIcon());
 

@@ -16,18 +16,16 @@ import java.util.function.Consumer;
 public class FHEMSensor implements Iterable<FHEMFileLog> {
     private final Coordinates coord;
     private final String name;
-    transient private final long ID;
     transient private final List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
     transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
 
-    public FHEMSensor(int coordX, int coordY, String name, long ID, List<String> permissions,
+    public FHEMSensor(int coordX, int coordY, String name, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
         this.coord = new Coordinates(coordX, coordY);
         this.name = name;
-        this.ID = ID;
         this.permissions = permissions;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
