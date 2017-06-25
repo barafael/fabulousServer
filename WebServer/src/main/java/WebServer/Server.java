@@ -76,7 +76,7 @@ public class Server extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
         /* Authentication */
         JsonObject jdbcClientConfig = new JsonObject()
-                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false")
+                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?autoReconnect=true")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("initial_pool_size", 5)
                 .put("user", "java")
@@ -114,6 +114,7 @@ public class Server extends AbstractVerticle {
         CompositeFuture.join(databaseFuture, serverFuture).setHandler(res -> {
             if (res.failed()) {
                 startFuture.fail(res.cause());
+                System.exit(34);
             } else {
                 connection = res.result().resultAt(0);
                 startFuture.complete();
