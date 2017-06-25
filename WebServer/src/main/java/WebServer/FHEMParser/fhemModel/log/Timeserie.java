@@ -15,16 +15,26 @@ import java.util.regex.Pattern;
 
 class Timeserie {
     private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+    /* Needed for timezone-independence */
     private transient static final ZoneId zoneId = ZoneId.systemDefault();
-
-    /* TODO: Maybe completely disregard floating point values? Int everything. */
-    private Map<Double, String> legend = new HashMap<>();
 
     private final List<Long> xs;
     private final List<Double> ys;
 
+    /**
+     * This legend associates certain y-values with names.
+     * This can be used for 'open', 'closed' samples, or for markings on the y-axis
+     */
+    private Map<Double, String> legend = new HashMap<>();
+
     private transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
 
+    /**
+     * Constructor for a timeserie, which parses samples given in a list of strings.
+     *
+     * @param samples a list of strings directly from a FileLog
+     * @param logtype the desired filelog type
+     */
     Timeserie(List<String> samples, Logtype logtype) {
         this.legend = new HashMap<>();
         switch (logtype) {
@@ -47,12 +57,12 @@ class Timeserie {
                         ys.add(currentKey);
                         currentKey++;
                     } else {
-                        // get() ok because legend.containsvalue(value)
+                        /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
-               }
+                }
                 break;
             case REAL:
             case PERCENT:
@@ -83,6 +93,14 @@ class Timeserie {
         }
     }
 
+    /**
+     * Constructor for a timeserie, which parses samples given in a list of strings.
+     *
+     * @param samples a list of strings directly from a FileLog
+     * @param logtype the desired filelog type
+     * @param start unix timestamp to start with
+     * @param end unix timestamp to end with
+     */
     public Timeserie(List<String> samples, Logtype logtype, long start, long end) {
         this.legend = new HashMap<>();
         switch (logtype) {
@@ -108,7 +126,7 @@ class Timeserie {
                         ys.add(currentKey);
                         currentKey++;
                     } else {
-                        // get() ok because legend.containsvalue(value)
+                        /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());

@@ -19,12 +19,21 @@ import java.util.Map;
 class ModelSerializer implements JsonSerializer<FHEMModel> {
     private final List<String> permissions;
 
-    public ModelSerializer(List<String> permissions) {
+    ModelSerializer(List<String> permissions) {
         this.permissions = permissions;
     }
 
+    /**
+     * Custom serializer for a model, only parses model if it is permitted.
+     *
+     * @param model the source model
+     * @return a JsonObject or jsonNull instance, depending on the permissions
+     */
     @Override
     public JsonElement serialize(FHEMModel model, Type type, JsonSerializationContext jsc) {
+        /* All lower serializers need to be reattached here since the custom serializer actually uses
+        a separate instance of gson
+         */
         JsonObject jObj = (JsonObject) new GsonBuilder()
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
@@ -39,11 +48,18 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
         return jObj;
     }
 
+    /**
+     * This method recursively traverses a json representation of a model, and removes all null elements
+     * A JsonElement can be a JsonObject, a JsonArray, a JsonPrimitive, or a JsonNull.
+     *
+     * @param element the top element of the remaining tree
+     */
     private void cleanNull(JsonElement element) {
         if (element.isJsonNull()) {
             System.err.println("JsonElement which is instance of JsonNull was not removed!");
         } else if (element.isJsonArray()) {
             JsonArray arr = element.getAsJsonArray();
+            /* Hold all elements to be deleted (as to not invalidate the iterator */
             ArrayList<JsonElement> toDelete = new ArrayList<>();
             for (JsonElement arr_elem : arr) {
                 if (arr_elem.isJsonNull()) {
@@ -55,6 +71,7 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
             toDelete.forEach(arr::remove);
         } else if (element.isJsonObject()) {
             JsonObject jsonObject = element.getAsJsonObject();
+            /* Hold all elements to be deleted (as to not invalidate the iterator */
             HashSet<String> toDelete = new HashSet<>();
             for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                 if (entry.getValue().isJsonNull()) {
@@ -64,8 +81,8 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
                 }
             }
             toDelete.forEach(jsonObject::remove);
-        } else if (element.isJsonPrimitive()) {
+        } /*else if (element.isJsonPrimitive()) {
             JsonPrimitive prim = element.getAsJsonPrimitive();
-        }
+        } */
     }
 }

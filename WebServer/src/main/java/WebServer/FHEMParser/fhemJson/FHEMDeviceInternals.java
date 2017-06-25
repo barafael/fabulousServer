@@ -32,11 +32,23 @@ public class FHEMDeviceInternals {
     private String type;
     private String currentlogfile;
 
+    /**
+     * The regexp of a logfile in FHEM usually starts with the name of a sensor.
+     * The separator, by default, is a colon.
+     * This method can be used to guess a correspondence between a sensor and a log.
+     * @return a prefix of the filelog's regexp, if present
+     */
     Optional<String> getRegexpPrefix() {
         return getRegexpPrefix(':');
     }
 
-    Optional<String> getRegexpPrefix(char sep) {
+    /**
+     * The regexp of a logfile in FHEM always starts with the name of a sensor.
+     * This private helper method does the actual work of finding a regexpprefix.
+     * This method can be used to guess a correspondence between a sensor and a log.
+     * @return a prefix of the filelog's regexp, if present
+     */
+    private Optional<String> getRegexpPrefix(char sep) {
         int index = regexp.indexOf(sep);
         if (index >= 0) {
             String prefix = regexp.substring(0, index);
@@ -47,6 +59,10 @@ public class FHEMDeviceInternals {
         }
     }
 
+    /**
+     * Gets an expanded and normalized path to a logfile from the internals of a FileLog.
+     * @return an expanded and normalized path to a logfile from the internals of a FileLog
+     */
     Optional<String> getCurrentLogfileField() {
         if (currentlogfile.startsWith(".")) {
             Optional<String> fhemPath = FHEMUtils.getGlobVar("FHEMDIR");

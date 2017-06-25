@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * This class represents a room which associates a FHEM model.
+ * This class represents a room which consists of several sensors which in turn contain filelogs.
  *
  * @author Rafael
  */
@@ -40,6 +40,28 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return name.startsWith("room_");
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public boolean hasPermittedSensors(List<String> permissions) {
+        for (FHEMSensor sensor : this) {
+            if (sensor.hasPermittedLogs(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPermitted(List<String> permissions) {
+        return hasPermittedSensors(permissions);
+    }
+
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * @return an iterator over the contained sensors in this room.
+     */
+
     @NotNull
     @Override
     public Iterator<FHEMSensor> iterator() {
@@ -47,10 +69,8 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     }
 
     @Override
-    public String toString() {
-        return "FHEMRoom{" +
-                "name='" + name + '\'' +
-                '}';
+    public void forEach(Consumer<? super FHEMSensor> action) {
+        sensors.forEach(action);
     }
 
     @Override
@@ -66,27 +86,5 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     @Override
     public int hashCode() {
         return name.hashCode();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void forEach(Consumer<? super FHEMSensor> action) {
-        sensors.forEach(action);
-    }
-
-    public boolean hasPermittedSensors(List<String> permissions) {
-        for (FHEMSensor sensor : this) {
-            if (sensor.hasPermittedLogs(permissions)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isPermitted(List<String> permissions) {
-        return hasPermittedSensors(permissions);
     }
 }

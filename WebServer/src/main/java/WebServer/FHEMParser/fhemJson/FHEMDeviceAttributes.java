@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Optional;
 
 /**
- * Created by ra on 02.06.17.
+ * @author Rafael on 02.06.17.
  * This class represents the relevant attributes of the
  * 'Attributes' section in each device in jsonList2.
  */
@@ -33,20 +33,30 @@ class FHEMDeviceAttributes {
     private String permissions;
     private String alias;
 
+    /**
+     * The SubType attribute is set to the sensor type sometimes.
+     * @return the value set for SubType in a FHEM device
+     */
     public Optional<String> getSubType() {
         return Optional.ofNullable(subType);
     }
 
+    /**
+     *  This is the accessor method for the rooms, which are an attribute set manually in FHEM.
+     * @return the Rooms list set for a device in FHEM
+     */
     Optional<String> getRooms() {
         return Optional.ofNullable(rooms);
     }
 
+    /** Accessor for the X coordinates set in FHEM */
     int getCoordX() {
         if (coordX == null) coordX = "0";
         if (coordX.isEmpty()) coordX = "0";
         return Integer.parseInt(coordX);
     }
 
+    /** Accessor for the Y coordinates set in FHEM */
     int getCoordY() {
         if (coordY == null) coordY = "0";
         if (coordY.isEmpty()) coordY = "0";
@@ -54,15 +64,29 @@ class FHEMDeviceAttributes {
     }
 
     // TODO read all attributes which might be possible
+
+    /**
+     * Acessor for the userattr 'permissions' in FHEM
+     * @return the userattr 'permissions' in FHEM
+     */
     /* Field because getPermissions() sounds weird */
     Optional<String> getPermissionField() {
         return Optional.ofNullable(permissions);
     }
 
+    /**
+     * Acessor for the userattr 'alias' in FHEM
+     * @return the userattr 'alias' in FHEM
+     */
     Optional<String> getAlias() {
         return Optional.ofNullable(alias);
     }
 
+    /**
+     * Acessor for the userattr 'icon' in FHEM
+     * @return the userattr 'icon' in FHEM
+     */
+    /* TODO: deliver icon svg maybe? */
     String getIcon() {
         return icon_in_app;
     }

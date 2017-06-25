@@ -12,18 +12,21 @@ import static WebServer.FHEMParser.fhemUtils.FHEMUtils.getFHEMPort;
 /**
  * This class contains methods which can interface to FHEM from the computer they are running on.
  * The Client Mode, provided by FHEM, offers FHEM-perl command execution from a system's shell.
- * 
+ *
  * @author Rafael on 09.06.17.
  */
 public class FHEMClientModeCon implements FHEMConnection {
+    /**
+     * Accessor method for FHEM's jsonList on the local machine.
+     * @return A string with jsonList2's content.
+     * @throws IOException
+     * @throws FHEMNotFoundException if communication couldn't be established
+     */
     @Override
     public String getJsonList2() throws IOException, FHEMNotFoundException {
-        return getJsonList2(getFHEMPort(), FHEMUtils.getFhemScriptPath());
-    }
-
-    /* maybe keep a copy of jsonlist here and just refresh it once in a while ? */
-    @Override
-    public String getJsonList2(int port, String pathToFhemPL) throws IOException, FHEMNotFoundException {
+        /* Maybe keep a copy of jsonlist here and just refresh it once in a while ? */
+        String pathToFhemPL = FHEMUtils.getFhemScriptPath();
+        int port = FHEMUtils.getFHEMPort();
         String[] command = {"perl", pathToFhemPL, "localhost:" + port, "jsonList2"};
 
         Runtime runtime = Runtime.getRuntime();
@@ -56,7 +59,8 @@ public class FHEMClientModeCon implements FHEMConnection {
     /**
      * Runs a FHEM command, currently assuming it is not malicious
      * maybe add whitelisting later
-    */
+     * @param command: String in pure FHEM perl syntax; Nothing else needed
+     */
     public boolean sendPerlCommand(String command) throws IOException {
         /* TODO: maybe verify command here */
         boolean permitted = true;

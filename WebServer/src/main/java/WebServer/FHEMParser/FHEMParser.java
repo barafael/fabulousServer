@@ -35,6 +35,11 @@ public class FHEMParser {
     private FHEMParser() {
     }
 
+    /**
+     * Acquisitor for Parser instance
+     *
+     * @return the instance of this singleton
+     */
     public static synchronized FHEMParser getInstance() {
         if (FHEMParser.instance == null) {
             FHEMParser.instance = new FHEMParser();
@@ -42,6 +47,14 @@ public class FHEMParser {
         return FHEMParser.instance;
     }
 
+    /**
+     * Custom serialization for the FHEM model:
+     * First, everything is copied, ignoring non-permitted fields.
+     * Then, the ignored fields are filtered out (this happens in the serializers).
+     *
+     * @param permissions a list of permissions which limit what information will be given to the caller.
+     * @return a serialized model which, when deserialized, contains only the permitted filelogs
+     */
     public Optional<String> getFHEMModel(List<String> permissions) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
@@ -52,6 +65,12 @@ public class FHEMParser {
         return getFHEMModel().map(gson::toJson);
     }
 
+    /**
+     * This method gets a fhemmodel. Depending on where it is running, it gets data from different sources,
+     * permitting easy mocking of real data. Pulling the data: ./pull.sh from the top-lvl dir.
+     *
+     * @return a FHEMModel, if present
+     */
     public Optional<FHEMModel> getFHEMModel() {
         Instant one = Instant.now();
         if (System.getProperty("user.home").contains("/pi")) {
@@ -98,12 +117,15 @@ public class FHEMParser {
                 jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
                 jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");
 
-                if (timePrint) System.out.println("Replaced stuff at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint)
+                    System.out.println("Replaced stuff at: " + Duration.between(one, Instant.now()).toMillis());
 
                 JsonList2 list = JsonList2.parseFrom(jsonList2_str);
-                if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint)
+                    System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
                 FHEMModel fhemModel = list.toFHEMModel();
-                if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+                if (timePrint)
+                    System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
                 model = fhemModel;
                 return Optional.ofNullable(fhemModel);
             } else {
@@ -113,6 +135,14 @@ public class FHEMParser {
         return Optional.empty();
     }
 
+    /**
+     * Sets the sensor position of a specific sensor in FHEM
+     *
+     * @param x          x position in %
+     * @param y          y position in %
+     * @param sensorName name of sensor
+     * @return whether the operation succeeded
+     */
     public boolean setSensorPosition(int x, int y, String sensorName) {
         FHEMClientModeCon con = new FHEMClientModeCon();
         try {
@@ -136,11 +166,23 @@ public class FHEMParser {
         return Optional.empty();
     }
 
+    /**
+     * Gets a specific timeserie
+     * @param fileLogID ID of filelog (name)
+     * @return an optional String - the json representation of the timeserie
+     */
     public Optional<String> getTimeserie(String fileLogID) {
         long now = System.currentTimeMillis() / 1000L;
         return getTimeserie(0, now, fileLogID);
     }
 
+    /**
+     * Gets a specific timeserie
+     * @param startTime start time
+     * @param endTime end time
+     * @param fileLogID ID of filelog (name)
+     * @return an optional String - the json representation of the timeserie
+     */
     public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
         for (Iterator<FHEMFileLog> it = model.eachLog(); it.hasNext(); ) {
             FHEMFileLog log = it.next();

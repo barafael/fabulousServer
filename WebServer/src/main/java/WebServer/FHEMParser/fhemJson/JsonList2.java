@@ -56,13 +56,16 @@ public class JsonList2 {
         return gson.fromJson(jsonString, JsonList2.class);
     }
 
+    /** This method converts a parsed jsonList2 to a FHEMModel
+     *
+     * @return a FHEMModel generated from the contents of jsonList2.
+     */
     public FHEMModel toFHEMModel() {
         HashSet<FHEMSensor> realSensors = new HashSet<>();
         HashSet<FHEMRoom> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
-
-        /* Ignore static analysis warnings here: Results is populated by gson */
+        /* Ignore static analysis 'null dereference' warnings here: Results is populated by Gson */
         for (FHEMDevice d : Results) {
             boolean isSensor = d.isSensor();
             boolean isFileLog = d.isFileLog();
@@ -100,7 +103,7 @@ public class JsonList2 {
         }
 
         for (FHEMDevice filelog : filelogs) {
-            Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix(':');
+            Optional<String> sensorname_opt = filelog.getInternals().getRegexpPrefix();
             if (!sensorname_opt.isPresent()) {
                 System.err.println("Could not detect which sensor corresponds to this filelog: " + filelog.getName());
                 continue;

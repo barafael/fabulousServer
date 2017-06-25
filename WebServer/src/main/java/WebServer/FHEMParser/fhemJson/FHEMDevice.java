@@ -88,6 +88,7 @@ public class FHEMDevice {
      * This method returns if a device is located in a FHEM room.
      * Manual parsing of a comma-separated line is necessary, because that is how FHEM stores a room.
      * A room exists in FHEM if it is mentioned in the 'room' String in a device's attributes.
+     * @param name: Name of the room to check.
      */
     private boolean isInRoom(String name) {
         Optional<String> rooms_opt = attributes.getRooms();

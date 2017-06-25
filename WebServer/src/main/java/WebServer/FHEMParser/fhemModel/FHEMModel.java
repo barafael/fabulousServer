@@ -48,11 +48,12 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return gson.toJson(this);
     }
 
-    /** Iterator over the contained rooms.
-     * This is necessary to encapsulate the rooms collection -
-     * Otherwise it would be necessary to give out mutable access to the internal structure.
-     * @return an iterator over the rooms in this model
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     *
+     * @return an iterator over the contained rooms in this model.
      */
+
     @NotNull
     @Override
     public Iterator<FHEMRoom> iterator() {
@@ -65,10 +66,22 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return logs.iterator();
     }
 
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     *
+     * @return an iterator over the contained rooms in this model.
+     */
+
     @Override
     public void forEach(Consumer<? super FHEMRoom> action) {
         rooms.forEach(action);
     }
+
+    /**
+     * Returns whether any of the rooms are permitted to be accesseed with the given permissions.
+     * @param permissions list of permissions against which to check
+     * @return whether this model contains viewable rooms
+     */
 
     public boolean hasPermittedRooms(List<String> permissions) {
         for (FHEMRoom room : this) {

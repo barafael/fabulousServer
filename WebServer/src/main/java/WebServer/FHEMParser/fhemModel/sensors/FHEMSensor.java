@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.
+ * It also contains the FileLog stubs needed to aquire timeseries.
  *
  * @author Rafael
  */
@@ -69,17 +70,30 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         return fileLogs;
     }
 
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * @return an iterator over the contained logs in this sensor.
+     */
     @NotNull
     @Override
     public Iterator<FHEMFileLog> iterator() {
         return fileLogs.iterator();
     }
 
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * @return an iterator over the contained logs in this sensor.
+     */
     @Override
     public void forEach(Consumer<? super FHEMFileLog> action) {
         fileLogs.forEach(action);
     }
 
+    /**
+     * Returns whether any of the logs are permitted to be accesseed with the given permissions.
+     * @param permissions list of permissions against which to check
+     * @return whether this sensor contains viewable timeseries
+     */
     public boolean hasPermittedLogs(List<String> permissions) {
         for (FHEMFileLog log : this) {
             if (log.isPermitted(permissions)) {

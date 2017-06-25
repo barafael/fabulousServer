@@ -1,6 +1,7 @@
 package WebServer.FHEMParser.fhemModel.log;
 
 /**
+ * This enum contains some type tags which a timeserie can assume.
  * @author Rafael on 16.06.17.
  */
 public enum Logtype {

@@ -12,7 +12,7 @@ import java.util.Optional;
 import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
 
 /**
- * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.
+ * This class is a proxy for an actual timeserie, which can be parsed on demand with getTimeserie().
  *
  * @author Rafael
  */
@@ -20,45 +20,65 @@ import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
 public class FHEMFileLog {
     private final Logtype type;
     private final String name;
-    // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
-    // private Optional<? extends Timeserie> log = Optional.empty();
     private final String sensorName;
     private final String unit;
     transient private final boolean isShowInApp;
     transient private final String path;
     transient private final List<String> permissions;
 
+    /**
+     * Constructs a filelog from data obtained in fhemjson.
+     *
+     * @param path        path to an timeseries logfile
+     * @param name        name of this filelog
+     * @param isShowInApp whether this filelog should be exposed in the app (this is independent from permissions)
+     * @param permissions the permission ID which this filelog requires to access it
+     */
     public FHEMFileLog(String path, String name, boolean isShowInApp, List<String> permissions) {
         this.path = path;
         this.isShowInApp = isShowInApp;
         this.name = name;
         this.unit = getUnit().orElse("No unit given");
         this.sensorName = getSensorName().orElse("No sensor name given");
-        // System.out.println("constructing filelog: " + path);
         this.type = guessLogtype(path);
         this.permissions = permissions;
-
-        // TODO this is only here to force parsing for all logs. Remove to parse on demand with getTimeserie()
-        // this.timeserie = getTimeserie();
     }
 
+    /**
+     * The filelogs in FHEM which are blessed should all be crafted in a way that the sensor name appears
+     * in the second column (the first being the date). This should be the FHEM default though.
+     *
+     * @param path the path to the FileLog. This has to be read as a file (instead of parsing it immediately)
+     *             because parsing happens later on demand but the information is necessary now.
+     * @return the name of the sensor this log belongs to
+     */
     private static Optional<String> getSensorInFileLog(String path) {
+        String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line = bufferedReader.readLine();
+            line = bufferedReader.readLine();
             bufferedReader.close();
-            if (line == null) {
-                System.err.println("Could not read line. Presumably there is none.");
-                return Optional.empty();
-            }
-            String name = line.split(" ")[1];
-            return Optional.of(name);
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
         }
+
+        if (line == null) {
+            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+            return Optional.empty();
+        }
+        String name = line.split(" ")[1];
+        return Optional.of(name);
     }
 
+    /**
+     * The filelogs in FHEM which are blessed should all be crafted in a way that the unit name appears
+     * in the third column (the first being the date). This should be the FHEM default though.
+     *
+     * @param path the path to the FileLog. This has to be read as a file (instead of parsing it immediately)
+     *             because parsing happens later on demand but the information is necessary now.
+     * @return the name of the unit of this log
+     */
     private static Optional<String> getUnitInFileLog(String path) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
@@ -83,6 +103,11 @@ public class FHEMFileLog {
         return name;
     }
 
+    /**
+     * Parses a timeserie from disk on demand
+     *
+     * @return a parsed sample representation, if file is present
+     */
     public Optional<Timeserie> getTimeserie() {
         List<String> filelog;
         String line;
@@ -112,6 +137,14 @@ public class FHEMFileLog {
         }
 
     }
+
+    /**
+     * Parses a timeserie from disk on demand, between two unix timestamps
+     *
+     * @param start the start date
+     * @param end   the end date
+     * @return a parsed sample representation, if file is present
+     */
 
     private Optional<Timeserie> getTimeserie(long start, long end) {
         List<String> filelog;
@@ -143,6 +176,12 @@ public class FHEMFileLog {
 
     }
 
+    /**
+     * This method guesses the type of a log based on it's first line.
+     * Types are defined in the logtypes enum.
+     * @param path path to logfile
+     * @return an estimated logtype
+     */
     private Logtype guessLogtype(String path) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
@@ -168,6 +207,11 @@ public class FHEMFileLog {
         }
     }
 
+    /**
+     * Parses a line to obtain the value of the measurement
+     * @param line line from a FileLog
+     * @return the value, as a String
+     */
     private String getLineValue(String line) {
         String[] splitted = line.split(" ");
         if (splitted.length > 3) {
@@ -178,13 +222,18 @@ public class FHEMFileLog {
     }
 
     private Optional<String> getSensorName() {
-        return FHEMFileLog.getSensorInFileLog(path);
+        return getSensorInFileLog(path);
     }
 
     private Optional<String> getUnit() {
-        return FHEMFileLog.getUnitInFileLog(path);
+        return getUnitInFileLog(path);
     }
 
+    /**
+     * This method checks if given permissions are sufficient to access this filelog
+     * @param allPermissions List of permissions which are available to a user
+     * @return whether the user with given permissions is allowed to access this log
+     */
     public boolean isPermitted(List<String> allPermissions) {
         for (String perm : permissions) {
             if (allPermissions.contains(perm)) {
@@ -194,6 +243,12 @@ public class FHEMFileLog {
         return false;
     }
 
+    /**
+     * Generate a subsection of the entire timeserie based on start and end params.
+     * @param startTime the unix timestamp to start with
+     * @param endTime the unix timestamp to end with
+     * @return a subsection of a timeserie
+     */
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> ts = getTimeserie(startTime, endTime);
         if (ts.isPresent()) {
