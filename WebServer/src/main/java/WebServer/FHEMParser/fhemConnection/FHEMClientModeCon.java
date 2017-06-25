@@ -10,6 +10,9 @@ import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import static WebServer.FHEMParser.fhemUtils.FHEMUtils.getFHEMPort;
 
 /**
+ * This class contains methods which can interface to FHEM from the computer they are running on.
+ * The Client Mode, provided by FHEM, offers FHEM-perl command execution from a system's shell.
+ * 
  * @author Rafael on 09.06.17.
  */
 public class FHEMClientModeCon implements FHEMConnection {

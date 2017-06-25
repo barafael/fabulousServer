@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @author Rafael
  * @date 02.06.17.
  * This class represents the relevant attributes of the
- * elements of the 'Results' section in each device in jsonList2.
+ * elements of the 'Results' array in jsonList2.json.
  */
 
 /* Don't change attribute names or remove attributes! They are needed by Gson to parse jsonList2.
@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class FHEMDevice {
     /* Class Attributes */
-    /* Used to give filelogs and sensors an ID */
+    /* Used to give filelogs and sensors an ID, could be removed */
     transient private static long IDCounter = 0;
+    /* Only ever valid for FileLog devices */
+    transient private String linkedDeviceName;
     /* Json Attributes */
     @SerializedName("Name")
     private String name;
@@ -35,13 +37,10 @@ public class FHEMDevice {
     private FHEMDeviceInternals internals;
     @SerializedName("Attributes")
     private FHEMDeviceAttributes attributes;
-    /* Only ever valid for FileLog devices */
-    transient private String linkedDeviceName;
 
-    String getName() {
-        return name;
-    }
-
+    /** 
+     * Accessor method for the internals of a FHEM device.
+     * */
     FHEMDeviceInternals getInternals() {
         /* invariant:
            Internals != null
@@ -55,10 +54,19 @@ public class FHEMDevice {
         return internals;
     }
 
+    /** 
+     * This method returns if the device this class represents was tagged as a sensor in FHEM.
+     * FHEM itself does not distinguish between devices, which is why this crude measure of tagging manually is necessary.
+     */
     boolean isSensor() {
         return isInRoom("sensors");
     }
 
+     /** 
+     * This method returns if the device this class represents is tagged with a FileLog type in FHEM.
+     * FHEM itself does not distinguish between devices, which is why this crude measure of checking manually is necessary.
+     * At least in this case, the internals have an attribute called 'TYPE'.
+     */
     boolean isFileLog() {
         if (isOfType("FileLog")) {
             /* Consistency check: A FileLog must have a currentlogfile attribute too */
@@ -71,6 +79,18 @@ public class FHEMDevice {
         return false;
     }
 
+    /**
+     * Accessor for the name field which is set in jsonList2
+     */
+    String getName() {
+        return name;
+    }
+
+    /**
+     * This method returns if a device is located in a FHEM room.
+     * Manual parsing of a comma-separated line is necessary, because that is how FHEM stores a room.
+     * A room exists in FHEM if it is mentioned in the 'room' String in a device's attributes.
+     */
     private boolean isInRoom(String name) {
         Optional<String> rooms_opt = attributes.getRooms();
         if (rooms_opt.isPresent()) {
@@ -84,6 +104,10 @@ public class FHEMDevice {
         return false;
     }
 
+    /**
+     * This method manually checks if a type field was set in jsonList2's internals.
+     * @param type: the type to check against
+     */
     private boolean isOfType(String type) {
         Optional<String> type_opt = internals.getType();
         if (type_opt.isPresent()) {
@@ -94,6 +118,10 @@ public class FHEMDevice {
         return false;
     }
 
+    /**
+     * This method returns if the underlying device should be shown in the app.
+     * This is marked by a tag 'app' in the room list.
+     */
     private boolean isShowInApp() {
         if (!isSensor() && !isFileLog()) {
             System.err.println("This might be unintended: " +
@@ -102,6 +130,9 @@ public class FHEMDevice {
         return this.isInRoom("app");
     }
 
+    /**
+     * This method parses a device to a sensor, if it seems to be one.
+     */
     Optional<FHEMSensor> parseToSensor() {
         if (!isSensor()) {
             return Optional.empty();
@@ -127,6 +158,9 @@ public class FHEMDevice {
         return Optional.of(sensor);
     }
 
+    /**
+     * This method parses a device to a filelog, if it seems to be one.
+     */
     Optional<FHEMFileLog> parseToLog() {
         if (!isFileLog()) {
             return Optional.empty();
@@ -151,22 +185,37 @@ public class FHEMDevice {
         return Optional.of(new FHEMFileLog(path, name, isShowInApp(), permissions));
     }
 
+    /** Accessor for attributes */
     private FHEMDeviceAttributes getAttributes() {
         return attributes;
     }
 
+    /**
+     * Checks if the device is a fakelog. In this case, it should not be shown.
+     */
     boolean isFakelog() {
         return getInternals().getRegexp().orElse("").equals("fakelog");
     }
 
+    /**
+     * A filelog is 'blessed' if the path to it's timeserie contains the $FHEMDIR/log/timeseries/ directory.
+     * It means that the format is such that it can be parsed in a Timeseries easily.
+     */
     boolean isBlessed() {
         return getInternals().getCurrentLogfileField().orElse("").contains("timeseries");
     }
 
+    /** Two devices are likely to be linked if the filelog's regexp contains the sensor's name.
+     * This is stored in linkedDeviceName, and should only be accessed from devices representing FileLogs.
+     */
     public boolean isLinked(FHEMSensor s) {
         return linkedDeviceName.equals(s.getName());
     }
 
+    /** 
+     * Since rooms have to be used to tag a fhem device, a special prefix must be used for real rooms.
+     * Those rooms are where the device should appear in the app, hence the name.
+     */
     FHEMRoom getAppRoom() {
         Optional<String> rooms_opt = getAttributes().getRooms();
         if (!rooms_opt.isPresent()) {
@@ -192,3 +241,4 @@ public class FHEMDevice {
         return appRoom;
     }
 }
+
