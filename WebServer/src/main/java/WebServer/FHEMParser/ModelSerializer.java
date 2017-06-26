@@ -58,7 +58,8 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
             System.err.println("JsonElement which is instance of JsonNull was not removed!");
         } else if (element.isJsonArray()) {
             JsonArray arr = element.getAsJsonArray();
-            /* Hold all elements to be deleted (as to not invalidate the iterator */
+            /* Hold all elements to be deleted (as to not invalidate the iterator)
+             * This is reported as a false positive (I hope) by static analysis */
             ArrayList<JsonElement> toDelete = new ArrayList<>();
             for (JsonElement arr_elem : arr) {
                 if (arr_elem.isJsonNull()) {
@@ -70,8 +71,9 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
             toDelete.forEach(arr::remove);
         } else if (element.isJsonObject()) {
             JsonObject jsonObject = element.getAsJsonObject();
-            /* Hold all elements to be deleted (as to not invalidate the iterator */
-            HashSet<String> toDelete = new HashSet<>();
+            /* Hold all elements to be deleted (as to not invalidate the iterator)
+             * This is reported as a false positive (I hope) by static analysis */
+            ArrayList<String> toDelete = new ArrayList<>();
             for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                 if (entry.getValue().isJsonNull()) {
                     toDelete.add(entry.getKey());

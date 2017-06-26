@@ -67,9 +67,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
-     *
-     * @return an iterator over the contained rooms in this model.
+     * This method is necessary to be able to iterate over an internal datastructure
      */
 
     @Override

@@ -40,7 +40,7 @@ public class FHEMUtils {
     /**
      * Execute a 'whereis' command to find fhem.pl
      * @return the path to fhem.pl, including the script name
-     * @throws IOException
+     * @throws IOException if invocation fails
      */
     private static String whereisFhemDotPl() throws IOException {
         /* The output of 'whereis' is broken into lines, and the one containing the script is returned */

@@ -81,8 +81,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
-     * @return an iterator over the contained logs in this sensor.
+     * This method is necessary to be able to iterate over an internal datastructure
      */
     @Override
     public void forEach(Consumer<? super FHEMFileLog> action) {

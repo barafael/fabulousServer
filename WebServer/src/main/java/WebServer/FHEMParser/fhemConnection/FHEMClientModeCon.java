@@ -16,7 +16,7 @@ public class FHEMClientModeCon implements FHEMConnection {
     /**
      * Accessor method for FHEM's jsonList on the local machine.
      * @return A string with jsonList2's content.
-     * @throws IOException
+     * @throws IOException if the invocation fails
      * @throws FHEMNotFoundException if communication couldn't be established
      */
     @Override
