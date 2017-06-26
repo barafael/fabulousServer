@@ -3,11 +3,8 @@ package WebServer.FHEMParser.fhemConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
-
-import static WebServer.FHEMParser.fhemUtils.FHEMUtils.getFHEMPort;
 
 /**
  * This class contains methods which can interface to FHEM from the computer they are running on.
