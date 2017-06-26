@@ -28,15 +28,11 @@ public class ServerTest {
     public Timeout timeout = Timeout.seconds(5000);
     private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
-    private JsonObject ServerConfig;
     private Vertx vertx;
 
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
-        int PORT = new Random().nextInt(10000) + 50000;
-        Main.main(new String[]{"" + PORT});
-        Thread.sleep(4000);
-        System.out.println("Test-PORT: " + PORT);
+        int PORT = 8080;
         ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
         vertx = Vertx.vertx();
         httpClient = vertx.createHttpClient(ClientOptions);
