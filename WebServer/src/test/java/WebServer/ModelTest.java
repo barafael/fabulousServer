@@ -86,9 +86,12 @@ public class ModelTest {
 
     @Test
     public void validJsonWithPermissions() {
-        /*
-        FHEMModel model =
-        */
+        FHEMParser parser = FHEMParser.getInstance();
+        List<String> permissions = Arrays.asList("96_Pwr_Current");
+        Optional<String> model_str = parser.getFHEMModel(permissions);
+        if (model_str.isPresent()) {
+            assert isValidJSON(model_str.get());
+        } else assert false;
     }
 
     public static boolean isValidJSON(String jsonInString) {
