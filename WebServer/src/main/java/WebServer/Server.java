@@ -54,9 +54,7 @@ public class Server extends AbstractVerticle {
     private static final String ContentLength_HEADER = "content-length";
     private static final String ContentType_VALUE = "application/json";
 
-    private static final String SetRoomplan_PERMISSION = "S_Fenster_4";
-    private static final String SetSensorPosition_PERMISSION = "S_Fenster_4";
-    private static final String GetRoomplan_PERMISSION = "S_Fenster_4";
+    private static final String Edit_PERMISSION = "Edit";
 
     private static final String Username_PARAM = "username";
     private static final String Password_PARAM = "password";
@@ -203,7 +201,7 @@ public class Server extends AbstractVerticle {
             return;
         }
         Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), SetRoomplan_PERMISSION, darfErDasFuture.completer());
+        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
@@ -261,7 +259,7 @@ public class Server extends AbstractVerticle {
         int coordY = Integer.parseInt(routingContext.request().getParam(coordY_PARAM));
 
         Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), SetSensorPosition_PERMISSION, darfErDasFuture.completer());
+        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
@@ -317,16 +315,16 @@ public class Server extends AbstractVerticle {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
+                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()+1)) //TODO: why +1 ??
                                 .write(answerData)
                                 .end(OK_SERVER_RESPONSE);
                     } else {
-                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                        routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                         System.out.println(res.cause());
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
                 System.out.println(res.cause());
             }
         });
@@ -391,16 +389,17 @@ public class Server extends AbstractVerticle {
             hash = 0;
             hasHash = false;
         }
-        Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), GetRoomplan_PERMISSION, darfErDasFuture.completer());
-        darfErDasFuture.setHandler(res -> {
-            if (res.succeeded() && darfErDasFuture.result()) {
+        Future<List<String>> listFuture = Future.future();
+        getListOfPermissions(routingContext.user().principal(), listFuture);
+        listFuture.setHandler(res -> {
+            if (listFuture.succeeded()) {
+                List<String> perm = listFuture.result();
                 vertx.executeBlocking(future -> {
                     Optional<String> answerData_opt;
                     if (hasHash) {
-                        answerData_opt = parser.getRoomplan(room, hash);
+                        answerData_opt = parser.getRoomplan(room, hash, perm);
                     } else {
-                        answerData_opt = parser.getRoomplan(room);
+                        answerData_opt = parser.getRoomplan(room, perm);
                     }
                     if (!answerData_opt.isPresent()) {
                         System.err.println("getRoomplan: AnswerData is not present");
@@ -417,12 +416,12 @@ public class Server extends AbstractVerticle {
                                 .write(answerData)
                                 .end(OK_SERVER_RESPONSE);
                     } else {
-                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause());
+                        routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                System.out.println(res.cause());
             }
         });
     }
@@ -475,17 +474,17 @@ public class Server extends AbstractVerticle {
             endTime = Long.parseLong(routingContext.request().getParam(endTime_PARAM));
             hasTargetTime = true;
         }
-        Future<Boolean> darfErDasFuture = Future.future();
-        // TODO: permission check?? no idea about the specific permissions here
-        darfErDas(routingContext.user(), "", darfErDasFuture.completer());
-        darfErDasFuture.setHandler(res -> {
-            if (res.succeeded() && darfErDasFuture.result()) {
+        Future<List<String>> listFuture = Future.future();
+        getListOfPermissions(routingContext.user().principal(), listFuture);
+        listFuture.setHandler(res -> {
+            if (listFuture.succeeded()) {
+                List<String> perm = listFuture.result();
                 vertx.executeBlocking(future -> {
                     Optional<String> answerData_opt;
                     if (hasTargetTime) {
-                        answerData_opt = parser.getTimeserie(startTime, endTime, ID);
+                        answerData_opt = parser.getTimeserie(startTime, endTime, ID, perm);
                     } else {
-                        answerData_opt = parser.getTimeserie(ID);
+                        answerData_opt = parser.getTimeserie(ID, perm);
                     }
                     if (!answerData_opt.isPresent()) {
                         System.err.println("getTimeseries: AnswerData is not present");
@@ -502,12 +501,12 @@ public class Server extends AbstractVerticle {
                                 .write(answerData)
                                 .end(OK_SERVER_RESPONSE);
                     } else {
-                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res.cause());
+                        routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                     }
                 });
             } else {
-                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                System.out.println(res.cause());
             }
         });
     }
