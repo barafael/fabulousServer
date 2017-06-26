@@ -155,6 +155,12 @@ public class FHEMParser {
     }
 
     public boolean setRoomplan(String roomName, String svg) {
+        Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
+        if (room_opt.isPresent()) {
+            FHEMRoom room = room_opt.get();
+            room.setPlan(svg);
+            return true;
+        }
         return false;
     }
 
@@ -163,6 +169,15 @@ public class FHEMParser {
     }
 
     public Optional<String> getRoomplan(String roomName, long hash, List<String> permission) {
+        Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
+        if (room_opt.isPresent()) {
+            FHEMRoom room = room_opt.get();
+            boolean permitted = room.hasPermittedSensors(permission);
+            if (!permitted) {
+                return Optional.empty();
+            }
+            return room.getRoomplan(hash);
+        }
         return Optional.empty();
     }
 
@@ -189,7 +204,9 @@ public class FHEMParser {
         for (Iterator<FHEMFileLog> it = model.eachLog(); it.hasNext(); ) {
             FHEMFileLog log = it.next();
             if (log.getName().equals(fileLogID)) {
-                return log.subSection(startTime, endTime);
+                if (log.isPermitted(permissions)) {
+                    return log.subSection(startTime, endTime);
+                }
             }
         }
         return Optional.empty();

@@ -33,7 +33,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return Optional.empty();
     }
 
-    private Optional<FHEMRoom> getRoom(String roomname) {
+    public Optional<FHEMRoom> getRoomByName(String roomname) {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
     }
 

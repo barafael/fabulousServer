@@ -59,6 +59,7 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
 
     /**
      * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     *
      * @return an iterator over the contained sensors in this room.
      */
 
@@ -86,5 +87,14 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    public Optional<String> getRoomplan(long hash) {
+        // todo implement
+        return Optional.empty();
+    }
+
+    public boolean setPlan(String svg) {
+        return false;
     }
 }
