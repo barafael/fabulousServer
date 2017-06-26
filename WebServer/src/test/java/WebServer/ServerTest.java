@@ -101,10 +101,10 @@ public class ServerTest {
     @Test
     public void testGetTimeSeries(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "hans:sonne123";//"peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getTimeSeries?ID=S_Fenster_4")
+        httpClient.get("/api/getTimeSeries?ID=FileLog_HM_52CC96_Pwr_current")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetTimeSeries_answerHeader: " + h));
