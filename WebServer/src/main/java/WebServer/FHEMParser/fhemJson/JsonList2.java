@@ -119,7 +119,6 @@ public class JsonList2 {
                 log.ifPresent(sensor::addLog);
             }
         }
-        System.out.println("Parsed FHEM model!");
         return new FHEMModel(rooms);
     }
 }
