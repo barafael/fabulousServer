@@ -1,25 +1,38 @@
-Um einen Sensor in FHEM einzubinden, muss dieser (zum Beispiel über das Web-Frontend)  angelernt werden. Dabei ist das FHEM-Wiki normalerweise ein bisschen hilfreich.
+Um einen Sensor in FHEM einzubinden, muss dieser (zum Beispiel über das Web-Frontend) angelernt werden.
+Dabei ist das FHEM-Wiki normalerweise ein bisschen hilfreich.
 
-Um den Sensor danach von der App aus bedienen zu können, muss man noch einige Attribute setzen und Einstellungen vornehmen. Das hängt damit zusammen, dass FHEM eine sehr allgemeine Sicht auf Sensoren, Aktuatoren und Logs hat. So ist z.B. ein telnet-login für FHEM ein device, genauso wie ein Log.
+Um den Sensor danach von der App aus bedienen zu können, muss man in FHEM noch einige Attribute setzen und Einstellungen vornehmen.
+Das hängt damit zusammen, dass FHEM eine sehr allgemeine Sicht auf Sensoren, Aktuatoren und Logs hat.
+So ist z.B. ein telnet-login für FHEM ein device, genauso wie ein Log.
 
 Einen Sensor zur App hinzufügen (nach dem Anlernen in FHEM):
-* Attribute coordY und coordX setzen
+* Attribute coordY und coordX (in %) setzen
 * Den Sensor zum room 'app' hinzufügen
-* Das Attribut name_in_app setzen
+* Den Sensor zum roon 'room_<echter raumname>' hinzufügen (präfix room_ ist zwingend erforderlich)
+* Das Attribut alias setzen
 
 Ein FileLog zur App exportieren
-* Nach der Definition in FHEM sollte die Zeitreihe nur einen Zahlenwert pro Sample enthalten.
-* Das output-Verzeichnis für Zeitreihen, die innerhalb der App angezeigt werden sollen, muss innerhalb von
+* Nach der Definition in FHEM sollte ein FileLog nur einen Messwert mit einer Einheit pro Zeile enthalten.
+Beispielsweise könnte eine Zeile so aussehen:
+2017-06-02_20:13:18 HM_521A72 brightness: 499.01
+Wenn eine Zeile anders aussieht, dann führt das unweigerlich zu Problemen in der Anzeige.
+Dieses Format ist jedoch in FHEM Standard.
+
+* Das Output-Verzeichnis für Zeitreihen, die innerhalb der App angezeigt werden sollen, muss innerhalb von
 $FHEM_DIR/log/timeseries liegen
+
+* Anlegen der FileLogs in FHEM:
+define <name> FileLog <pfad> <Sensorname>:<regex>
+define FileLog_HM_52CC96_Pwr_current FileLog /opt/fhem/log/timeseries/energy/HM_52CC96_Pwr_current-%Y-%m.log HM_52CC96_Pwr:(current).*
 
 # Globale Variablen im .profile
 Damit Fhem gefunden werden kann, müssen einige globale variablen gesetzt werden:
-export FHEMPL="/usr/bin/fhem.pl"
-export FHEMPORT="6062"
+export FHEMDIR="/opt/fhem/"
+export FHEMPORT="7072"
 
 Und falls mocken der Daten via pull.sh erwünscht ist:
-export FHEMMOCKDIR="/home/ra/"
+export FHEMMOCKDIR="/home/fhemmock/"
 
-Andere Umgebungsvariablen:
-FHEMDIR
-FHEMPL
+Der Java-Server findet auch ohne diese Einstellungen die FHEM-Installation, aber so ist es sicherer,
+da der Server sich dann nicht auf externe Kommandos wie Bash, Whereis, Grep und Sed verlassen muss.
+
