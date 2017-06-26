@@ -83,4 +83,21 @@ public class ModelTest {
             System.out.println(new Gson().toJson(model2));
         });
     }
+
+    @Test
+    public void validJsonWithPermissions() {
+        /*
+        FHEMModel model =
+        */
+    }
+
+    public static boolean isValidJSON(String jsonInString) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(jsonInString, Object.class);
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
+    }
 }
