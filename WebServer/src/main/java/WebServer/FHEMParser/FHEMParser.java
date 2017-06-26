@@ -146,7 +146,7 @@ public class FHEMParser {
     public boolean setSensorPosition(int x, int y, String sensorName) {
         FHEMClientModeCon con = new FHEMClientModeCon();
         try {
-            return  con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
+            return con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
                     con.sendPerlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
@@ -158,32 +158,34 @@ public class FHEMParser {
         return false;
     }
 
-    public Optional<String> getRoomplan(String roomName) {
+    public Optional<String> getRoomplan(String roomName, List<String> permission) {
         return Optional.empty();
     }
 
-    public Optional<String> getRoomplan(String roomName, long hash) {
+    public Optional<String> getRoomplan(String roomName, long hash, List<String> permission) {
         return Optional.empty();
     }
 
     /**
      * Gets a specific timeserie
+     *
      * @param fileLogID ID of filelog (name)
      * @return an optional String - the json representation of the timeserie
      */
-    public Optional<String> getTimeserie(String fileLogID) {
+    public Optional<String> getTimeserie(String fileLogID, List<String> permissions) {
         long now = System.currentTimeMillis() / 1000L;
-        return getTimeserie(0, now, fileLogID);
+        return getTimeserie(0, now, fileLogID, permissions);
     }
 
     /**
      * Gets a specific timeserie
+     *
      * @param startTime start time
-     * @param endTime end time
+     * @param endTime   end time
      * @param fileLogID ID of filelog (name)
      * @return an optional String - the json representation of the timeserie
      */
-    public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID) {
+    public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID, List<String> permissions) {
         for (Iterator<FHEMFileLog> it = model.eachLog(); it.hasNext(); ) {
             FHEMFileLog log = it.next();
             if (log.getName().equals(fileLogID)) {

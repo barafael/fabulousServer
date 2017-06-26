@@ -35,4 +35,3 @@ export FHEMMOCKDIR="/home/fhemmock/"
 
 Der Java-Server findet auch ohne diese Einstellungen die FHEM-Installation, aber so ist es sicherer,
 da der Server sich dann nicht auf externe Kommandos wie Bash, Whereis, Grep und Sed verlassen muss.
-
