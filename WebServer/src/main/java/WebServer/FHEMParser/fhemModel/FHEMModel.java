@@ -90,4 +90,14 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
+    public boolean sensorExists(String sensorName) {
+        for (FHEMRoom room : this) {
+            for (FHEMSensor sensor : room) {
+                if (sensor.getName().equals(sensorName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
