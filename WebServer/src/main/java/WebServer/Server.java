@@ -54,7 +54,7 @@ public class Server extends AbstractVerticle {
     private static final String ContentLength_HEADER = "content-length";
     private static final String ContentType_VALUE = "application/json";
 
-    private static final String Edit_PERMISSION = "Edit";
+    private static final String Edit_PERMISSION = "E_Änderung";
 
     private static final String Username_PARAM = "username";
     private static final String Password_PARAM = "password";
@@ -315,9 +315,7 @@ public class Server extends AbstractVerticle {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()+1)) //TODO: why +1 ??
-                                .write(answerData)
-                                .end(OK_SERVER_RESPONSE);
+                                .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                         System.out.println(res.cause());
@@ -348,9 +346,7 @@ public class Server extends AbstractVerticle {
                 String permString = new Gson().toJson(perm);
                 routingContext.response().setStatusCode(OK_HTTP_CODE)
                         .putHeader(ContentType_HEADER, ContentType_VALUE)
-                        .putHeader(ContentLength_HEADER, Integer.toString(permString.length()))
-                        .write(permString)
-                        .end(OK_SERVER_RESPONSE);
+                        .end(permString);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                 System.out.println(res.cause());
@@ -412,9 +408,7 @@ public class Server extends AbstractVerticle {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
-                                .write(answerData)
-                                .end(OK_SERVER_RESPONSE);
+                                .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                     }
@@ -497,9 +491,7 @@ public class Server extends AbstractVerticle {
                         String answerData = (String) res2.result();
                         routingContext.response().setStatusCode(OK_HTTP_CODE)
                                 .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .putHeader(ContentLength_HEADER, Integer.toString(answerData.length()))
-                                .write(answerData)
-                                .end(OK_SERVER_RESPONSE);
+                                .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                     }
