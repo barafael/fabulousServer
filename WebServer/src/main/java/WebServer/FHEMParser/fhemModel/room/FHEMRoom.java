@@ -79,21 +79,6 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         sensors.forEach(action);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FHEMRoom room = (FHEMRoom) o;
-
-        return name.equals(room.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
     public Optional<String> getRoomplan() {
         try {
             String content = new String(Files.readAllBytes(pathToPlan));
