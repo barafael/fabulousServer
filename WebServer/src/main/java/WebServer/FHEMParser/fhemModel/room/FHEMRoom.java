@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 
 public class FHEMRoom implements Iterable<FHEMSensor> {
     private final Set<FHEMSensor> sensors = new HashSet<>();
-    private Path pathToHash;
-    private Path pathToPlan;
+    transient private Path pathToHash;
+    transient private Path pathToPlan;
     private final String name;
 
     public FHEMRoom(String roomname) {
