@@ -145,8 +145,10 @@ public class FHEMParser {
      */
     public boolean setSensorPosition(int x, int y, String sensorName) {
         FHEMClientModeCon con = new FHEMClientModeCon();
+        //TODO handle percent coords
+        //TODO handle perl injection (check sensor name present)
         try {
-            return con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
+            return  con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
                     con.sendPerlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
@@ -179,15 +181,16 @@ public class FHEMParser {
 
     public Optional<String> getRoomplan(String roomName, int hash, List<String> permission) {
         Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
-        if (room_opt.isPresent()) {
-            FHEMRoom room = room_opt.get();
-            boolean permitted = room.hasPermittedSensors(permission);
-            if (!permitted) {
-                return Optional.empty();
-            }
-            return room.getRoomplan(hash);
+        if (!room_opt.isPresent()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        FHEMRoom room = room_opt.get();
+        if (room.hasPermittedSensors(permission)) {
+            return Optional.empty();
+        }
+
+        return room.getRoomplan(hash);
     }
 
     /**

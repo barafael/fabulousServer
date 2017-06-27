@@ -4,6 +4,11 @@ import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -15,17 +20,18 @@ import java.util.function.Consumer;
 
 public class FHEMRoom implements Iterable<FHEMSensor> {
     private final Set<FHEMSensor> sensors = new HashSet<>();
-    private final SVGRoomPlan plan;
+    private Path pathToHash;
+    private Path pathToPlan;
     private final String name;
 
     public FHEMRoom(String roomname) {
-        if (roomname.startsWith("room_")) {
-            String pathToPlan = FHEMUtils.getGlobVar("FHEMDIR") + "roomplans/" + roomname + ".svg";
-            plan = SVGRoomPlan.loadFile(pathToPlan);
-        } else {
-            plan = null; // Null Plan.
-        }
         name = roomname;
+        if (roomname.startsWith("room_")) {
+            String fhemPath = FHEMUtils.getGlobVar("FHEMDIR").orElse("");
+            pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".svg");
+            System.out.println("Path to plan: " + pathToPlan);
+            pathToHash = Paths.get(fhemPath + "roomplans/" + roomname + ".hash");
+        }
     }
 
     public Set<FHEMSensor> getSensors() {
@@ -90,8 +96,28 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     }
 
     public Optional<String> getRoomplan() {
+        try {
+            String content = new String(Files.readAllBytes(pathToPlan));
+            return Optional.of(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
 
-        return Optional.empty();
+    public Optional<String> getRoomplan(int request_hash) {
+        try {
+            String hash_str = new String(Files.readAllBytes(pathToHash));
+            int file_hash = Integer.parseInt(hash_str);
+            if (request_hash != file_hash) {
+                return Optional.of(new String(Files.readAllBytes(pathToPlan)));
+            } else {
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     public boolean setRoomplan(String svg) {
