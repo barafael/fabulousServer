@@ -25,7 +25,7 @@ import java.util.Random;
 @RunWith(VertxUnitRunner.class)
 public class ServerTest {
     @Rule
-    public Timeout timeout = Timeout.seconds(5);
+    public Timeout timeout = Timeout.seconds(500);
     private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
     private Vertx vertx;
@@ -33,6 +33,8 @@ public class ServerTest {
     @org.junit.Before
     public void setUp(TestContext testContext) throws Exception {
         int PORT = 8080;
+        Main.main(new String[]{"8080"});
+        Thread.sleep(4000);
         ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
         vertx = Vertx.vertx();
         httpClient = vertx.createHttpClient(ClientOptions);
@@ -61,10 +63,10 @@ public class ServerTest {
     @Test
     public void testSetSensorPosition(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader ="hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/setSensorPosition?SensorName=MH_5554,coordX=33,coordY=10")
+        httpClient.get("/api/setSensorPosition?SensorName=HM_52CC96&coordX=33&coordY=10")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testSetSensorPosition_answerHeader: " + h));

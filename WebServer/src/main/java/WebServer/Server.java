@@ -305,6 +305,7 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Optional<String> answerData_opt = parser.getFHEMModel(perm);
                     if (!answerData_opt.isPresent()) {
+                        System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
                         future.complete(answerData_opt.get());
@@ -317,7 +318,7 @@ public class Server extends AbstractVerticle {
                                 .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                        System.out.println(res.cause());
+                        System.out.println(res2.cause());
                     }
                 });
             } else {
