@@ -25,7 +25,7 @@ import java.util.Random;
 @RunWith(VertxUnitRunner.class)
 public class ServerTest {
     @Rule
-    public Timeout timeout = Timeout.seconds(5000);
+    public Timeout timeout = Timeout.seconds(5);
     private HttpClientOptions ClientOptions;
     private HttpClient httpClient;
     private Vertx vertx;
@@ -36,6 +36,7 @@ public class ServerTest {
         ClientOptions = new HttpClientOptions().setDefaultHost("localhost").setDefaultPort(PORT);
         vertx = Vertx.vertx();
         httpClient = vertx.createHttpClient(ClientOptions);
+        System.out.println("SSH Connection needed for Server");
     }
 
     @Test
