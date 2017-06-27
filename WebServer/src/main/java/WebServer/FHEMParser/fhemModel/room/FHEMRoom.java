@@ -29,7 +29,6 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         if (roomname.startsWith("room_")) {
             String fhemPath = FHEMUtils.getGlobVar("FHEMDIR").orElse("");
             pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".svg");
-            System.out.println("Path to plan: " + pathToPlan);
             pathToHash = Paths.get(fhemPath + "roomplans/" + roomname + ".hash");
         }
     }

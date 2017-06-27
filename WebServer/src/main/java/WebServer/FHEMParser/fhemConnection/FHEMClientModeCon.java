@@ -71,6 +71,7 @@ public class FHEMClientModeCon implements FHEMConnection {
             System.out.println("Return from FHEM(should be empty) : " + line);
             return line == null || line.isEmpty();
         }
+        System.out.println("Could not talk to fhem");
         return false;
     }
 }

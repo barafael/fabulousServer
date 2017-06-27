@@ -145,8 +145,10 @@ public class FHEMParser {
      */
     public boolean setSensorPosition(int x, int y, String sensorName) {
         FHEMClientModeCon con = new FHEMClientModeCon();
-        //TODO handle percent coords
-        //TODO handle perl injection (check sensor name present)
+        if ((x > 100 || x < 0) || (y > 100 || y < 0)) {
+            System.err.printf("Incorrect percent values for coordinates! x: %d, y: %d", x, y);
+        }
+        //TODO handle perl injection (check if sensor name is present)
         try {
             return  con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
                     con.sendPerlCommand("attr " + sensorName + " coordY " + y);
