@@ -193,7 +193,7 @@ public class FHEMParser {
         }
 
         FHEMRoom room = room_opt.get();
-        if (room.hasPermittedSensors(permission)) {
+        if (!room.hasPermittedSensors(permission)) {
             return Optional.empty();
         }
 
