@@ -119,6 +119,26 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FHEMRoom that = (FHEMRoom) o;
+
+        if (pathToHash != null ? !pathToHash.equals(that.pathToHash) : that.pathToHash != null) return false;
+        if (pathToPlan != null ? !pathToPlan.equals(that.pathToPlan) : that.pathToPlan != null) return false;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = pathToHash != null ? pathToHash.hashCode() : 0;
+        result = 31 * result + (pathToPlan != null ? pathToPlan.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+
     public boolean setRoomplan(String svg) {
         try (BufferedWriter writer = Files.newBufferedWriter(pathToPlan)) {
             writer.write(svg);
