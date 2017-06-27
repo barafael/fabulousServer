@@ -18,6 +18,8 @@ class Timeserie {
     /* Needed for timezone-independence */
     private transient static final ZoneId zoneId = ZoneId.systemDefault();
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    /* Because this field is actually read by Gson */
     private final List<Long> xs;
     private final List<Double> ys;
 

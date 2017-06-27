@@ -23,12 +23,13 @@ import java.util.stream.Collectors;
  *         really removing attributes from the representation.)
  */
 
-
 /* If you want to rename an attribute, annotate them with:
 
    @SerializedName("oldname")
 
-   javac warns about unused elements because of gson.
+   Static analysis warns about unused elements because of gson.
+   There is a high number of false positives detected in this package due to many fields which are
+   only ever initialized by gson. This is intentional and cannot be easily avoided.
  */
 
 public class JsonList2 {

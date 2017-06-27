@@ -16,7 +16,9 @@ import java.util.Optional;
 
    @SerializedName("oldname")
 
-   javac warns about unused elements because of gson.
+   Static analysis warns about unused elements because of gson.
+   There is a high number of false positives detected in this package due to many fields which are
+   only ever initialized by gson. This is intentional and cannot be easily avoided.
  */
 
 @SuppressWarnings("unused")
