@@ -3,6 +3,7 @@ package WebServer.FHEMParser.FHEMRules;
 import com.google.gson.Gson;
 
 import java.time.Instant;
+import java.util.Map;
 
 /**
  * @author Rafael
@@ -12,7 +13,7 @@ public class FHEMRule {
     private String name;
     private String expression;
     private String permission;
-    private String errorMessage;
+    private Map<WARNINGLEVEL, String> errorMessages;
     private String okMessage;
     private long lastChangeTimestamp;
     transient private boolean state;
@@ -35,6 +36,5 @@ public class FHEMRule {
     }
 
     public void log() {
-
     }
 }

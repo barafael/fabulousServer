@@ -56,10 +56,10 @@ public class FHEMParser {
      * @return a serialized model which, when deserialized, contains only the permitted filelogs
      */
     public Optional<String> getFHEMModel(List<String> permissions) {
-        Gson gson = new GsonBuilder()
+        Gson gson = new GsonBuilder()/*
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
-                .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions))
+                .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions))*/
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
                 .create();
         return getFHEMModel().map(gson::toJson);
@@ -163,9 +163,18 @@ public class FHEMParser {
         return false;
     }
 
-    public Optional<String> getRoomplan(String roomName, List<String> permission) {
-        //TODO implement
-        return Optional.empty();
+    public Optional<String> getRoomplan(String roomName, List<String> permissions) {
+        Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
+        if (!room_opt.isPresent()) {
+            return Optional.empty();
+        }
+
+        FHEMRoom room = room_opt.get();
+        if (!room.hasPermittedSensors(permissions)) {
+            return Optional.empty();
+        }
+
+        return room.getRoomplan();
     }
 
     public Optional<String> getRoomplan(String roomName, int hash, List<String> permission) {

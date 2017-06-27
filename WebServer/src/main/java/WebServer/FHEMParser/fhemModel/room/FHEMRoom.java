@@ -89,12 +89,17 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return name.hashCode();
     }
 
-    public Optional<String> getRoomplan(long hash) {
-        // todo implement
+    public Optional<String> getRoomplan() {
+
         return Optional.empty();
     }
 
+<<<<<<< Updated upstream
     public boolean setRoomplan(String svg) {
+=======
+    public boolean setPlan(String svg) {
+        // TODO write svg to file and update hash
+>>>>>>> Stashed changes
         return false;
     }
 }

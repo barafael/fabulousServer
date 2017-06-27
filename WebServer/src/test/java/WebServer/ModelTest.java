@@ -5,6 +5,7 @@ import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -21,6 +22,11 @@ import java.util.*;
  * @date 20.06.17.
  */
 public class ModelTest {
+    FHEMModel model;
+    @Before
+    public void setUp() {
+
+    }
     @Test
     public void testModelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();

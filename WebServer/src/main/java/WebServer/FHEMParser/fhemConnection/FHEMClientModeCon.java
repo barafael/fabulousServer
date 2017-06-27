@@ -68,6 +68,7 @@ public class FHEMClientModeCon implements FHEMConnection {
             String line = stdin.readLine();
             stdin.close();
             /* No news is good news */
+            System.out.println("Return from FHEM(should be empty) : " + line);
             return line == null || line.isEmpty();
         }
         return false;
