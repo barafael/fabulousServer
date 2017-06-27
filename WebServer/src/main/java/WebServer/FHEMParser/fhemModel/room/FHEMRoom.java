@@ -94,7 +94,7 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return Optional.empty();
     }
 
-    public boolean setPlan(String svg) {
+    public boolean setRoomplan(String svg) {
         return false;
     }
 }

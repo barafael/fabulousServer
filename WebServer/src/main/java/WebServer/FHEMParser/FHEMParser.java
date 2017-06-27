@@ -1,5 +1,17 @@
 package WebServer.FHEMParser;
 
+import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
+import WebServer.FHEMParser.fhemConnection.FHEMConnection;
+import WebServer.FHEMParser.fhemConnection.FHEMNotFoundException;
+import WebServer.FHEMParser.fhemJson.JsonList2;
+import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
+import WebServer.FHEMParser.fhemUtils.FHEMUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,18 +20,6 @@ import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
-import WebServer.FHEMParser.fhemConnection.FHEMConnection;
-import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
-import WebServer.FHEMParser.fhemConnection.FHEMNotFoundException;
-import WebServer.FHEMParser.fhemModel.FHEMModel;
-import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
-import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
-import WebServer.FHEMParser.fhemUtils.FHEMUtils;
-import WebServer.FHEMParser.fhemJson.JsonList2;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * @author Rafael on 31.05.17.
@@ -158,8 +158,7 @@ public class FHEMParser {
         Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
         if (room_opt.isPresent()) {
             FHEMRoom room = room_opt.get();
-            room.setPlan(svg);
-            return true;
+            return room.setRoomplan(svg);
         }
         return false;
     }
