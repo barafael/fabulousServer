@@ -68,6 +68,18 @@ public class ModelTest {
     }
 
     @Test
+    public void testModelWithoutPermissions() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        model.ifPresent(System.out::println);
+        assert isValidJSON(model.get().toJson());
+    }
+
+    @Test
+    public void testModelWithoutPermissionsToString() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert isValidJSON(model.get().toString());
+    }
+    @Test
     public void testFilelogSerialization() {
         List<String> permissions = Collections.singletonList("S_Fenster");
         Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
