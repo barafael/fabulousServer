@@ -24,10 +24,10 @@ public class ModelTest {
     @Test
     public void testModelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(fhemRooms -> {
+        model.ifPresent(fhemModel -> {
             Path path = Paths.get("fhemmodel.json");
             try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                writer.write(fhemRooms.toString());
+                writer.write(fhemModel.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -84,7 +84,7 @@ public class ModelTest {
     @Test
     public void validJsonWithPermissions() {
         FHEMParser parser = FHEMParser.getInstance();
-        List<String> permissions = Arrays.asList("96_Pwr_Current");
+        List<String> permissions = Collections.singletonList("96_Pwr_Current");
         Optional<String> model_str = parser.getFHEMModel(permissions);
         if (model_str.isPresent()) {
             assert isValidJSON(model_str.get());
