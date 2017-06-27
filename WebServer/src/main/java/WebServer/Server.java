@@ -380,10 +380,10 @@ public class Server extends AbstractVerticle {
         }
         String room = routingContext.request().getParam(Room_PARAM);
         boolean hasHash;
-        long hash;
+        int hash;
         if (routingContext.request().getParam(Hash_PARAM) != null
                 && !(routingContext.request().getParam(Hash_PARAM).isEmpty())) {
-            hash = Long.parseLong(routingContext.request().getParam(Hash_PARAM));
+            hash = Integer.parseInt(routingContext.request().getParam(Hash_PARAM));
             hasHash = true;
         } else {
             hash = 0;

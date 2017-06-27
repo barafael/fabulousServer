@@ -165,10 +165,11 @@ public class FHEMParser {
     }
 
     public Optional<String> getRoomplan(String roomName, List<String> permission) {
+        //TODO implement
         return Optional.empty();
     }
 
-    public Optional<String> getRoomplan(String roomName, long hash, List<String> permission) {
+    public Optional<String> getRoomplan(String roomName, int hash, List<String> permission) {
         Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
         if (room_opt.isPresent()) {
             FHEMRoom room = room_opt.get();
