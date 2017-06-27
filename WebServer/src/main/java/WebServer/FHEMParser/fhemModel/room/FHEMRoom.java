@@ -94,12 +94,13 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return Optional.empty();
     }
 
-<<<<<<< Updated upstream
     public boolean setRoomplan(String svg) {
-=======
-    public boolean setPlan(String svg) {
-        // TODO write svg to file and update hash
->>>>>>> Stashed changes
-        return false;
+        try (BufferedWriter writer = Files.newBufferedWriter(pathToPlan)) {
+            writer.write(svg);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
