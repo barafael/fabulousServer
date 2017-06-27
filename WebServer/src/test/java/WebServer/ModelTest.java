@@ -22,11 +22,6 @@ import java.util.*;
  * @date 20.06.17.
  */
 public class ModelTest {
-    FHEMModel model;
-    @Before
-    public void setUp() {
-
-    }
     @Test
     public void testModelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -44,9 +39,11 @@ public class ModelTest {
     public void testModelRoomIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         model.ifPresent(fhemRooms -> {
+            int count = 0;
             for (FHEMRoom room : fhemRooms) {
-                System.out.println(room);
+                count++;
             }
+            System.out.println(count + " rooms.");
         });
     }
 
@@ -54,10 +51,12 @@ public class ModelTest {
     public void testModelLogIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         model.ifPresent(fhemRooms -> {
+            int count = 0;
             for (Iterator<FHEMFileLog> it = fhemRooms.eachLog(); it.hasNext(); ) {
                 FHEMFileLog log = it.next();
-                System.out.println(log);
+                count++;
             }
+            System.out.println(count + " logs.");
         });
     }
 
@@ -70,10 +69,13 @@ public class ModelTest {
 
     @Test
     public void testFilelogSerialization() {
-        List<String> permissions = Arrays.asList("permission1","23414");
+        List<String> permissions = Collections.singletonList("S_Fenster");
         Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
         if (json.isPresent()) {
-            System.out.println(json);
+            System.out.println(json.get());
+            assert isValidJSON(json.get());
+        } else {
+            assert false;
         }
     }
 

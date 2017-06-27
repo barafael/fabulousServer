@@ -57,6 +57,7 @@ public class FHEMParser {
      */
     public Optional<String> getFHEMModel(List<String> permissions) {
         Gson gson = new GsonBuilder()/*
+                //TODO verify this is still working
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
                 .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions))*/

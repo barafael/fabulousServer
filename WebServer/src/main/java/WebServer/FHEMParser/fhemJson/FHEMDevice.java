@@ -152,7 +152,6 @@ public class FHEMDevice {
         sensor.addMeta("State", internals.getState().orElse("Not supplied"));
         sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
-        /* TODO use those in android app, don't just dump them */
         sensor.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
 
         return Optional.of(sensor);
