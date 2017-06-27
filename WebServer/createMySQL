@@ -49,13 +49,42 @@ INSERT INTO fhem_userdata.USER VALUES ('peter','1E5BB3E45EF750DEBC9D775881B4A23B
 
 INSERT INTO fhem_userdata.ROLES VALUES ('admin');
 INSERT INTO fhem_userdata.ROLES VALUES ('user');
-INSERT INTO fhem_userdata.PERMS VALUES ('S_Fenster_1');
-INSERT INTO fhem_userdata.PERMS VALUES ('S_Fenster_2');
-INSERT INTO fhem_userdata.PERMS VALUES ('S_Fenster_3');
-INSERT INTO fhem_userdata.PERMS VALUES ('S_Fenster_4');
-INSERT INTO fhem_userdata.ROLE_PERM VALUE ('S_Fenster_2','admin');
-INSERT INTO fhem_userdata.ROLE_PERM VALUE ('S_Fenster_3','admin');
-INSERT INTO fhem_userdata.ROLE_PERM VALUE ('S_Fenster_4','user');
+
+
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Fenster');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Tür');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Regen');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Licht');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Temperatur');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_CO2');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Sonometer');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Luftfeuchtigkeit');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Leistung_3D-Drucker');
+INSERT INTO fhem_userdata.PERMS VALUES ('S_Leistung_Lasercutter');
+INSERT INTO fhem_userdata.PERMS VALUES ('A_Steckdose_3D-Drucker');
+INSERT INTO fhem_userdata.PERMS VALUES ('A_Steckdose_Lasercutter');
+INSERT INTO fhem_userdata.PERMS VALUES ('E_Änderung');
+INSERT INTO fhem_userdata.PERMS VALUES ('I_Laborbelegung');
+
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Fenster','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Tür','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Regen','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Licht','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Temperatur','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_CO2','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Sonometer','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Luftfeuchtigkeit','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Leistung_3D-Drucker','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Leistung_Lasercutter','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('A_Steckdose_3D-Drucker','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('A_Steckdose_Lasercutter','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('E_Änderung','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('I_Laborbelegung','admin');
+
+
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Fenster','user');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Licht','user');
+
 
 INSERT INTO fhem_userdata.USER_ROLE VALUE ('admin','hans');
 INSERT INTO fhem_userdata.USER_ROLE VALUE ('user','peter');
@@ -66,11 +95,10 @@ INSERT INTO fhem_userdata.USER_ROLE VALUE ('user','peter');
 
 
 
-
 CREATE USER java IDENTIFIED BY 'ialsevlhdakkyllosnmnilk';
 UPDATE mysql.user SET Host='localhost' WHERE User='java';
 
-GRANT ALL PRIVILEGES ON fhem_userdata3.* TO 'java'@'localhost';
+GRANT ALL PRIVILEGES ON fhem_userdata.* TO 'java'@'localhost';
 
 FLUSH PRIVILEGES;
 
