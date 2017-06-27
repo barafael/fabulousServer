@@ -584,7 +584,7 @@ public class Server extends AbstractVerticle {
         //TODO: remove debug print
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
+        routingContext.request().params().forEach(System.out::println);
         System.out.println("Server user: " + routingContext.user().principal().getString(Username_PARAM));
         routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
     }
