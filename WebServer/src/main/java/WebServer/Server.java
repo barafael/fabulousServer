@@ -37,7 +37,6 @@ public class Server extends AbstractVerticle {
     private SQLConnection connection;
     private final FHEMParser parser = Main.parser;
 
-    private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";
     private static final String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
     private static final String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
@@ -51,7 +50,6 @@ public class Server extends AbstractVerticle {
     private static final int Unavailable_HTTP_CODE = 503;
 
     private static final String ContentType_HEADER = "content-type";
-    private static final String ContentLength_HEADER = "content-length";
     private static final String ContentType_VALUE = "application/json";
 
     private static final String Edit_PERMISSION = "E_Änderung";
