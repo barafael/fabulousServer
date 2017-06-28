@@ -127,6 +127,42 @@ public class ModelTest {
         assert json.get().equals("null");
     }
 
+    @Test
+    public void getRoomNoHash() {
+        FHEMParser parser = FHEMParser.getInstance();
+        List<String> permissions = Arrays.asList("testing", "otherperm");
+        Optional<String> room = parser.getRoomplan("room_testing", permissions);
+        assert room.isPresent();
+        assert room.get().equals("this is no moon.\n");
+    }
+
+    @Test
+    public void getRoomWithHash() {
+        FHEMParser parser = FHEMParser.getInstance();
+        List<String> permissions = Arrays.asList("testing", "otherperm");
+        String content = "this is no moon.\n";
+        int hash = content.hashCode();
+        parser.getFHEMModel();
+        parser.setRoomplan("room_testing", "this is no moon.\n");
+        Optional<String> roomplan = parser.getRoomplan("room_testing", hash, permissions);
+        /* because hashes were equal! */
+        assert !roomplan.isPresent();
+    }
+
+    @Test
+    public void getRoomWithoutHash() {
+        FHEMParser parser = FHEMParser.getInstance();
+        List<String> permissions = Arrays.asList("testing", "otherperm");
+        String content = "this is no moon.\n";
+        int hash = content.hashCode() + 1;
+        parser.getFHEMModel();
+        parser.setRoomplan("room_testing", "this is no moon.\n");
+        Optional<String> roomplan = parser.getRoomplan("room_testing", hash, permissions);
+        assert roomplan.isPresent();
+        assert roomplan.get().equals("this is no moon.\n");
+        System.out.println(roomplan.get());
+    }
+
     /**
      * Helper function which tests if a json string can be deserialized without throwing an exception.
      * @param json A string which should be tested

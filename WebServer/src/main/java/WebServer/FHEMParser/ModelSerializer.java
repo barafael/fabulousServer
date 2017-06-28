@@ -82,8 +82,8 @@ class ModelSerializer implements JsonSerializer<FHEMModel> {
                 }
             }
             toDelete.forEach(jsonObject::remove);
-        } /*else if (element.isJsonPrimitive()) {
-            JsonPrimitive prim = element.getAsJsonPrimitive();
-        } */
+        } else if (element.isJsonPrimitive()) {
+            /* JsonPrimitive prim = element.getAsJsonPrimitive(); */
+        }
     }
 }

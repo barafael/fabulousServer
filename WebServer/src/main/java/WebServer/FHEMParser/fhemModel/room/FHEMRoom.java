@@ -125,8 +125,10 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
     }
 
     public boolean setRoomplan(String svg) {
-        try (BufferedWriter writer = Files.newBufferedWriter(pathToPlan)) {
-            writer.write(svg);
+        try (BufferedWriter filewrite = Files.newBufferedWriter(pathToPlan);
+             BufferedWriter hashwrite = Files.newBufferedWriter(pathToHash)) {
+            filewrite.write(svg);
+            hashwrite.write(String.valueOf(svg.hashCode()));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
