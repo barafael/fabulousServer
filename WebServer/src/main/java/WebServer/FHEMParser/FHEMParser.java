@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 
 public class FHEMParser {
-    private static boolean timePrint = false;
+    private static final boolean timePrint = false;
     private static FHEMParser instance;
 
     private FHEMModel model;
@@ -35,7 +35,7 @@ public class FHEMParser {
     }
 
     /**
-     * Acquisitor for Parser instance
+     * Aquisitor for Parser instance
      *
      * @return the instance of this singleton
      */

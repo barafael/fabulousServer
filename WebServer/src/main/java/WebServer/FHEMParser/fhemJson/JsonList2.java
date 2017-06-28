@@ -99,6 +99,7 @@ public class JsonList2 {
                 }
                 filelogs.add(d);
             } else {
+                /* continue as last statement in loop, but keep it in in case the logic is extended */
                 continue;
             }
         }

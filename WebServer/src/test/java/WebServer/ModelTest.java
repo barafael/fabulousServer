@@ -22,7 +22,7 @@ import java.util.*;
  */
 public class ModelTest {
     @Test
-    public void testModelPrint() {
+    public void modelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         model.ifPresent(fhemModel -> {
             Path path = Paths.get("fhemmodel.json");
@@ -35,85 +35,107 @@ public class ModelTest {
     }
 
     @Test
-    public void testModelRoomIterator() {
+    public void modelRoomIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         model.ifPresent(fhemRooms -> {
             int count = 0;
             for (FHEMRoom room : fhemRooms) {
                 count++;
             }
+            assert count > 0;
             System.out.println(count + " rooms.");
         });
     }
 
     @Test
-    public void testModelLogIterator() {
+    public void modelLogIterator() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         model.ifPresent(fhemRooms -> {
             int count = 0;
             for (Iterator<FHEMFileLog> it = fhemRooms.eachLog(); it.hasNext(); ) {
                 FHEMFileLog log = it.next();
+                assert log != null;
                 count++;
             }
+            assert count > 0;
             System.out.println(count + " logs.");
         });
     }
 
     @Test
-    public void testModelParseTime() {
+    public void modelParseTimeWithoutPermissions() {
         Instant now = Instant.now();
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(fhemRooms -> System.out.println(Duration.between(now, Instant.now()).toMillis()));
+        model.ifPresent(fhemRooms -> System.out.println("Without permissions: " + Duration.between(now, Instant.now()).toMillis()));
     }
 
     @Test
-    public void testModelWithoutPermissions() {
+    public void modelParseTimeWithPermissions() {
+        Instant now = Instant.now();
+        Optional<String> model = FHEMParser.getInstance().getFHEMModel(Arrays.asList("permission1", "S_Fenster"));
+        model.ifPresent(fhemRooms -> System.out.println("With permissions: " + Duration.between(now, Instant.now()).toMillis()));
+    }
+
+    @Test
+    public void parseWithoutPermissionsJSON() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(System.out::println);
+        assert model.isPresent();
         assert isValidJSON(model.get().toJson());
     }
 
     @Test
-    public void testModelWithoutPermissionsToString() {
+    public void modelWithoutPermissionsToString() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
         assert isValidJSON(model.get().toString());
     }
     @Test
-    public void testFilelogSerialization() {
-        List<String> permissions = Collections.singletonList("S_Fenster");
+    public void toJSONWithPermissions() {
+        List<String> permissions = Arrays.asList("Permission1", "S_Fenster");
         Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
-        if (json.isPresent()) {
-            System.out.println(json.get());
-            assert isValidJSON(json.get());
-        } else {
-            assert false;
-        }
+        assert json.isPresent();
+        assert isValidJSON(json.get());
     }
 
     @Test
-    public void serdeRoundtrip() {
-        List<String> permissions = Arrays.asList("permission1","23414");
+    public void toJSONWithEmptyStringPermissions() {
+        List<String> permissions = Collections.singletonList("");
         Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
-        json.ifPresent(s -> {
-            FHEMModel model2 = new Gson().fromJson(s, FHEMModel.class);
-            System.out.println(new Gson().toJson(model2));
-        });
+        assert json.isPresent();
+        assert isValidJSON(json.get());
     }
 
     @Test
-    public void validJsonWithPermissions() {
+    public void serDeRoundtrip() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        String json1 = model.get().toJson();
+        assert isValidJSON(json1);
+        FHEMModel model2 = new Gson().fromJson(json1, FHEMModel.class);
+        String json2 = model2.toJson();
+        assert json1.length() == json2.length();
+    }
+
+    @Test
+    public void toJSONWithPermissionsNoMatch() {
         FHEMParser parser = FHEMParser.getInstance();
-        List<String> permissions = Collections.singletonList("96_Pwr_Current");
-        Optional<String> model_str = parser.getFHEMModel(permissions);
-        if (model_str.isPresent()) {
-            assert isValidJSON(model_str.get());
-        } else assert false;
+        List<String> permissions = Arrays.asList("nomatch", "othernomatch");
+        Optional<String> json = parser.getFHEMModel(permissions);
+        assert json.isPresent();
+        assert isValidJSON(json.get());
+        /* There was no match! */
+        assert json.get().equals("null");
     }
 
-    public static boolean isValidJSON(String jsonInString) {
+    /**
+     * Helper function which tests if a json string can be deserialized without throwing an exception.
+     * @param json A string which should be tested
+     * @return whether the input was valid json
+     */
+    private static boolean isValidJSON(String json) {
         Gson gson = new Gson();
         try {
-            gson.fromJson(jsonInString, Object.class);
+            gson.fromJson(json, Object.class);
             return true;
         } catch(com.google.gson.JsonSyntaxException ex) {
             return false;
