@@ -313,11 +313,15 @@ public class Server extends AbstractVerticle {
                 }, res2 -> {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
-                        routingContext.response().setStatusCode(OK_HTTP_CODE)
-                                .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .end(answerData);
+                        if (!answerData.equals("null")) {
+                            routingContext.response().setStatusCode(OK_HTTP_CODE)
+                                    .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                    .end(answerData);
+                        } else {
+                            routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                        }
                     } else {
-                        routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
                         System.out.println(res2.cause());
                     }
                 });
