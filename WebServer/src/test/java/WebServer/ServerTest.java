@@ -42,15 +42,15 @@ public class ServerTest {
     @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader = "hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.post("/api/setRoomplan?room=fablab")
+        httpClient.post("/api/setRoomplan?room=room_fablab")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testSetRoomplan_answerHeader: " + h));
                     ans.bodyHandler(body -> {
-                        System.out.println("Client received: " + body.toString());//body.toJsonArray());
+                        System.out.println("Client received: " + body.toString());
                         async.complete();
                     });
                     testContext.assertEquals(200, ans.statusCode());
@@ -96,8 +96,8 @@ public class ServerTest {
                 .end();
     }
 
-    @Test
-    public void testGetModelUnauthorized(TestContext testContext) {
+    @Test   
+    public void testGetModelSmall(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "peter:sterne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
@@ -110,7 +110,7 @@ public class ServerTest {
                         System.out.println("Client received: " + body.toString());
                         async.complete();
                     });
-                    testContext.assertEquals(401, ans.statusCode());
+                    testContext.assertEquals(200, ans.statusCode());
                 })
                 .end();
     }
@@ -118,10 +118,10 @@ public class ServerTest {
     @Test
     public void testGetTimeSeries(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader = "hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getTimeSeries?ID=FileLog_HM_52CC96_Pwr_current")
+        httpClient.get("/api/getTimeSeries?ID=FileLog_HM_521A72_brightness")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetTimeSeries_answerHeader: " + h));
@@ -135,17 +135,36 @@ public class ServerTest {
     }
 
     @Test
-    public void testGetRoomplan(TestContext testContext) {
+    public void testGetRoomplanWithoutHash(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader = "hans"+":"+"sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getRoomplan?room=fablab")
+        httpClient.get("/api/getRoomplan?room=room_fablab")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetRoomplan_answerHeader: " + h));
                     ans.bodyHandler(body -> {
-                        System.out.println("Client received: " + body.toString());//body.toJsonArray());
+                        System.out.println("Client received: " + body.toString());
+                        async.complete();
+                    });
+                    testContext.assertEquals(200, ans.statusCode());
+                })
+                .end();
+    }
+    @Test
+    public void testGetRoomplanWithHash(TestContext testContext) {
+        final Async async = testContext.async();
+        String authHeader = "hans"+":"+"sonne123";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        int hash = "thisshallbetheSVG".hashCode();
+        System.out.println("Client sent [authHeader]: " + base64);
+        httpClient.get("/api/getRoomplan?room=room_fablab&hash="+hash)
+                .putHeader("Authorization", base64)
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetRoomplan_answerHeader: " + h));
+                    ans.bodyHandler(body -> {
+                        System.out.println("Client received: " + body.toString());
                         async.complete();
                     });
                     testContext.assertEquals(200, ans.statusCode());
