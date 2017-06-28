@@ -96,7 +96,7 @@ public class ServerTest {
                 .end();
     }
 
-    @Test   
+    @Test
     public void testGetModelSmall(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "peter:sterne123";
@@ -152,6 +152,26 @@ public class ServerTest {
                 })
                 .end();
     }
+
+    @Test
+    public void testGetRoomplanWithoutHashUnauthorized(TestContext testContext) {
+        final Async async = testContext.async();
+        String authHeader = "noperms:test";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        System.out.println("Client sent [authHeader]: " + base64);
+        httpClient.get("/api/getRoomplan?room=room_fablab")
+                .putHeader("Authorization", base64)
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetRoomplan_answerHeader: " + h));
+                    ans.bodyHandler(body -> {
+                        System.out.println("Client received: " + body.toString());
+                        async.complete();
+                    });
+                    testContext.assertEquals(401, ans.statusCode());
+                })
+                .end();
+    }
+
     @Test
     public void testGetRoomplanWithHash(TestContext testContext) {
         final Async async = testContext.async();
@@ -164,11 +184,10 @@ public class ServerTest {
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetRoomplan_answerHeader: " + h));
                     ans.bodyHandler(body -> {
-                        System.out.println("Client received: " + body.toString());
+                        System.out.println("Client received: " + ans.statusMessage());
                         async.complete();
                     });
-                    //TODO: should be 304 not modified
-                    testContext.assertEquals(401, ans.statusCode());
+                    testContext.assertEquals(304, ans.statusCode());
                 })
                 .end();
     }

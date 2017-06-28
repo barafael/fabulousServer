@@ -42,9 +42,11 @@ public class Server extends AbstractVerticle {
     private static final String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
     private static final String BadRequest_SERVER_RESPONSE = "Bad Request";
     private static final String Unauthorized_SERVER_RESPONSE = "Unauthorized";
+    private static final String NotModified_SERVER_RESPONSE = "Not Modified";
     private static final String Unavailable_SERVER_RESPONSE = "Service Unavailable";
 
     private static final int OK_HTTP_CODE = 200;
+    private static final int NotModified_HTTP_CODE = 304;
     private static final int BadRequest_HTTP_CODE = 400;
     private static final int Unauthorized_HTTP_CODE = 401;
     private static final int Unavailable_HTTP_CODE = 503;
@@ -115,11 +117,6 @@ public class Server extends AbstractVerticle {
                 connection = res.result().resultAt(0);
                 startFuture.complete();
                 System.out.println("Server started successfully!");
-                //TODO: remove debug databse insert
-                /*Future<Void> testFuture = Future.future();
-                Future<Void> testFuture2 = Future.future();
-                storeUserInDatabase("hans", "sonne123","Hans","Hut", testFuture);
-                storeUserInDatabase("peter", "sterne123","Peter","Lustig", testFuture2);*/
             }
         });
     }
@@ -408,11 +405,15 @@ public class Server extends AbstractVerticle {
                 }, res2 -> {
                     if (res2.succeeded()) {
                         String answerData = (String) res2.result();
-                        routingContext.response().setStatusCode(OK_HTTP_CODE)
-                                .putHeader(ContentType_HEADER, ContentType_VALUE)
-                                .end(answerData);
+                        if (!answerData.equals("null")) {
+                            routingContext.response().setStatusCode(OK_HTTP_CODE)
+                                    .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                    .end(answerData);
+                        } else {
+                            routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                        }
                     } else {
-                        routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                        routingContext.response().setStatusCode(NotModified_HTTP_CODE).end(NotModified_SERVER_RESPONSE);
                     }
                 });
             } else {
@@ -586,10 +587,10 @@ public class Server extends AbstractVerticle {
         //TODO: remove debug print
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: "+ routingContext.request().params());
-        if(routingContext.user()!=null){
+        System.out.println("Server params: " + routingContext.request().params());
+        if (routingContext.user() != null) {
             System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
-        }else{
+        } else {
             System.out.println("Server user: not specified");
         }
         routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
