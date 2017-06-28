@@ -5,7 +5,6 @@ import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.Gson;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;

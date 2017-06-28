@@ -7,7 +7,6 @@ import WebServer.FHEMParser.fhemJson.JsonList2;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

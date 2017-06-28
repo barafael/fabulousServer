@@ -3,7 +3,6 @@ package WebServer.FHEMParser.FHEMRules;
 import com.google.gson.Gson;
 
 import java.time.Instant;
-import java.util.Map;
 
 /**
  * @author Rafael
