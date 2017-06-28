@@ -266,7 +266,7 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
                     if (result) {
-                        future.handle(Future.succeededFuture(true));
+                        future.handle(Future.succeededFuture());
                     } else {
                         future.handle(Future.failedFuture(future.cause()));
                     }
@@ -588,8 +588,12 @@ public class Server extends AbstractVerticle {
         //TODO: remove debug print
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        routingContext.request().params().forEach(System.out::println);
-        System.out.println("Server user: " + routingContext.user().principal().getString(Username_PARAM));
+        System.out.println("Server params: "+ routingContext.request().params());
+        if(routingContext.user()!=null){
+            System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
+        }else{
+            System.out.println("Server user: not specified");
+        }
         routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
     }
 }
