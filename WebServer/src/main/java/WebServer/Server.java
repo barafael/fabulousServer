@@ -452,14 +452,13 @@ public class Server extends AbstractVerticle {
                 vertx.executeBlocking(future -> {
                     Optional<Long> result = parser.getMutex(routingContext.user().principal().getString(Username_PARAM));
                     if (result.isPresent()) {
-                        future.handle(Future.succeededFuture(result));
+                        future.handle(Future.succeededFuture(result.get()));
                     } else {
                         future.handle(Future.failedFuture(future.cause()));
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
-                        Long result = ((Optional<Long>) res2.result()).get();
-                        String str = result.toString();
+                        String str = ((Long) res2.result()).toString();
                         routingContext.response()
                                 .putHeader(MutexID_HEADER, str)
                                 .setStatusCode(OK_HTTP_CODE)
