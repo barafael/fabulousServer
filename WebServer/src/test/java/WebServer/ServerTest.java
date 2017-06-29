@@ -42,9 +42,9 @@ public class ServerTest {
     @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
-        int val = new Random().nextInt(2)+1;
+        int val = new Random().nextInt(2) + 1;
         String authHeader;
-        switch (val){
+        switch (val) {
             case 1:
                 authHeader = "peter" + ":" + "sterne123";
                 break;
@@ -52,7 +52,7 @@ public class ServerTest {
                 authHeader = "hans" + ":" + "sonne123";
                 break;
             default:
-                authHeader = "noperm" + ":" + "test";
+                authHeader = "noperms" + ":" + "test";
                 break;
         }
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
@@ -93,8 +93,8 @@ public class ServerTest {
     public void testGetModel(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader;
-        int val = new Random().nextInt(2)+1;
-        switch (val){
+        int val = new Random().nextInt(2) + 1;
+        switch (val) {
             case 1:
                 authHeader = "peter" + ":" + "sterne123";
                 break;
@@ -102,7 +102,7 @@ public class ServerTest {
                 authHeader = "hans" + ":" + "sonne123";
                 break;
             default:
-                authHeader = "noperm" + ":" + "test";
+                authHeader = "noperms" + ":" + "test";
                 break;
         }
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
@@ -220,8 +220,8 @@ public class ServerTest {
     public void testGetPermissions(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader;
-        int val = new Random().nextInt(2)+1;
-        switch (val){
+        int val = new Random().nextInt(3);
+        switch (val) {
             case 1:
                 authHeader = "peter" + ":" + "sterne123";
                 break;
@@ -229,7 +229,7 @@ public class ServerTest {
                 authHeader = "hans" + ":" + "sonne123";
                 break;
             default:
-                authHeader = "noperm" + ":" + "test";
+                authHeader = "noperms" + ":" + "test";
                 break;
         }
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
