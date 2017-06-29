@@ -73,7 +73,7 @@ public class ModelTest {
     @Test
     public void modelParseTimeWithPermissions() {
         Instant now = Instant.now();
-        Optional<String> model = FHEMParser.getInstance().getFHEMModel(Arrays.asList("permission1", "S_Fenster"));
+        Optional<String> model = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList("permission1", "S_Fenster"));
         model.ifPresent(fhemRooms -> System.out.println("With permissions: " + Duration.between(now, Instant.now()).toMillis()));
     }
 
@@ -93,7 +93,7 @@ public class ModelTest {
     @Test
     public void toJSONWithPermissions() {
         List<String> permissions = Arrays.asList("Permission1", "S_Fenster");
-        Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
+        Optional<String> json = FHEMParser.getInstance().getFHEMModelJSON(permissions);
         assert json.isPresent();
         assert isValidJSON(json.get());
     }
@@ -101,7 +101,7 @@ public class ModelTest {
     @Test
     public void toJSONWithEmptyStringPermissions() {
         List<String> permissions = Collections.singletonList("");
-        Optional<String> json = FHEMParser.getInstance().getFHEMModel(permissions);
+        Optional<String> json = FHEMParser.getInstance().getFHEMModelJSON(permissions);
         assert json.isPresent();
         assert isValidJSON(json.get());
     }
@@ -121,7 +121,7 @@ public class ModelTest {
     public void toJSONWithPermissionsNoMatch() {
         FHEMParser parser = FHEMParser.getInstance();
         List<String> permissions = Arrays.asList("nomatch", "othernomatch");
-        Optional<String> json = parser.getFHEMModel(permissions);
+        Optional<String> json = parser.getFHEMModelJSON(permissions);
         assert json.isPresent();
         assert isValidJSON(json.get());
         /* There was no match! */

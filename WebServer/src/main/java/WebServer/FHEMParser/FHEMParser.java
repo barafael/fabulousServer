@@ -54,7 +54,7 @@ public class FHEMParser {
      * @param permissions a list of permissions which limit what information will be given to the caller.
      * @return a serialized model which, when deserialized, contains only the permitted filelogs
      */
-    public Optional<String> getFHEMModel(List<String> permissions) {
+    public Optional<String> getFHEMModelJSON(List<String> permissions) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
                 .create();

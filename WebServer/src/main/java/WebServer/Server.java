@@ -298,7 +298,7 @@ public class Server extends AbstractVerticle {
             if (permissionFuture.succeeded()) {
                 List<String> perm = permissionFuture.result();
                 vertx.executeBlocking(future -> {
-                    Optional<String> answerData_opt = parser.getFHEMModel(perm);
+                    Optional<String> answerData_opt = parser.getFHEMModelJSON(perm);
                     if (!answerData_opt.isPresent()) {
                         System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
