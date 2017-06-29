@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 
 public class FHEMSensor implements Iterable<FHEMFileLog> {
-    private final Coordinates coord;
+    private final Coordinates coords;
     private final String name;
     transient private final List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
@@ -25,7 +25,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
 
     public FHEMSensor(int coordX, int coordY, String name, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
-        this.coord = new Coordinates(coordX, coordY);
+        this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.permissions = permissions;
         this.isShowInApp = isShowInApp;
@@ -100,5 +100,9 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
             }
         }
         return false;
+    }
+
+    public Coordinates getCoords() {
+        return coords;
     }
 }

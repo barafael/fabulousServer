@@ -107,8 +107,7 @@ public class FHEMClientModeCon implements FHEMConnection {
                     InputStreamReader(process.getInputStream()));
             String line = stdin.readLine();
             stdin.close();
-            Process processDebugOutput = Runtime.getRuntime().exec(new String[]{"echo", command});
-            System.out.println("executed");
+            System.out.println(command);
             /* No news is good news */
             System.out.println("Return from FHEM(should be empty) : " + line);
             return line == null || line.isEmpty();

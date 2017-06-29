@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Rafael
  */
 
-class Coordinates {
+public class Coordinates {
     @SerializedName("x")
     private int coordX;
 
@@ -20,6 +20,14 @@ class Coordinates {
             this.coordX = coordX;
             this.coordY = coordY;
         }
+    }
+
+    public int getX() {
+        return coordX;
+    }
+
+    public int getY() {
+        return coordY;
     }
 
     @Override

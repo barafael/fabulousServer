@@ -28,10 +28,15 @@ public class FHEMParser {
     private static final boolean timePrint = false;
     private static FHEMParser instance;
     private static String mutex = "";
+    private FHEMConnection fhc = new FHEMClientModeCon();
     private FHEMModel model;
 
     /* Prevent construction */
-    private FHEMParser() {
+    private FHEMParser() {}
+
+    public FHEMParser setFHEMConnection(FHEMConnection con) {
+        fhc = con;
+        return this;
     }
 
     /**
@@ -70,7 +75,6 @@ public class FHEMParser {
     public Optional<FHEMModel> getFHEMModel() {
         Instant one = Instant.now();
         if (System.getProperty("user.home").contains("pi")) {
-            FHEMConnection fhc = new FHEMClientModeCon();
             String jsonList2_str = "";
             try {
                 jsonList2_str = fhc.getJsonList2();
@@ -140,7 +144,6 @@ public class FHEMParser {
      * @return whether the operation succeeded
      */
     public boolean setSensorPosition(int x, int y, String sensorName) {
-        FHEMClientModeCon con = new FHEMClientModeCon();
         if ((x > 100 || x < 0) || (y > 100 || y < 0)) {
             System.err.printf("Incorrect percent values for coordinates! x: %d, y: %d", x, y);
         }
@@ -150,8 +153,8 @@ public class FHEMParser {
         }
 
         try {
-            return con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
-                    con.sendPerlCommand("attr " + sensorName + " coordY " + y);
+            return  fhc.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
+                    fhc.sendPerlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
             return false;

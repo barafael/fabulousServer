@@ -96,6 +96,16 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
+    public Optional<FHEMSensor> getSensorByName(String name) {
+        for (Iterator<FHEMSensor> it = this.eachSensor(); it.hasNext(); ) {
+            FHEMSensor s = it.next();
+            if (s.getName().equals(name)) {
+                return Optional.of(s);
+            }
+        }
+        return Optional.empty();
+    }
+
     public boolean sensorExists(String sensorName) {
         for (FHEMRoom room : this) {
             for (FHEMSensor sensor : room) {

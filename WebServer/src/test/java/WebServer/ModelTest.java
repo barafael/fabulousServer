@@ -181,15 +181,15 @@ public class ModelTest {
     @Test
     public void testSetSensorPosition() {
         FHEMParser parser = FHEMParser.getInstance();
-        parser.getFHEMModel();
-        parser.setSensorPosition(DRÖLF, 2 * DRÖLF, "HM_52CC96_Pwr");
         Optional<FHEMModel> model = parser.getFHEMModel();
-        model.ifPresent(m -> {
-            for (Iterator<FHEMSensor> it = m.eachSensor(); it.hasNext(); ) {
-                FHEMSensor s = it.next();
-
-            }
-        });
+        assert model.isPresent();
+        String sensorName = "HM_52CC96_Pwr";
+        assert model.get().sensorExists(sensorName);
+        parser.setSensorPosition(DRÖLF, 2 * DRÖLF, sensorName);
+        model = parser.getFHEMModel();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        System.out.println(sensor.get().getCoords().getX());
+        assert sensor.get().getCoords().getX() == DRÖLF;
     }
 
     /**
