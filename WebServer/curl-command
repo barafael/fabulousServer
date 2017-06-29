@@ -4,3 +4,5 @@ curl -v localhost:8080/api/getPermissions -H "Authorization:Basic cGV0ZXI6c3Rlcm
 POST with user Hans
 curl -v localhost:8080/api/setRoomplan?room=room_fablab -H "Authorization:Basic aGFuczpzb25uZTEyMw==" -H "Content-Type:application/json" --data-ascii $(cat /tmp/fhem/fhemlog/roomplans/file.svg)
 
+POST any file with user Hans
+echo "$(cat Schreibtisch/test.svg)" | curl -v localhost:8080/api/setRoomplan?room=room_fablab -H "Authorization:Basic aGFuczpzb25uZTEyMw==" -H "Content-Type:application/json" --data-ascii @-

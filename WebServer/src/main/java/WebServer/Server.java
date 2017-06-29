@@ -268,7 +268,6 @@ public class Server extends AbstractVerticle {
             if (res.succeeded() && darfErDasFuture.result()) {
                 vertx.executeBlocking(future -> {
                     if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
-                        System.out.println("Server: Mutex is unavailable");
                         routingContext.response()
                                 .setStatusCode(Unavailable_HTTP_CODE)
                                 .end(Unavailable_SERVER_RESPONSE);
@@ -610,9 +609,10 @@ public class Server extends AbstractVerticle {
      */
     private void printRequestHeaders(RoutingContext routingContext) {
         //TODO: remove debug print
+        System.out.println("");
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
+        System.out.print("Server params: " + routingContext.request().params());
         if (routingContext.user() != null) {
             System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
         } else {

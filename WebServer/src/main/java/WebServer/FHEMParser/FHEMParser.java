@@ -230,13 +230,16 @@ public class FHEMParser {
     public synchronized boolean getMutex(String username) {
         if (mutex.isEmpty() || mutex.equals(username)) {
             mutex = username;
+            System.out.println("Parser: Set Mutex for user: "+username);
             return true;
         } else {
+            System.out.println("Parser: Mutex is unavailable");
             return false;
         }
     }
 
     public synchronized void releaseMutex(){
         mutex = "";
+        System.out.println("Parser: released Mutex");
     }
 }
