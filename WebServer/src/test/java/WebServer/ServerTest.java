@@ -121,25 +121,6 @@ public class ServerTest {
     }
 
     @Test
-    public void testGetModelSmall(TestContext testContext) {
-        final Async async = testContext.async();
-        String authHeader = "peter:sterne123";
-        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
-        System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/getModel")
-                .putHeader("Authorization", base64)
-                .handler(ans -> {
-                    ans.headers().forEach(h -> System.out.println("testGetModel_answerHeader: " + h));
-                    ans.bodyHandler(body -> {
-                        System.out.println("Client received: " + body.toString());
-                        async.complete();
-                    });
-                    testContext.assertEquals(200, ans.statusCode());
-                })
-                .end();
-    }
-
-    @Test
     public void testGetTimeSeries(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "hans" + ":" + "sonne123";
