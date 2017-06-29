@@ -204,7 +204,15 @@ public class Server extends AbstractVerticle {
                 String file = routingContext.getBodyAsString();
 
                 vertx.executeBlocking(future -> {
+                    if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
+                        System.out.println("Server: Mutex is unavailable");
+                        routingContext.response()
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
+                        return;
+                    }
                     Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
+                    parser.releaseMutex();
                     if (status) {
                         future.handle(Future.succeededFuture(true));
                     } else {
@@ -259,7 +267,15 @@ public class Server extends AbstractVerticle {
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
                 vertx.executeBlocking(future -> {
+                    if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
+                        System.out.println("Server: Mutex is unavailable");
+                        routingContext.response()
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
+                        return;
+                    }
                     Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
+                    parser.releaseMutex();
                     if (result) {
                         future.handle(Future.succeededFuture());
                     } else {
@@ -431,6 +447,15 @@ public class Server extends AbstractVerticle {
      */
     private void getEditMutex(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
+
+        if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
+            routingContext.response()
+                    .setStatusCode(Unavailable_HTTP_CODE)
+                    .end(Unavailable_SERVER_RESPONSE);
+            return;
+        }
+
+
         //TODO: implement
         routingContext.response()
                 .setStatusCode(501)

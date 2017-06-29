@@ -27,7 +27,7 @@ import java.util.Optional;
 public class FHEMParser {
     private static final boolean timePrint = false;
     private static FHEMParser instance;
-
+    private static String mutex = "";
     private FHEMModel model;
 
     /* Prevent construction */
@@ -150,7 +150,7 @@ public class FHEMParser {
         }
 
         try {
-            return  con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
+            return con.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
                     con.sendPerlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
@@ -225,5 +225,18 @@ public class FHEMParser {
             }
         }
         return Optional.empty();
+    }
+
+    public synchronized boolean getMutex(String username) {
+        if (mutex.isEmpty() || mutex.equals(username)) {
+            mutex = username;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public synchronized void releaseMutex(){
+        mutex = "";
     }
 }
