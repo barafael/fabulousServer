@@ -19,6 +19,8 @@ public final class Main {
     static FHEMParser parser = FHEMParser.getInstance();
     static FHEMModel fhemModel;
     static long parserTimerID;
+    public static final Vertx vertx = Vertx.vertx();
+
 
     static {
         Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
@@ -41,7 +43,6 @@ public final class Main {
         }
         JsonObject config = new JsonObject().put("PORT", defaultPORT).put("HOST", "localhost");
         DeploymentOptions options = new DeploymentOptions().setConfig(config);
-        final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(Server.class.getCanonicalName(), options);
 
         parserTimerID = vertx.setPeriodic(5000, id -> {

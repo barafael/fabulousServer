@@ -8,9 +8,9 @@ import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
+import WebServer.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.vertx.core.Vertx;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -236,7 +236,7 @@ public class FHEMParser {
     public synchronized Optional<Long> getMutex(String username) {
         if (mutex.isEmpty()) {
             mutex = username;
-            long timer = Vertx.vertx().setTimer(MutexTimeout, event -> {
+            long timer = Main.vertx.setTimer(MutexTimeout, event -> {
                 releaseMutex(username);
             });
             System.out.println("Parser: Set Mutex for user: "+username);
