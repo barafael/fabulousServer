@@ -25,10 +25,10 @@ public class FHEMUtils {
      * @return the value of the $FHEMPORT environment variable
      */
     public static int getFHEMPort() {
+        /* use getGlobVar here */
         String port_env = "FHEMPORT";
         String port_str = System.getenv(port_env);
         int port;
-
         if (port_str != null && port_str.matches("\\d+")) {
             port = Integer.parseInt(port_str);
         } else {

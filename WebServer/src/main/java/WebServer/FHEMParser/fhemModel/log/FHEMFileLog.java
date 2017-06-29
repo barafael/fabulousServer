@@ -135,7 +135,6 @@ public class FHEMFileLog {
                 System.err.println("Unimplemented logtype! " + logtype.name());
                 return Optional.empty();
         }
-
     }
 
     /**
@@ -179,6 +178,7 @@ public class FHEMFileLog {
     /**
      * This method guesses the type of a log based on it's first line.
      * Types are defined in the logtypes enum.
+     *
      * @param path path to logfile
      * @return an estimated logtype
      */
@@ -209,6 +209,7 @@ public class FHEMFileLog {
 
     /**
      * Parses a line to obtain the value of the measurement
+     *
      * @param line line from a FileLog
      * @return the value, as a String
      */
@@ -231,6 +232,7 @@ public class FHEMFileLog {
 
     /**
      * This method checks if given permissions are sufficient to access this filelog
+     *
      * @param allPermissions List of permissions which are available to a user
      * @return whether the user with given permissions is allowed to access this log
      */
@@ -245,8 +247,9 @@ public class FHEMFileLog {
 
     /**
      * Generate a subsection of the entire timeserie based on start and end params.
+     *
      * @param startTime the unix timestamp to start with
-     * @param endTime the unix timestamp to end with
+     * @param endTime   the unix timestamp to end with
      * @return a subsection of a timeserie
      */
     public Optional<String> subSection(long startTime, long endTime) {

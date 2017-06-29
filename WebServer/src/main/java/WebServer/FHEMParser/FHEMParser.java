@@ -164,6 +164,7 @@ public class FHEMParser {
             FHEMRoom room = room_opt.get();
             return room.setRoomplan(svg);
         }
+
         return false;
     }
 

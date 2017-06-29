@@ -4,6 +4,7 @@ import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import com.google.gson.Gson;
 import org.junit.Test;
 
@@ -145,7 +146,7 @@ public class ModelTest {
         parser.getFHEMModel();
         parser.setRoomplan("room_testing", "this is no moon.\n");
         Optional<String> roomplan = parser.getRoomplan("room_testing", hash, permissions);
-        /* because hashes were equal! */
+        /* Because hashes were equal! */
         assert !roomplan.isPresent();
     }
 

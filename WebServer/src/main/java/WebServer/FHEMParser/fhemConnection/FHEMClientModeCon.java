@@ -28,6 +28,7 @@ public class FHEMClientModeCon implements FHEMConnection {
 
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(command);
+
         BufferedReader stdin = new BufferedReader(new
                 InputStreamReader(process.getInputStream()));
 
@@ -56,6 +57,7 @@ public class FHEMClientModeCon implements FHEMConnection {
     /**
      * Runs a FHEM command, currently assuming it is not malicious
      * maybe add whitelisting later
+     *
      * @param command: String in pure FHEM perl syntax; Nothing else needed
      */
     public boolean sendPerlCommand(String command) throws IOException {
@@ -67,6 +69,8 @@ public class FHEMClientModeCon implements FHEMConnection {
                     InputStreamReader(process.getInputStream()));
             String line = stdin.readLine();
             stdin.close();
+            Process processDebugOutput = Runtime.getRuntime().exec(new String[]{"echo", command});
+            System.out.println("executed");
             /* No news is good news */
             System.out.println("Return from FHEM(should be empty) : " + line);
             return line == null || line.isEmpty();
