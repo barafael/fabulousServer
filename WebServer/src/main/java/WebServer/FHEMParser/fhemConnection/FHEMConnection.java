@@ -14,6 +14,8 @@ public interface FHEMConnection {
      */
     String getJsonList2() throws IOException, FHEMNotFoundException;
 
+    String getJsonList2(int port, String pathToFHEM) throws IOException, FHEMNotFoundException;
+
     /** This method runs a perl command in FHEM. It should verify the command before. */
     boolean sendPerlCommand(String command) throws IOException;
 }

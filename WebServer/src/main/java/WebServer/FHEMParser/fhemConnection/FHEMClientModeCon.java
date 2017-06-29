@@ -13,18 +13,55 @@ import WebServer.FHEMParser.fhemUtils.FHEMUtils;
  * @author Rafael on 09.06.17.
  */
 public class FHEMClientModeCon implements FHEMConnection {
+    /* Maybe keep a copy of jsonlist here and just refresh it once in a while ? */
+    private String path;
+    private int port;
+
     /**
-     * Accessor method for FHEM's jsonList on the local machine.
+     * Constructor which initializes this connection with a given path and port
+     * @param path path to fhem.pl on this system
+     * @param port port to use in client mode calls to fhem
+     */
+    public FHEMClientModeCon(String path, int port) {
+        this.path = path;
+        this.port = port;
+    }
+
+    /**
+     * Constructor which initializes this connection with the magic methods in FHEMUtils
+     * (It tries to guess based on `whereis` and global variables in ~/.profile)
+     */
+    public FHEMClientModeCon() {
+        path = FHEMUtils.getFhemScriptPath();
+        port = FHEMUtils.getFHEMPort();
+    }
+
+    /**
+     * Set this connection to use the magic methods in FHEMUtils
+     * (It tries to guess based on `whereis` and global variables in ~/.profile)
+     * @return this instance of the fhemconnection, enabling builder style
+     */
+    public FHEMClientModeCon setGlobalVariables() {
+        path = FHEMUtils.getFhemScriptPath();
+        port = FHEMUtils.getFHEMPort();
+        return this;
+    }
+
+    /**
+     * Accessor method for FHEM's jsonList on the defined parameters for path and port.
+     *
      * @return A string with jsonList2's content.
      * @throws IOException if the invocation fails
      * @throws FHEMNotFoundException if communication couldn't be established
      */
     @Override
     public String getJsonList2() throws IOException, FHEMNotFoundException {
-        /* Maybe keep a copy of jsonlist here and just refresh it once in a while ? */
-        String pathToFhemPL = FHEMUtils.getFhemScriptPath();
-        int port = FHEMUtils.getFHEMPort();
-        String[] command = {"perl", pathToFhemPL, "localhost:" + port, "jsonList2"};
+        return getJsonList2(port, path);
+    }
+
+    @Override
+    public String getJsonList2(int port, String fhemPath) throws IOException, FHEMNotFoundException {
+        String[] command = {"perl", fhemPath, "localhost:" + port, "jsonList2"};
 
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(command);
@@ -41,12 +78,13 @@ public class FHEMClientModeCon implements FHEMConnection {
             stringBuilder.append(line);
         }
         if (stringBuilder.toString().isEmpty()) {
+            // TODO get this out of the if, try to read, if empty ok
             StringBuilder error = new StringBuilder();
             while ((line = stderr.readLine()) != null) {
                 error.append(line);
             }
             throw new FHEMNotFoundException(
-                    "FHEM not found at " + pathToFhemPL + " on port " + port + "\n" +
+                    "FHEM not found at " + fhemPath + " on port " + port + "\n" +
                             error);
         }
         stdin.close();

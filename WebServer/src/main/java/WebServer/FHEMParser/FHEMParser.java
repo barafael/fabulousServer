@@ -69,7 +69,7 @@ public class FHEMParser {
      */
     public Optional<FHEMModel> getFHEMModel() {
         Instant one = Instant.now();
-        if (System.getProperty("user.home").contains("/pi")) {
+        if (System.getProperty("user.home").contains("pi")) {
             FHEMConnection fhc = new FHEMClientModeCon();
             String jsonList2_str = "";
             try {
