@@ -91,7 +91,8 @@ public class ServerTest {
 
     @Test
     public void testGetModel(TestContext testContext) {
-        final Async async = testContext.async();        String authHeader;
+        final Async async = testContext.async();
+        String authHeader;
         int val = new Random().nextInt(2)+1;
         switch (val){
             case 1:
@@ -218,7 +219,19 @@ public class ServerTest {
     @Test
     public void testGetPermissions(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "noperms:test";//"hans:sonne123";//"peter:sterne123"; //"hans"+":"+"sonne123";
+        String authHeader;
+        int val = new Random().nextInt(2)+1;
+        switch (val){
+            case 1:
+                authHeader = "peter" + ":" + "sterne123";
+                break;
+            case 2:
+                authHeader = "hans" + ":" + "sonne123";
+                break;
+            default:
+                authHeader = "noperm" + ":" + "test";
+                break;
+        }
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
         JsonArray jsonAns = new JsonArray().add("S_Fenster_4");
