@@ -32,7 +32,7 @@ public class FHEMParser {
     private FHEMConnection fhc = new FHEMClientModeCon();
     private FHEMModel model;
 
-    private static final long MutexTimeout=5000;//30*60*1000;
+    private static final long MutexTimeout=30*60*1000;
 
     /* Prevent construction */
     private FHEMParser() {}
