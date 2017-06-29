@@ -60,6 +60,12 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return rooms.iterator();
     }
 
+    public Iterator<FHEMSensor> eachSensor() {
+        HashSet<FHEMSensor> sensors = new HashSet<>();
+        forEach((FHEMRoom room) -> room.forEach(sensors::add));
+        return sensors.iterator();
+    }
+
     public Iterator<FHEMFileLog> eachLog() {
         HashSet<FHEMFileLog> logs = new HashSet<>();
         forEach(room -> room.forEach(sensor -> logs.addAll(sensor.getLogs())));
