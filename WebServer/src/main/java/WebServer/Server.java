@@ -612,12 +612,12 @@ public class Server extends AbstractVerticle {
         System.out.println("");
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.print("Server params: " + routingContext.request().params());
+        System.out.println("Server params: " + routingContext.request().params());
         if (routingContext.user() != null) {
             System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
         } else {
             System.out.println("Server user: not specified");
         }
-        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + h));
+        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("Authorization") ? h : "Authorization=Basic ***********")));
     }
 }
