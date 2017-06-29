@@ -10,6 +10,7 @@ import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.vertx.core.Vertx;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,6 +31,8 @@ public class FHEMParser {
     private static String mutex = "";
     private FHEMConnection fhc = new FHEMClientModeCon();
     private FHEMModel model;
+
+    private static final long MutexTimeout=5000;//30*60*1000;
 
     /* Prevent construction */
     private FHEMParser() {}
@@ -230,19 +233,32 @@ public class FHEMParser {
         return Optional.empty();
     }
 
-    public synchronized boolean getMutex(String username) {
-        if (mutex.isEmpty() || mutex.equals(username)) {
+    public synchronized Optional<Long> getMutex(String username) {
+        if (mutex.isEmpty()) {
             mutex = username;
+            long timer = Vertx.vertx().setTimer(MutexTimeout, event -> {
+                releaseMutex(username);
+            });
             System.out.println("Parser: Set Mutex for user: "+username);
-            return true;
+            return Optional.of(timer);
         } else {
             System.out.println("Parser: Mutex is unavailable");
+            return Optional.empty();
+        }
+    }
+
+    public synchronized boolean releaseMutex(String username){
+        if(mutex.equals(username)) {
+            mutex = "";
+            System.out.println("Parser: released Mutex for user: " + username);
+            return true;
+        }else {
+            System.err.println("motherfucker detected");
             return false;
         }
     }
 
-    public synchronized void releaseMutex(){
-        mutex = "";
-        System.out.println("Parser: released Mutex");
+    public String readMutex(){
+        return mutex;
     }
 }

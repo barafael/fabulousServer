@@ -37,6 +37,7 @@ public class Server extends AbstractVerticle {
     private SQLConnection connection;
     private final FHEMParser parser = Main.parser;
 
+    private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";
     private static final String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
     private static final String ChangedSensorPosition_SERVER_RESPONSE = "Changed Sensor Position";
@@ -52,11 +53,13 @@ public class Server extends AbstractVerticle {
     private static final int Unavailable_HTTP_CODE = 503;
 
     private static final String ContentType_HEADER = "content-type";
+    private static final String MutexID_HEADER = "mutexID";
     private static final String ContentType_VALUE = "application/json";
-
     private static final String Edit_PERMISSION = "E_Änderung";
 
     private static final String Username_PARAM = "username";
+
+    private static final String MutexID_PARAM = MutexID_HEADER;
     private static final String Password_PARAM = "password";
     private static final String Prename_PARAM = "prename";
     private static final String Surname_PARAM = "surname";
@@ -97,8 +100,8 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
         router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
-
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
+        router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
 
@@ -204,18 +207,15 @@ public class Server extends AbstractVerticle {
                 String file = routingContext.getBodyAsString();
 
                 vertx.executeBlocking(future -> {
-                    if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
-                        System.out.println("Server: Mutex is unavailable");
-                        routingContext.response()
-                                .setStatusCode(Unavailable_HTTP_CODE)
-                                .end(Unavailable_SERVER_RESPONSE);
-                        return;
-                    }
-                    Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
-                    if (status) {
-                        future.handle(Future.succeededFuture(true));
-                    } else {
+                    if (!parser.readMutex().equals(routingContext.user().principal().getString(Username_PARAM))) {
                         future.handle(Future.failedFuture(future.cause()));
+                    } else {
+                        Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
+                        if (status) {
+                            future.handle(Future.succeededFuture(true));
+                        } else {
+                            future.handle(Future.failedFuture(future.cause()));
+                        }
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
@@ -266,18 +266,15 @@ public class Server extends AbstractVerticle {
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
                 vertx.executeBlocking(future -> {
-                    if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
-                        routingContext.response()
-                                .setStatusCode(Unavailable_HTTP_CODE)
-                                .end(Unavailable_SERVER_RESPONSE);
-                        return;
-                    }
-                    Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
-                    parser.releaseMutex();
-                    if (result) {
-                        future.handle(Future.succeededFuture());
-                    } else {
+                    if (!parser.readMutex().equals(routingContext.user().principal().getString(Username_PARAM))) {
                         future.handle(Future.failedFuture(future.cause()));
+                    } else {
+                        Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
+                        if (result) {
+                            future.handle(Future.succeededFuture());
+                        } else {
+                            future.handle(Future.failedFuture(future.cause()));
+                        }
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
@@ -440,24 +437,83 @@ public class Server extends AbstractVerticle {
 
     /**
      * handles the REST-Api call for Route /api/getEditMutex
+     * reserves the right to edit the data model for one user
      *
      * @param routingContext the context in a route given by the router
      */
     private void getEditMutex(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
 
-        if (!parser.getMutex(routingContext.user().principal().getString(Username_PARAM))) {
+        Future<Boolean> darfErDasFuture = Future.future();
+        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
+
+        darfErDasFuture.setHandler(res -> {
+            if (res.succeeded() && darfErDasFuture.result()) {
+                vertx.executeBlocking(future -> {
+                    Optional<Long> result = parser.getMutex(routingContext.user().principal().getString(Username_PARAM));
+                    if (result.isPresent()) {
+                        future.handle(Future.succeededFuture(result));
+                    } else {
+                        future.handle(Future.failedFuture(future.cause()));
+                    }
+                }, res2 -> {
+                    if (res2.succeeded()) {
+                        Long result = (Long) res2.result();
+                        String str = result.toString();
+                        routingContext.response()
+                                .putHeader(MutexID_HEADER, str)
+                                .setStatusCode(OK_HTTP_CODE)
+                                .end(OK_SERVER_RESPONSE);
+                    } else {
+                        routingContext.response()
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+            }
+        });
+    }
+
+
+    /**
+     * handles the REST-Api call for Route /api/releaseEditMutex
+     * removes the right to edit the data model from the user
+     * needs parameter ID
+     * all parameter should be embedded in the request URI
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void releaseEditMutex(RoutingContext routingContext) {
+        if (routingContext.request().getParam(MutexID_PARAM) == null
+                || routingContext.request().getParam(MutexID_PARAM).isEmpty()) {
             routingContext.response()
-                    .setStatusCode(Unavailable_HTTP_CODE)
-                    .end(Unavailable_SERVER_RESPONSE);
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
             return;
         }
+        long timerID = Long.parseLong(routingContext.request().getParam(MutexID_PARAM));
 
-
-        //TODO: implement
-        routingContext.response()
-                .setStatusCode(501)
-                .end("HelloWorld!");
+        vertx.executeBlocking(future -> {
+            boolean result = parser.releaseMutex(routingContext.user().principal().getString(Username_PARAM));
+            if (result) {
+                future.handle(Future.succeededFuture());
+            } else {
+                future.handle(Future.failedFuture(future.cause()));
+            }
+        }, res2 -> {
+            if (res2.succeeded()) {
+                vertx.cancelTimer(timerID);
+                routingContext.response()
+                        .setStatusCode(OK_HTTP_CODE)
+                        .end(OK_SERVER_RESPONSE);
+            } else {
+                routingContext.response()
+                        .setStatusCode(Unauthorized_HTTP_CODE)
+                        .end(Unauthorized_SERVER_RESPONSE);
+            }
+        });
     }
 
 
