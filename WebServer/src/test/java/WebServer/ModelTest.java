@@ -22,6 +22,8 @@ import java.util.*;
  * @date 20.06.17.
  */
 public class ModelTest {
+    private static final int DRÖLF = 42;
+
     @Test
     public void modelPrint() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -41,6 +43,7 @@ public class ModelTest {
         model.ifPresent(fhemRooms -> {
             int count = 0;
             for (FHEMRoom room : fhemRooms) {
+                assert room != null;
                 count++;
             }
             assert count > 0;
@@ -134,34 +137,59 @@ public class ModelTest {
         List<String> permissions = Arrays.asList("testing", "otherperm");
         Optional<String> room = parser.getRoomplan("room_testing", permissions);
         assert room.isPresent();
-        assert room.get().equals("this is no moon.\n");
+        assert room.get().equals("that's no moon.\n");
     }
 
     @Test
-    public void getRoomWithHash() {
+    public void getRoomWithEqualHash() {
         FHEMParser parser = FHEMParser.getInstance();
         List<String> permissions = Arrays.asList("testing", "otherperm");
-        String content = "this is no moon.\n";
+        String content = "that's no moon.\n";
         int hash = content.hashCode();
         parser.getFHEMModel();
-        parser.setRoomplan("room_testing", "this is no moon.\n");
+        parser.setRoomplan("room_testing", "that's no moon.\n");
         Optional<String> roomplan = parser.getRoomplan("room_testing", hash, permissions);
         /* Because hashes were equal! */
         assert !roomplan.isPresent();
     }
 
     @Test
-    public void getRoomWithoutHash() {
+    public void getRoomWithUnequalHash() {
         FHEMParser parser = FHEMParser.getInstance();
         List<String> permissions = Arrays.asList("testing", "otherperm");
-        String content = "this is no moon.\n";
-        int hash = content.hashCode() + 1;
+        String content = "that's no moon.\n";
         parser.getFHEMModel();
-        parser.setRoomplan("room_testing", "this is no moon.\n");
-        Optional<String> roomplan = parser.getRoomplan("room_testing", hash, permissions);
+        parser.setRoomplan("room_testing", "that's no moon.\n");
+        Optional<String> roomplan = parser.getRoomplan("room_testing", DRÖLF, permissions);
         assert roomplan.isPresent();
-        assert roomplan.get().equals("this is no moon.\n");
-        System.out.println(roomplan.get());
+        assert roomplan.get().equals("that's no moon.\n");
+    }
+
+    @Test
+    public void setRoom() {
+        FHEMParser parser = FHEMParser.getInstance();
+        String content = "that's no moon.\n";
+        parser.getFHEMModel();
+        parser.setRoomplan("room_testing", "...und noch viel weiter\n");
+        Optional<String> roomplan =
+                parser.getRoomplan("room_testing", Collections.singletonList("testing"));
+        assert roomplan.isPresent();
+        assert roomplan.get().equals("...und noch viel weiter\n");
+        parser.setRoomplan("room_testing", "that's no moon.\n");
+    }
+
+    @Test
+    public void testSetSensorPosition() {
+        FHEMParser parser = FHEMParser.getInstance();
+        parser.getFHEMModel();
+        parser.setSensorPosition(DRÖLF, 2 * DRÖLF, "HM_52CC96_Pwr");
+        Optional<FHEMModel> model = parser.getFHEMModel();
+        model.ifPresent(m -> {
+            for (Iterator<FHEMSensor> it = m.eachSensor(); it.hasNext(); ) {
+                FHEMSensor s = it.next();
+
+            }
+        });
     }
 
     /**
