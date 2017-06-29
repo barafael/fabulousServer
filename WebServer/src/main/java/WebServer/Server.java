@@ -458,7 +458,7 @@ public class Server extends AbstractVerticle {
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
-                        Long result = (Long) res2.result();
+                        Long result = ((Optional<Long>) res2.result()).get();
                         String str = result.toString();
                         routingContext.response()
                                 .putHeader(MutexID_HEADER, str)
