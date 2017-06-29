@@ -39,6 +39,8 @@ public class ServerTest {
         System.out.println("SSH Connection needed for Server");
     }
 
+
+
     @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
@@ -108,6 +110,24 @@ public class ServerTest {
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
         httpClient.get("/api/getModel")
+                .putHeader("Authorization", base64)
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetModel_answerHeader: " + h));
+                    ans.bodyHandler(body -> {
+                        System.out.println("Client received: " + body.toString());
+                        async.complete();
+                    });
+                    testContext.assertEquals(200, ans.statusCode());
+                })
+                .end();
+    }
+    @Test
+    public void testGetEditMutex(TestContext testContext) {
+        final Async async = testContext.async();
+        String authHeader = "hans" + ":" + "sonne123";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        System.out.println("Client sent [authHeader]: " + base64);
+        httpClient.get("/api/getEditMutex")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetModel_answerHeader: " + h));
