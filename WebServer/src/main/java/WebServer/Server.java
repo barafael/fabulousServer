@@ -212,7 +212,6 @@ public class Server extends AbstractVerticle {
                         return;
                     }
                     Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
-                    parser.releaseMutex();
                     if (status) {
                         future.handle(Future.succeededFuture(true));
                     } else {

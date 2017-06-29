@@ -143,7 +143,7 @@ public class FHEMParser {
      * @param sensorName name of sensor
      * @return whether the operation succeeded
      */
-    public boolean setSensorPosition(int x, int y, String sensorName) {
+    public synchronized boolean setSensorPosition(int x, int y, String sensorName) {
         if ((x > 100 || x < 0) || (y > 100 || y < 0)) {
             System.err.printf("Incorrect percent values for coordinates! x: %d, y: %d", x, y);
         }
@@ -161,7 +161,7 @@ public class FHEMParser {
         }
     }
 
-    public boolean setRoomplan(String roomName, String svg) {
+    public synchronized boolean setRoomplan(String roomName, String svg) {
         Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
         if (room_opt.isPresent()) {
             FHEMRoom room = room_opt.get();
