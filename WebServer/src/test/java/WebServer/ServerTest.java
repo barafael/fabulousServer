@@ -42,7 +42,19 @@ public class ServerTest {
     @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
-        String authHeader = "hans" + ":" + "sonne123";
+        int val = new Random().nextInt(2)+1;
+        String authHeader;
+        switch (val){
+            case 1:
+                authHeader = "peter" + ":" + "sterne123";
+                break;
+            case 2:
+                authHeader = "hans" + ":" + "sonne123";
+                break;
+            default:
+                authHeader = "noperm" + ":" + "test";
+                break;
+        }
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
         httpClient.post("/api/setRoomplan?room=room_fablab")
@@ -55,7 +67,7 @@ public class ServerTest {
                     });
                     testContext.assertEquals(200, ans.statusCode());
                 })
-                .end("thisshallbetheSVGnew");
+                .end("<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"  \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"467\" height=\"462\">  <rect x=\"80\" y=\"60\" width=\"250\" height=\"250\" rx=\"20\"      style=\"fill:#ff0000; stroke:#000000;stroke-width:2px;\" />    <rect x=\"140\" y=\"120\" width=\"250\" height=\"250\" rx=\"40\"      style=\"fill:#0000ff; stroke:#000000; stroke-width:2px;      fill-opacity:0.7;\" /></svg>");
     }
 
     @Test
