@@ -254,9 +254,6 @@ public class FHEMFileLog {
      */
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> ts = getTimeserie(startTime, endTime);
-        if (ts.isPresent()) {
-            return Optional.of(new Gson().toJson(ts));
-        }
-        return Optional.empty();
+        return ts.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
     }
 }
