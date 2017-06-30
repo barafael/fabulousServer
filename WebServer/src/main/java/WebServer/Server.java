@@ -71,6 +71,7 @@ public class Server extends AbstractVerticle {
     private static final String TimeSeries_PARAM = "ID";
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
+    private long TimerofMutexID = 0;
 
 
     @Override
@@ -443,10 +444,8 @@ public class Server extends AbstractVerticle {
      */
     private void getEditMutex(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-
         Future<Boolean> darfErDasFuture = Future.future();
         darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
-
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
                 vertx.executeBlocking(future -> {
@@ -458,7 +457,9 @@ public class Server extends AbstractVerticle {
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
-                        String str = ((Long) res2.result()).toString();
+                        TimerofMutexID = (Long) res2.result();
+                        System.out.println("set TimerofMutexID to: " + TimerofMutexID);
+                        String str = res2.result().toString();
                         routingContext.response()
                                 .putHeader(MutexID_HEADER, str)
                                 .setStatusCode(OK_HTTP_CODE)
@@ -485,6 +486,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void releaseEditMutex(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
         if (routingContext.request().getParam(MutexID_PARAM) == null
                 || routingContext.request().getParam(MutexID_PARAM).isEmpty()) {
             routingContext.response()
@@ -493,8 +495,14 @@ public class Server extends AbstractVerticle {
             return;
         }
         long timerID = Long.parseLong(routingContext.request().getParam(MutexID_PARAM));
-
         vertx.executeBlocking(future -> {
+            if (timerID != TimerofMutexID) {
+                System.out.println("Server not matching: timerID=" + timerID + ", TimerofMutexID=" + TimerofMutexID);
+                routingContext.response()
+                        .setStatusCode(Unavailable_HTTP_CODE)
+                        .end(Unavailable_SERVER_RESPONSE);
+                return;
+            }
             boolean result = parser.releaseMutex(routingContext.user().principal().getString(Username_PARAM));
             if (result) {
                 future.handle(Future.succeededFuture());
@@ -504,13 +512,15 @@ public class Server extends AbstractVerticle {
         }, res2 -> {
             if (res2.succeeded()) {
                 vertx.cancelTimer(timerID);
+                TimerofMutexID = 0;
+                System.out.println("Server canceled timer and reset TimerofMutexID");
                 routingContext.response()
                         .setStatusCode(OK_HTTP_CODE)
                         .end(OK_SERVER_RESPONSE);
             } else {
                 routingContext.response()
-                        .setStatusCode(Unauthorized_HTTP_CODE)
-                        .end(Unauthorized_SERVER_RESPONSE);
+                        .setStatusCode(Unavailable_HTTP_CODE)
+                        .end(Unavailable_SERVER_RESPONSE);
             }
         });
     }

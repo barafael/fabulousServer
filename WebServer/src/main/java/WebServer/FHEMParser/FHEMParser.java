@@ -32,7 +32,7 @@ public class FHEMParser {
     private FHEMConnection fhc = new FHEMClientModeCon();
     private FHEMModel model;
 
-    private static final long MutexTimeout=30*60*1000;
+    private static final long MutexTimeout=15*60*1000; // 15min
 
     /* Prevent construction */
     private FHEMParser() {}
@@ -253,7 +253,7 @@ public class FHEMParser {
             System.out.println("Parser: released Mutex for user: " + username);
             return true;
         }else {
-            System.err.println("motherfucker detected");
+            System.err.println("Parser: no mutex for user: "+username);
             return false;
         }
     }

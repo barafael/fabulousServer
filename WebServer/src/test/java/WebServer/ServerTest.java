@@ -40,7 +40,6 @@ public class ServerTest {
     }
 
 
-
     @Test
     public void testSetRoomplan(TestContext testContext) {
         final Async async = testContext.async();
@@ -67,7 +66,14 @@ public class ServerTest {
                         System.out.println("Client received: " + body.toString());
                         async.complete();
                     });
-                    testContext.assertEquals(200, ans.statusCode());
+                    switch (val) {
+                        case 2:
+                            testContext.assertEquals(200, ans.statusCode());
+                            break;
+                        default:
+                            testContext.assertEquals(401, ans.statusCode());
+                            break;
+                    }
                 })
                 .end("<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"  \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"467\" height=\"462\">  <rect x=\"80\" y=\"60\" width=\"250\" height=\"250\" rx=\"20\"      style=\"fill:#ff0000; stroke:#000000;stroke-width:2px;\" />    <rect x=\"140\" y=\"120\" width=\"250\" height=\"250\" rx=\"40\"      style=\"fill:#0000ff; stroke:#000000; stroke-width:2px;      fill-opacity:0.7;\" /></svg>");
     }
@@ -121,13 +127,44 @@ public class ServerTest {
                 })
                 .end();
     }
+
     @Test
-    public void testGetEditMutex(TestContext testContext) {
+    public void testGetAndReleaseEditMutex(TestContext testContext) {
+        testGetEditMutex(testContext);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        testReleaseEditMutex(testContext);
+    }
+
+    private void testGetEditMutex(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "hans" + ":" + "sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
         httpClient.get("/api/getEditMutex")
+                .putHeader("Authorization", base64)
+                .handler(ans -> {
+                    ans.headers().forEach(h -> System.out.println("testGetEditMutex_answerHeader: " + h));
+                    testContext.put("mutexID", ans.getHeader("mutexID"));
+                    ans.bodyHandler(body -> {
+                        System.out.println("Client received: " + body.toString());
+                        async.complete();
+                    });
+                    testContext.assertEquals(200, ans.statusCode());
+                })
+                .end();
+    }
+
+
+    private void testReleaseEditMutex(TestContext testContext) {
+        final Async async = testContext.async();
+        String authHeader = "hans" + ":" + "sonne123";
+        String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
+        System.out.println("Client sent [authHeader]: " + base64);
+        httpClient.get("/api/releaseEditMutex?mutexID=" + testContext.get("mutexID"))
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testGetModel_answerHeader: " + h));
@@ -202,7 +239,7 @@ public class ServerTest {
         final Async async = testContext.async();
         String authHeader = "hans" + ":" + "sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
-        int hash = "thisshallbetheSVG".hashCode();
+        int hash = 608164779;
         System.out.println("Client sent [authHeader]: " + base64);
         httpClient.get("/api/getRoomplan?room=room_fablab&hash=" + hash)
                 .putHeader("Authorization", base64)
@@ -251,7 +288,7 @@ public class ServerTest {
                 .end();
     }
 
-    @Test
+  /*  @Test
     public void testRegister(TestContext testContext) {
         final Async async = testContext.async();
         JsonObject json = new JsonObject();
@@ -272,7 +309,7 @@ public class ServerTest {
                 })
                 .write(msg)
                 .end();
-    }
+    }*/
 
     @Test
     public void testRegisterFail(TestContext testContext) {
