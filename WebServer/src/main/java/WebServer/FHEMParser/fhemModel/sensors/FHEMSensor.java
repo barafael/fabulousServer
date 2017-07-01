@@ -105,4 +105,9 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     public Coordinates getCoords() {
         return coords;
     }
+
+    public boolean stateContains(String state) {
+        String value = metaInfo.get("State");
+        return value != null && value.contains(state);
+    }
 }
