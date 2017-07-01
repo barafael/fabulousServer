@@ -67,6 +67,7 @@ public class FHEMParser {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
                 .create();
+        /* Return the mapped Optional.of if present, empty otherwise */
         return getFHEMModel().map(gson::toJson);
     }
 

@@ -45,7 +45,8 @@ dependencies {
     compile 'com.intellij:annotations:+@jar'
     runtime group: 'com.google.code.gson', name: 'gson', version: '2.7'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
-    compile group: 'com.google.guava', name: 'guava', version: '22.0-android'
+    compile 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
+
 
     // test deps
     testCompile group: 'junit', name: 'junit', version: '4.12'

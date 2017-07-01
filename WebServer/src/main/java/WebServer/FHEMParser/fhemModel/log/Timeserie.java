@@ -174,9 +174,9 @@ public class Timeserie {
 
         Timeserie timeserie = (Timeserie) o;
 
-        if (!xs.equals(timeserie.xs)) return false;
-        if (!ys.equals(timeserie.ys)) return false;
-        return legend.equals(timeserie.legend);
+        return  xs.equals(timeserie.xs)
+                && ys.equals(timeserie.ys)
+                && legend.equals(timeserie.legend);
     }
 
     @Override
