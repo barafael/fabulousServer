@@ -1,6 +1,7 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
+import WebServer.FHEMParser.fhemModel.log.Timeserie;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +73,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     *
      * @return an iterator over the contained logs in this sensor.
      */
     @NotNull
@@ -90,6 +92,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * Returns whether any of the logs are permitted to be accesseed with the given permissions.
+     *
      * @param permissions list of permissions against which to check
      * @return whether this sensor contains viewable timeseries
      */

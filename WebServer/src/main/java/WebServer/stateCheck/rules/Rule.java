@@ -17,6 +17,7 @@ public abstract class Rule {
     String name;
     String permission;
     final Set<String> sensors;
+    final Set<String> affectedSensors;
     String okMessage;
     private WARNINGLEVEL level;
     final Map<WARNINGLEVEL, String> errorMessages;
@@ -29,6 +30,7 @@ public abstract class Rule {
         name = "";
         permission = "";
         sensors = new HashSet<>();
+        affectedSensors = new HashSet<>();
         okMessage = "";
         level = WARNINGLEVEL.NORMAL;
         errorMessages = new HashMap<>();

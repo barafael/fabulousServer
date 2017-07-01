@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
@@ -83,6 +84,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * Returns whether any of the rooms are permitted to be accesseed with the given permissions.
+     *
      * @param permissions list of permissions against which to check
      * @return whether this model contains viewable rooms
      */
@@ -115,5 +117,13 @@ public class FHEMModel implements Iterable<FHEMRoom> {
             }
         }
         return false;
+    }
+
+    public Set<FHEMSensor> getSensorsByList(Set<String> sensors) {
+        return sensors.stream()
+                .map(this::getSensorByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toCollection(HashSet::new));
     }
 }
