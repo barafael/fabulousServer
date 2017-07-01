@@ -164,22 +164,22 @@ public class ModelTest {
         List<String> permissions = Arrays.asList("testing", "otherperm");
         String content = "that's no moon.\n";
         parser.getFHEMModel();
-        parser.setRoomplan("room_testing", "that's no moon.\n");
+        parser.setRoomplan("room_testing", content);
         Optional<String> roomplan = parser.getRoomplan("room_testing", DRÖLF, permissions);
         assert roomplan.isPresent();
-        assert roomplan.get().equals("that's no moon.\n");
+        assert roomplan.get().equals(content);
     }
 
     @Test
     public void setRoom() {
         FHEMParser parser = FHEMParser.getInstance();
-        String content = "that's no moon.\n";
+        String content = "...und noch viel weiter\n";
         parser.getFHEMModel();
-        parser.setRoomplan("room_testing", "...und noch viel weiter\n");
+        parser.setRoomplan("room_testing", content);
         Optional<String> roomplan =
                 parser.getRoomplan("room_testing", Collections.singletonList("testing"));
         assert roomplan.isPresent();
-        assert roomplan.get().equals("...und noch viel weiter\n");
+        assert roomplan.get().equals(content);
         parser.setRoomplan("room_testing", "that's no moon.\n");
     }
 
@@ -207,6 +207,22 @@ public class ModelTest {
         assert sensor.isPresent();
         System.out.println(sensor.get().getCoords().getX());
         assert sensor.get().getCoords().getX() == DRÖLF;
+    }
+
+    @Test
+    public void testGetTimeserie() {
+        String sensorName = "HM_521A72";
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
+        Optional<FHEMFileLog> log = sensor.get().getLogs().stream().findFirst();
+        assert log.isPresent();
+        Optional<Timeserie> serie_opt = log.get().getTimeserie();
+        assert serie_opt.isPresent();
+        String json = new Gson().toJson(serie_opt.get(), Timeserie.class);
+        Timeserie timeserie = new Gson().fromJson(json, Timeserie.class);
+        assert timeserie.equals(serie_opt.get());
     }
 
     /**
