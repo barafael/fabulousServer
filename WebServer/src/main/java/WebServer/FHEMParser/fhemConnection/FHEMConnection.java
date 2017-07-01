@@ -1,6 +1,7 @@
 package WebServer.FHEMParser.fhemConnection;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * This interface contains methods to interface with FHEM.
@@ -17,5 +18,7 @@ public interface FHEMConnection {
     String getJsonList2(int port, String pathToFHEM) throws IOException, FHEMNotFoundException;
 
     /** This method runs a perl command in FHEM. It should verify the command before. */
-    boolean sendPerlCommand(String command) throws IOException;
+    Optional<String> execCommand(String command) throws IOException;
+
+    boolean perlCommand(String s) throws IOException;
 }

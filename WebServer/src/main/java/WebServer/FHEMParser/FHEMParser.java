@@ -156,8 +156,8 @@ public class FHEMParser {
         }
 
         try {
-            return  fhc.sendPerlCommand("attr " + sensorName + " coordX " + x) &&
-                    fhc.sendPerlCommand("attr " + sensorName + " coordY " + y);
+            return fhc.perlCommand("attr " + sensorName + " coordX " + x) &&
+                   fhc.perlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
             return false;
@@ -260,5 +260,13 @@ public class FHEMParser {
 
     public String readMutex(){
         return mutex;
+    }
+
+    public Optional<String> execCommand(String s) {
+        try {
+            return fhc.execCommand(s);
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 }

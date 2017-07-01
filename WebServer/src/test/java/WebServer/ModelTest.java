@@ -1,6 +1,7 @@
 package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
+import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
@@ -179,15 +180,27 @@ public class ModelTest {
     }
 
     @Test
-    public void testSetSensorPosition() {
+    public void testCommandExec() {
         FHEMParser parser = FHEMParser.getInstance();
-        Optional<FHEMModel> model = parser.getFHEMModel();
-        assert model.isPresent();
+        System.out.println(parser.execCommand("uname -a"));
+    }
+
+    @Test
+    public void testSetSensorPosition() {
+        FHEMParser parser = FHEMParser.getInstance()
+                .setFHEMConnection(new FHEMClientModeCon("/usr/bin/fhem.pl", 7072));
+        Optional<FHEMModel> model_opt = parser.getFHEMModel();
         String sensorName = "HM_52CC96_Pwr";
-        assert model.get().sensorExists(sensorName);
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+        assert model.sensorExists(sensorName);
         parser.setSensorPosition(DRÖLF, 2 * DRÖLF, sensorName);
-        model = parser.getFHEMModel();
-        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        parser.execCommand("./pull.sh");
+        parser.setFHEMConnection(new FHEMClientModeCon("/usr/bin/fhem.pl", 7072));
+        model_opt = parser.getFHEMModel();
+        assert model_opt.isPresent();
+        Optional<FHEMSensor> sensor = model_opt.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
         System.out.println(sensor.get().getCoords().getX());
         assert sensor.get().getCoords().getX() == DRÖLF;
     }

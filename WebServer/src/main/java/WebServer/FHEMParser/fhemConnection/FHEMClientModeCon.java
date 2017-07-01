@@ -3,6 +3,7 @@ package WebServer.FHEMParser.fhemConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 
@@ -96,9 +97,8 @@ public class FHEMClientModeCon implements FHEMConnection {
      * Runs a FHEM command, currently assuming it is not malicious
      * maybe add whitelisting later
      *
-     * @param command: String in pure FHEM perl syntax; Nothing else needed
      */
-    public boolean sendPerlCommand(String command) throws IOException {
+    public Optional<String> execCommand(String command) throws IOException {
         /* TODO: maybe verify command here */
         boolean permitted = true;
         if (permitted) {
@@ -107,10 +107,28 @@ public class FHEMClientModeCon implements FHEMConnection {
                     InputStreamReader(process.getInputStream()));
             String line = stdin.readLine();
             stdin.close();
+            /* No news is good news */
+            return Optional.of(line == null ? "" : line);
+        }
+        System.out.println("Could not talk to fhem");
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean perlCommand(String command) throws IOException {
+        /* TODO: maybe verify command here */
+        boolean permitted = true;
+        if (permitted) {
+            Process process = Runtime.getRuntime().exec(new String[]
+                    {"sudo", "-u", "fhem", "perl", path, "localhost:" + port, command});
+            BufferedReader stdin = new BufferedReader(new
+                    InputStreamReader(process.getInputStream()));
+            String line = stdin.readLine();
+            stdin.close();
             System.out.println(command);
             /* No news is good news */
             System.out.println("Return from FHEM(should be empty) : " + line);
-            return line == null || line.isEmpty();
+            return true;
         }
         System.out.println("Could not talk to fhem");
         return false;
