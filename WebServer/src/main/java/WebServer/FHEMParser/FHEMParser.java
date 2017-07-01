@@ -26,21 +26,17 @@ import java.util.Optional;
  */
 
 public class FHEMParser {
+    /* For benchmark time output */
     private static final boolean timePrint = false;
+    private static final long MutexTimeout = 15 * 60 * 1000; // 15min
     private static FHEMParser instance;
     private static String mutex = "";
+    private static boolean mock = false;
     private FHEMConnection fhc = new FHEMClientModeCon();
     private FHEMModel model;
 
-    private static final long MutexTimeout=15*60*1000; // 15min
-
     /* Prevent construction */
     private FHEMParser() {}
-
-    public FHEMParser setFHEMConnection(FHEMConnection con) {
-        fhc = con;
-        return this;
-    }
 
     /**
      * Aquisitor for Parser instance
@@ -52,6 +48,11 @@ public class FHEMParser {
             FHEMParser.instance = new FHEMParser();
         }
         return FHEMParser.instance;
+    }
+
+    public FHEMParser setFHEMConnection(FHEMConnection con) {
+        fhc = con;
+        return this;
     }
 
     /**
@@ -236,10 +237,8 @@ public class FHEMParser {
     public synchronized Optional<Long> getMutex(String username) {
         if (mutex.isEmpty()) {
             mutex = username;
-            long timer = Main.vertx.setTimer(MutexTimeout, event -> {
-                releaseMutex(username);
-            });
-            System.out.println("Parser: Set Mutex for user: "+username);
+            long timer = Main.vertx.setTimer(MutexTimeout, event -> releaseMutex(username));
+            System.out.println("Parser: Set Mutex for user: " + username);
             return Optional.of(timer);
         } else {
             System.out.println("Parser: Mutex is unavailable");
@@ -247,18 +246,18 @@ public class FHEMParser {
         }
     }
 
-    public synchronized boolean releaseMutex(String username){
-        if(mutex.equals(username)) {
+    public synchronized boolean releaseMutex(String username) {
+        if (mutex.equals(username)) {
             mutex = "";
             System.out.println("Parser: released Mutex for user: " + username);
             return true;
-        }else {
-            System.err.println("Parser: no mutex for user: "+username);
+        } else {
+            System.err.println("Parser: no mutex for user: " + username);
             return false;
         }
     }
 
-    public String readMutex(){
+    public String readMutex() {
         return mutex;
     }
 

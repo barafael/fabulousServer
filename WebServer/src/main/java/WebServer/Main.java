@@ -2,6 +2,7 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -17,7 +18,7 @@ import java.util.Optional;
  */
 public final class Main {
     static FHEMParser parser = FHEMParser.getInstance();
-    static FHEMModel fhemModel;
+    private static FHEMModel fhemModel;
     static long parserTimerID;
     public static final Vertx vertx = Vertx.vertx();
 

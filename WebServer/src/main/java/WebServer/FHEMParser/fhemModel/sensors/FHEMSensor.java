@@ -63,7 +63,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return new Gson().toJson(this, FHEMSensor.class);
     }
 
     public HashSet<FHEMFileLog> getLogs() {

@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Rafael
  */
 
+//TODO before final: privatize this, only public for testing
 public class Coordinates {
     @SerializedName("x")
     private int coordX;

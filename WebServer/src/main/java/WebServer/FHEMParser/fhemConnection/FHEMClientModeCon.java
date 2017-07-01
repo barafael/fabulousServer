@@ -42,7 +42,7 @@ public class FHEMClientModeCon implements FHEMConnection {
      * (It tries to guess based on `whereis` and global variables in ~/.profile)
      * @return this instance of the fhemconnection, enabling builder style
      */
-    public FHEMClientModeCon setGlobalVariables() {
+    public FHEMClientModeCon useGlobalVariables() {
         path = FHEMUtils.getFhemScriptPath();
         port = FHEMUtils.getFHEMPort();
         return this;

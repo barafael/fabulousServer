@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public interface FHEMConnection {
     /**
-     * This method accesses jsonList2 without specifiying arguments or connection details.
+     * This method accesses jsonList2 without specifying arguments or connection details.
      */
     String getJsonList2() throws IOException, FHEMNotFoundException;
 

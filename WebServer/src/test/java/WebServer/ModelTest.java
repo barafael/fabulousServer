@@ -3,6 +3,7 @@ package WebServer;
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemConnection.FHEMClientModeCon;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.log.Timeserie;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
@@ -71,14 +72,17 @@ public class ModelTest {
     public void modelParseTimeWithoutPermissions() {
         Instant now = Instant.now();
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(fhemRooms -> System.out.println("Without permissions: " + Duration.between(now, Instant.now()).toMillis()));
+        model.ifPresent(fhemRooms -> System.out.println(
+                "Without permissions: " + Duration.between(now, Instant.now()).toMillis()));
     }
 
     @Test
     public void modelParseTimeWithPermissions() {
         Instant now = Instant.now();
-        Optional<String> model = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList("permission1", "S_Fenster"));
-        model.ifPresent(fhemRooms -> System.out.println("With permissions: " + Duration.between(now, Instant.now()).toMillis()));
+        Optional<String> model = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
+                "permission1", "S_Fenster"));
+        model.ifPresent(fhemRooms -> System.out.println(
+                "With permissions: " + Duration.between(now, Instant.now()).toMillis()));
     }
 
     @Test

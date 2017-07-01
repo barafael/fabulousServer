@@ -38,8 +38,8 @@ public class FHEMFileLog {
         this.path = path;
         this.isShowInApp = isShowInApp;
         this.name = name;
-        this.unit = getUnit().orElse("No unit given");
-        this.sensorName = getSensorName().orElse("No sensor name given");
+        this.unit = getUnitInFileLog(path).orElse("No unit given");
+        this.sensorName = getSensorInFileLog(path).orElse("No sensor name given");
         this.type = guessLogtype(path);
         this.permissions = permissions;
     }
@@ -65,6 +65,7 @@ public class FHEMFileLog {
 
         if (line == null) {
             System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+            System.err.println("This can happen in the beginning of the month.");
             return Optional.empty();
         }
         String name = line.split(" ")[1];
@@ -144,7 +145,6 @@ public class FHEMFileLog {
      * @param end   the end date
      * @return a parsed sample representation, if file is present
      */
-
     private Optional<Timeserie> getTimeserie(long start, long end) {
         List<String> filelog;
         String line;
@@ -222,14 +222,6 @@ public class FHEMFileLog {
         }
     }
 
-    private Optional<String> getSensorName() {
-        return getSensorInFileLog(path);
-    }
-
-    private Optional<String> getUnit() {
-        return getUnitInFileLog(path);
-    }
-
     /**
      * This method checks if given permissions are sufficient to access this filelog
      *
@@ -253,7 +245,7 @@ public class FHEMFileLog {
      * @return a subsection of a timeserie
      */
     public Optional<String> subSection(long startTime, long endTime) {
-        Optional<Timeserie> ts = getTimeserie(startTime, endTime);
-        return ts.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
+        Optional<Timeserie> timeserie_opt = getTimeserie(startTime, endTime);
+        return timeserie_opt.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
     }
 }

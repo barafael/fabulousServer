@@ -40,12 +40,12 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     @Override
     public String toString() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
+        return gson.toJson(this, FHEMModel.class);
     }
 
     public String toJson() {
         Gson gson = new Gson();
-        return gson.toJson(this);
+        return gson.toJson(this, FHEMModel.class);
     }
 
     /**
@@ -60,7 +60,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return rooms.iterator();
     }
 
-    public Iterator<FHEMSensor> eachSensor() {
+    private Iterator<FHEMSensor> eachSensor() {
         HashSet<FHEMSensor> sensors = new HashSet<>();
         forEach((FHEMRoom room) -> room.forEach(sensors::add));
         return sensors.iterator();
