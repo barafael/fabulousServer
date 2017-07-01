@@ -81,24 +81,27 @@ public class FHEMFileLog {
      * @return the name of the unit of this log
      */
     private static Optional<String> getUnitInFileLog(String path) {
+        String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line = bufferedReader.readLine();
+            line = bufferedReader.readLine();
             bufferedReader.close();
-            if (line == null) {
-                System.err.println("Could not read line. Presumably there is none.");
-                return Optional.empty();
-            }
-            String unit = line.split(" ")[2];
-            if (unit.endsWith(":")) {
-                unit = unit.substring(0, unit.length() - 1);
-            }
-            return Optional.of(unit);
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
         }
+        if (line == null) {
+            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+            System.err.println("This can happen in the beginning of the month.");
+            return Optional.empty();
+        }
+        String unit = line.split(" ")[2];
+        if (unit.endsWith(":")) {
+            unit = unit.substring(0, unit.length() - 1);
+        }
+        return Optional.of(unit);
     }
+
 
     public String getName() {
         return name;
@@ -183,27 +186,30 @@ public class FHEMFileLog {
      * @return an estimated logtype
      */
     private Logtype guessLogtype(String path) {
+        String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line = bufferedReader.readLine();
+            line = bufferedReader.readLine();
             bufferedReader.close();
-            if (line == null) {
-                System.err.println("Could not read line. Presumably there is none.");
-                return UNKNOWN;
-            }
-            if (line.contains("%")) {
-                return PERCENT;
-            } else {
-                String value = getLineValue(line);
-                if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
-                    return REAL;
-                } else {
-                    return DISCRETE;
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
             return Logtype.UNKNOWN;
+        }
+        if (line == null) {
+            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+            System.err.println("This can happen in the beginning of the month.");
+            return UNKNOWN;
+        }
+        /* TODO test if this actually works */
+        if (line.contains("%")) {
+            return PERCENT;
+        } else {
+            String value = getLineValue(line);
+            if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
+                return REAL;
+            } else {
+                return DISCRETE;
+            }
         }
     }
 
