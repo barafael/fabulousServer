@@ -77,9 +77,38 @@ public class FHEMParser {
      * @return a FHEMModel, if present
      */
     public Optional<FHEMModel> getFHEMModel() {
-        Instant one = Instant.now();
-        if (System.getProperty("user.home").contains("pi")) {
-            String jsonList2_str = "";
+        Instant one = timePrint ? Instant.now() : null;
+        if (System.getProperty("user.home").equals("/home/ra")) {
+            mock = true;
+        }
+        String jsonList2_str = "";
+        if (mock) {
+            System.out.println("Mocking FHEM Connection!");
+            /* Mock jsonlist2! */
+            Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
+            if (!mockdir_opt.isPresent()) {
+                System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
+                return Optional.empty();
+            }
+            String path = mockdir_opt.get();
+            try {
+                jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
+            } catch (IOException e) {
+                System.err.println("FHEM might not be running or the logs might not be there.");
+                System.err.println
+                        ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
+                                "FHEMPORT (fhem telnet port) in your $HOME/.profile");
+                System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
+                        "Client Mode won't work if this is the case because of FHEM. You should consider removing the password and instead blocking the port.");
+                return Optional.empty();
+            }
+            if (timePrint) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
+            jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
+            jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");
+
+            if (timePrint)
+                System.out.println("Replaced paths at: " + Duration.between(one, Instant.now()).toMillis());
+        } else {
             try {
                 jsonList2_str = fhc.getJsonList2();
             } catch (FHEMNotFoundException e) {
@@ -88,55 +117,21 @@ public class FHEMParser {
                         ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
                                 "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                 System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
-                        "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
+                        "Client Mode won't work if this is the case because of FHEM. You should consider removing the password and instead blocking the port.");
                 return Optional.empty();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if (timePrint) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
-            JsonList2 list = JsonList2.parseFrom(jsonList2_str);
-            if (timePrint) System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
-            FHEMModel fhemModel = list.toFHEMModel();
-            if (timePrint) System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
-            model = fhemModel;
-            return Optional.ofNullable(fhemModel);
-        } else {
-            /* Mock jsonlist2! */
-            String jsonList2_str;
-            Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
-            if (mockdir_opt.isPresent()) {
-                String path = mockdir_opt.get();
-                try {
-                    jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
-                } catch (IOException e) {
-                    System.err.println("FHEM might not be running or the logs might not be there.");
-                    System.err.println
-                            ("You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n" +
-                                    "FHEMPORT (fhem telnet port) in your $HOME/.profile");
-                    System.err.println("Otherwise, is your telnet port password protected by FHEM? " +
-                            "Client Mode won't work if this is the case because of FHEM. Use telnet directly with a password.");
-                    return Optional.empty();
-                }
-                if (timePrint) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
-                jsonList2_str = jsonList2_str.replaceAll("/opt/fhem/log/", path + "fhemlog/");
-                jsonList2_str = jsonList2_str.replaceAll("./log/", path + "fhemlog/");
-
-                if (timePrint)
-                    System.out.println("Replaced stuff at: " + Duration.between(one, Instant.now()).toMillis());
-
-                JsonList2 list = JsonList2.parseFrom(jsonList2_str);
-                if (timePrint)
-                    System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
-                FHEMModel fhemModel = list.toFHEMModel();
-                if (timePrint)
-                    System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
-                model = fhemModel;
-                return Optional.ofNullable(fhemModel);
-            } else {
-                System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
-            }
         }
-        return Optional.empty();
+        JsonList2 list = JsonList2.parseFrom(jsonList2_str);
+        if (timePrint)
+            System.out.println("Parsed jsonlist at: " + Duration.between(one, Instant.now()).toMillis());
+        FHEMModel fhemModel = list.toFHEMModel();
+        if (timePrint)
+            System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
+        model = fhemModel;
+        return Optional.ofNullable(fhemModel);
     }
 
     /**
