@@ -2,9 +2,7 @@ package WebServer.FHEMParser.fhemModel.log;
 
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -253,5 +251,29 @@ public class FHEMFileLog {
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> timeserie_opt = getTimeserie(startTime, endTime);
         return timeserie_opt.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
+    }
+
+    public String last() {
+        String last = "";
+        long maxLineLength = 200;
+        try {
+            RandomAccessFile raf = new RandomAccessFile(path, "r");
+            long len;
+            try {
+                len = raf.length();
+                if (len > maxLineLength) {
+                    raf.seek(len - maxLineLength);
+                }
+                String s = "";
+                while ((s = raf.readLine()) != null) {
+                    last = s;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return last;
     }
 }

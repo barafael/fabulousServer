@@ -7,10 +7,7 @@ import WebServer.stateCheck.VAR;
 import WebServer.stateCheck.WARNINGLEVEL;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Rafael

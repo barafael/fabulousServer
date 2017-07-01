@@ -113,4 +113,24 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         String value = metaInfo.get("State");
         return value != null && value.contains(state);
     }
+
+    public String getStateValue() {
+        return metaInfo.get("State");
+    }
+
+    public Optional<Double> getBatteryValue() {
+        Optional<FHEMFileLog> batteryLog = fileLogs.stream().filter(fhemFileLog -> fhemFileLog.getName().endsWith("battery")).findFirst();
+        if (!batteryLog.isPresent()) {
+            return Optional.empty();
+        }
+        String last = batteryLog.get().last();
+        System.out.println(last);
+        String[] cols = last.split(" ");
+        String value = cols[cols.length - 1];
+        if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
+            return Optional.of(Double.parseDouble(value));
+        } else {
+            return Optional.of(value.equals("ok") ? 100.0 : 0.0);
+        }
+    }
 }
