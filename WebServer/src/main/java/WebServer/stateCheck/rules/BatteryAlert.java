@@ -7,14 +7,17 @@ import WebServer.stateCheck.VAR;
 import WebServer.stateCheck.WARNINGLEVEL;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
  */
 
-public class WindowOpenLabClosed extends Rule {
-    public WindowOpenLabClosed() {
+public class BatteryAlert extends Rule {
+    public BatteryAlert() {
         super();
         // TODO: what about translation?
         name = "Fenster offen außerhalb der Öffnungszeiten";
@@ -32,17 +35,20 @@ public class WindowOpenLabClosed extends Rule {
         sensors.add("HM_56A27C");
     }
 
-    //TODO use affected sensors
     @Override
     public boolean eval(FHEMModel model, State globalState) {
-        long currentTime = Instant.now().getEpochSecond();
-        if (currentTime >= globalState.getTimes().get(VAR.STARTTIME)
-                && currentTime <= globalState.getTimes().get(VAR.ENDTIME)) {
-            newState(true);
-            return true;
+        Set<FHEMSensor> batterySensors = model.getSensorsByList(sensors);
+        boolean state = true;
+        for (FHEMSensor sensor : batterySensors) {
+            Optional<Double> value = sensor.getBatteryValue();
+            if (value.isPresent()) {
+                double v = value.get();
+                if (v < 25.0) {
+                    affectedSensors.add(sensor.getName());
+                    state = false;
+                }
+            }
         }
-        Set<FHEMSensor> windowSensors = model.getSensorsByList(sensors);
-        boolean state = windowSensors.stream().anyMatch(s -> s.stateContains("open"));
         newState(state);
         return state;
     }
