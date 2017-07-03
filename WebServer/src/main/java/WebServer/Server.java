@@ -80,7 +80,6 @@ public class Server extends AbstractVerticle {
         JsonObject jdbcClientConfig = new JsonObject()
                 .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false&autoReconnect=true&connectTimeout=0")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
-                .put("initial_pool_size", 5)
                 .put("user", "java")
                 .put("password", "ialsevlhdakkyllosnmnilk");
         JDBCClient jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
