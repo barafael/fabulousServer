@@ -41,31 +41,46 @@ public class ModelTest {
 
     @Test
     public void modelRoomIterator() {
-        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(fhemRooms -> {
-            int count = 0;
-            for (FHEMRoom room : fhemRooms) {
-                assert room != null;
-                count++;
-            }
-            assert count > 0;
-            System.out.println(count + " rooms.");
-        });
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+        int count = 0;
+        for (FHEMRoom room : model) {
+            assert room != null;
+            count++;
+        }
+        assert count > 0;
+        System.out.println(count + " rooms.");
+    }
+
+    @Test
+    public void modelSensorIterator() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+        int count = 0;
+        for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {
+            FHEMSensor sensor = it.next();
+            assert sensor != null;
+            count++;
+        }
+        assert count > 0;
+        System.out.println(count + " sensors.");
     }
 
     @Test
     public void modelLogIterator() {
-        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        model.ifPresent(fhemRooms -> {
-            int count = 0;
-            for (Iterator<FHEMFileLog> it = fhemRooms.eachLog(); it.hasNext(); ) {
-                FHEMFileLog log = it.next();
-                assert log != null;
-                count++;
-            }
-            assert count > 0;
-            System.out.println(count + " logs.");
-        });
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+        int count = 0;
+        for (Iterator<FHEMFileLog> it = model.eachLog(); it.hasNext(); ) {
+            FHEMFileLog log = it.next();
+            assert log != null;
+            count++;
+        }
+        assert count > 0;
+        System.out.println(count + " logs.");
     }
 
     @Test
@@ -190,7 +205,7 @@ public class ModelTest {
         System.out.println(parser.execCommand("uname -a"));
     }
 
-    @Test
+    //@Test
     public void testSetSensorPosition() {
         FHEMParser parser = FHEMParser.getInstance()
                 .setFHEMConnection(new FHEMClientModeCon("/usr/bin/fhem.pl", 7072));
@@ -227,7 +242,9 @@ public class ModelTest {
     }
 
     /**
-     * Helper function which tests if a json string can be deserialized without throwing an exception.
+     * Helper function which tests if a json string can be deserialized without throwing an exception
+     * (which would mean incorrect json format).
+     *
      * @param json A string which should be tested
      * @return whether the input was valid json
      */
@@ -236,7 +253,7 @@ public class ModelTest {
         try {
             gson.fromJson(json, Object.class);
             return true;
-        } catch(com.google.gson.JsonSyntaxException ex) {
+        } catch (com.google.gson.JsonSyntaxException ex) {
             return false;
         }
     }

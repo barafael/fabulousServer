@@ -54,14 +54,18 @@ public class FHEMModel implements Iterable<FHEMRoom> {
      *
      * @return an iterator over the contained rooms in this model.
      */
-
     @NotNull
     @Override
     public Iterator<FHEMRoom> iterator() {
         return rooms.iterator();
     }
 
-    private Iterator<FHEMSensor> eachSensor() {
+    /**
+     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     *
+     * @return an iterator over the contained sensors in this model.
+     */
+    public Iterator<FHEMSensor> eachSensor() {
         HashSet<FHEMSensor> sensors = new HashSet<>();
         forEach((FHEMRoom room) -> room.forEach(sensors::add));
         return sensors.iterator();
