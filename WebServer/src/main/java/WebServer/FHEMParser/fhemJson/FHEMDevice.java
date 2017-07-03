@@ -59,7 +59,7 @@ public class FHEMDevice {
      * FHEM itself does not distinguish between devices, which is why this crude measure of tagging manually is necessary.
      */
     boolean isSensor() {
-        boolean isSupersensor = getInternals().hasChannels();
+        boolean isSupersensor = getInternals().isSupersensor();
         return !isSupersensor && isInRoom("sensors");
     }
 

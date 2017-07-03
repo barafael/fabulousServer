@@ -65,8 +65,6 @@ class FHEMDeviceAttributes {
         return Integer.parseInt(coordY);
     }
 
-    // TODO read all attributes which might be possible
-
     /**
      * Acessor for the userattr 'permissions' in FHEM
      * @return the userattr 'permissions' in FHEM

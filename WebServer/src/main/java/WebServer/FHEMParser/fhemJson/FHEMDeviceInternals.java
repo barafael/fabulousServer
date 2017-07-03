@@ -29,6 +29,8 @@ public class FHEMDeviceInternals {
     @SerializedName("STATE")
     private String state;
     private String channel_01;
+    @SerializedName("Clients")
+    private String clients;
     @SerializedName("REGEXP")
     private String regexp;
     @SerializedName("TYPE")
@@ -87,7 +89,7 @@ public class FHEMDeviceInternals {
         return Optional.ofNullable(regexp);
     }
 
-    public boolean hasChannels() {
-        return channel_01 != null;
+    public boolean isSupersensor() {
+        return channel_01 != null || clients != null;
     }
 }

@@ -98,6 +98,7 @@ public class ModelTest {
         assert model.isPresent();
         assert isValidJSON(model.get().toString());
     }
+
     @Test
     public void toJSONWithPermissions() {
         List<String> permissions = Arrays.asList("Permission1", "S_Fenster");
