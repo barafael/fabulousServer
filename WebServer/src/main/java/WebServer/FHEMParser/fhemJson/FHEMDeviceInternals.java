@@ -28,6 +28,7 @@ public class FHEMDeviceInternals {
     private String definition;
     @SerializedName("STATE")
     private String state;
+    private String channel_01;
     @SerializedName("REGEXP")
     private String regexp;
     @SerializedName("TYPE")
@@ -84,5 +85,9 @@ public class FHEMDeviceInternals {
 
     public Optional<String> getRegexp() {
         return Optional.ofNullable(regexp);
+    }
+
+    public boolean hasChannels() {
+        return channel_01 != null;
     }
 }
