@@ -53,6 +53,7 @@ public class ModelTest {
         System.out.println(count + " rooms.");
     }
 
+    //TODO annotate sensors in fhem
     @Test
     public void modelSensorIterator() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();

@@ -97,9 +97,14 @@ public class FHEMFileLog {
         if (unit.endsWith(":")) {
             unit = unit.substring(0, unit.length() - 1);
         }
+
+        /* Duck-type extra handling for switches */
+        if (unit.equals("on") || unit.equals("off")) {
+            unit = "switch";
+        }
+
         return Optional.of(unit);
     }
-
 
     public String getName() {
         return name;
