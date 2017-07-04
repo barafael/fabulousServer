@@ -78,7 +78,7 @@ public class Server extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
         /* Authentication */
         JsonObject jdbcClientConfig = new JsonObject()
-                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false&autoReconnect=true&connectTimeout=0")
+                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false&autoReconnect=true&tcpKeepAlive=true&connectTimeout=0&socketTimeout=0&reconnectAtTxEnd=true")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("user", "java")
                 .put("password", "ialsevlhdakkyllosnmnilk");
