@@ -84,7 +84,6 @@ public class FHEMParser {
         }
         String jsonList2_str = "";
         if (mock) {
-            System.out.println("Mocking FHEM Connection!");
             /* Mock jsonlist2! */
             Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
             if (!mockdir_opt.isPresent()) {

@@ -13,6 +13,7 @@ import java.util.Map;
  */
 
 public class State {
+    //TODO maybe add other variables here later
     private final Map<VAR, Long> times = new HashMap<>();
     /* GPS location for the FABLAB */
     private static final Location location = new Location("48.5657463", "13.450155799999948");
@@ -24,12 +25,8 @@ public class State {
         Calendar officialSunset = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance());
         times.put(VAR.SUNRISE, officialSunrise.getTimeInMillis()/1000L);
         times.put(VAR.SUNSET, officialSunset.getTimeInMillis()/1000L);
-
-
         times.put(VAR.STARTTIME, timeOfToday(6, 0));
         times.put(VAR.ENDTIME, timeOfToday(20, 0));
-
-        System.out.println(this);
     }
 
     public Map<VAR, Long> getTimes() {

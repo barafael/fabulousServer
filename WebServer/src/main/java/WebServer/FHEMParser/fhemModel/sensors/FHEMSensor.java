@@ -1,8 +1,8 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
-import WebServer.FHEMParser.fhemModel.log.Timeserie;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -14,20 +14,22 @@ import java.util.function.Consumer;
  *
  * @author Rafael
  */
-
 public class FHEMSensor implements Iterable<FHEMFileLog> {
     private final Coordinates coords;
     private final String name;
+    @SerializedName("alias")
+    private final String nameInApp;
     transient private final List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
     transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
 
-    public FHEMSensor(int coordX, int coordY, String name, List<String> permissions,
+    public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
+        this.nameInApp = nameInApp;
         this.permissions = permissions;
         this.isShowInApp = isShowInApp;
         this.metaInfo = metaInfo;
@@ -42,6 +44,10 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String getNameInApp() {
         return name;
     }
 
@@ -119,18 +125,10 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     public Optional<Double> getBatteryValue() {
-        Optional<FHEMFileLog> batteryLog = fileLogs.stream().filter(fhemFileLog -> fhemFileLog.getName().endsWith("battery")).findFirst();
-        if (!batteryLog.isPresent()) {
-            return Optional.empty();
-        }
-        String last = batteryLog.get().last();
-        System.out.println(last);
-        String[] cols = last.split(" ");
-        String value = cols[cols.length - 1];
-        if (value.matches("[+-]?([0-9]+[.])?[0-9]+")) {
-            return Optional.of(Double.parseDouble(value));
-        } else {
-            return Optional.of(value.equals("ok") ? 100.0 : 0.0);
-        }
+        return Optional.of(Double.parseDouble(metaInfo.get("battery percent")));
+    }
+
+    public Optional<String> getBatteryStatus() {
+        return Optional.of(metaInfo.get("battery"));
     }
 }

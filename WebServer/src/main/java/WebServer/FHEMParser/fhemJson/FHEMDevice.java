@@ -37,6 +37,8 @@ public class FHEMDevice {
     private FHEMDeviceInternals internals;
     @SerializedName("Attributes")
     private FHEMDeviceAttributes attributes;
+    @SerializedName("Readings")
+    private FHEMDeviceReadings readings;
 
     /** 
      * Accessor method for the internals of a FHEM device.
@@ -145,7 +147,9 @@ public class FHEMDevice {
         List<String> permissions = Arrays.asList(permissionfield.split(","));
         HashMap<String, String> meta = new HashMap<>();
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, permissions, isShowInApp(), meta);
+        String alias = attributes.getAlias().orElse("Not supplied");
+
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isShowInApp(), meta);
 
         sensor.setIcon(getAttributes().getIcon());
 
@@ -153,7 +157,7 @@ public class FHEMDevice {
         sensor.addMeta("State", internals.getState().orElse("Not supplied"));
         sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
-        sensor.addMeta("alias", attributes.getAlias().orElse("Not supplied"));
+        readings.getReadings().forEach(sensor::addMeta);
 
         return Optional.of(sensor);
     }
@@ -239,6 +243,10 @@ public class FHEMDevice {
             appRoom = appRooms.get(0);
         }
         return appRoom;
+    }
+
+    public FHEMDeviceReadings getReadings() {
+        return readings;
     }
 }
 

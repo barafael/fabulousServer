@@ -6,7 +6,7 @@ import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import java.util.Optional;
 
 /**
- * Created by ra on 02.06.17.
+ * @author Rafael on 02.06.17.
  * This class represents the relevant attributes of the
  * 'Internals' section in each device in jsonList2.
  */
