@@ -28,7 +28,7 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         name = roomname;
         if (roomname.startsWith("room_")) {
             String fhemPath = FHEMUtils.getGlobVar("FHEMDIR").orElse("");
-            pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".svg");
+            pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".png");
             pathToHash = Paths.get(fhemPath + "roomplans/" + roomname + ".hash");
         }
     }
@@ -81,7 +81,7 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
 
     public Optional<String> getRoomplan() {
         try {
-            String content = new String(Files.readAllBytes(pathToPlan));
+            String content = new String(Base64.getEncoder().encode(Files.readAllBytes(pathToPlan)));
             return Optional.of(content);
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
             String hash_str = new String(Files.readAllBytes(pathToHash));
             int file_hash = Integer.parseInt(hash_str);
             if (request_hash != file_hash) {
-                return Optional.of(new String(Files.readAllBytes(pathToPlan)));
+                return Optional.of(new String(Base64.getEncoder().encode(Files.readAllBytes(pathToPlan))));
             } else {
                 return Optional.empty();
             }
@@ -124,11 +124,12 @@ public class FHEMRoom implements Iterable<FHEMSensor> {
         return result;
     }
 
-    public boolean setRoomplan(String svg) {
+    public boolean setRoomplan(String picture) {
         try (BufferedWriter filewrite = Files.newBufferedWriter(pathToPlan);
              BufferedWriter hashwrite = Files.newBufferedWriter(pathToHash)) {
-            filewrite.write(svg);
-            hashwrite.write(String.valueOf(svg.hashCode()));
+            byte[] file = Base64.getDecoder().decode(picture);
+            filewrite.write(String.valueOf(file));
+            hashwrite.write(String.valueOf(picture.hashCode()));
         } catch (IOException e) {
             e.printStackTrace();
             return false;

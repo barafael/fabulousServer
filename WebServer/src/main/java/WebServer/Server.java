@@ -203,9 +203,7 @@ public class Server extends AbstractVerticle {
 
         darfErDasFuture.setHandler(res -> {
             if (res.succeeded() && darfErDasFuture.result()) {
-                //TODO: check body (file) for errors
                 String file = routingContext.getBodyAsString();
-
                 vertx.executeBlocking(future -> {
                     if (!parser.readMutex().equals(routingContext.user().principal().getString(Username_PARAM))) {
                         future.handle(Future.failedFuture(future.cause()));
