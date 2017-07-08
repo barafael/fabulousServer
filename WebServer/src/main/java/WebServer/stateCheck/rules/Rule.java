@@ -1,14 +1,15 @@
 package WebServer.stateCheck.rules;
 
 import WebServer.FHEMParser.fhemModel.FHEMModel;
-import WebServer.stateCheck.State;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.stateCheck.WARNINGLEVEL;
+import WebServer.stateCheck.rules.parsing.RuleParam;
 
 import java.time.Instant;
 import java.util.*;
 
 /**
- * This abstract class contains the attributes of a rule in fhem, most notably the eval(model) method.
+ * This abstract class contains the attributes of a rule in FHEM, most notably the eval(model) method.
  *  @author Rafael
  *
  */
@@ -16,31 +17,38 @@ import java.util.*;
 public abstract class Rule {
     String name;
     String permission;
-    final Set<String> sensors;
-    final Set<String> affectedSensors;
+    Set<FHEMSensor> sensorNames;
+    Set<FHEMSensor> affectedSensorNames;
+    Set<String> requiredTrueRules;
+    Set<String> requiredFalseRules;
     String okMessage;
-    private WARNINGLEVEL level;
-    final Map<WARNINGLEVEL, String> errorMessages;
-    private final Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    private long lastChangeTimestamp;
-    private final transient boolean state;
-    private transient boolean lastState;
+    WARNINGLEVEL level;
+    Map<WARNINGLEVEL, String> errorMessages;
+    Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    long lastChangeTimestamp;
+    final boolean state;
+    boolean lastState;
 
-    Rule() {
-        name = "";
-        permission = "";
-        sensors = new HashSet<>();
-        affectedSensors = new HashSet<>();
-        okMessage = "";
+    FHEMModel model;
+
+    public Rule(RuleParam ruleParam, FHEMModel model) {
+        name = ruleParam.getName();
+        permission = ruleParam.getPermissionField();
+        sensorNames = model.getSensorsByCollection(ruleParam.getSensorNames());
+        affectedSensorNames = new HashSet<>();
+        okMessage = ruleParam.getOkMessage();
+        requiredTrueRules = ruleParam.getRequiredTrueRules();
+        requiredFalseRules = ruleParam.getRequiredFalseRules();
         level = WARNINGLEVEL.NORMAL;
-        errorMessages = new HashMap<>();
+        errorMessages = ruleParam.getErrorMessages;
         lastChangeTimestamp = Instant.now().getEpochSecond();
         state = true;
         lastState = true;
+
+        this.model = model;
     }
 
-
-    public abstract boolean eval(FHEMModel model, State state);
+    public abstract boolean eval();
 
     public String log() {
         StringBuilder out = new StringBuilder();
@@ -50,7 +58,7 @@ public abstract class Rule {
         } else {
             out.append(errorMessages.get(level)).append('\n');
         }
-        out.append("Affected sensors: ").append(sensors).append('\n');
+        out.append("Affected sensors: \n\t").append(affectedSensorNames).append("\n\t");
         return out.toString();
     }
 

@@ -123,7 +123,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
-    public Set<FHEMSensor> getSensorsByList(Set<String> sensors) {
+    public Set<FHEMSensor> getSensorsByCollection(Collection<String> sensors) {
         return sensors.stream()
                 .map(this::getSensorByName)
                 .filter(Optional::isPresent)
