@@ -1,0 +1,8 @@
+package WebServer.stateCheck.rules.parsing;
+
+/**
+ * @author Rafael on 07.07.17.
+ */
+public enum RuleType {
+    REGEXP, THRESHHOLD, PREDICATE
+}
