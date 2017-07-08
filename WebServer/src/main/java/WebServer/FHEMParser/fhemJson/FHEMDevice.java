@@ -4,7 +4,9 @@ import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
