@@ -35,6 +35,7 @@ public class Server extends AbstractVerticle {
     private Router router;
     private HttpServer server;
     private SQLConnection connection;
+    private JDBCClient jdbcClient;
     private final FHEMParser parser = Main.parser;
 
     private static final String OK_SERVER_RESPONSE = "OK";
@@ -72,17 +73,19 @@ public class Server extends AbstractVerticle {
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
     private long TimerofMutexID = 0;
+    private long DatabaseAliveTimer = 0;
+    private final int DatabaseKeepAlive = 1 * 60 * 1000;
 
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
         /* Authentication */
         JsonObject jdbcClientConfig = new JsonObject()
-                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false&autoReconnect=true&tcpKeepAlive=true&connectTimeout=0&socketTimeout=0&reconnectAtTxEnd=true")
+                .put("url", "jdbc:mysql://localhost:3306/fhem_userdata?useSSL=false")
                 .put("driver_class", "com.mysql.cj.jdbc.Driver")
                 .put("user", "java")
                 .put("password", "ialsevlhdakkyllosnmnilk");
-        JDBCClient jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
+        jdbcClient = JDBCClient.createNonShared(vertx, jdbcClientConfig);
         authProvider = JDBCAuth.create(vertx, jdbcClient);
         AuthHandler authHandler = BasicAuthHandler.create(authProvider);
 
@@ -120,7 +123,32 @@ public class Server extends AbstractVerticle {
                 connection = res.result().resultAt(0);
                 startFuture.complete();
                 System.out.println("Server started successfully!");
+                databaseKeepAlive();
             }
+        });
+    }
+
+    private void databaseKeepAlive() {
+        DatabaseAliveTimer = vertx.setPeriodic(DatabaseKeepAlive, id -> {
+            Future<List<String>> future = Future.future();
+            getListOfPermissions(new JsonObject().put(Username_PARAM, "noperms"), future);
+            future.setHandler(res -> {
+                if (!future.succeeded()) {
+                    System.err.println("database connection died, trying to reconnect!");
+                    /* reconnect Database  */
+                    Future<SQLConnection> databaseFuture = Future.future();
+                    jdbcClient.getConnection(databaseFuture.completer());
+                    databaseFuture.setHandler(res2 -> {
+                        if (res2.failed()) {
+                            System.err.println("database seems offline, exiting!");
+                            System.exit(12);
+                        } else {
+                            System.out.println("database successfully reconnected");
+                            connection = res2.result();
+                        }
+                    });
+                }
+            });
         });
     }
 
@@ -133,6 +161,7 @@ public class Server extends AbstractVerticle {
     @Override
     public void stop() throws Exception {
         vertx.cancelTimer(Main.parserTimerID);
+        vertx.cancelTimer(DatabaseAliveTimer);
         router.clear();
         connection.close();
         server.close();
@@ -669,7 +698,6 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void printRequestHeaders(RoutingContext routingContext) {
-        //TODO: remove debug print
         System.out.println("");
         System.out.println("---");
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
