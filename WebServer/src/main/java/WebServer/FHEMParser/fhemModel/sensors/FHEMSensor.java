@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.
- * It also contains the FileLog stubs needed to aquire timeseries.
+ * It also contains the FileLog stubs needed to acquire timeseries.
  *
  * @author Rafael
  */
@@ -47,10 +47,6 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         return name;
     }
 
-    public String getNameInApp() {
-        return name;
-    }
-
     public void setIcon(String icon) {
         this.icon = icon;
     }
@@ -78,7 +74,8 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * This method is necessary to be able to iterate over an internal data structure
+     * while not permitting mutable access.
      *
      * @return an iterator over the contained logs in this sensor.
      */
@@ -89,7 +86,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure
+     * This method is necessary to be able to iterate over an internal data structure
      */
     @Override
     public void forEach(Consumer<? super FHEMFileLog> action) {
@@ -97,7 +94,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * Returns whether any of the logs are permitted to be accesseed with the given permissions.
+     * Returns whether any of the logs are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
      * @return whether this sensor contains viewable timeseries
@@ -115,20 +112,15 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         return coords;
     }
 
-    public boolean stateContains(String state) {
-        String value = metaInfo.get("State");
-        return value != null && value.contains(state);
+    public Optional<String> getValueOfField(String field) {
+        switch (field) {
+            //TODO implement more fields!
+            case "STATE":
+                return Optional.ofNullable(metaInfo.get("STATE"));
+            default:
+                return Optional.empty();
+        }
     }
 
-    public String getStateValue() {
-        return metaInfo.get("State");
-    }
 
-    public Optional<Double> getBatteryValue() {
-        return Optional.of(Double.parseDouble(metaInfo.get("battery percent")));
-    }
-
-    public Optional<String> getBatteryStatus() {
-        return Optional.of(metaInfo.get("battery"));
-    }
 }

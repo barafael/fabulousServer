@@ -194,7 +194,6 @@ public class FHEMParser {
         if (!room.hasPermittedSensors(permission)) {
             return Optional.of("null");
         }
-
         return room.getRoomplan(hash);
     }
 

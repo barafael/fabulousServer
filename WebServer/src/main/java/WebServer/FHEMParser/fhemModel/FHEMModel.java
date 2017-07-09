@@ -50,7 +50,8 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * This method is necessary to be able to iterate over an internal data structure
+     * while not permitting mutable access.
      *
      * @return an iterator over the contained rooms in this model.
      */
@@ -61,7 +62,8 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure while not permitting mutable access.
+     * This method is necessary to be able to iterate over an internal data structure
+     * while not permitting mutable access.
      *
      * @return an iterator over the contained sensors in this model.
      */
@@ -78,7 +80,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal datastructure
+     * This method is necessary to be able to iterate over an internal data structure
      */
 
     @Override
@@ -87,7 +89,7 @@ public class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * Returns whether any of the rooms are permitted to be accesseed with the given permissions.
+     * Returns whether any of the rooms are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
      * @return whether this model contains viewable rooms
