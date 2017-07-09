@@ -1,51 +1,41 @@
 package WebServer.stateCheck;
 
-import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
-import com.luckycatlabs.sunrisesunset.dto.Location;
+import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
+import WebServer.stateCheck.rules.Rule;
+import WebServer.stateCheck.rules.RuleInfo;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Rafael
  */
 
 public class State {
-    //TODO maybe add other variables here later
-    private final Map<VAR, Long> times = new HashMap<>();
-    /* GPS location for the FABLAB */
-    private static final Location location = new Location("48.5657463", "13.450155799999948");
-    private static final SunriseSunsetCalculator calculator =
-            new SunriseSunsetCalculator(location, "Berlin/Europe");
+    Map<String, Map<String, Long>> state = new HashMap<>();
 
-    public State() {
-        Calendar officialSunrise = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance());
-        Calendar officialSunset = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance());
-        times.put(VAR.SUNRISE, officialSunrise.getTimeInMillis()/1000L);
-        times.put(VAR.SUNSET, officialSunset.getTimeInMillis()/1000L);
-        times.put(VAR.STARTTIME, timeOfToday(6, 0));
-        times.put(VAR.ENDTIME, timeOfToday(20, 0));
-    }
+    /**
+     * Update the warning message and attach a RuleInfo to the sensor
+     *
+     * @param model
+     * @param rules
+     */
+    public void setRuleInfos(FHEMModel model, Set<Rule> rules) {
+        for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {
+            FHEMSensor sensor = it.next();
 
-    public Map<VAR, Long> getTimes() {
-        return times;
-    }
-
-    @Override
-    public String toString() {
-        return "State{" +
-                "times=" + times +
-                '}';
-    }
-
-    private long timeOfToday(int hour, int minute) {
-        Calendar time = new GregorianCalendar();
-        time.set(Calendar.HOUR_OF_DAY, hour);
-        time.set(Calendar.MINUTE, minute);
-        time.set(Calendar.SECOND, 0);
-        time.set(Calendar.MILLISECOND, 0);
-        return time.getTimeInMillis()/1000L;
+            Set<String> violatingRuleNames = state.get(sensor.getName()).keySet();
+            Set<Rule> violatingRules = rules.stream().
+                    filter(s -> violatingRuleNames.contains(s.getName())).collect(Collectors.toSet());
+            for (Rule rule : violatingRules) {
+                long timestamp = state.get(sensor.getName()).get(rule.getName());
+                String message = rule.getWarningMessage(timestamp);
+                sensor.addRuleInfo(new RuleInfo(rule.getName(), rule.getPermissionField(), message));
+            }
+        }
     }
 }

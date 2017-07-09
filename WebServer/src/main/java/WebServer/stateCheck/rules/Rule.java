@@ -7,84 +7,74 @@ import WebServer.stateCheck.rules.parsing.RuleParam;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * This abstract class contains the attributes of a rule in FHEM, most notably the eval(model) method.
- *  @author Rafael
+ * This abstract class contains the attributes of a rule, most notably the eval() method.
  *
+ * @author Rafael
  */
 
 public abstract class Rule {
     String name;
     String permission;
-    Set<FHEMSensor> sensorNames;
-    Set<FHEMSensor> affectedSensorNames;
-    Set<String> requiredTrueRules;
-    Set<String> requiredFalseRules;
+    Set<String> sensorNames;
+    String expression;
     String okMessage;
-    WARNINGLEVEL level;
     Map<WARNINGLEVEL, String> errorMessages;
     Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    long lastChangeTimestamp;
-    final boolean state;
-    boolean lastState;
 
-    FHEMModel model;
+    boolean isEvaluated = false;
+    RuleState ruleState = null;
+    Set<Rule> requiredTrueRules;
+    Set<Rule> requiredFalseRules;
 
-    public Rule(RuleParam ruleParam, FHEMModel model) {
+    public Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
         permission = ruleParam.getPermissionField();
-        sensorNames = model.getSensorsByCollection(ruleParam.getSensorNames());
-        affectedSensorNames = new HashSet<>();
+        sensorNames = ruleParam.getSensorNames();
+        expression = ruleParam.getExpression();
         okMessage = ruleParam.getOkMessage();
-        requiredTrueRules = ruleParam.getRequiredTrueRules();
-        requiredFalseRules = ruleParam.getRequiredFalseRules();
-        level = WARNINGLEVEL.NORMAL;
-        errorMessages = ruleParam.getErrorMessages;
-        lastChangeTimestamp = Instant.now().getEpochSecond();
-        state = true;
-        lastState = true;
-
-        this.model = model;
+        errorMessages = ruleParam.getErrorMessages();
+        escalation = ruleParam.getEscalation();
     }
 
-    public abstract boolean eval();
+    public abstract RuleState eval(FHEMModel model);
 
-    public String log() {
-        StringBuilder out = new StringBuilder();
-        out.append(name).append('\n');
-        if (state) {
-            out.append(okMessage).append('\n');
-        } else {
-            out.append(errorMessages.get(level)).append('\n');
-        }
-        out.append("Affected sensors: \n\t").append(affectedSensorNames).append("\n\t");
-        return out.toString();
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "name='" + name + '\'' +
+                ", permission='" + permission + '\'' +
+                ", expression='" + expression + '\'' +
+                '}';
     }
 
-    Rule stamp() {
-        lastChangeTimestamp = Instant.now().getEpochSecond();
-        return this;
+    public String getName() {
+        return name;
     }
 
-    void newState(boolean state) {
-        if (state == lastState) {
-            if (!state) {
-                long time_passed = Instant.now().getEpochSecond() - lastChangeTimestamp;
-                setLevel(time_passed);
-            }
-        } else {
-            lastState = state;
-            stamp();
-        }
+    public void setRequiredTrue(Set<Rule> requiredTrue) {
+        this.requiredTrueRules = requiredTrue;
     }
 
-    private void setLevel(long time_passed) {
-        for (long time: escalation.keySet()) {
-            if (time_passed > time) {
-                level = escalation.get(time);
-                return;
+    public String getWarningMessage(long startTime) {
+        long elapsedTime = Instant.now().getEpochSecond() - startTime;
+        List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
+        for (long key : keys) {
+            if (elapsedTime <= key) {
+                return errorMessages.get(escalation.get(key));
             }
         }
+        /* elapsed time was higher than all keys in list */
+        return errorMessages.get(WARNINGLEVEL.DISASTER);
+    }
+
+    public void setRequiredFalse(Set<Rule> requiredFalse) {
+        this.requiredFalseRules = requiredFalse;
+    }
+
+    public String getPermissionField() {
+        return permission;
     }
 }

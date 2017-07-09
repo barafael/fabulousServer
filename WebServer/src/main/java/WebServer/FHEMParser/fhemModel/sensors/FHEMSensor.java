@@ -1,6 +1,7 @@
 package WebServer.FHEMParser.fhemModel.sensors;
 
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
+import WebServer.stateCheck.rules.RuleInfo;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
+    private Set<RuleInfo> ruleInfos;
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
@@ -62,6 +64,17 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
             }
         }
         return Optional.empty();
+    }
+
+    public void addRuleInfo(RuleInfo ruleInfo) {
+        /* First remove the old info, then put the current one */
+        /* This works because the equals() and hashCode() methods only care about the name */
+        if (ruleInfos.contains(ruleInfo)) {
+            ruleInfos.remove(ruleInfo);
+            ruleInfos.add(ruleInfo);
+        } else {
+            ruleInfos.add(ruleInfo);
+        }
     }
 
     @Override

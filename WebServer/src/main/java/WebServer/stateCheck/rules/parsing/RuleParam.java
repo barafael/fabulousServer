@@ -52,4 +52,16 @@ public class RuleParam {
     public Set<String> getRequiredFalseRules() {
         return requiredFalseRules;
     }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public Map<WARNINGLEVEL, String> getErrorMessages() {
+        return errorMessages;
+    }
+
+    public Map<Long, WARNINGLEVEL> getEscalation() {
+        return escalation;
+    }
 }
