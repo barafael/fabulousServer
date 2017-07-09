@@ -74,7 +74,7 @@ public class Server extends AbstractVerticle {
     private static final String endTime_PARAM = "endTime";
     private long TimerofMutexID = 0;
     private long DatabaseAliveTimer = 0;
-    private final int DatabaseKeepAlive = 1 * 60 * 1000;
+    private final int DatabaseKeepAlive = 15 * 60 * 1000;
 
 
     @Override
@@ -707,6 +707,6 @@ public class Server extends AbstractVerticle {
         } else {
             System.out.println("Server user: not specified");
         }
-        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("Authorization") ? h : "Authorization=Basic ***********")));
+        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("uthorization") ? h : "Authorization=Basic ***********")));
     }
 }
