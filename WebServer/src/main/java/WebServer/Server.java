@@ -213,7 +213,7 @@ public class Server extends AbstractVerticle {
     /**
      * handles the REST-Api call for Route /api/setRoomplan
      * needs parameter room which should be embedded in the request URI
-     * needs parameter svg file as text which should be embedded in the request body
+     * needs parameter png as Base64 which should be embedded in the request body
      * checks for users permission and calls the model to set the roomplan
      *
      * @param routingContext the context in a route given by the router
@@ -397,8 +397,8 @@ public class Server extends AbstractVerticle {
      * needs parameter room
      * optional parameter hash
      * all parameter should be embedded in the request URI
-     * checks for users permission and reads the models room data for the given id
-     * which are returned as Json in the response body
+     * checks for users permission and reads the roomplan for the given id
+     * which is returned as Base64 in the response body
      *
      * @param routingContext the context in a route given by the router
      */
