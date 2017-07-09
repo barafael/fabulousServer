@@ -2,7 +2,6 @@ package WebServer.stateCheck.rules.parsing;
 
 import WebServer.stateCheck.WARNINGLEVEL;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -12,18 +11,19 @@ import java.util.TreeMap;
  */
 public class RuleParam {
     String name;
-    String permission;
-    RuleType ruleType;
     Set<String> sensorNames;
+    RuleType ruleType;
+    String permission;
+    String expression;
     Set<String> requiredTrueRules;
     Set<String> requiredFalseRules;
     String okMessage;
     Map<WARNINGLEVEL, String> errorMessages;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    public Map<WARNINGLEVEL,String> getErrorMessages;
 
-    private RuleParam() {}
+    private RuleParam() {
+    }
 
     public RuleType getType() {
         return ruleType;
@@ -37,7 +37,7 @@ public class RuleParam {
         return permission;
     }
 
-    public Collection<String> getSensorNames() {
+    public Set<String> getSensorNames() {
         return sensorNames;
     }
 
