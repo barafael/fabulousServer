@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
  * This abstract class contains the attributes of a rule, most notably the eval() method.
  *
  * @author Rafael
+ *
+ * TODO: implement AND and OR rules?
+ * TODO: implement 'invisible' attribute, which makes a rule invisible for the app but can still be used from other rules?
  */
 
 public abstract class Rule {
     String name;
     String permission;
+    /* sensor names and not aliases, to guarantee uniqueness */
     Set<String> sensorNames;
     String expression;
     String okMessage;

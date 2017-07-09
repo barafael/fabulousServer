@@ -44,6 +44,7 @@ public class StateChecker {
     }
 
     private RuleParamCollection loadRuleParams() throws IOException, JsonSyntaxException {
+        /* TODO add translations for rules? */
         String content = new String(Files.readAllBytes(Paths.get("rules.json")));
         return RuleParamCollection.fromJson(content);
     }

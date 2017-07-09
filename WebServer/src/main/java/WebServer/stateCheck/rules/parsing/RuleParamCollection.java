@@ -22,6 +22,7 @@ public class RuleParamCollection {
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
         /* TODO: validate against fields which are null (not set in the input) */
+        /* TODO: detect duplicate rule names */
         return gson.fromJson(json, RuleParamCollection.class);
     }
 

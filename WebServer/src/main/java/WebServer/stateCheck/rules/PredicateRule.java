@@ -5,6 +5,7 @@ import WebServer.stateCheck.rules.parsing.RuleParam;
 
 /**
  * @author Rafael on 07.07.17.
+ * TODO implementation
  */
 public class PredicateRule extends Rule {
     public PredicateRule(RuleParam ruleParam) {

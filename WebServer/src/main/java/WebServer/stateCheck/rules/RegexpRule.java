@@ -20,6 +20,7 @@ public class RegexpRule extends Rule {
     @Override
     public RuleState eval(FHEMModel model) {
         /* TODO pull specific, repeated logic in method that calls concrete eval() */
+        /* TODO implement cycle detection */
         /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
         if (isEvaluated) {
             assert ruleState != null;
