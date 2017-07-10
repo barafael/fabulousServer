@@ -1,24 +1,24 @@
 {
     "ruleParams": [
         {
-            "requiredTrueRules": [],
-            "escalation": {
-                "100": "LOW"
-            },
-            "name": "Fenster1",
-            "okMessage": "all ok",
+            "name": "NeverTrue",
             "expression": "State contains noRainNoDry",
+            "permission": "permission1",
+            "ruleType": "REGEXP",
             "sensorNames": [
                 "HM_4F5DAA_Rain"
             ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
             "errorMessages": {
                 "LOW": "something is wrong",
                 "NORMAL": "all good",
                 "HIGH": "hey, fix it!"
-            },
-            "permission": "permission1",
-            "ruleType": "REGEXP",
-            "requiredFalseRules": []
+            }
         }
     ]
 }
