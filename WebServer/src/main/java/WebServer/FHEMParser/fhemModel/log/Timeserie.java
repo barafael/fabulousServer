@@ -53,7 +53,7 @@ public class Timeserie {
                     long epoch = dateTime.atZone(zoneId).toEpochSecond();
                     xs.add(epoch);
 
-                    String value = items[3];
+                    String value = items[items.length - 1];
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
                         ys.add(currentKey);
