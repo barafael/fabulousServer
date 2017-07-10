@@ -78,6 +78,7 @@ public class StateChecker {
                 /* Consistency check */
                 if (!ruleState.getViolatedSensors().isEmpty()) {
                     System.err.println("Error! Rule is ok but violatedSensors is not empty!");
+                    /* TODO: Mark some violated sensors? */
                 }
                 /* Get all names of sensors which are ok */
                 Set<String> sensorNames = ruleState.getOkSensors().stream().
@@ -92,6 +93,7 @@ public class StateChecker {
                     }
                 }
             } else {
+                /* ruleState is not ok */
                 /* Get all names of sensors which are ok */
                 Set<String> okSensorNames = ruleState.getOkSensors().stream().
                         map(FHEMSensor::getName).collect(Collectors.toSet());
@@ -99,6 +101,11 @@ public class StateChecker {
                     /* Remove ok rules from violated rules of this sensor */
                     Map<String, Long> violatedRules = fhemState.state.get(sensorName);
                     violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+
+                    /* If no rules at all are violated now, remove the sensor from the state */
+                    if (violatedRules.isEmpty()) {
+                        fhemState.state.remove(sensorName);
+                    }
                 }
 
                 /* Get all names of sensors which are not ok */

@@ -69,16 +69,16 @@ public class RegexpRule extends Rule {
         String operator = tokens[1];
         String expr = tokens[2];
 
-        for (String sensorname : sensorNames) {
-            Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorname);
+        for (String sensorName : sensorNames) {
+            Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorName);
             if (!sensor_opt.isPresent()) {
-                System.err.println("The sensor name " + sensorname + " was not found in the FHEM model!");
+                System.err.println("The sensor name " + sensorName + " was not found in the FHEM model!");
                 continue;
             }
 
-            boolean ruleOK;
-
             FHEMSensor sensor = sensor_opt.get();
+
+            boolean ruleOK;
 
             Optional<String> concField_opt = sensor.getValueOfField(field);
             if (!concField_opt.isPresent()) {
@@ -120,8 +120,8 @@ public class RegexpRule extends Rule {
                 violatedSensors.add(sensor);
             }
         }
-        ruleState = new RuleState(violatedSensors.isEmpty(), okSensors, violatedSensors);
         isEvaluated = true;
+        ruleState = new RuleState(violatedSensors.isEmpty(), okSensors, violatedSensors);
         return ruleState;
     }
 }

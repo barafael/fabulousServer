@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
+ * This class contains all parameters for building a Rule.
+ * It should be deserialized from a rules file.
+ *
  * @author Rafael on 07.07.17.
  */
 public class RuleParam {
@@ -45,10 +48,18 @@ public class RuleParam {
         return okMessage;
     }
 
+    /**
+     * Returns requiredTrue-Rules, which are rules which must be true as a pre-requisite
+     * @return a set of rules which are required to be true
+     */
     public Set<String> getRequiredTrueRules() {
         return requiredTrueRules;
     }
 
+    /**
+     * Returns requiredFalse-Rules, which are rules which must be false as a pre-requisite
+     * @return a set of rules which are required to be false
+     */
     public Set<String> getRequiredFalseRules() {
         return requiredFalseRules;
     }
