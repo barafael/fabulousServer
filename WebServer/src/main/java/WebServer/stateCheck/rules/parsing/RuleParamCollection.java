@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Rafael on 07.07.17.
  */
 public class RuleParamCollection {
-    private List<RuleParam> ruleParams = new ArrayList<>();
+    private Set<RuleParam> ruleParams = new HashSet<>();
 
     /* TODO: Suppress direct creation */
     /* Currently open because testing */

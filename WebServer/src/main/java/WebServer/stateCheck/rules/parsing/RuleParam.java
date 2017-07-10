@@ -96,4 +96,19 @@ public class RuleParam {
     public Map<Long, WARNINGLEVEL> getEscalation() {
         return escalation != null ? escalation : new HashMap<>();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RuleParam ruleParam = (RuleParam) o;
+
+        return name.equals(ruleParam.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

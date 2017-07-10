@@ -12,9 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
+ * Tests for the StateChecker. Some tests depend on json files in the root directory.
  * @author Rafael
  */
 
@@ -97,13 +101,13 @@ public class StateCheckerTest {
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, Optional.of("duplicateRule.json"));
-
-        Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
-        assert sensor_opt.isPresent();
-        FHEMSensor sensor = sensor_opt.get();
-
-        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
+        String json;
+        try {
+            json = new String(Files.readAllBytes(Paths.get("duplicateRule.json")));
+        } catch (IOException e) {
+            assert false;
+            return;
+        }
+        assert RuleParamCollection.fromJson(json).toRules().size() == 1;
     }
 }
