@@ -65,8 +65,8 @@ public class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
@@ -88,8 +88,8 @@ public class Timeserie {
                     }
                     ys.add(value);
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
@@ -137,8 +137,8 @@ public class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
@@ -163,8 +163,8 @@ public class Timeserie {
                     }
                     ys.add(value);
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
