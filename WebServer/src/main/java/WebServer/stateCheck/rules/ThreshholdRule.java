@@ -12,7 +12,7 @@ public class ThreshholdRule extends Rule {
     }
 
     @Override
-    public RuleState eval(FHEMModel model) {
+    public RuleState realEval(FHEMModel model) {
         return null;
     }
 }
