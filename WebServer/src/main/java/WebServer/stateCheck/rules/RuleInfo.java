@@ -23,6 +23,14 @@ public class RuleInfo {
         this.message = message;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

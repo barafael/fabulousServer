@@ -16,19 +16,19 @@ import java.util.stream.Collectors;
 
 public abstract class Rule {
     String name;
-    String permission;
-    Set<String> sensorNames;
-    String expression;
-    String okMessage;
-    Map<WARNINGLEVEL, String> errorMessages;
-    Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    private String permission;
+    protected Set<String> sensorNames;
+    protected String expression;
+    private String okMessage;
+    private Map<WARNINGLEVEL, String> errorMessages;
+    private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
 
     boolean isEvaluated = false;
-    RuleState ruleState = null;
-    Set<Rule> requiredTrueRules;
-    Set<Rule> requiredFalseRules;
+    RuleState ruleState;
+    private Set<Rule> requiredTrueRules;
+    private Set<Rule> requiredFalseRules;
 
-    public Rule(RuleParam ruleParam) {
+    Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
         permission = ruleParam.getPermissionField();
         sensorNames = ruleParam.getSensorNames();
@@ -38,7 +38,7 @@ public abstract class Rule {
         escalation = ruleParam.getEscalation();
     }
 
-    public abstract RuleState realEval(FHEMModel model);
+    protected abstract RuleState realEval(FHEMModel model);
 
     public RuleState eval(FHEMModel model) {
         /* TODO pull specific, repeated logic in method that calls concrete eval() */
@@ -78,15 +78,6 @@ public abstract class Rule {
         return realEval(model);
     }
 
-    @Override
-    public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                ", permission='" + permission + '\'' +
-                ", expression='" + expression + '\'' +
-                '}';
-    }
-
     public String getName() {
         return name;
     }
@@ -113,5 +104,29 @@ public abstract class Rule {
 
     public String getPermissionField() {
         return permission;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "name='" + name + '\'' +
+                ", permission='" + permission + '\'' +
+                ", expression='" + expression + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rule rule = (Rule) o;
+
+        return name.equals(rule.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

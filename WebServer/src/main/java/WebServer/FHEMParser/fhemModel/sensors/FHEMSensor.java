@@ -49,12 +49,17 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         return name;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    public String getIcon() {
-        return icon;
+
+    public Set<RuleInfo> getRuleInfo() {
+        return ruleInfos;
     }
 
     public Optional<FHEMFileLog> getLogByName(String filelogName) {

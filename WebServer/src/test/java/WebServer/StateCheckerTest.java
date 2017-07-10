@@ -39,14 +39,26 @@ public class StateCheckerTest {
     @Test
     public void testConstructRuleParam() {
         Set<String> sensorlist = new HashSet<>(Arrays.asList("sensor1", "sensor2", "sensor3"));
+        Set<String> reqTrue = new HashSet<>(Arrays.asList("testRule", "anotherRule", "yetAnotherRule"));
+        Set<String> reqFalse = new HashSet<>(Arrays.asList("Rule1", "Rule2", "Rule3"));
         Map<WARNINGLEVEL, String> warnings = new HashMap<>();
         warnings.put(WARNINGLEVEL.NORMAL, "all good");
         warnings.put(WARNINGLEVEL.LOW, "something is wrong");
         warnings.put(WARNINGLEVEL.HIGH, "hey, fix it!");
         Map<Long, WARNINGLEVEL> escalation = new HashMap<>();
         escalation.put(100L, WARNINGLEVEL.LOW);
-        RuleParam ruleParam = new RuleParam("Fenster1", sensorlist, RuleType.REGEXP, "permission1", "STATE contains dry", new HashSet<>(), new HashSet<>(), "all ok", warnings, escalation);
-        Gson gson = new Gson();
+        RuleParam ruleParam = new RuleParam("Fenster1",
+                sensorlist,
+                RuleType.REGEXP,
+                "permission1",
+                "STATE contains dry",
+                reqTrue,
+                reqFalse,
+                "all ok",
+                warnings,
+                escalation);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         RuleParamCollection col = new RuleParamCollection(ruleParam);
         String json = gson.toJson(col);
         System.out.println(json);
@@ -71,5 +83,27 @@ public class StateCheckerTest {
 
         StateChecker stateChecker = StateChecker.getInstance();
         stateChecker.evaluate(model, Optional.of("noRainNoDry.json"));
+
+        Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
+        assert sensor_opt.isPresent();
+        FHEMSensor sensor = sensor_opt.get();
+
+        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
+    }
+
+    @Test
+    public void testDuplicateRule() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, Optional.of("duplicateRule.json"));
+
+        Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
+        assert sensor_opt.isPresent();
+        FHEMSensor sensor = sensor_opt.get();
+
+        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
     }
 }

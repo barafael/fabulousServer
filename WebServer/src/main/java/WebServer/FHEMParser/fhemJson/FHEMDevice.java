@@ -174,8 +174,8 @@ public class FHEMDevice {
             System.err.println("No logfile specified for log: " + getName());
             return Optional.empty();
         }
-        String permissionfield = attributes.getPermissionField().orElse("");
-        List<String> permissions = Arrays.asList(permissionfield.split(","));
+        String permissionField = attributes.getPermissionField().orElse("");
+        List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();
         return Optional.of(new FHEMFileLog(path, name, isShowInApp(), permissions));
@@ -196,7 +196,7 @@ public class FHEMDevice {
      * A filelog is 'approved' if the path to it's timeserie contains the $FHEMDIR/log/timeseries/ directory.
      * It means that the format is such that it can be parsed in a Timeseries easily.
      */
-    boolean isBlessed() {
+    boolean isApproved() {
         return getInternals().getCurrentLogfileField().orElse("").contains("timeseries");
     }
 

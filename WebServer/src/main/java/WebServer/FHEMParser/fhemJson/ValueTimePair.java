@@ -7,17 +7,10 @@ import com.google.gson.annotations.SerializedName;
  * It is necessary for deserialization for Gson to know the structure of the data in advance.
  * @author Rafael on 04.07.17.
  */
-public class ValueTimePair {
+class ValueTimePair {
+    /* Those fields are only written by Gson */
     @SerializedName("Value")
-    String value;
+    protected String value;
     @SerializedName("Time")
-    String time;
-
-    @Override
-    public String toString() {
-        return "ValueTimePair{" +
-                "value='" + value + '\'' +
-                ", time='" + time + '\'' +
-                '}';
-    }
+    private String time;
 }

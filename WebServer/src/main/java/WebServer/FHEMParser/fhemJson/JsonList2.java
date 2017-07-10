@@ -95,7 +95,7 @@ public class JsonList2 {
                 if (d.isFakelog()) {
                     continue;
                 }
-                if (!d.isBlessed()) {
+                if (!d.isApproved()) {
                     continue;
                 }
                 filelogs.add(d);
