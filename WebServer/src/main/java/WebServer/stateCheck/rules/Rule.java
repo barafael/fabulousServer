@@ -69,7 +69,7 @@ public abstract class Rule {
         }
 
         /* Return early if not all preconditions are met. */
-        if (!trueRulesOK || falseRulesOK) {
+        if (!trueRulesOK || !falseRulesOK) {
             isEvaluated = true;
             /* Not all preconditions have been met. This rule is violated. */
             ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));

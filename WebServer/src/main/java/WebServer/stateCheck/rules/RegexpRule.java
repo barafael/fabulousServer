@@ -88,7 +88,8 @@ public class RegexpRule extends Rule {
             }
         }
         isEvaluated = true;
-        ruleState = new RuleState(violatedSensors.isEmpty(), okSensors, violatedSensors);
+        boolean state = violatedSensors.isEmpty() && !okSensors.isEmpty();
+        ruleState = new RuleState(state, okSensors, violatedSensors);
         return ruleState;
     }
 }

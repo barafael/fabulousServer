@@ -29,13 +29,17 @@ public class State {
         for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {
             FHEMSensor sensor = it.next();
 
-            Set<String> violatingRuleNames = state.get(sensor.getName()).keySet();
-            Set<Rule> violatingRules = rules.stream().
-                    filter(s -> violatingRuleNames.contains(s.getName())).collect(Collectors.toSet());
-            for (Rule rule : violatingRules) {
-                long timestamp = state.get(sensor.getName()).get(rule.getName());
-                String message = rule.getWarningMessage(timestamp);
-                sensor.addRuleInfo(new RuleInfo(rule.getName(), rule.getPermissionField(), message));
+            Map<String, Long> allRulesOfSensor = state.get(sensor.getName());
+            if (allRulesOfSensor != null) {
+                Set<String> violatingRuleNames = allRulesOfSensor.keySet();
+
+                Set<Rule> violatingRules = rules.stream().
+                        filter(s -> violatingRuleNames.contains(s.getName())).collect(Collectors.toSet());
+                for (Rule rule : violatingRules) {
+                    long timestamp = state.get(sensor.getName()).get(rule.getName());
+                    String message = rule.getWarningMessage(timestamp);
+                    sensor.addRuleInfo(new RuleInfo(rule.getName(), rule.getPermissionField(), message));
+                }
             }
         }
     }
