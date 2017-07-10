@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 public class RuleParamCollection {
     private List<RuleParam> ruleParams = new ArrayList<>();
 
-    /* Suppress direct creation */
-    private RuleParamCollection() {
+    /* TODO: Suppress direct creation */
+    /* Currently open because testing */
+    public RuleParamCollection(RuleParam... ruleParam) {
+        ruleParams.addAll(Arrays.asList(ruleParam));
     }
 
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {

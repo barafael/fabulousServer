@@ -28,6 +28,19 @@ public class RuleParam {
     private RuleParam() {
     }
 
+    public RuleParam(String name, Set<String> sensorNames, RuleType ruleType, String permission, String expression, Set<String> requiredTrueRules, Set<String> requiredFalseRules, String okMessage, Map<WARNINGLEVEL, String> errorMessages, Map<Long, WARNINGLEVEL> escalation) {
+        this.name = name;
+        this.sensorNames = sensorNames;
+        this.ruleType = ruleType;
+        this.permission = permission;
+        this.expression = expression;
+        this.requiredTrueRules = requiredTrueRules;
+        this.requiredFalseRules = requiredFalseRules;
+        this.okMessage = okMessage;
+        this.errorMessages = errorMessages;
+        this.escalation = escalation;
+    }
+
     public RuleType getType() {
         return ruleType;
     }
