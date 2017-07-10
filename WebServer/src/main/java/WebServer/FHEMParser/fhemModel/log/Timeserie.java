@@ -65,6 +65,8 @@ public class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
+                legend.put(Collections.max(ys), "Max");
+                legend.put(Collections.min(ys), "Min");
                 break;
             case REAL:
             case PERCENT:
