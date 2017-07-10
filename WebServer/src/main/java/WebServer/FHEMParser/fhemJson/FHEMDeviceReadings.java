@@ -7,6 +7,7 @@ import java.util.Map;
  * @author Rafael on 04.07.17.
  */
 public class FHEMDeviceReadings {
+    /* Fields only written by Gson */
     private ValueTimePair battery;
     private ValueTimePair battery_percent;
     private ValueTimePair humidity;

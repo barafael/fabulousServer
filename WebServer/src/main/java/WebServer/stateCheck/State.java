@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
  * @author Rafael
  */
 
-public class State {
+class State {
     /* Sensorname -> (Rulename, StartTime) */
     Map<String, Map<String, Long>> state = new HashMap<>();
 
     /**
      * Update the warning message and attach a RuleInfo to the sensor
      *
-     * @param model
-     * @param rules
+     * @param model the model which should be checked. RuleInfos will be added for the sensors.
+     * @param rules the set of rules which should be evaluated
      */
     public void setRuleInfos(FHEMModel model, Set<Rule> rules) {
         for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {

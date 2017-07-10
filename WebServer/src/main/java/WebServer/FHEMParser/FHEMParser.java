@@ -9,7 +9,6 @@ import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import WebServer.FHEMParser.fhemModel.room.FHEMRoom;
 import WebServer.FHEMParser.fhemUtils.FHEMUtils;
 import WebServer.Main;
-import WebServer.stateCheck.StateChecker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -40,7 +39,7 @@ public class FHEMParser {
     private FHEMParser() {}
 
     /**
-     * Aquisitor for Parser instance
+     * Acquisitor for Parser instance
      *
      * @return the instance of this singleton
      */

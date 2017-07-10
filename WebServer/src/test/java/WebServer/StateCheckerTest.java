@@ -2,12 +2,14 @@ package WebServer;
 
 import WebServer.FHEMParser.FHEMParser;
 import WebServer.FHEMParser.fhemModel.FHEMModel;
+import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.stateCheck.StateChecker;
 import WebServer.stateCheck.WARNINGLEVEL;
 import WebServer.stateCheck.rules.parsing.RuleParam;
 import WebServer.stateCheck.rules.parsing.RuleParamCollection;
 import WebServer.stateCheck.rules.parsing.RuleType;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Test;
 
 import java.util.*;

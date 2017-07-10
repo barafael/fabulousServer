@@ -2,13 +2,13 @@ package WebServer.stateCheck.rules.parsing;
 
 import WebServer.stateCheck.WARNINGLEVEL;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * This class contains all parameters for building a Rule.
  * It should be deserialized from a rules file.
+ * All the getters from this class never return null. When they are not set in the corresponding entry
+ * in the rules file, they are set to a standard value.
  *
  * @author Rafael on 07.07.17.
  */

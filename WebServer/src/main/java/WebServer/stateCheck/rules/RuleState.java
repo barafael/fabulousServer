@@ -1,7 +1,6 @@
 package WebServer.stateCheck.rules;
 import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**

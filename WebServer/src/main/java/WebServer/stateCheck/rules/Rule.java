@@ -1,7 +1,6 @@
 package WebServer.stateCheck.rules;
 
 import WebServer.FHEMParser.fhemModel.FHEMModel;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.stateCheck.WARNINGLEVEL;
 import WebServer.stateCheck.rules.parsing.RuleParam;
 

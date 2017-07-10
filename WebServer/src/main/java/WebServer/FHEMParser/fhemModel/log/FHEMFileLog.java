@@ -10,17 +10,21 @@ import java.util.Optional;
 import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
 
 /**
- * This class is a proxy for an actual timeserie, which can be parsed on demand with getTimeserie().
+ * This class is a proxy for an actual timeserie, which can be parsed from disk on demand with getTimeserie().
  *
  * @author Rafael
  */
 
 public class FHEMFileLog {
+    /* Json attributes, which are needed for deserialization even if static analysis deems them useless */
+
+    @SuppressWarnings("FieldCanBeLocal")
     private final Logtype type;
     private final String name;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String sensorName;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String unit;
-    transient private final boolean isShowInApp;
     transient private final String path;
     transient private final List<String> permissions;
 
@@ -203,7 +207,6 @@ public class FHEMFileLog {
             System.err.println("This can happen in the beginning of the month.");
             return UNKNOWN;
         }
-        /* TODO test if this actually works */
         if (line.contains("%")) {
             return PERCENT;
         } else {

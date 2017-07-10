@@ -10,8 +10,11 @@ package WebServer.stateCheck.rules;
 
 public class RuleInfo {
     private String name;
+
     /* TODO handle permissions similarly to filelogs */
     private transient String permission;
+    /* This field is needed for serialization */
+    @SuppressWarnings("FieldCanBeLocal")
     private String message;
 
     public RuleInfo(String name, String permission, String message) {

@@ -136,6 +136,4 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
                 return Optional.empty();
         }
     }
-
-
 }

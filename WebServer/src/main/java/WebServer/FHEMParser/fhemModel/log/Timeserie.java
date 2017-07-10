@@ -22,7 +22,7 @@ public class Timeserie {
     private transient static final ZoneId zoneId = ZoneId.systemDefault();
     private transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    /* Because this field is actually read by Gson */
+    /* This field is actually read by Gson */
     private final List<Long> xs;
     private final List<Double> ys;
     /**
@@ -60,6 +60,7 @@ public class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        //noinspection ConstantConditions
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
@@ -132,6 +133,7 @@ public class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        //noinspection ConstantConditions
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
