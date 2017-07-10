@@ -67,6 +67,7 @@ public class Timeserie {
                 }
                 legend.put(Collections.max(ys), "Max");
                 legend.put(Collections.min(ys), "Min");
+                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
             case PERCENT:
@@ -136,6 +137,9 @@ public class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
+                legend.put(Collections.max(ys), "Max");
+                legend.put(Collections.min(ys), "Min");
+                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
             case PERCENT:
