@@ -415,10 +415,11 @@ public class Server extends AbstractVerticle {
         boolean hasHash;
         int hash;
         if (routingContext.request().getParam(Hash_PARAM) != null
-                && !(routingContext.request().getParam(Hash_PARAM).isEmpty())) {
+                && !(routingContext.request().getParam(Hash_PARAM).isEmpty())
+                && routingContext.request().getParam(Hash_PARAM).equals(0 + "")) {
             hash = Integer.parseInt(routingContext.request().getParam(Hash_PARAM));
             hasHash = true;
-        } else {
+        } else {    
             hash = 0;
             hasHash = false;
         }
