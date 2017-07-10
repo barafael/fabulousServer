@@ -18,41 +18,7 @@ public class RegexpRule extends Rule {
     }
 
     @Override
-    public RuleState eval(FHEMModel model) {
-        /* TODO pull specific, repeated logic in method that calls concrete eval() */
-        /* TODO implement cycle detection */
-        /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
-        if (isEvaluated) {
-            assert ruleState != null;
-            return ruleState;
-        }
-
-        /* Handle preconditions (rules which are specified to be true or false in order for this rule to even apply */
-        boolean trueRulesOK = true;
-        boolean falseRulesOK = true;
-
-        for (Rule trueRule : requiredTrueRules) {
-            if (!trueRule.eval(model).isOk()) {
-                trueRulesOK = false;
-                break;
-            }
-        }
-
-        for (Rule falseRule : requiredFalseRules) {
-            if (falseRule.eval(model).isOk()) {
-                falseRulesOK = false;
-                break;
-            }
-        }
-
-        /* Return early if not all preconditions are met. */
-        if (!trueRulesOK || falseRulesOK) {
-            isEvaluated = true;
-            /* Not all preconditions have been met. This rule is violated. */
-            ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
-            return ruleState;
-        }
-
+    public RuleState realEval(FHEMModel model) {
         Set<FHEMSensor> okSensors = new HashSet<>();
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 
@@ -70,16 +36,16 @@ public class RegexpRule extends Rule {
         String operator = tokens[1];
         String expr = tokens[2];
 
-        for (String sensorname : sensorNames) {
-            Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorname);
+        for (String sensorName : sensorNames) {
+            Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorName);
             if (!sensor_opt.isPresent()) {
-                System.err.println("The sensor name " + sensorname + " was not found in the FHEM model!");
+                System.err.println("The sensor name " + sensorName + " was not found in the FHEM model!");
                 continue;
             }
 
-            boolean ruleOK;
-
             FHEMSensor sensor = sensor_opt.get();
+
+            boolean ruleOK;
 
             Optional<String> concField_opt = sensor.getValueOfField(field);
             if (!concField_opt.isPresent()) {
@@ -121,8 +87,9 @@ public class RegexpRule extends Rule {
                 violatedSensors.add(sensor);
             }
         }
-        ruleState = new RuleState(violatedSensors.isEmpty(), okSensors, violatedSensors);
         isEvaluated = true;
+        boolean state = violatedSensors.isEmpty() && !okSensors.isEmpty();
+        ruleState = new RuleState(state, okSensors, violatedSensors);
         return ruleState;
     }
 }

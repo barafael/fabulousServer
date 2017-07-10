@@ -25,7 +25,7 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
     transient private final boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
-    private Set<RuleInfo> ruleInfos;
+    private Set<RuleInfo> ruleInfos = new HashSet<>();
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
@@ -53,8 +53,9 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
         this.icon = icon;
     }
 
-    public String getIcon() {
-        return icon;
+
+    public Set<RuleInfo> getRuleInfo() {
+        return ruleInfos;
     }
 
     public Optional<FHEMFileLog> getLogByName(String filelogName) {
@@ -130,10 +131,10 @@ public class FHEMSensor implements Iterable<FHEMFileLog> {
             //TODO implement more fields!
             case "STATE":
                 return Optional.ofNullable(metaInfo.get("STATE"));
+            case "State":
+                return Optional.ofNullable(metaInfo.get("State"));
             default:
                 return Optional.empty();
         }
     }
-
-
 }

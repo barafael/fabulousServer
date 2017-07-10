@@ -53,20 +53,21 @@ public class Timeserie {
                     long epoch = dateTime.atZone(zoneId).toEpochSecond();
                     xs.add(epoch);
 
-                    String value = items[3];
+                    String value = items[items.length - 1];
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
                         ys.add(currentKey);
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
@@ -88,8 +89,8 @@ public class Timeserie {
                     }
                     ys.add(value);
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
@@ -132,13 +133,14 @@ public class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
@@ -163,8 +165,8 @@ public class Timeserie {
                     }
                     ys.add(value);
                 }
-                legend.put(Collections.max(ys), "Max");
-                legend.put(Collections.min(ys), "Min");
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
                 legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:

@@ -40,7 +40,7 @@ public class FHEMParser {
     private FHEMParser() {}
 
     /**
-     * Aquisitor for Parser instance
+     * Acquisitor for Parser instance
      *
      * @return the instance of this singleton
      */

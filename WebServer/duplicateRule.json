@@ -1,0 +1,45 @@
+{
+    "ruleParams": [
+        {
+            "name": "Duplicate",
+            "expression": "State matches bl*",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*"
+            }
+        },
+        {
+            "name": "Duplicate",
+            "expression": "State contains noRainNoDry",
+            "permission": "permission1",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "something is wrong",
+                "NORMAL": "all good",
+                "HIGH": "hey, fix it!"
+            }
+        }
+
+    ]
+}

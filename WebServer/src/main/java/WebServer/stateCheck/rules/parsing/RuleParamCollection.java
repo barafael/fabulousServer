@@ -11,13 +11,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * This class represents a collection of rule parameters.
+ * It should be deserialized from a rules file.
+ *
  * @author Rafael on 07.07.17.
  */
 public class RuleParamCollection {
     private List<RuleParam> ruleParams = new ArrayList<>();
 
-    /* Suppress direct creation */
-    private RuleParamCollection() {}
+    /* TODO: Suppress direct creation */
+    /* Currently open because testing */
+    public RuleParamCollection(RuleParam... ruleParam) {
+        ruleParams.addAll(Arrays.asList(ruleParam));
+    }
 
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
@@ -26,11 +32,10 @@ public class RuleParamCollection {
         return gson.fromJson(json, RuleParamCollection.class);
     }
 
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this, RuleParamCollection.class);
-    }
-
+    /**
+     * Convert the ist of rule parameters to rules.
+     * @return a set of rules generated from the parameters.
+     */
     public Set<Rule> toRules() {
         Set<Rule> rules = new HashSet<>(ruleParams.size() + 5);
 

@@ -66,7 +66,7 @@ class FHEMDeviceAttributes {
     }
 
     /**
-     * Acessor for the userattr 'permissions' in FHEM
+     * Accessor for the userattr 'permissions' in FHEM
      * @return the userattr 'permissions' in FHEM
      */
     /* Field because getPermissions() sounds weird */

@@ -10,17 +10,21 @@ import java.util.Optional;
 import static WebServer.FHEMParser.fhemModel.log.Logtype.*;
 
 /**
- * This class is a proxy for an actual timeserie, which can be parsed on demand with getTimeserie().
+ * This class is a proxy for an actual timeserie, which can be parsed from disk on demand with getTimeserie().
  *
  * @author Rafael
  */
 
 public class FHEMFileLog {
+    /* Json attributes, which are needed for deserialization even if static analysis deems them useless */
+
+    @SuppressWarnings("FieldCanBeLocal")
     private final Logtype type;
     private final String name;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String sensorName;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String unit;
-    transient private final boolean isShowInApp;
     transient private final String path;
     transient private final List<String> permissions;
 
@@ -34,7 +38,6 @@ public class FHEMFileLog {
      */
     public FHEMFileLog(String path, String name, boolean isShowInApp, List<String> permissions) {
         this.path = path;
-        this.isShowInApp = isShowInApp;
         this.name = name;
         this.unit = getUnitInFileLog(path).orElse("No unit given");
         this.sensorName = getSensorInFileLog(path).orElse("No sensor name given");
@@ -203,7 +206,6 @@ public class FHEMFileLog {
             System.err.println("This can happen in the beginning of the month.");
             return UNKNOWN;
         }
-        /* TODO test if this actually works */
         if (line.contains("%")) {
             return PERCENT;
         } else {
@@ -256,29 +258,5 @@ public class FHEMFileLog {
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> timeserie_opt = getTimeserie(startTime, endTime);
         return timeserie_opt.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
-    }
-
-    public String last() {
-        String last = "";
-        long maxLineLength = 200;
-        try {
-            RandomAccessFile raf = new RandomAccessFile(path, "r");
-            long len;
-            try {
-                len = raf.length();
-                if (len > maxLineLength) {
-                    raf.seek(len - maxLineLength);
-                }
-                String s = "";
-                while ((s = raf.readLine()) != null) {
-                    last = s;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return last;
     }
 }

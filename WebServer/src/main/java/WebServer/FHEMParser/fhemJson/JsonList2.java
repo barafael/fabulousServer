@@ -67,6 +67,7 @@ public class JsonList2 {
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
         /* Ignore static analysis 'null dereference' warnings here: Results is populated by Gson */
+        //noinspection ConstantConditions
         for (FHEMDevice d : Results) {
             boolean isSensor = d.isSensor();
             boolean isFileLog = d.isFileLog();
@@ -94,12 +95,12 @@ public class JsonList2 {
                 if (d.isFakelog()) {
                     continue;
                 }
-                if (!d.isBlessed()) {
+                if (!d.isApproved()) {
                     continue;
                 }
                 filelogs.add(d);
             } else {
-                /* continue as last statement in loop, but keep it in in case the logic is extended */
+                /* continue useless as last statement in loop, but keep it in in case the logic is extended */
                 continue;
             }
         }

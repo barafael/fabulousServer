@@ -1,7 +1,6 @@
 package WebServer.stateCheck.rules;
 
 import WebServer.FHEMParser.fhemModel.FHEMModel;
-import WebServer.FHEMParser.fhemModel.sensors.FHEMSensor;
 import WebServer.stateCheck.WARNINGLEVEL;
 import WebServer.stateCheck.rules.parsing.RuleParam;
 
@@ -10,9 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This abstract class contains the attributes of a rule, most notably the eval() method.
- *
- * @author Rafael
+ * This abstract class contains the attributes of a rule in fhem, most notably the eval(model) method.
+ *  @author Rafael
  *
  * TODO: implement AND and OR rules?
  * TODO: implement 'invisible' attribute, which makes a rule invisible for the app but can still be used from other rules?
@@ -20,20 +18,20 @@ import java.util.stream.Collectors;
 
 public abstract class Rule {
     String name;
-    String permission;
+    private String permission;
     /* sensor names and not aliases, to guarantee uniqueness */
-    Set<String> sensorNames;
-    String expression;
-    String okMessage;
-    Map<WARNINGLEVEL, String> errorMessages;
-    Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    protected Set<String> sensorNames;
+    protected String expression;
+    private String okMessage;
+    private Map<WARNINGLEVEL, String> errorMessages;
+    private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
 
     boolean isEvaluated = false;
-    RuleState ruleState = null;
-    Set<Rule> requiredTrueRules;
-    Set<Rule> requiredFalseRules;
+    RuleState ruleState;
+    private Set<Rule> requiredTrueRules;
+    private Set<Rule> requiredFalseRules;
 
-    public Rule(RuleParam ruleParam) {
+    Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
         permission = ruleParam.getPermissionField();
         sensorNames = ruleParam.getSensorNames();
@@ -43,15 +41,43 @@ public abstract class Rule {
         escalation = ruleParam.getEscalation();
     }
 
-    public abstract RuleState eval(FHEMModel model);
+    protected abstract RuleState realEval(FHEMModel model);
 
-    @Override
-    public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                ", permission='" + permission + '\'' +
-                ", expression='" + expression + '\'' +
-                '}';
+    public RuleState eval(FHEMModel model) {
+        /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
+        if (isEvaluated) {
+            /* TODO: When is this cleared? */
+            assert ruleState != null;
+            return ruleState;
+        }
+
+        /* Handle preconditions (rules which are specified to be true or false in order for this rule to even apply */
+        boolean trueRulesOK = true;
+        boolean falseRulesOK = true;
+
+        for (Rule trueRule : requiredTrueRules) {
+            if (!trueRule.eval(model).isOk()) {
+                trueRulesOK = false;
+                break;
+            }
+        }
+
+        for (Rule falseRule : requiredFalseRules) {
+            if (falseRule.eval(model).isOk()) {
+                falseRulesOK = false;
+                break;
+            }
+        }
+
+        /* Return early if not all preconditions are met. */
+        if (!trueRulesOK || !falseRulesOK) {
+            isEvaluated = true;
+            /* Not all preconditions have been met. This rule is violated. */
+            ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
+            return ruleState;
+        }
+
+        return realEval(model);
     }
 
     public String getName() {
@@ -80,5 +106,29 @@ public abstract class Rule {
 
     public String getPermissionField() {
         return permission;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "name='" + name + '\'' +
+                ", permission='" + permission + '\'' +
+                ", expression='" + expression + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rule rule = (Rule) o;
+
+        return name.equals(rule.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

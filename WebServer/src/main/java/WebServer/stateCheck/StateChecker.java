@@ -43,16 +43,16 @@ public class StateChecker {
         return StateChecker.instance;
     }
 
-    private RuleParamCollection loadRuleParams() throws IOException, JsonSyntaxException {
+    private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
         /* TODO add translations for rules? */
-        String content = new String(Files.readAllBytes(Paths.get("rules.json")));
+        String content = new String(Files.readAllBytes(Paths.get(path)));
         return RuleParamCollection.fromJson(content);
     }
 
-    private Optional<Set<Rule>> getRules() {
+    private Optional<Set<Rule>> getRules(String path) {
         RuleParamCollection params;
         try {
-            params = loadRuleParams();
+            params = loadRuleParams(path);
         } catch (IOException e) {
             System.err.println("The file 'rules.json' could not be read because there was an IO exception.");
             return Optional.empty();
@@ -63,8 +63,8 @@ public class StateChecker {
         return Optional.of(params.toRules());
     }
 
-    public boolean evaluate(FHEMModel model) {
-        Optional<Set<Rule>> rules_opt = getRules();
+    public boolean evaluate(FHEMModel model, Optional<String> path) {
+        Optional<Set<Rule>> rules_opt = getRules(path.orElse("rules.json"));
         if (!rules_opt.isPresent()) {
             return false;
         }
@@ -79,6 +79,7 @@ public class StateChecker {
                 /* Consistency check */
                 if (!ruleState.getViolatedSensors().isEmpty()) {
                     System.err.println("Error! Rule is ok but violatedSensors is not empty!");
+                    /* TODO: Mark some violated sensors? */
                 }
                 /* Get all names of sensors which are ok */
                 Set<String> sensorNames = ruleState.getOkSensors().stream().
@@ -86,20 +87,30 @@ public class StateChecker {
                 for (String sensorName : sensorNames) {
                     /* Remove ok rules from violated rules of this sensor */
                     Map<String, Long> violatedRules = fhemState.state.get(sensorName);
-                    violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+                    if (violatedRules != null) {
+                        violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+                    } /* else, sensor did not violate any rules (then get resulted in null) */
                     /* If no rules at all are violated now, remove the sensor from the state */
-                    if (violatedRules.isEmpty()) {
+                    if (violatedRules == null || violatedRules.isEmpty()) {
                         fhemState.state.remove(sensorName);
                     }
                 }
             } else {
+                /* ruleState is not ok */
                 /* Get all names of sensors which are ok */
                 Set<String> okSensorNames = ruleState.getOkSensors().stream().
                         map(FHEMSensor::getName).collect(Collectors.toSet());
                 for (String sensorName : okSensorNames) {
                     /* Remove ok rules from violated rules of this sensor */
                     Map<String, Long> violatedRules = fhemState.state.get(sensorName);
-                    violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+                    if (violatedRules != null) {
+                        violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+                    } /* else, sensor did not violate any rules (then get resulted in null) */
+
+                    /* If no rules at all are violated now, remove the sensor from the state */
+                    if (violatedRules == null || violatedRules.isEmpty()) {
+                        fhemState.state.remove(sensorName);
+                    }
                 }
 
                 /* Get all names of sensors which are not ok */

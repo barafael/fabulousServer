@@ -6,7 +6,8 @@ import java.util.Map;
 /**
  * @author Rafael on 04.07.17.
  */
-public class FHEMDeviceReadings {
+class FHEMDeviceReadings {
+    /* Fields only written by Gson */
     private ValueTimePair battery;
     private ValueTimePair battery_percent;
     private ValueTimePair humidity;
@@ -43,11 +44,5 @@ public class FHEMDeviceReadings {
             ret.put("current", current.value);
         }
         return ret;
-    }
-
-    @Override
-    public String toString() {
-        return "FHEMDeviceReadings: " +
-                getReadings().toString();
     }
 }

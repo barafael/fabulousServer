@@ -17,16 +17,6 @@ import java.util.stream.Collectors;
  * elements of the 'Results' array in jsonList2.json.
  */
 
-/* Don't change attribute names or remove attributes! They are needed by Gson to parse jsonList2.
-   If you want to rename an attribute, annotate them with:
-
-   @SerializedName("oldname")
-
-   Static analysis warns about unused elements because of gson.
-   There is a high number of false positives detected in this package due to many fields which are
-   only ever initialized by gson. This is intentional and cannot be easily avoided.
- */
-
 @SuppressWarnings("unused")
 public class FHEMDevice {
     /* Class Attributes */
@@ -51,7 +41,6 @@ public class FHEMDevice {
            This would mean that the underlying FHEM device had no Internals section!
         */
         if (internals == null) {
-            /* Explicit assumption violated! */
             System.err.println("Internals was null! We assumed this could never be the case." +
                     "FHEM usually sets this field.");
         }
@@ -60,7 +49,8 @@ public class FHEMDevice {
 
     /** 
      * This method returns if the device this class represents was tagged as a sensor in FHEM.
-     * FHEM itself does not distinguish between devices, which is why this crude measure of tagging manually is necessary.
+     * FHEM itself does not distinguish between devices, which is why this
+     * crude measure of tagging manually is necessary.
      */
     boolean isSensor() {
         boolean isSupersensor = getInternals().isSupersensor();
@@ -137,7 +127,8 @@ public class FHEMDevice {
     }
 
     /**
-     * This method parses a device to a sensor, if it seems to be one.
+     * This method parses a device to a sensor, if it's type fits.
+     * All obtainable meta information is also added to the sensor.
      */
     Optional<FHEMSensor> parseToSensor() {
         if (!isSensor()) {
@@ -145,8 +136,8 @@ public class FHEMDevice {
         }
         int coordX = attributes.getCoordX();
         int coordY = attributes.getCoordY();
-        String permissionfield = attributes.getPermissionField().orElse("");
-        List<String> permissions = Arrays.asList(permissionfield.split(","));
+        String permissionField = attributes.getPermissionField().orElse("");
+        List<String> permissions = Arrays.asList(permissionField.split(","));
         HashMap<String, String> meta = new HashMap<>();
 
         String alias = attributes.getAlias().orElse("Not supplied");
@@ -165,7 +156,8 @@ public class FHEMDevice {
     }
 
     /**
-     * This method parses a device to a filelog, if it seems to be one.
+     * This method parses this device to a filelog, if it's type fits
+     * It also links a timeserie to the new log by it's path.
      */
     Optional<FHEMFileLog> parseToLog() {
         if (!isFileLog()) {
@@ -184,30 +176,29 @@ public class FHEMDevice {
             System.err.println("No logfile specified for log: " + getName());
             return Optional.empty();
         }
-        String permissionfield = attributes.getPermissionField().orElse("");
-        List<String> permissions = Arrays.asList(permissionfield.split(","));
+        String permissionField = attributes.getPermissionField().orElse("");
+        List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();
         return Optional.of(new FHEMFileLog(path, name, isShowInApp(), permissions));
     }
 
-    /** Accessor for attributes */
     private FHEMDeviceAttributes getAttributes() {
         return attributes;
     }
 
     /**
-     * Checks if the device is a fakelog. In this case, it should not be shown.
+     * This method checks if the device is a fakelog.
      */
     boolean isFakelog() {
         return getInternals().getRegexp().orElse("").equals("fakelog");
     }
 
     /**
-     * A filelog is 'blessed' if the path to it's timeserie contains the $FHEMDIR/log/timeseries/ directory.
+     * A filelog is 'approved' if the path to it's timeserie contains the $FHEMDIR/log/timeseries/ directory.
      * It means that the format is such that it can be parsed in a Timeseries easily.
      */
-    boolean isBlessed() {
+    boolean isApproved() {
         return getInternals().getCurrentLogfileField().orElse("").contains("timeseries");
     }
 

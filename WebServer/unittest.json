@@ -1,0 +1,36 @@
+{
+  "ruleParams": [
+    {
+      "name": "Fenster1",
+      "sensorNames": [
+        "sensor2",
+        "sensor3",
+        "sensor1"
+      ],
+      "ruleType": "REGEXP",
+      "permission": "permission1",
+      "expression": "STATE contains dry",
+      "requiredTrueRules": [
+        "anotherRule",
+        "testRule",
+        "yetAnotherRule"
+      ],
+      "requiredFalseRules": [
+        "Rule2",
+        "Rule3",
+        "Rule1"
+      ],
+      "okMessage": "all ok",
+      "errorMessages": {
+        "LOW": "something is wrong",
+        "HIGH": "hey, fix it!",
+        "NORMAL": "all good"
+      },
+      "escalation": {
+        "200": "LOW",
+        "300": "HIGH",
+        "500": "DISASTER"
+      }
+    }
+  ]
+}
