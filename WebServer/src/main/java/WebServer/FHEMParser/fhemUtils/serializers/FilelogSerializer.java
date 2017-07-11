@@ -1,4 +1,4 @@
-package WebServer.FHEMParser;
+package WebServer.FHEMParser.fhemUtils.serializers;
 
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
 import com.google.gson.*;

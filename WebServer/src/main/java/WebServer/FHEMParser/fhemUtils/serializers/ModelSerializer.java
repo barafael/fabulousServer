@@ -1,4 +1,4 @@
-package WebServer.FHEMParser;
+package WebServer.FHEMParser.fhemUtils.serializers;
 
 import WebServer.FHEMParser.fhemModel.FHEMModel;
 import WebServer.FHEMParser.fhemModel.log.FHEMFileLog;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This custom serializer class for a FHEM model filters out all elements for which there are insufficient permissions.
  * @author Rafael on 22.06.17.
  */
-
-class ModelSerializer implements JsonSerializer<FHEMModel> {
+public class ModelSerializer implements JsonSerializer<FHEMModel> {
     private final List<String> permissions;
 
-    ModelSerializer(List<String> permissions) {
+    public ModelSerializer(List<String> permissions) {
         this.permissions = permissions;
     }
 
