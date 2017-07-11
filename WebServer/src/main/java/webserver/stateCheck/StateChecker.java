@@ -66,8 +66,13 @@ public class StateChecker {
         return Optional.of(params.toRules());
     }
 
-    public boolean evaluate(FHEMModel model, Optional<String> path) {
-        Optional<Set<Rule>> rules_opt = getRules(path.orElse("rules.json"));
+
+    public boolean evaluate(FHEMModel model) {
+        return evaluate(model, "rules.json");
+    }
+
+    public boolean evaluate(FHEMModel model, String path) {
+        Optional<Set<Rule>> rules_opt = getRules(path);
         if (!rules_opt.isPresent()) {
             return false;
         }

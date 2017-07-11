@@ -30,6 +30,7 @@ class State {
             FHEMSensor sensor = it.next();
 
             Map<String, Long> allRulesOfSensor = state.get(sensor.getName());
+            /* If sensor even has violating rules in the state map */
             if (allRulesOfSensor != null) {
                 Set<String> violatingRuleNames = allRulesOfSensor.keySet();
 

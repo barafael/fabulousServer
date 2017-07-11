@@ -11,6 +11,7 @@ import webserver.stateCheck.parsing.RuleType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Test;
+import webserver.stateCheck.rules.Rule;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import java.util.*;
  * The directory $FHEMMOCKDIR (defined as a global shell environment variable) should contain
  * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
  * This can be achieved by executing the {@code pull.sh} file from the root directory.
+ *
  * @author Rafael
  */
 public class StateCheckerTest {
@@ -73,13 +75,41 @@ public class StateCheckerTest {
     }
 
     @Test
-    public void testStateCheckerEvaluate() {
+    public void testStateCheckerEvaluateDefaultRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
         StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, Optional.empty());
+        stateChecker.evaluate(model);
+    }
+
+    /**
+     * This test defines a regexp rule which has a non-satisfiable expression.
+     * The model should contain violated ruleinfo,
+     */
+    @Test
+    public void testStateCheckerEvaluateSimpleRule() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/impossibleRainRule.json");
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 1;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().stream().findAny().get()
+                .getName().equals("impossibleRainRule");
+    }
+
+    @Test
+    public void testEvaluateMultiplePerSensor() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/simpleRule.json");
     }
 
     @Test
@@ -89,7 +119,7 @@ public class StateCheckerTest {
         FHEMModel model = model_opt.get();
 
         StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, Optional.of("noRainNoDry.json"));
+        stateChecker.evaluate(model, "jsonRules/noRainNoDry.json");
 
         Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
         assert sensor_opt.isPresent();
@@ -106,7 +136,42 @@ public class StateCheckerTest {
 
         String json;
         try {
-            json = new String(Files.readAllBytes(Paths.get("duplicateRule.json")));
+            json = new String(Files.readAllBytes(Paths.get("jsonRules/duplicateRule.json")));
+        } catch (IOException e) {
+            assert false;
+            return;
+        }
+        assert RuleParamCollection.fromJson(json).toRules().size() == 1;
+    }
+
+    //@Test
+    public void testRuleDependencies() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        String json;
+        try {
+            json = new String(Files.readAllBytes(Paths.get("jsonRules/ruleDependencies.json")));
+        } catch (IOException e) {
+            assert false;
+            return;
+        }
+        Set<Rule> rules = RuleParamCollection.fromJson(json).toRules();
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model,"jsonRules/ruleDependencies.json");
+
+    }
+
+    //@Test
+    public void testSelfCycleRule() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        String json;
+        try {
+            json = new String(Files.readAllBytes(Paths.get("jsonRules/selfCycle.json")));
         } catch (IOException e) {
             assert false;
             return;

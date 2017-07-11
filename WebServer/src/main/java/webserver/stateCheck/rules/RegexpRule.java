@@ -23,7 +23,7 @@ public class RegexpRule extends Rule {
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 
         String[] tokens = expression.split(" ");
-        if (!(tokens.length == 3)) {
+        if (tokens.length != 3) {
             System.err.println("Expression for RegexRule must have three elements separated by a space.");
             /* Return false to draw attention to formulation error (?) */
             violatedSensors.addAll(model.getSensorsByCollection(sensorNames));

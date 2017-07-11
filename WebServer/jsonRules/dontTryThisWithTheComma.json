@@ -1,0 +1,25 @@
+{
+    "ruleParams": [
+        {
+            "name": "impossibleRainRule",
+            "expression": "State matches bl*",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*",
+                "DISASTER": "'tis bad!"
+            }
+        },
+    ]
+}
