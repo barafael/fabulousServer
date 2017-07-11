@@ -227,7 +227,23 @@ public class ModelTest {
     }
 
     @Test
-    public void testGetTimeserie() {
+    public void testGetTimeserieDiscrete() {
+        String sensorName = "HM_4F5DAA_Rain";
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
+        Optional<FHEMFileLog> log = sensor.get().getLogs().stream().findFirst();
+        assert log.isPresent();
+        Optional<Timeserie> serie_opt = log.get().getTimeserie();
+        assert serie_opt.isPresent();
+        String json = new Gson().toJson(serie_opt.get(), Timeserie.class);
+        Timeserie timeserie = new Gson().fromJson(json, Timeserie.class);
+        assert timeserie.equals(serie_opt.get());
+    }
+
+    @Test
+    public void testGetTimeserieReal() {
         String sensorName = "HM_521A72";
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();

@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  *
  * @author Rafael
  */
-
 //TODO before final: privatize this, only public for testing
 public class Timeserie {
     private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
@@ -25,6 +24,7 @@ public class Timeserie {
     /* Because this field is actually read by Gson */
     private final List<Long> xs;
     private final List<Double> ys;
+
     /**
      * This legend associates certain y-values with names.
      * This can be used for 'open', 'closed' samples, or for markings on the y-axis

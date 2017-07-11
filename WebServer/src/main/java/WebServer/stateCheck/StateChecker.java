@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Singleton because the state should not be overwritten.
+ * This is a singleton because the state should not be overwritten.
  * The state stores sensors which violate one or more rules, and
  * contains the time at which a sensor violated a specific condition.
  *

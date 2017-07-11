@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 /**
  * @author Rafael
  */
-
 class State {
     /* Sensorname -> (Rulename, StartTime) */
     Map<String, Map<String, Long>> state = new HashMap<>();
