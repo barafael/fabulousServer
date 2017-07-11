@@ -13,14 +13,14 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'WebServer.Main'
+        attributes 'Main-Class': 'webserver.Main'
     }
 }
 
 task fatJar(type: Jar) {
     baseName = project.name + '-all'
     manifest {
-        attributes 'Main-Class': 'WebServer/Main'
+        attributes 'Main-Class': 'webserver/Main'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
