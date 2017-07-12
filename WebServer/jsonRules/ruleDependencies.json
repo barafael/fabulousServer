@@ -42,7 +42,7 @@
         },
         {
             "name": "BasicRule3",
-            "expression": "State matches bl*",
+            "expression": "State matches dry|rain",
             "permission": "permission0",
             "ruleType": "REGEXP",
             "sensorNames": [

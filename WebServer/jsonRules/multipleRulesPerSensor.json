@@ -41,6 +41,27 @@
                 "HIGH": "hey, fix it bl*",
                 "DISASTER": "'tis bad!"
             }
+        },
+        {
+            "name": "Rule 3 for door sensor",
+            "expression": "Battery notequals ok",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_56A86F"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*",
+                "DISASTER": "'tis bad!"
+            }
         }
     ]
 }
