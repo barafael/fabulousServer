@@ -18,7 +18,7 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * @author Johannes Köstler <github@johanneskoestler.de>
+ * @author Johannes Köstler (github@johanneskoestler.de)
  *         on 16.06.17.
  */
 @RunWith(VertxUnitRunner.class)

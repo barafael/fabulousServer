@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
  * Serves a stateless REST-Api secured with BasicAuth and backed with JDBC.
  * Handles user permissions for different actions.
  *
- * @author Johannes Köstler <github@johanneskoestler.de>
- * @since 16.06.17.
+ * @author Johannes Köstler (github@johanneskoestler.de)
+ *         on 16.06.17.
  */
 public class Server extends AbstractVerticle {
     private static final String OK_SERVER_RESPONSE = "OK";

@@ -12,8 +12,8 @@ import java.util.Optional;
 /**
  * Main class to launch the APP-Backend.
  *
- * @author Johannes Köstler <github@johanneskoestler.de>
- * @since 16.06.17.
+ * @author Johannes Köstler (github@johanneskoestler.de)
+ *         on 16.06.17.
  */
 public final class Main {
     public static final Vertx vertx = Vertx.vertx();

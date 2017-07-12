@@ -155,7 +155,7 @@ public final class FHEMDevice {
     }
 
     /**
-     *  This method returns if the device this class represents is tagged with a FileLog type in FHEM.
+     * This method returns if the device this class represents is tagged with a FileLog type in FHEM.
      * FHEM itself does not distinguish between devices, which is why this crude measure of checking manually is necessary.
      * At least in this case, the internals have an attribute called 'TYPE'.
      *
