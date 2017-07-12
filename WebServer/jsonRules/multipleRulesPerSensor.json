@@ -1,0 +1,46 @@
+{
+    "ruleParams": [
+        {
+            "name": "Rule 1 for door sensor",
+            "expression": "State equals closed",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_56A86F"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*",
+                "DISASTER": "'tis bad!"
+            }
+        },
+        {
+            "name": "Rule 2 for door sensor",
+            "expression": "State equals open",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_56A86F"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*",
+                "DISASTER": "'tis bad!"
+            }
+        }
+    ]
+}

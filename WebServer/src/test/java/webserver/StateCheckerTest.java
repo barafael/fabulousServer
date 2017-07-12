@@ -79,8 +79,12 @@ public class StateCheckerTest {
         assert isValidJSON(json);
     }
 
+    /**
+     * The default rules are in the top-lvl dir 'rules.json'.
+     * Evaluating these is inconclusive because the content changes over time.
+     */
     @Test
-    public void testStateCheckerEvaluateDefaultRule() {
+    public void testStateCheckerEvaluateDefaultRules() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
@@ -91,10 +95,10 @@ public class StateCheckerTest {
 
     /**
      * This test defines a regexp rule which has a non-satisfiable expression.
-     * The model should contain violated ruleinfo,
+     * The model should contain violated ruleinfo for a specific sensor.
      */
     @Test
-    public void testStateCheckerEvaluateSimpleRule() {
+    public void testEvaluateImpossibleRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
@@ -107,16 +111,61 @@ public class StateCheckerTest {
                 .getName().equals("impossibleRainRule");
     }
 
+    /**
+     * Evaluates a rule which should always be true for this sensor.
+     * The regex rule matches dry|rain on the state of the sensor.
+     */
     @Test
-    public void testEvaluateMultiplePerSensor() {
+    public void testEvaluateAlwaysTrueRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
         StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/simpleRule.json");
+        stateChecker.evaluate(model, "jsonRules/alwaysTrue.json");
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 0;
     }
 
+    /**
+     * Evaluates a rule which should be incorrect JSON which gson incorrectly ignores currently.
+     */
+    @Test
+    public void testEvaluateInvalidInput() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/dontTryThisWithTheComma.json");
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 1;
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().stream()
+                .filter(s -> s.getName().equals("incorrectJSONRule")).count() == 1;
+    }
+
+    /**
+     * Evaluate more than one rule per sensor.
+     */
+    //@Test
+    public void testEvaluateMultipleRulesPerSensor() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/multipleRulesPerSensor.json");
+
+        assert model.getSensorByName("HM_56A86F").isPresent();
+        assert model.getSensorByName("HM_56A86F").get().getRuleInfo().size() == 1;
+    }
+
+    /**
+     * 
+     */
     @Test
     public void testInvalidRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();

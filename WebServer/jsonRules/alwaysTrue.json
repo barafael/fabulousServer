@@ -1,8 +1,8 @@
 {
     "ruleParams": [
         {
-            "name": "impossibleRainRule",
-            "expression": "State matches bl*",
+            "name": "simpleRule",
+            "expression": "State matches dry|rain",
             "permission": "permission0",
             "ruleType": "REGEXP",
             "sensorNames": [
