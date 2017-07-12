@@ -45,6 +45,7 @@ public abstract class Rule {
      * The permissions for this rule to be shown.
      */
     private String permission;
+    @SuppressWarnings ("FieldCanBeLocal")
     private String okMessage;
     private Map<WARNINGLEVEL, String> errorMessages;
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
@@ -145,10 +146,10 @@ public abstract class Rule {
 
     @Override
     public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                ", permission='" + permission + '\'' +
-                ", expression='" + expression + '\'' +
-                '}';
+        return "Rule{"
+                + "name='" + name + '\''
+                + ", permission='" + permission + '\''
+                + ", expression='" + expression + '\''
+                + '}';
     }
 }

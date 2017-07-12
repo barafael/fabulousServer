@@ -25,9 +25,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private final String name;
     @SerializedName ("alias")
     private final String nameInApp;
-    private transient final List<String> permissions;
+    @SuppressWarnings ("FieldCanBeLocal")
+    private final transient List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
-    private transient final boolean isShowInApp;
+    @SuppressWarnings ("FieldCanBeLocal")
+    private final transient boolean isShowInApp;
     private final HashMap<String, String> metaInfo;
     private String icon;
     private Set<RuleInfo> ruleInfos = new HashSet<>();

@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * serves a stateless REST-Api secured with BasicAuth and backed with JDBC
- * handles user permissions for different actions
+ * Serves a stateless REST-Api secured with BasicAuth and backed with JDBC.
+ * Handles user permissions for different actions.
  *
  * @author Johannes Köstler <github@johanneskoestler.de>
  * @since 16.06.17.
@@ -65,7 +65,7 @@ public class Server extends AbstractVerticle {
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
     private final FHEMParser parser = Main.parser;
-    private final int DatabaseKeepAlive = 15 * 60 * 1000;
+    private final int DATABASE_KEEP_ALIVE = 15 * 60 * 1000;
     private JDBCAuth authProvider;
     private Router router;
     private HttpServer server;
@@ -126,7 +126,7 @@ public class Server extends AbstractVerticle {
     }
 
     private void databaseKeepAlive() {
-        DatabaseAliveTimer = vertx.setPeriodic(DatabaseKeepAlive, id -> {
+        DatabaseAliveTimer = vertx.setPeriodic(DATABASE_KEEP_ALIVE, id -> {
             Future<List<String>> future = Future.future();
             getListOfPermissions(new JsonObject().put(Username_PARAM, "noperms"), future);
             future.setHandler(res -> {

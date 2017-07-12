@@ -30,7 +30,7 @@ import java.util.Optional;
  */
 public final class FHEMParser {
     /**
-     * For benchmark time output
+     * For benchmark time output.
      */
     private static final boolean PRINT_TIME = false;
     /**
@@ -38,15 +38,15 @@ public final class FHEMParser {
      */
     private static final long MUTEX_TIMEOUT = 15 * 60 * 1000;
     /**
-     * The instance of this singleton
+     * The instance of this singleton.
      */
     private static FHEMParser instance;
     /**
-     * The mutex, storing the user name
+     * The mutex, storing the user name.
      */
     private static String mutex = "";
     /**
-     * Flag for mocking; should usually be off
+     * Flag for mocking; should usually be off.
      */
     private static boolean mock = false;
     /**

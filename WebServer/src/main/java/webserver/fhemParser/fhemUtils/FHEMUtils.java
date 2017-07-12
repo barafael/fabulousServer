@@ -36,7 +36,7 @@ public final class FHEMUtils {
     }
 
     /**
-     * Gets the value for the FHEM location set as a global variable
+     * Gets the value for the FHEM location set as a global variable.
      *
      * @return a path to the fhem perl script
      */
@@ -66,7 +66,7 @@ public final class FHEMUtils {
     }
 
     /**
-     * Execute a 'whereis' command to find fhem.pl
+     * Execute a 'whereis' command to find fhem.pl.
      *
      * @return the path to fhem.pl, including the script name
      *

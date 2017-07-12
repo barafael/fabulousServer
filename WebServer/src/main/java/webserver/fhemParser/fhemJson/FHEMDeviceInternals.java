@@ -14,17 +14,40 @@ import java.util.Optional;
 @SuppressWarnings ("unused")
 public final class FHEMDeviceInternals {
     /* Json Attributes */
+    /**
+     * This field can be used to filter out the device name a filelog has been defined on.
+     */
     @SerializedName ("DEF")
     private String definition;
+    /**
+     * This field holds information about the internals' state in FHEM.
+     */
     @SerializedName ("STATE")
     private String state;
+    /**
+     * This fields' presence marks a supersensor which is not useful for the frontend.
+     */
     private String channel_01;
+    /**
+     * This fields' presence marks a supersensor which is not useful for the frontend.
+     */
     @SerializedName ("Clients")
     private String clients;
+    /**
+     * This field can be used to filter out the device name a filelog has been defined on.
+     */
     @SerializedName ("REGEXP")
     private String regexp;
+    /**
+     * This field holds type information.
+     * Usually it is not useful, but in the case of filelogs, the type is set to 'FileLog'.
+     */
     @SerializedName ("TYPE")
     private String type;
+    /**
+     * This field holds a path to a fileLog on disk.
+     * Date strings like %y-%m are substituted for the current year and month.
+     */
     private String currentlogfile;
 
     /**

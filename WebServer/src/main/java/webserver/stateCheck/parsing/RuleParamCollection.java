@@ -68,6 +68,9 @@ public class RuleParamCollection {
                     break;
                 case PREDICATE:
                     rules.add(new PredicateRule(ruleParam));
+                    break;
+                default:
+                    System.err.println("Unimplemented Rule Type!");
             }
         }
 

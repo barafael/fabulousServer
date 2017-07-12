@@ -19,23 +19,24 @@ import java.util.regex.Pattern;
  * @author Rafael
  */
 //TODO before final: privatize this, only public for testing
-public class Timeserie {
+public final class Timeserie {
     /**
      * A formatter used to parse the FHEM date format.
      */
-    private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+    private static final transient DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
     /**
-     * A ZoneId, needed for timezone-independence
+     * A ZoneId, needed for timezone-independence.
      */
-    private transient static final ZoneId zoneId = ZoneId.systemDefault();
+    private static final transient ZoneId ZONE_ID = ZoneId.systemDefault();
     /**
      * A pattern used to check if a string is parseable to a number, decimal or whole.
      */
-    private transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
-    @SuppressWarnings ("MismatchedQueryAndUpdateOfCollection")
+    private static final transient Pattern NUMBER_PATTERN = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
     /**
      * A list of timestamps in unix long format.
-     * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive. */
+     * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive.
+     */
+    @SuppressWarnings ("MismatchedQueryAndUpdateOfCollection")
     private final List<Long> xs;
     /**
      * A list of readings parsed from a file.
@@ -67,7 +68,7 @@ public class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
                     xs.add(epoch);
 
                     String value = items[items.length - 1];
@@ -96,11 +97,11 @@ public class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
                     xs.add(epoch);
 
                     double value = 0.0;
-                    Matcher numberMatch = number.matcher(items[3]);
+                    Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
                     if (numberMatch.matches()) {
                         value = Double.parseDouble(items[3]);
                     }
@@ -137,7 +138,7 @@ public class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
                     if (epoch < start || epoch > end) {
                         continue;
                     }
@@ -169,14 +170,14 @@ public class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(zoneId).toEpochSecond();
+                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
                     if (epoch < start || epoch > end) {
                         continue;
                     }
                     xs.add(epoch);
 
                     double value = 0.0;
-                    Matcher numberMatch = number.matcher(items[3]);
+                    Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
                     if (numberMatch.matches()) {
                         value = Double.parseDouble(items[3]);
                     }

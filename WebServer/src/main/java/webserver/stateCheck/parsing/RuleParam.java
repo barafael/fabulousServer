@@ -16,7 +16,7 @@ import java.util.TreeMap;
  *
  * @author Rafael on 07.07.17.
  */
-public class RuleParam {
+public final class RuleParam {
     private String name;
     private Set<String> sensorNames;
     private RuleType ruleType;
@@ -72,7 +72,7 @@ public class RuleParam {
     }
 
     /**
-     * Returns requiredTrue-Rules, which are rules which must be true as a pre-requisite
+     * Returns requiredTrue-Rules, which are rules which must be true as a pre-requisite.
      *
      * @return a set of rules which are required to be true
      */
@@ -81,7 +81,7 @@ public class RuleParam {
     }
 
     /**
-     * Returns requiredFalse-Rules, which are rules which must be false as a pre-requisite
+     * Returns requiredFalse-Rules, which are rules which must be false as a pre-requisite.
      *
      * @return a set of rules which are required to be false
      */

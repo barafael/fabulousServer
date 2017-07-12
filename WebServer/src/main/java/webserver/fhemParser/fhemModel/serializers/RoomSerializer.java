@@ -20,6 +20,9 @@ import java.util.List;
  * @author Rafael on 22.06.17.
  */
 class RoomSerializer implements JsonSerializer<FHEMRoom> {
+    /**
+     * A list of permision identifiers that are used to remove/retain json elements.
+     */
     private final List<String> permissions;
 
     RoomSerializer(List<String> permissions) {

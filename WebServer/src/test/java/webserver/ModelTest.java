@@ -33,6 +33,9 @@ import java.util.Random;
  * @author Rafael
  */
 public class ModelTest {
+    /**
+     * An integer between 0 and 100 used for testing hashes and position.
+     */
     private static final int RANDOM = new Random().nextInt(101);
 
     /**

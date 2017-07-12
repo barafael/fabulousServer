@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Rafael
  */
-public class RuleState {
+public final class RuleState {
     /**
      * A set of sensors for which this rule holds.
      */
@@ -20,7 +20,7 @@ public class RuleState {
      */
     private final Set<FHEMSensor> violatedSensors;
     /**
-     * A Rule only has state true if no sensors violate it
+     * A Rule only has state true if no sensors violate it.
      */
     private boolean state;
 

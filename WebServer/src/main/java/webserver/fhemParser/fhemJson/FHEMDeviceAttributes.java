@@ -46,9 +46,17 @@ class FHEMDeviceAttributes {
     @SerializedName ("room")
     private String rooms;
     private String icon_in_app;
-
+    /**
+     * SubType as defined in FHEM. TODO read this in metainfo
+     */
     private String subType;
+    /**
+     * The permissions defined in FHEM.
+     */
     private String permissions;
+    /**
+     * The alias defined in the custom FHEM userattr.
+     */
     private String alias;
 
     /**

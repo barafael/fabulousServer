@@ -114,6 +114,11 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         sensors.forEach(action);
     }
 
+    /**
+     * Gets a plan corresponding to this room.
+     *
+     * @return a plan if present, empty otherwise.
+     */
     public Optional<String> getRoomplan() {
         try {
             String content = new String(Base64.getEncoder().encode(Files.readAllBytes(pathToPlan)));
@@ -159,7 +164,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         try (BufferedWriter filewrite = Files.newBufferedWriter(pathToPlan);
              BufferedWriter hashwrite = Files.newBufferedWriter(pathToHash)) {
             byte[] file = Base64.getDecoder().decode(picture);
-            filewrite.write(String.valueOf(file));
+            filewrite.write(java.util.Arrays.toString(file));
             hashwrite.write(String.valueOf(picture.hashCode()));
         } catch (IOException e) {
             e.printStackTrace();

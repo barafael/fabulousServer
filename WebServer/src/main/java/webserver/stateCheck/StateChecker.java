@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  *
  * @author Rafael
  */
-public class StateChecker {
+public final class StateChecker {
     private static StateChecker instance;
     /* (Sensorname -> (Rulename -> timeAtViolation)) */
     /* If a rule is violated, it appears in the hashmap with its start time */
@@ -34,7 +34,7 @@ public class StateChecker {
     }
 
     /**
-     * Aquisitor for StateChecker instance
+     * Aquisitor for StateChecker instance.
      *
      * @return the instance of this singleton
      */
@@ -122,6 +122,13 @@ public class StateChecker {
         return true;
     }
 
+    /**
+     * Get rule parameters from a file and parse them to rules.
+     *
+     * @param path path to the rules file
+     *
+     * @return a set of parsed rules
+     */
     private Optional<Set<Rule>> getRules(String path) {
         RuleParamCollection params;
         try {

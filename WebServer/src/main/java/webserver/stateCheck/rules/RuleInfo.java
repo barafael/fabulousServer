@@ -8,7 +8,7 @@ package webserver.stateCheck.rules;
  * @author Rafael
  */
 
-public class RuleInfo {
+public final class RuleInfo {
     /**
      * The name of the Rule as shown in the frontend.
      */
@@ -17,8 +17,12 @@ public class RuleInfo {
     /**
      * The state of this rule. True if not violated.
      */
+    @SuppressWarnings ("FieldCanBeLocal")
     private boolean isOk;
     /* TODO handle permissions similarly to filelogs */
+    /**
+     * The necessary permissions to be able to see this information in a sensor.
+     */
     private transient String permission;
     /**
      * A message about the state of the rule.
@@ -27,6 +31,14 @@ public class RuleInfo {
     @SuppressWarnings ("FieldCanBeLocal")
     private String message;
 
+    /**
+     * Construct a RuleInfo instance.
+     *
+     * @param name       Name of the rule as shown in app
+     * @param isOk       state of the rule; true if ok
+     * @param permission necessary permissions
+     * @param message    the message about the state of the rule
+     */
     public RuleInfo(String name, boolean isOk, String permission, String message) {
         this.name = name;
         this.isOk = isOk;

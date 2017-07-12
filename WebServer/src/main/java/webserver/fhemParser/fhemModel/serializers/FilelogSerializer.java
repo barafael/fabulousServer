@@ -18,6 +18,9 @@ import java.util.List;
  * @author Rafael on 22.06.17.
  */
 class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
+    /**
+     * A list of permision identifiers that are used to remove/retain json elements.
+     */
     private final List<String> permissions;
 
     FilelogSerializer(List<String> permissions) {

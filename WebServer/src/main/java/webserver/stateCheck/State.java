@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * This class keeps an intermediate state which can later be applied to a FHEM model
+ * This class keeps an intermediate state which can later be applied to a FHEM model.
  *
  * @author Rafael
  */
