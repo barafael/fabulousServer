@@ -74,8 +74,15 @@ public class RuleParamCollection {
             /* Filter out the name of the rule itself. Otherwise infinite recursion (self pointer in graph)! */
             Set<String> requiredTrue = ruleParam.getRequiredTrueRules().stream().
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
+
             Set<String> requiredFalse = ruleParam.getRequiredFalseRules().stream().
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
+
+            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size() ||
+                    requiredFalse.size() != ruleParam.getRequiredFalseRules().size() ) {
+                System.err.println("Ignoring rule self dependency!");
+                System.err.println("Rule Parameters: " + ruleParam);
+            }
 
             requiredTrueRules.put(ruleParam.getName(), requiredTrue);
             requiredFalseRules.put(ruleParam.getName(), requiredFalse);

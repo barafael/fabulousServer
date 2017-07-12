@@ -77,7 +77,6 @@ public class StateCheckerTest {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         RuleParamCollection col = new RuleParamCollection(ruleParam);
         String json = gson.toJson(col);
-        System.out.println(json);
         assert isValidJSON(json);
     }
 
@@ -266,6 +265,7 @@ public class StateCheckerTest {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
+
         StateChecker stateChecker = StateChecker.getInstance();
         stateChecker.evaluate(model, "jsonRules/selfCycle.json");
 
