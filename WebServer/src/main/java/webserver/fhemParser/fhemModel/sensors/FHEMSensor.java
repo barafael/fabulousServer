@@ -21,17 +21,44 @@ import java.util.function.Consumer;
  * @author Rafael
  */
 public final class FHEMSensor implements Iterable<FHEMFileLog> {
-    private final Coordinates coords;
+    /**
+     * Name of the sensor in FHEM.
+     */
     private final String name;
+    /**
+     * Name of the sensor as it should be shown in the frontend.
+     */
     @SerializedName ("alias")
     private final String nameInApp;
+    /**
+     * Coordinates of sensor in percent.
+     */
+    private final Coordinates coords;
+    /**
+     * Permissions of this sensor as set in FHEM.
+     * Unused because of technical reasons:
+     * In FHEM, a userattr is always global. And any device will have it.
+     * This means that the sensor has a permission field which could be used in the future but is unused now.
+     */
     @SuppressWarnings ("FieldCanBeLocal")
     private final transient List<String> permissions;
+    /**
+     * All filelogs which belong to this sensor.
+     */
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
+    /**
+     * Documents whether this should be shown in the frontend.
+     */
     @SuppressWarnings ("FieldCanBeLocal")
     private final transient boolean isShowInApp;
+    /**
+     * This map contains key-value pairs about meta information of this sensor.
+     */
     private final HashMap<String, String> metaInfo;
     private String icon;
+    /**
+     * This field contains information about the rules this sensor violates or passes.
+     */
     private Set<RuleInfo> ruleInfos = new HashSet<>();
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
@@ -73,9 +100,17 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return Optional.empty();
     }
 
+    /**
+     * This method adds a ruleInfo to this sensor.
+     *
+     * Old rule information is overwritten.
+     * This works because the {@link webserver.stateCheck.rules.RuleInfo#equals(Object) equals}
+     * and {@link webserver.stateCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
+     *
+     * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
+     */
     public void addRuleInfo(RuleInfo ruleInfo) {
         /* First remove the old info, then put the current one */
-        /* This works because the equals() and hashCode() methods only care about the name */
         if (ruleInfos.contains(ruleInfo)) {
             ruleInfos.remove(ruleInfo);
             ruleInfos.add(ruleInfo);
@@ -84,9 +119,36 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         }
     }
 
-    @Override
-    public String toString() {
-        return new Gson().toJson(this, FHEMSensor.class);
+    /**
+     * Returns whether any of the logs are permitted to be accessed with the given permissions.
+     *
+     * @param permissions list of permissions against which to check
+     *
+     * @return whether this sensor contains viewable timeseries
+     */
+    public boolean hasPermittedLogs(List<String> permissions) {
+        for (FHEMFileLog log : this) {
+            if (log.isPermitted(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Coordinates getCoords() {
+        return coords;
+    }
+
+    /**
+     * This method returns the value of the given field in the metaInfo map or Optional.empty, if
+     * such a value was not put in the map.
+     *
+     * @param field the name of the field in the map
+     *
+     * @return the value corresponding to the input key
+     */
+    public Optional<String> getValueOfField(String field) {
+        return Optional.ofNullable(metaInfo.get(field));
     }
 
     public HashSet<FHEMFileLog> getLogs() {
@@ -113,35 +175,23 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         fileLogs.forEach(action);
     }
 
-    /**
-     * Returns whether any of the logs are permitted to be accessed with the given permissions.
-     *
-     * @param permissions list of permissions against which to check
-     *
-     * @return whether this sensor contains viewable timeseries
-     */
-    public boolean hasPermittedLogs(List<String> permissions) {
-        for (FHEMFileLog log : this) {
-            if (log.isPermitted(permissions)) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
-    public Coordinates getCoords() {
-        return coords;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        webserver.fhemParser.fhemModel.sensors.FHEMSensor that = (webserver.fhemParser.fhemModel.sensors.FHEMSensor) o;
+
+        return name.equals(that.name);
     }
 
-    public Optional<String> getValueOfField(String field) {
-        switch (field) {
-            //TODO implement more fields!
-            case "STATE":
-                return Optional.ofNullable(metaInfo.get("STATE"));
-            case "State":
-                return Optional.ofNullable(metaInfo.get("State"));
-            default:
-                return Optional.empty();
-        }
+    @Override
+    public String toString() {
+        return new Gson().toJson(this, FHEMSensor.class);
     }
 }
