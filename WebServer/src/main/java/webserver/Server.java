@@ -1,7 +1,11 @@
 package webserver;
 
 import com.google.gson.Gson;
-import io.vertx.core.*;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
@@ -145,11 +149,30 @@ public class Server extends AbstractVerticle {
         });
     }
 
-
-    private void exceptionHandler(Throwable throwable) {
-        throwable.printStackTrace();
+    /**
+     * lists all permissions an user has from the database to a List<String>
+     *
+     * @param user the user given by the RoutingContext on a route
+     * @param next Handler which gets called, whenever the database action has been finished
+     */
+    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+        String username = user.getString(Username_PARAM);
+        if (username == null) {
+            next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
+            return;
+        }
+        String query = "SELECT perm FROM `ROLE_PERM` INNER JOIN `USER_ROLE` ON `ROLE_PERM`.role=`USER_ROLE`.role where `user`=?";
+        JsonArray params = new JsonArray().add(username);
+        connection.queryWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                ResultSet result = res.result();
+                List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
+                next.handle(Future.succeededFuture(list));
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+            }
+        });
     }
-
 
     @Override
     public void stop() throws Exception {
@@ -161,6 +184,9 @@ public class Server extends AbstractVerticle {
         super.stop();
     }
 
+    private void exceptionHandler(Throwable throwable) {
+        throwable.printStackTrace();
+    }
 
     /**
      * Handles the REST-API call for Route /api/register.
@@ -174,9 +200,9 @@ public class Server extends AbstractVerticle {
     private void register(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
         if (routingContext.getBodyAsJson().getString(Username_PARAM) == null
-                 || routingContext.getBodyAsJson().getString(Username_PARAM).isEmpty()
-                 || routingContext.getBodyAsJson().getString(Password_PARAM) == null
-                 || routingContext.getBodyAsJson().getString(Password_PARAM).isEmpty()) {
+                || routingContext.getBodyAsJson().getString(Username_PARAM).isEmpty()
+                || routingContext.getBodyAsJson().getString(Password_PARAM) == null
+                || routingContext.getBodyAsJson().getString(Password_PARAM).isEmpty()) {
             routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
             return;
         }
@@ -202,6 +228,46 @@ public class Server extends AbstractVerticle {
         });
     }
 
+    /**
+     * prints useful information of an request to the server
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void printRequestHeaders(RoutingContext routingContext) {
+        System.out.println("");
+        System.out.println("---");
+        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
+        System.out.println("Server params: " + routingContext.request().params());
+        if (routingContext.user() != null) {
+            System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
+        } else {
+            System.out.println("Server user: not specified");
+        }
+        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("uthorization") ? h : "Authorization=Basic ***********")));
+    }
+
+    /**
+     * stores an unregistered user with hashed and salted password to the database
+     *
+     * @param username the unique username of the new user
+     * @param password the clear text password
+     * @param prename  the Prename of the new user
+     * @param surname  the Surname of the new user
+     * @param next     Handler which gets called, whenever the database action has been finished
+     */
+    private void storeUserInDatabase(String username, String password, String prename, String surname,
+                                     Handler<AsyncResult<Void>> next) {
+        String salt = authProvider.generateSalt();
+        String hash = authProvider.computeHash(password, salt);
+        JsonArray params = new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname);
+        connection.updateWithParams("INSERT INTO USER VALUES (?, ?, ?, ?, ?)", params, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+            }
+        });
+    }
 
     /**
      * handles the REST-Api call for Route /api/setRoomplan
@@ -254,6 +320,25 @@ public class Server extends AbstractVerticle {
         });
     }
 
+    /**
+     * checks if an user is authorized to perform an action
+     *
+     * @param user          the user given by the RoutingContext on a route
+     * @param permission    the needed permission, which should already be stored in the database
+     * @param resultHandler Handler which gets called, whenever the database action has been finished
+     */
+    private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
+        Future<List<String>> future = Future.future();
+        getListOfPermissions(user.principal(), future.completer());
+        future.setHandler(res -> {
+            if (future.succeeded()) {
+                resultHandler.handle(Future.succeededFuture(future.result().contains(permission)));
+            } else {
+                System.out.println("Server failed darferdas");
+                resultHandler.handle(Future.failedFuture(res.cause()));
+            }
+        });
+    }
 
     /**
      * handles the REST-Api call for Route /api/setSensorPosition
@@ -313,7 +398,6 @@ public class Server extends AbstractVerticle {
         });
     }
 
-
     /**
      * handles the REST-Api call for Route /api/getModel
      * lists the users permission and hands it to the model, to build a user-specific view
@@ -358,7 +442,6 @@ public class Server extends AbstractVerticle {
         });
     }
 
-
     /**
      * handles the REST-Api call for Route /api/getPermissions
      * lists all permissions an user has to a List<String>
@@ -383,7 +466,6 @@ public class Server extends AbstractVerticle {
             }
         });
     }
-
 
     /**
      * handles the REST-Api call for Route /api/getRoomplan
@@ -455,7 +537,6 @@ public class Server extends AbstractVerticle {
         });
     }
 
-
     /**
      * handles the REST-Api call for Route /api/getEditMutex
      * reserves the right to edit the data model for one user
@@ -495,7 +576,6 @@ public class Server extends AbstractVerticle {
             }
         });
     }
-
 
     /**
      * handles the REST-Api call for Route /api/releaseEditMutex
@@ -544,7 +624,6 @@ public class Server extends AbstractVerticle {
             }
         });
     }
-
 
     /**
      * handles the REST-Api call for Route /api/getTimeSeries
@@ -612,95 +691,5 @@ public class Server extends AbstractVerticle {
                 System.out.println(res.cause());
             }
         });
-    }
-
-
-    /**
-     * checks if an user is authorized to perform an action
-     *
-     * @param user          the user given by the RoutingContext on a route
-     * @param permission    the needed permission, which should already be stored in the database
-     * @param resultHandler Handler which gets called, whenever the database action has been finished
-     */
-    private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
-        Future<List<String>> future = Future.future();
-        getListOfPermissions(user.principal(), future.completer());
-        future.setHandler(res -> {
-            if (future.succeeded()) {
-                resultHandler.handle(Future.succeededFuture(future.result().contains(permission)));
-            } else {
-                System.out.println("Server failed darferdas");
-                resultHandler.handle(Future.failedFuture(res.cause()));
-            }
-        });
-    }
-
-
-    /**
-     * lists all permissions an user has from the database to a List<String>
-     *
-     * @param user the user given by the RoutingContext on a route
-     * @param next Handler which gets called, whenever the database action has been finished
-     */
-    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
-        String username = user.getString(Username_PARAM);
-        if (username == null) {
-            next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
-            return;
-        }
-        String query = "SELECT perm FROM `ROLE_PERM` INNER JOIN `USER_ROLE` ON `ROLE_PERM`.role=`USER_ROLE`.role where `user`=?";
-        JsonArray params = new JsonArray().add(username);
-        connection.queryWithParams(query, params, res -> {
-            if (res.succeeded()) {
-                ResultSet result = res.result();
-                List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
-                next.handle(Future.succeededFuture(list));
-            } else {
-                next.handle(Future.failedFuture(res.cause()));
-            }
-        });
-    }
-
-
-    /**
-     * stores an unregistered user with hashed and salted password to the database
-     *
-     * @param username the unique username of the new user
-     * @param password the clear text password
-     * @param prename  the Prename of the new user
-     * @param surname  the Surname of the new user
-     * @param next     Handler which gets called, whenever the database action has been finished
-     */
-    private void storeUserInDatabase(String username, String password, String prename, String surname,
-                                     Handler<AsyncResult<Void>> next) {
-        String salt = authProvider.generateSalt();
-        String hash = authProvider.computeHash(password, salt);
-        JsonArray params = new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname);
-        connection.updateWithParams("INSERT INTO USER VALUES (?, ?, ?, ?, ?)", params, res -> {
-            if (res.succeeded()) {
-                next.handle(Future.succeededFuture());
-            } else {
-                next.handle(Future.failedFuture(res.cause()));
-            }
-        });
-    }
-
-
-    /**
-     * prints useful information of an request to the server
-     *
-     * @param routingContext the context in a route given by the router
-     */
-    private void printRequestHeaders(RoutingContext routingContext) {
-        System.out.println("");
-        System.out.println("---");
-        System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
-        System.out.println("Server params: " + routingContext.request().params());
-        if (routingContext.user() != null) {
-            System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
-        } else {
-            System.out.println("Server user: not specified");
-        }
-        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("uthorization") ? h : "Authorization=Basic ***********")));
     }
 }

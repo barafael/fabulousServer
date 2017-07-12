@@ -2,7 +2,11 @@ package webserver.stateCheck.parsing;
 
 import webserver.stateCheck.WARNINGLEVEL;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * This class contains all parameters for building a Rule.
@@ -98,6 +102,11 @@ public class RuleParam {
     }
 
     @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -105,10 +114,5 @@ public class RuleParam {
         RuleParam ruleParam = (RuleParam) o;
 
         return name.equals(ruleParam.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
     }
 }

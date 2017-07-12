@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * This class keeps an intermediate state which can later be applied to a FHEM model
+ *
  * @author Rafael
  */
 class State {
@@ -39,7 +40,7 @@ class State {
                 for (Rule rule : violatingRules) {
                     long timestamp = state.get(sensor.getName()).get(rule.getName());
                     String message = rule.getWarningMessage(timestamp);
-                    sensor.addRuleInfo(new RuleInfo(rule.getName(), rule.getPermissionField(), message));
+                    sensor.addRuleInfo(new RuleInfo(rule.getName(), false, rule.getPermissionField(), message));
                 }
             }
         }

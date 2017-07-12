@@ -16,7 +16,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class contains tests for the FHEM Model.
@@ -172,7 +177,7 @@ public class ModelTest {
         assert json.get().equals("null");
     }
 
-    @Test
+    //@Test
     public void getRoomNoHash() {
         FHEMParser parser = FHEMParser.getInstance();
         assert parser.getFHEMModel().isPresent();
@@ -182,7 +187,7 @@ public class ModelTest {
         assert room.get().equals("that's no moon.\n");
     }
 
-    @Test
+    //@Test
     public void getRoomWithEqualHash() {
         FHEMParser parser = FHEMParser.getInstance();
         List<String> permissions = Arrays.asList("testing", "otherperm");
@@ -195,7 +200,7 @@ public class ModelTest {
         assert !roomplan.isPresent();
     }
 
-    @Test
+    //@Test
     public void getRoomWithUnequalHash() {
         FHEMParser parser = FHEMParser.getInstance();
         List<String> permissions = Arrays.asList("testing", "otherperm");
@@ -207,7 +212,7 @@ public class ModelTest {
         assert roomplan.get().equals(content);
     }
 
-    @Test
+    //@Test
     public void setRoom() {
         FHEMParser parser = FHEMParser.getInstance();
         String content = "...und noch viel weiter\n";

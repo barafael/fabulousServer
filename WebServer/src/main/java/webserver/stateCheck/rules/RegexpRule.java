@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
+ * A specific rule implementation for a rule to match on fields of sensors via regex or literal terms.
+ *
  * @author Rafael on 07.07.17.
  */
 public class RegexpRule extends Rule {

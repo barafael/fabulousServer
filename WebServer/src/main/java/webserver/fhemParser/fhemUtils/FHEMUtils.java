@@ -18,16 +18,6 @@ public final class FHEMUtils {
     }
 
     /**
-     * This private helper method gets any environment variable.
-     *
-     * @param var the name of the variable to get
-     * @return the value of the environment variable var
-     */
-    public static Optional<String> getGlobVar(String var) {
-        return Optional.ofNullable(System.getenv(var));
-    }
-
-    /**
      * Accessor for the $FHEMPORT environment variable
      *
      * @return the value of the $FHEMPORT environment variable
@@ -43,22 +33,6 @@ public final class FHEMUtils {
             port = 7072;
         }
         return port;
-    }
-
-    /**
-     * Execute a 'whereis' command to find fhem.pl
-     *
-     * @return the path to fhem.pl, including the script name
-     * @throws IOException if invocation fails
-     */
-    private static String whereisFhemDotPl() throws IOException {
-        /* The output of 'whereis' is broken into lines, and the one containing the script is returned */
-        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\""});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        String line = stdin.readLine();
-        stdin.close();
-        return line;
     }
 
     /**
@@ -78,5 +52,33 @@ public final class FHEMUtils {
                 return "/usr/bin/fhem.pl";
             }
         }
+    }
+
+    /**
+     * This private helper method gets any environment variable.
+     *
+     * @param var the name of the variable to get
+     *
+     * @return the value of the environment variable var
+     */
+    public static Optional<String> getGlobVar(String var) {
+        return Optional.ofNullable(System.getenv(var));
+    }
+
+    /**
+     * Execute a 'whereis' command to find fhem.pl
+     *
+     * @return the path to fhem.pl, including the script name
+     *
+     * @throws IOException if invocation fails
+     */
+    private static String whereisFhemDotPl() throws IOException {
+        /* The output of 'whereis' is broken into lines, and the one containing the script is returned */
+        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\""});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        String line = stdin.readLine();
+        stdin.close();
+        return line;
     }
 }

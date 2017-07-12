@@ -1,6 +1,11 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
@@ -14,7 +19,6 @@ import java.util.List;
  *
  * @author Rafael on 22.06.17.
  */
-
 class RoomSerializer implements JsonSerializer<FHEMRoom> {
     private final List<String> permissions;
 
@@ -26,6 +30,7 @@ class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * Custom serializer for room, only parses room if it is permitted.
      *
      * @param room the source room
+     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
 

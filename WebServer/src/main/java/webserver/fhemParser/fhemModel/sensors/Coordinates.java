@@ -13,13 +13,13 @@ public final class Coordinates {
     /**
      * A coordinate in x between 0 (inclusive) and 100 (inclusive).
      */
-    @SerializedName("x")
+    @SerializedName ("x")
     private int coordX;
 
     /**
      * A coordinate in y between 0 (inclusive) and 100 (inclusive).
      */
-    @SerializedName("y")
+    @SerializedName ("y")
     private int coordY;
 
     /**
@@ -42,17 +42,17 @@ public final class Coordinates {
     }
 
     @Override
+    public int hashCode() {
+        int result = coordX;
+        result = 31 * result + coordY;
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coordinates that = (Coordinates) o;
         return coordX == that.coordX && coordY == that.coordY;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = coordX;
-        result = 31 * result + coordY;
-        return result;
     }
 }

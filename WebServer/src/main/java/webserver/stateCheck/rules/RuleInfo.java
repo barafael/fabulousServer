@@ -9,16 +9,27 @@ package webserver.stateCheck.rules;
  */
 
 public class RuleInfo {
+    /**
+     * The name of the Rule as shown in the frontend.
+     */
     private String name;
 
+    /**
+     * The state of this rule. True if not violated.
+     */
+    private boolean isOk;
     /* TODO handle permissions similarly to filelogs */
     private transient String permission;
-    /* This field is needed for serialization */
-    @SuppressWarnings("FieldCanBeLocal")
+    /**
+     * A message about the state of the rule.
+     * This field is needed for serialization
+     */
+    @SuppressWarnings ("FieldCanBeLocal")
     private String message;
 
-    public RuleInfo(String name, String permission, String message) {
+    public RuleInfo(String name, boolean isOk, String permission, String message) {
         this.name = name;
+        this.isOk = isOk;
         this.permission = permission;
         this.message = message;
     }
@@ -32,6 +43,11 @@ public class RuleInfo {
     }
 
     @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -39,10 +55,5 @@ public class RuleInfo {
         RuleInfo ruleInfo = (RuleInfo) o;
 
         return name.equals(ruleInfo.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
     }
 }

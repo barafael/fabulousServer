@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -80,6 +85,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * This method checks if there are sensors with given permissions in this room.
      *
      * @param permissions the callers permissions
+     *
      * @return true if there are available sensors
      */
     public boolean hasPermittedSensors(List<String> permissions) {
@@ -124,6 +130,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * Else, the file is delivered.
      *
      * @param request_hash the hash of the caller's file
+     *
      * @return the roomplan, if there were changes. Empty otherwise.
      */
     public Optional<String> getRoomplan(int request_hash) {
@@ -145,6 +152,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * Setter for a roomplan, which writes the roomplan to a file.
      *
      * @param picture the file's content
+     *
      * @return whether the operation succeeded
      */
     public boolean setRoomplan(String picture) {
@@ -161,6 +169,14 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
     }
 
     @Override
+    public int hashCode() {
+        int result = pathToHash != null ? pathToHash.hashCode() : 0;
+        result = 31 * result + (pathToPlan != null ? pathToPlan.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -170,13 +186,5 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         if (pathToHash != null ? !pathToHash.equals(that.pathToHash) : that.pathToHash != null) return false;
         if (pathToPlan != null ? !pathToPlan.equals(that.pathToPlan) : that.pathToPlan != null) return false;
         return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = pathToHash != null ? pathToHash.hashCode() : 0;
-        result = 31 * result + (pathToPlan != null ? pathToPlan.hashCode() : 0);
-        result = 31 * result + name.hashCode();
-        return result;
     }
 }

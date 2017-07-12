@@ -19,9 +19,8 @@ import java.util.Random;
 
 /**
  * @author Johannes Köstler <github@johanneskoestler.de>
- * @date 16.06.17.
+ *         on 16.06.17.
  */
-
 @RunWith(VertxUnitRunner.class)
 public class ServerTest {
     @Rule

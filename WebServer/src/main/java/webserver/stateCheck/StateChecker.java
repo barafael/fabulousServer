@@ -3,9 +3,9 @@ package webserver.stateCheck;
 import com.google.gson.JsonSyntaxException;
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.stateCheck.parsing.RuleParamCollection;
 import webserver.stateCheck.rules.Rule;
 import webserver.stateCheck.rules.RuleState;
-import webserver.stateCheck.parsing.RuleParamCollection;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
  *
  * @author Rafael
  */
-
 public class StateChecker {
     private static StateChecker instance;
     /* (Sensorname -> (Rulename -> timeAtViolation)) */
@@ -45,27 +44,6 @@ public class StateChecker {
         }
         return StateChecker.instance;
     }
-
-    private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
-        /* TODO add translations for rules? */
-        String content = new String(Files.readAllBytes(Paths.get(path)));
-        return RuleParamCollection.fromJson(content);
-    }
-
-    private Optional<Set<Rule>> getRules(String path) {
-        RuleParamCollection params;
-        try {
-            params = loadRuleParams(path);
-        } catch (IOException e) {
-            System.err.println("The file 'rules.json' could not be read because there was an IO exception.");
-            return Optional.empty();
-        } catch (JsonSyntaxException e) {
-            System.err.println("There seems to be a syntax error in rules.json.");
-            return Optional.empty();
-        }
-        return Optional.of(params.toRules());
-    }
-
 
     public boolean evaluate(FHEMModel model) {
         return evaluate(model, "rules.json");
@@ -142,5 +120,25 @@ public class StateChecker {
         }
         fhemState.setRuleInfos(model, rules);
         return true;
+    }
+
+    private Optional<Set<Rule>> getRules(String path) {
+        RuleParamCollection params;
+        try {
+            params = loadRuleParams(path);
+        } catch (IOException e) {
+            System.err.println("The file 'rules.json' could not be read because there was an IO exception.");
+            return Optional.empty();
+        } catch (JsonSyntaxException e) {
+            System.err.println("There seems to be a syntax error in rules.json.");
+            return Optional.empty();
+        }
+        return Optional.of(params.toRules());
+    }
+
+    private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
+        /* TODO add translations for rules? */
+        String content = new String(Files.readAllBytes(Paths.get(path)));
+        return RuleParamCollection.fromJson(content);
     }
 }

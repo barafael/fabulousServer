@@ -6,7 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.stateCheck.rules.RuleInfo;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -18,7 +23,7 @@ import java.util.function.Consumer;
 public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private final Coordinates coords;
     private final String name;
-    @SerializedName("alias")
+    @SerializedName ("alias")
     private final String nameInApp;
     private transient final List<String> permissions;
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
@@ -52,7 +57,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-
 
     public Set<RuleInfo> getRuleInfo() {
         return ruleInfos;
@@ -111,6 +115,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * Returns whether any of the logs are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
+     *
      * @return whether this sensor contains viewable timeseries
      */
     public boolean hasPermittedLogs(List<String> permissions) {

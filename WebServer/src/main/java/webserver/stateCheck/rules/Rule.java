@@ -5,25 +5,45 @@ import webserver.stateCheck.WARNINGLEVEL;
 import webserver.stateCheck.parsing.RuleParam;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
  * This abstract class contains the attributes of a rule in fhem, most notably the eval(model) method.
  *
  * @author Rafael
- *         <p>
  *         TODO: implement AND and OR rules?
  *         TODO: implement 'invisible' attribute, which makes a rule invisible for the app but can still be used from other rules?
  */
-
 public abstract class Rule {
-    /* sensor names and not aliases, to guarantee uniqueness */
+    /**
+     * A set of names for which this rule applies.
+     * Sensor names should be used (and not aliases) to guarantee uniqueness
+     */
     protected Set<String> sensorNames;
+    /**
+     * The expression which should be evaluated for each sensor, like 'State matches d*y'.
+     */
     protected String expression;
+    /**
+     * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
+     */
+    protected RuleState ruleState;
+    /**
+     * The name of the rule.
+     */
     String name;
+    /**
+     * Whether this rule has already been evaluated.
+     */
     boolean isEvaluated = false;
-    RuleState ruleState;
+    /**
+     * The permissions for this rule to be shown.
+     */
     private String permission;
     private String okMessage;
     private Map<WARNINGLEVEL, String> errorMessages;
@@ -109,12 +129,8 @@ public abstract class Rule {
     }
 
     @Override
-    public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                ", permission='" + permission + '\'' +
-                ", expression='" + expression + '\'' +
-                '}';
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override
@@ -128,7 +144,11 @@ public abstract class Rule {
     }
 
     @Override
-    public int hashCode() {
-        return name.hashCode();
+    public String toString() {
+        return "Rule{" +
+                "name='" + name + '\'' +
+                ", permission='" + permission + '\'' +
+                ", expression='" + expression + '\'' +
+                '}';
     }
 }

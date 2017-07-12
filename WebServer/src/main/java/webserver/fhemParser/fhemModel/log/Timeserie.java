@@ -5,7 +5,11 @@ import com.google.gson.Gson;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,13 +20,26 @@ import java.util.regex.Pattern;
  */
 //TODO before final: privatize this, only public for testing
 public class Timeserie {
+    /**
+     * A formatter used to parse the FHEM date format.
+     */
     private transient static final DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
-    /* Needed for timezone-independence */
+    /**
+     * A ZoneId, needed for timezone-independence
+     */
     private transient static final ZoneId zoneId = ZoneId.systemDefault();
+    /**
+     * A pattern used to check if a string is parseable to a number, decimal or whole.
+     */
     private transient static final Pattern number = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    /* Because this field is actually read by Gson */
+    @SuppressWarnings ("MismatchedQueryAndUpdateOfCollection")
+    /**
+     * A list of timestamps in unix long format.
+     * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive. */
     private final List<Long> xs;
+    /**
+     * A list of readings parsed from a file.
+     */
     private final List<Double> ys;
 
     /**
@@ -176,6 +193,14 @@ public class Timeserie {
     }
 
     @Override
+    public int hashCode() {
+        int result = xs.hashCode();
+        result = 31 * result + ys.hashCode();
+        result = 31 * result + legend.hashCode();
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -185,14 +210,6 @@ public class Timeserie {
         return xs.equals(timeserie.xs)
                 && ys.equals(timeserie.ys)
                 && legend.equals(timeserie.legend);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = xs.hashCode();
-        result = 31 * result + ys.hashCode();
-        result = 31 * result + legend.hashCode();
-        return result;
     }
 
     @Override

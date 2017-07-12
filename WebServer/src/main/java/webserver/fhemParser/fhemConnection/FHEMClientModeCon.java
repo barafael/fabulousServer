@@ -61,6 +61,7 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * Getter method for FHEM's jsonList on the defined parameters for path and port.
      *
      * @return A string with jsonList2's content.
+     *
      * @throws IOException           if the invocation fails
      * @throws FHEMNotFoundException if communication couldn't be established
      */
@@ -74,7 +75,9 @@ public final class FHEMClientModeCon implements FHEMConnection {
      *
      * @param port     the port which should be used
      * @param fhemPath the path at which fhem.pl is located
+     *
      * @return the output of the jsonList2 command
+     *
      * @throws IOException           if an exception occurred during I/O
      * @throws FHEMNotFoundException if FHEM could not be found at the specified location
      */
@@ -115,7 +118,9 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * Runs a bash command, assuming it is not malicious.
      *
      * @param command the command to execute
+     *
      * @return the stdout from the command
+     *
      * @throws IOException if there was an I/O error
      */
     public Optional<String> execCommand(String command) throws IOException {
@@ -138,7 +143,9 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * Executes a perl command in FHEM via client mode.
      *
      * @param command the FHEM perl command to execute
+     *
      * @return the return stdout from the FHEM command, most often empty ('no news is good news')
+     *
      * @throws IOException if there was an error during I/O
      */
     @Override

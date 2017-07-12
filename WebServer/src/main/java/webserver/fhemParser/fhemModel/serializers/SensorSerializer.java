@@ -1,6 +1,11 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 
@@ -24,9 +29,9 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
      * Custom serializer for sensor, only parses sensor if it is permitted.
      *
      * @param sensor the source sensor
+     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
-
     @Override
     public JsonElement serialize(FHEMSensor sensor, Type type, JsonSerializationContext jsc) {
         /* All lower serializers need to be reattached here since the custom serializer actually uses

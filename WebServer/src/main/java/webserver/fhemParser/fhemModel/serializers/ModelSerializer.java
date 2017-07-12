@@ -1,6 +1,12 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
@@ -27,6 +33,7 @@ public class ModelSerializer implements JsonSerializer<FHEMModel> {
      * Custom serializer for a model, only parses model if it is permitted.
      *
      * @param model the source model
+     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

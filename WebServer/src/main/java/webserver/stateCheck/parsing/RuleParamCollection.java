@@ -7,7 +7,11 @@ import webserver.stateCheck.rules.RegexpRule;
 import webserver.stateCheck.rules.Rule;
 import webserver.stateCheck.rules.ThreshholdRule;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

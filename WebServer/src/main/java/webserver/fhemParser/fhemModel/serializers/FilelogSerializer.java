@@ -1,6 +1,11 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 
 import java.lang.reflect.Type;
@@ -23,6 +28,7 @@ class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
      * Custom serializer for a filelog, only parses filelog if it is permitted.
      *
      * @param fileLog the source filelog
+     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

@@ -1,5 +1,8 @@
 package webserver;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.junit.Test;
 import webserver.fhemParser.FHEMParser;
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
@@ -8,15 +11,17 @@ import webserver.stateCheck.WARNINGLEVEL;
 import webserver.stateCheck.parsing.RuleParam;
 import webserver.stateCheck.parsing.RuleParamCollection;
 import webserver.stateCheck.parsing.RuleType;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.junit.Test;
 import webserver.stateCheck.rules.Rule;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Tests for the StateChecker. Some tests depend on json files in the root directory.
@@ -159,7 +164,7 @@ public class StateCheckerTest {
         }
         Set<Rule> rules = RuleParamCollection.fromJson(json).toRules();
         StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model,"jsonRules/ruleDependencies.json");
+        stateChecker.evaluate(model, "jsonRules/ruleDependencies.json");
 
     }
 

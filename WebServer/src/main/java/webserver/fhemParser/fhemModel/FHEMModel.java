@@ -7,7 +7,12 @@ import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -30,6 +35,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * Getter for a specific timeserie.
      *
      * @param filelogName the name of the desired log
+     *
      * @return the desired timeserie, if present. Optional.empty otherwise
      */
     private Optional getTimeserie(String filelogName) {
@@ -48,6 +54,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * Getter for the specified room.
      *
      * @param roomname the name of the desired room
+     *
      * @return the desired room, if present
      */
     public Optional<FHEMRoom> getRoomByName(String roomname) {
@@ -84,14 +91,11 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * This method is necessary to be able to iterate over an internal data structure.
-     * while not permitting mutable access.
-     *
-     * @return an iterator over the contained sensors in this model.
+     * The consumer is applied to each room.
      */
-    public Iterator<FHEMSensor> eachSensor() {
-        HashSet<FHEMSensor> sensors = new HashSet<>();
-        forEach((FHEMRoom room) -> room.forEach(sensors::add));
-        return sensors.iterator();
+    @Override
+    public void forEach(Consumer<? super FHEMRoom> action) {
+        rooms.forEach(action);
     }
 
     /**
@@ -107,18 +111,10 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
-     * This method is necessary to be able to iterate over an internal data structure.
-     * The consumer is applied to each room.
-     */
-    @Override
-    public void forEach(Consumer<? super FHEMRoom> action) {
-        rooms.forEach(action);
-    }
-
-    /**
      * Returns whether any of the rooms are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
+     *
      * @return whether this model contains viewable rooms
      */
 
@@ -135,6 +131,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * Getter for a specific room, by name.
      *
      * @param name the name of the desired room
+     *
      * @return the specified room, if present
      */
     public Optional<FHEMSensor> getSensorByName(String name) {
@@ -148,9 +145,22 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     /**
+     * This method is necessary to be able to iterate over an internal data structure.
+     * while not permitting mutable access.
+     *
+     * @return an iterator over the contained sensors in this model.
+     */
+    public Iterator<FHEMSensor> eachSensor() {
+        HashSet<FHEMSensor> sensors = new HashSet<>();
+        forEach((FHEMRoom room) -> room.forEach(sensors::add));
+        return sensors.iterator();
+    }
+
+    /**
      * Get a collection of sensors by specifying a collection of sensor names.
      *
      * @param sensors the input collection
+     *
      * @return a collection of sensors with the given names in this model
      */
     public Set<FHEMSensor> getSensorsByCollection(Collection<String> sensors) {
@@ -165,6 +175,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * Check for a given sensor.
      *
      * @param sensorName name of the sensor to check
+     *
      * @return whether the sensor with this name exists
      */
     public boolean sensorExists(String sensorName) {

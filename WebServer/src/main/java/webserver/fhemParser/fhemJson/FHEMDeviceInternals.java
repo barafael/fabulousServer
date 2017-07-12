@@ -11,19 +11,19 @@ import java.util.Optional;
  *
  * @author Rafael on 02.06.17.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings ("unused")
 public final class FHEMDeviceInternals {
     /* Json Attributes */
-    @SerializedName("DEF")
+    @SerializedName ("DEF")
     private String definition;
-    @SerializedName("STATE")
+    @SerializedName ("STATE")
     private String state;
     private String channel_01;
-    @SerializedName("Clients")
+    @SerializedName ("Clients")
     private String clients;
-    @SerializedName("REGEXP")
+    @SerializedName ("REGEXP")
     private String regexp;
-    @SerializedName("TYPE")
+    @SerializedName ("TYPE")
     private String type;
     private String currentlogfile;
 
@@ -44,6 +44,7 @@ public final class FHEMDeviceInternals {
      * This method can be used to guess a correspondence between a sensor and a log.
      *
      * @param sep the char used as separator
+     *
      * @return a prefix of the filelog's regexp, if present
      */
     private Optional<String> getRegexpPrefix(char sep) {
@@ -70,7 +71,6 @@ public final class FHEMDeviceInternals {
         }
         return Optional.ofNullable(currentlogfile);
     }
-
 
     public Optional<String> getType() {
         return Optional.ofNullable(type);
