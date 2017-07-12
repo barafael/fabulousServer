@@ -1,5 +1,7 @@
 package webserver.stateCheck.rules;
 
+import java.util.List;
+
 /**
  * A class containing information about a rule.
  * This cannot be solved easily by marking fields in Rule as transient,
@@ -67,5 +69,9 @@ public final class RuleInfo {
         RuleInfo ruleInfo = (RuleInfo) o;
 
         return name.equals(ruleInfo.name);
+    }
+
+    public boolean isPermitted(List<String> permissions) {
+        return permissions.contains(permission);
     }
 }

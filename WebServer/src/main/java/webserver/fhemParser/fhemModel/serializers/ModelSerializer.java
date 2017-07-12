@@ -11,6 +11,7 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.stateCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class ModelSerializer implements JsonSerializer<FHEMModel> {
         a separate instance of gson
          */
         JsonObject jObj = (JsonObject) new GsonBuilder()
+                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
                 .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions))

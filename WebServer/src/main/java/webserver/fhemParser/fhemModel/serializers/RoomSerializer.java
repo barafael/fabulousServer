@@ -9,12 +9,13 @@ import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.stateCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * This serializer gets a list of permissions and, when  serializing, uses them to filter out fields which should not be visible.
+ * This serializer gets a list of permissions and, when serializing, uses them to filter out fields which should not be visible.
  * It is intended to be chained together with other serializers.
  *
  * @author Rafael on 22.06.17.
@@ -43,6 +44,7 @@ class RoomSerializer implements JsonSerializer<FHEMRoom> {
         a separate instance of gson
          */
         JsonObject jObj = (JsonObject) new GsonBuilder()
+                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
                 .create().toJsonTree(room);
