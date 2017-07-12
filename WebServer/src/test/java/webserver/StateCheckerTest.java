@@ -151,8 +151,9 @@ public class StateCheckerTest {
 
     /**
      * Evaluate more than one rule per sensor.
+     * door sensor is tested, (open or closed) and battery ok
      */
-    //@Test
+    @Test
     public void testEvaluateMultipleRulesPerSensor() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
@@ -162,7 +163,7 @@ public class StateCheckerTest {
         stateChecker.evaluate(model, "jsonRules/multipleRulesPerSensor.json");
 
         assert model.getSensorByName("HM_56A86F").isPresent();
-        assert model.getSensorByName("HM_56A86F").get().getRuleInfo().size() == 1;
+        assert model.getSensorByName("HM_56A86F").get().getRuleInfo().size() == 2;
     }
 
     /**
@@ -200,11 +201,16 @@ public class StateCheckerTest {
         assert sensor_opt.isPresent();
         FHEMSensor sensor = sensor_opt.get();
 
+        assert sensor.getRuleInfo().size() == 1;
         assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
     }
 
+    /**
+     * Test direct construction of parameters from a json string.
+     * The input file contains a duplicate rule, which should be filtered out.
+     */
     @Test
-    public void testDuplicateRule() {
+    public void testParamConstruction() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
@@ -213,44 +219,58 @@ public class StateCheckerTest {
         try {
             json = new String(Files.readAllBytes(Paths.get("jsonRules/duplicateRule.json")));
         } catch (IOException e) {
+            e.printStackTrace();
             assert false;
             return;
         }
         assert RuleParamCollection.fromJson(json).toRules().size() == 1;
     }
 
-    //@Test
+    /**
+     * Test filter of duplicate rules, without direct construction.
+     * The input file contains a duplicate rule, which should be filtered out.
+     */
+    @Test
+    public void testDuplicateRule() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/duplicateRule.json");
+
+        Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
+        assert sensor_opt.isPresent();
+        FHEMSensor sensor = sensor_opt.get();
+
+        assert sensor.getRuleInfo().size() == 1;
+        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("Duplicate")).count() == 1;
+   }
+
+    @Test
     public void testRuleDependencies() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
-        String json;
-        try {
-            json = new String(Files.readAllBytes(Paths.get("jsonRules/ruleDependencies.json")));
-        } catch (IOException e) {
-            assert false;
-            return;
-        }
-        Set<Rule> rules = RuleParamCollection.fromJson(json).toRules();
         StateChecker stateChecker = StateChecker.getInstance();
         stateChecker.evaluate(model, "jsonRules/ruleDependencies.json");
 
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert sensor.getRuleInfo().size() == 3;
     }
 
-    //@Test
+    @Test
     public void testSelfCycleRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/selfCycle.json");
 
-        String json;
-        try {
-            json = new String(Files.readAllBytes(Paths.get("jsonRules/selfCycle.json")));
-        } catch (IOException e) {
-            assert false;
-            return;
-        }
-        assert RuleParamCollection.fromJson(json).toRules().size() == 1;
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert sensor.getRuleInfo().size() == 1;
     }
 }
