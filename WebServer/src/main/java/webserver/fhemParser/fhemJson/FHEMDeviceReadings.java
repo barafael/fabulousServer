@@ -29,28 +29,28 @@ final class FHEMDeviceReadings {
     Map<String, String> getReadings() {
         Map<String, String> ret = new HashMap<>();
         if (battery != null) {
-            ret.put("battery", battery.value);
+            ret.put("Battery", battery.value);
         }
         if (battery_percent != null) {
-            ret.put("battery percent", battery_percent.value);
+            ret.put("Battery percent", battery_percent.value);
         }
         if (humidity != null) {
-            ret.put("humidity", humidity.value);
+            ret.put("Humidity", humidity.value);
         }
         if (temperature != null) {
-            ret.put("temperature", temperature.value);
+            ret.put("Temperature", temperature.value);
         }
         if (co2 != null) {
-            ret.put("co2", co2.value);
+            ret.put("CO2", co2.value);
         }
         if (power != null) {
-            ret.put("power", power.value);
+            ret.put("Power", power.value);
         }
         if (voltage != null) {
-            ret.put("voltage", voltage.value);
+            ret.put("Voltage", voltage.value);
         }
         if (current != null) {
-            ret.put("current", current.value);
+            ret.put("Current", current.value);
         }
         return ret;
     }

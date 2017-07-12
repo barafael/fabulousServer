@@ -72,11 +72,10 @@ public final class FHEMDevice {
         sensor.setIcon(getAttributes().getIcon());
 
         /* Add metadata which might or might not be supplied for every sensor */
-        sensor.addMeta("State", internals.getState().orElse("Not supplied"));
-        sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
-        sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
+        sensor.addMeta("State", internals.getState().orElse("No state supplied by sensor!"));
+        //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
+        //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);
-
         return Optional.of(sensor);
     }
 
