@@ -64,7 +64,7 @@ public class RegexpRule extends Rule {
                     ruleOK = value.startsWith(expr);
                     break;
                 case "endsWith":
-                    ruleOK = value.startsWith(expr);
+                    ruleOK = value.endsWith(expr);
                     break;
                 case "contains":
                     ruleOK = value.contains(expr);
@@ -74,6 +74,12 @@ public class RegexpRule extends Rule {
                     break;
                 case "matches":
                     ruleOK = value.matches(expr);
+                    break;
+                case "notcontains":
+                    ruleOK = !value.contains(expr);
+                    break;
+                case "notequals":
+                    ruleOK = !value.equals(expr);
                     break;
                 case "notmatches":
                     ruleOK = !value.matches(expr);
