@@ -59,7 +59,7 @@ public final class StateChecker {
         for (Rule rule : rules) {
             RuleState ruleState = rule.eval(model);
 
-            Long now = Instant.EPOCH.getEpochSecond();
+            Long now = Instant.now().getEpochSecond();
 
             if (ruleState.isOk()) {
                 /* Consistency check */
