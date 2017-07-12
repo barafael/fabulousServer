@@ -46,7 +46,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * @param roomname the name of the new room
      */
     public FHEMRoom(String roomname) {
-        name = roomname;
+        name = roomname.substring(5);
         if (!roomname.startsWith("room_")) {
             System.err.println("Room name does not start with 'room_'!");
         }
