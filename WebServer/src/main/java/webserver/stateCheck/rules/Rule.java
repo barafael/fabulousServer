@@ -65,6 +65,16 @@ public abstract class Rule {
     protected abstract RuleState realEval(FHEMModel model);
 
     public RuleState eval(FHEMModel model) {
+        return eval(model, new HashSet<>());
+    }
+
+    public RuleState eval(FHEMModel model, Set<Rule> visited) {
+        if (!visited.add(this)) {
+            System.err.println("There was a cyclic rule dependency! Breaking the cycle by assuming the next rule is false.");
+            /* Not setting to evaluated because another eval might still pass by */
+            return new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
+        }
+
         /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
         if (isEvaluated) {
             /* TODO: When is this cleared? */
@@ -77,14 +87,14 @@ public abstract class Rule {
         boolean falseRulesOK = true;
 
         for (Rule trueRule : requiredTrueRules) {
-            if (!trueRule.eval(model).isOk()) {
+            if (!trueRule.eval(model, visited).isOk()) {
                 trueRulesOK = false;
                 break;
             }
         }
 
         for (Rule falseRule : requiredFalseRules) {
-            if (falseRule.eval(model).isOk()) {
+            if (falseRule.eval(model, visited).isOk()) {
                 falseRulesOK = false;
                 break;
             }
