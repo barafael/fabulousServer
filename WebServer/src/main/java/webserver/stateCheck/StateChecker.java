@@ -134,7 +134,7 @@ public final class StateChecker {
         try {
             params = loadRuleParams(path);
         } catch (IOException e) {
-            System.err.println("The file 'rules.json' could not be read because there was an IO exception.");
+            System.err.println("The file " + path + " could not be read because there was an IO exception.");
             return Optional.empty();
         } catch (JsonSyntaxException e) {
             System.err.println("There seems to be a syntax error in rules.json.");

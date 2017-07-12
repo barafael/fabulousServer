@@ -68,9 +68,10 @@ public abstract class Rule {
         return eval(model, new HashSet<>());
     }
 
-    public RuleState eval(FHEMModel model, Set<Rule> visited) {
+    private RuleState eval(FHEMModel model, Set<Rule> visited) {
         if (!visited.add(this)) {
-            System.err.println("There was a cyclic rule dependency! Breaking the cycle by assuming the next rule is false.");
+            System.err.println("There was a cyclic rule dependency! Breaking the cycle by assuming this rule is violated.");
+            System.err.println("This will invalidate all rules in the cycle.");
             /* Not setting to evaluated because another eval might still pass by */
             return new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
         }

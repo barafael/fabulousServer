@@ -1,0 +1,85 @@
+{
+    "ruleParams": [
+        {
+            "name": "Rule 1",
+            "expression": "State matches rain|dry",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": ["Rule 2"],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*"
+            }
+        },
+        {
+            "name": "Rule 2",
+            "expression": "State matches rain|dry",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": ["Rule 3"],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*"
+            }
+        },
+        {
+            "name": "Rule 3",
+            "expression": "State matches rain|dry",
+            "permission": "permission0",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": ["Rule 4"],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*"
+            }
+        },
+        {
+            "name": "Rule 4",
+            "expression": "State matches rain|dry",
+            "permission": "permission1",
+            "ruleType": "REGEXP",
+            "sensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": ["Rule 1"],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "something is wrong",
+                "NORMAL": "all good",
+                "HIGH": "hey, fix it!"
+            }
+        }
+
+    ]
+}

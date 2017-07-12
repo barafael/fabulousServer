@@ -166,10 +166,29 @@ public class StateCheckerTest {
     }
 
     /**
-     * 
+     * Evaluates a rule which can never be true. The Regexp will not be fulfilled by this rule.
      */
     @Test
-    public void testInvalidRule() {
+    public void testCyclicRules() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        StateChecker stateChecker = StateChecker.getInstance();
+        stateChecker.evaluate(model, "jsonRules/cyclicRuleDependencies.json");
+
+        Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
+        assert sensor_opt.isPresent();
+
+        FHEMSensor sensor = sensor_opt.get();
+        assert sensor.getRuleInfo().size() == 4;
+    }
+
+    /**
+     * Evaluates a rule which can never be true. The Regexp will not be fulfilled by this rule.
+     */
+    @Test
+    public void testNeverTrueRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();

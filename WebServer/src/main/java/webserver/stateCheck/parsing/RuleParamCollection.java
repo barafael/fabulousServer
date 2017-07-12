@@ -103,7 +103,7 @@ public class RuleParamCollection {
             Set<String> requiredFalseOfThisRule = requiredFalseRules.get(rule.getName());
 
             Set<Rule> trueRules = rules.stream().
-                    filter(r -> requiredTrueOfThisRule.contains(r.getName())).collect(Collectors.toSet());
+                    filter((Rule r) -> requiredTrueOfThisRule.contains(r.getName())).collect(Collectors.toSet());
             Set<Rule> falseRules = rules.stream().
                     filter(r -> requiredFalseOfThisRule.contains(r.getName())).collect(Collectors.toSet());
 
