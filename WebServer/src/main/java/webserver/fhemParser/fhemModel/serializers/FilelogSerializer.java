@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * This serializer gets a list of permissions and, when  serializing, uses them to filter out fields which should not be visible.
+ * This serializer gets a list of permissions and, when serializing, uses them to filter out fields which should not be visible.
  * It is intended to be chained together with other serializers.
  *
  * @author Rafael on 22.06.17.
