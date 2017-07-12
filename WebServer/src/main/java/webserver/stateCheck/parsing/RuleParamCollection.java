@@ -32,9 +32,30 @@ public class RuleParamCollection {
 
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
-        /* TODO: validate against fields which are null (not set in the input) */
-        /* TODO: detect duplicate rule names */
-        return gson.fromJson(json, RuleParamCollection.class);
+        RuleParamCollection ruleParamCollection = gson.fromJson(json, RuleParamCollection.class);
+        /* Gson incorrectly deserializes incorrect json with too many commas.
+           This is why null values have to be cleaned up here.
+        */
+        ruleParamCollection.ruleParams.removeIf(Objects::isNull);
+
+        return ruleParamCollection;
+    }
+
+    /**
+     * Keep for now in case I want to change equals() method
+     */
+    private void filterDuplicates() {
+        Set<String> rulenames = ruleParams.stream().map(RuleParam::getName).collect(Collectors.toSet());
+        if (rulenames.size() != ruleParams.size()) {
+            System.err.println("The rules definition contained duplicate entries (entries with duplicate names)!");
+        } else {
+            return;
+        }
+        Set<RuleParam> dedup = new HashSet<>();
+        for (String rulename : rulenames) {
+            dedup.add(ruleParams.stream().filter(ruleParam -> ruleParam.getName().equals(rulename)).findAny().get());
+        }
+        ruleParams = dedup;
     }
 
     /**

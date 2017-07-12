@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author Rafael on 07.07.17.
  */
-public final class RegexpRule extends Rule {
+public class RegexpRule extends Rule {
 
     public RegexpRule(RuleParam ruleParam) {
         super(ruleParam);

@@ -25,7 +25,8 @@ import java.util.Set;
 
 /**
  * Tests for the StateChecker. Some tests depend on json files in the root directory.
- * All tests which get a FHEM model depend on local copies of FHEM state files.
+ * <p>
+ * All tests which get a FHEM model depend on a local copy of jsonList2.
  * The directory $FHEMMOCKDIR (defined as a global shell environment variable) should contain
  * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
  * This can be achieved by executing the {@code pull.sh} file from the root directory.
@@ -38,6 +39,7 @@ public class StateCheckerTest {
      * (which would mean incorrect json format).
      *
      * @param json A string which should be tested
+     *
      * @return whether the input was valid json
      */
     private static boolean isValidJSON(String json) {
