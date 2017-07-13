@@ -122,12 +122,10 @@ public class StateCheckerTest {
      */
     @Test
     public void testEvaluateImpossibleRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/impossibleRainRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/impossibleRainRule.json");
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 1;
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().stream().findAny().get()
@@ -157,12 +155,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testEvaluateInvalidInput() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/dontTryThisWithTheComma.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/dontTryThisWithTheComma.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 1;
@@ -177,12 +172,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testEvaluateMultipleRulesPerSensor() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/multipleRulesPerSensor.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/multipleRulesPerSensor.json");
 
         assert model.getSensorByName("HM_56A86F").isPresent();
         assert model.getSensorByName("HM_56A86F").get().getViolatedRules().size() == 2;
@@ -193,12 +185,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testCyclicRules() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/cyclicRuleDependencies.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/cyclicRuleDependencies.json");
 
         Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
         assert sensor_opt.isPresent();
@@ -212,12 +201,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testNeverTrueRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/noRainNoDry.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/noRainNoDry.json");
 
         Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
         assert sensor_opt.isPresent();
@@ -254,12 +240,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testDuplicateRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/duplicateRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/duplicateRule.json");
 
         Optional<FHEMSensor> sensor_opt = model.getSensorByName("HM_4F5DAA_Rain");
         assert sensor_opt.isPresent();
@@ -271,12 +254,9 @@ public class StateCheckerTest {
 
     @Test
     public void testRuleDependencies() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/ruleDependencies.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/ruleDependencies.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
@@ -290,12 +270,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testSelfCycleRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/selfCycle.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/selfCycle.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
@@ -307,8 +284,8 @@ public class StateCheckerTest {
      */
     @Test
     public void testRulePermissionsAllowed() {
-        Optional<String> json_opt = FHEMParser.getInstance()
-                .getFHEMModelJSON(Arrays.asList("alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
+        Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
+                "alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
