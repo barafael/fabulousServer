@@ -58,10 +58,11 @@ public class Server extends AbstractVerticle {
     private static final String Surname_PARAM = "surname";
     private static final String Room_PARAM = "room";
     private static final String SensorName_PARAM = "sensorname";
+    private static final String State_PARAM = "state";
     private static final String coordX_PARAM = "coordX";
     private static final String coordY_PARAM = "coordY";
     private static final String Hash_PARAM = "hash";
-    private static final String TimeSeries_PARAM = "ID";
+    private static final String Id_PARAM = "ID";
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
     private final FHEMParser parser = Main.parser;
@@ -104,6 +105,7 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
+        router.route(HttpMethod.GET, "/api/setActuator").handler(this::setActuator);
 
         /* Server */
         server = getVertx().createHttpServer();
@@ -626,6 +628,64 @@ public class Server extends AbstractVerticle {
     }
 
     /**
+     * handles the REST-Api call for Route /api/setActuator
+     * needs parameter sensorname, state
+     * all parameter should be embedded in the request URI
+     *
+     * @param routingContext the context in a route given by the router
+     */
+
+    private void setActuator(RoutingContext routingContext) {
+        printRequestHeaders(routingContext);
+        if (routingContext.request().getParam(SensorName_PARAM) == null
+                || routingContext.request().getParam(SensorName_PARAM).isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+        if (routingContext.request().getParam(State_PARAM) == null
+                || routingContext.request().getParam(State_PARAM).isEmpty()) {
+            routingContext.response()
+                    .setStatusCode(BadRequest_HTTP_CODE)
+                    .end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+
+        boolean state = Boolean.parseBoolean(routingContext.request().getParam(State_PARAM));
+        String sensorname = routingContext.request().getParam(Id_PARAM);
+
+        Future<List<String>> listFuture = Future.future();
+        getListOfPermissions(routingContext.user().principal(), listFuture);
+        listFuture.setHandler(res -> {
+            if (listFuture.succeeded()) {
+                List<String> perm = listFuture.result();
+                vertx.executeBlocking(future -> {
+                    Boolean status = parser.setActuator(sensorname, state, perm);
+                    if (status) {
+                        future.handle(Future.succeededFuture(true));
+                    } else {
+                        future.handle(Future.failedFuture(future.cause()));
+                    }
+                }, res2 -> {
+                    if (res2.succeeded()) {
+                        routingContext.response()
+                                .setStatusCode(OK_HTTP_CODE)
+                                .end(OK_SERVER_RESPONSE);
+                    } else {
+                        routingContext.response()
+                                .setStatusCode(Unavailable_HTTP_CODE)
+                                .end(Unavailable_SERVER_RESPONSE);
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                System.out.println(res.cause());
+            }
+        });
+    }
+
+    /**
      * handles the REST-Api call for Route /api/getTimeSeries
      * needs parameter ID
      * optional parameter startTime and endTime
@@ -635,14 +695,14 @@ public class Server extends AbstractVerticle {
      */
     private void getTimeSeries(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(TimeSeries_PARAM) == null
-                || routingContext.request().getParam(TimeSeries_PARAM).isEmpty()) {
+        if (routingContext.request().getParam(Id_PARAM) == null
+                || routingContext.request().getParam(Id_PARAM).isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String ID = routingContext.request().getParam(TimeSeries_PARAM);
+        String ID = routingContext.request().getParam(Id_PARAM);
         boolean hasTargetTime;
         long startTime;
         long endTime;

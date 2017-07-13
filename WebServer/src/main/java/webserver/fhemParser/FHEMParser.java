@@ -342,6 +342,11 @@ public final class FHEMParser {
         }
     }
 
+    public synchronized boolean setActuator(String sensorName, boolean state, List<String> permissions) {
+        //TODO: implement
+        return false;
+    }
+
     /**
      * Get the mutex which is set.
      *
