@@ -56,12 +56,13 @@ public class ServerTest {
                 .end();
     }
 
+
     private void testSetSensorPosition(TestContext testContext) {
         final Async async = testContext.async();
         String authHeader = "hans" + ":" + "sonne123";
         String base64 = "Basic " + new String(Base64.getEncoder().encode(authHeader.getBytes()));
         System.out.println("Client sent [authHeader]: " + base64);
-        httpClient.get("/api/setSensorPosition?SensorName=HM_56A439&coordX=44&coordY=2")
+        httpClient.get("/api/setSensorPosition?SensorName=HM_56A27C&coordX=10&coordY=90")
                 .putHeader("Authorization", base64)
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testSetSensorPosition_answerHeader: " + h));
@@ -114,12 +115,12 @@ public class ServerTest {
             e.printStackTrace();
         }
         testSetSensorPosition(testContext);
-        try {
+       /* try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //testSetRoomplan(testContext);
+        testSetRoomplan(testContext);*/
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
