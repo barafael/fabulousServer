@@ -118,13 +118,13 @@ public final class RuleParam {
 
     @Override
     public String toString() {
-        return "RuleParam{" +
-                "name='" + name + '\'' +
-                ", sensorNames=" + sensorNames +
-                ", ruleType=" + ruleType +
-                ", expression='" + expression + '\'' +
-                ", requiredTrueRules=" + requiredTrueRules +
-                ", requiredFalseRules=" + requiredFalseRules +
-                '}';
+        return "RuleParam{"
+                + "name='" + name + '\''
+                + ", sensorNames=" + sensorNames
+                + ", ruleType=" + ruleType
+                + ", expression='" + expression + '\''
+                + ", requiredTrueRules=" + requiredTrueRules
+                + ", requiredFalseRules=" + requiredFalseRules
+                + '}';
     }
 }

@@ -80,6 +80,38 @@ public final class FHEMDevice {
     }
 
     /**
+     * This method parses this device to a filelog, if it's type fits
+     * It also links a timeserie to the new log by it's path.
+     *
+     * @return the parsed filelog, if parsing was possible
+     */
+    Optional<FHEMFileLog> parseToLog() {
+        if (!isFileLog()) {
+            return Optional.empty();
+        }
+        /*  Extract sensor from regex
+         *  FHEM uses this regex internally on a device's filelog to filter events which belong in this filelog.
+         *  A regex must be present, starting with the sensor name this data belongs to.
+         *  */
+        if (!getInternals().getRegexpPrefix().isPresent()) {
+            System.err.println("FileLog has no REGEXP prefix: " + getName());
+            return Optional.empty();
+        }
+        Optional<String> path_opt = internals.getCurrentLogfileField();
+        if (!path_opt.isPresent()) {
+            System.err.println("No logfile specified for log: " + getName());
+            return Optional.empty();
+        }
+        String permissionField = attributes.getPermissionField().orElse("");
+        /* Switchable permissions MUST start with A_ */
+        boolean switchable = permissionField.startsWith("A_");
+        List<String> permissions = Arrays.asList(permissionField.split(","));
+
+        String path = path_opt.get();
+        return Optional.of(new FHEMFileLog(path, name, switchable, isShowInApp(), permissions));
+    }
+
+    /**
      * This method returns if the device this class represents was tagged as a sensor in FHEM.
      * FHEM itself does not distinguish between devices, which is why this
      * crude measure of tagging manually is necessary.
@@ -187,36 +219,6 @@ public final class FHEMDevice {
         }
         System.err.println(name + ": Encountered a FHEM device without TYPE set!");
         return false;
-    }
-
-    /**
-     * This method parses this device to a filelog, if it's type fits
-     * It also links a timeserie to the new log by it's path.
-     *
-     * @return the parsed filelog, if parsing was possible
-     */
-    Optional<FHEMFileLog> parseToLog() {
-        if (!isFileLog()) {
-            return Optional.empty();
-        }
-        /*  Extract sensor from regex
-         *  FHEM uses this regex internally on a device's filelog to filter events which belong in this filelog.
-         *  A regex must be present, starting with the sensor name this data belongs to.
-         *  */
-        if (!getInternals().getRegexpPrefix().isPresent()) {
-            System.err.println("FileLog has no REGEXP prefix: " + getName());
-            return Optional.empty();
-        }
-        Optional<String> path_opt = internals.getCurrentLogfileField();
-        if (!path_opt.isPresent()) {
-            System.err.println("No logfile specified for log: " + getName());
-            return Optional.empty();
-        }
-        String permissionField = attributes.getPermissionField().orElse("");
-        List<String> permissions = Arrays.asList(permissionField.split(","));
-
-        String path = path_opt.get();
-        return Optional.of(new FHEMFileLog(path, name, isShowInApp(), permissions));
     }
 
     /**

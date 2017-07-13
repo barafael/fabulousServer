@@ -137,8 +137,8 @@ public class RuleParamCollection {
 
     @Override
     public String toString() {
-        return "RuleParamCollection{" +
-                "ruleParams=" + ruleParams +
-                '}';
+        return "RuleParamCollection{"
+                + "ruleParams=" + ruleParams
+                + '}';
     }
 }

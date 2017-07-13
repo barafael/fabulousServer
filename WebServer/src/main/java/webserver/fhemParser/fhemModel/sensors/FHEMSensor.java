@@ -157,6 +157,13 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * This method is necessary to be able to iterate over an internal data structure.
+     */
+    public void forEach(Consumer<? super FHEMFileLog> action) {
+        fileLogs.forEach(action);
+    }
+
+    /**
+     * This method is necessary to be able to iterate over an internal data structure.
      * while not permitting mutable access.
      *
      * @return an iterator over the contained logs in this sensor.
@@ -165,14 +172,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     @Override
     public Iterator<FHEMFileLog> iterator() {
         return fileLogs.iterator();
-    }
-
-    /**
-     * This method is necessary to be able to iterate over an internal data structure.
-     */
-    @Override
-    public void forEach(Consumer<? super FHEMFileLog> action) {
-        fileLogs.forEach(action);
     }
 
     @Override
@@ -192,6 +191,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this, FHEMSensor.class);
+        return "FHEMSensor{"
+                + "name='" + name + '\''
+                + ", nameInApp='" + nameInApp + '\''
+                + ", coords=" + coords
+                + ", switchable=" + switchable
+                + '}';
     }
 }

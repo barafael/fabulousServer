@@ -52,8 +52,26 @@ public final class RuleInfo {
         return name;
     }
 
+    public boolean isOk() {
+        return isOk;
+    }
+
     public String getPermission() {
         return permission;
+    }
+
+    public boolean isPermitted(List<String> permissions) {
+        return permissions.contains(permission);
+    }
+
+    @Override
+    public String toString() {
+        return "RuleInfo{"
+                + "name='" + name + '\''
+                + ", isOk=" + isOk
+                + ", permission='" + permission + '\''
+                + ", message='" + message + '\''
+                + '}';
     }
 
     @Override
@@ -69,9 +87,5 @@ public final class RuleInfo {
         RuleInfo ruleInfo = (RuleInfo) o;
 
         return name.equals(ruleInfo.name);
-    }
-
-    public boolean isPermitted(List<String> permissions) {
-        return permissions.contains(permission);
     }
 }

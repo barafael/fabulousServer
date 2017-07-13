@@ -34,7 +34,7 @@ public final class StateChecker {
     }
 
     /**
-     * Aquisitor for StateChecker instance.
+     * Acquisitor for StateChecker instance.
      *
      * @return the instance of this singleton
      */
