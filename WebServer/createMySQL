@@ -65,6 +65,8 @@ INSERT INTO fhem_userdata.PERMS VALUES ('A_Steckdose_3D-Drucker');
 INSERT INTO fhem_userdata.PERMS VALUES ('A_Steckdose_Lasercutter');
 INSERT INTO fhem_userdata.PERMS VALUES ('E_Änderung');
 INSERT INTO fhem_userdata.PERMS VALUES ('I_Laborbelegung');
+INSERT INTO fhem_userdata.PERMS VALUES ('R_Testing');
+
 
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Fenster','admin');
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Tür','admin');
@@ -80,6 +82,7 @@ INSERT INTO fhem_userdata.ROLE_PERM VALUES ('A_Steckdose_3D-Drucker','admin');
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('A_Steckdose_Lasercutter','admin');
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('E_Änderung','admin');
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('I_Laborbelegung','admin');
+INSERT INTO fhem_userdata.ROLE_PERM VALUES ('R_Testing','admin');
 
 
 INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Fenster','user');
