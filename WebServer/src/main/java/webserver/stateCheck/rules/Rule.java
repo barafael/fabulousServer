@@ -140,6 +140,10 @@ public abstract class Rule {
         return permission;
     }
 
+    public String getOkMessage() {
+        return okMessage;
+    }
+
     @Override
     public int hashCode() {
         return name.hashCode();

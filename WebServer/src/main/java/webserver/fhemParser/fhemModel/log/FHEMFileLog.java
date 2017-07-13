@@ -163,7 +163,6 @@ public final class FHEMFileLog {
      * Parses a line to obtain the value of the measurement.
      *
      * @param line line from a FileLog
-     *
      * @return the value, as a String
      */
     private String getLineValue(String line) {

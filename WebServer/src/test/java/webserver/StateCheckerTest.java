@@ -139,7 +139,7 @@ public class StateCheckerTest {
      * The regex rule matches dry|rain on the state of the sensor.
      */
     @Test
-    public void testEvaluateAlwaysTrueRule() {
+    public void testEvaluateAlwaysTrueRuleWithOkInfo() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
@@ -149,6 +149,7 @@ public class StateCheckerTest {
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 0;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getPassedRules().size() == 1;
     }
 
     /**
@@ -294,5 +295,27 @@ public class StateCheckerTest {
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
         assert sensor.getViolatedRules().size() == 1;
+    }
+
+    @Test
+    public void testRulePermissions() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
+
+        Optional<String> json_opt = FHEMParser.getInstance()
+                .getFHEMModelJSON(Arrays.asList("alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/alwaysTruePermission.json");
+        assert json_opt.isPresent();
+        String json = json_opt.get();
+
+        FHEMModel model2 = new Gson().fromJson(json, FHEMModel.class);
+
+        assert model2.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor2 = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert sensor2.getPassedRules().size() == 1;
     }
 }

@@ -12,6 +12,8 @@ import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.serializers.ModelSerializer;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
+import webserver.stateCheck.StateChecker;
+import webserver.stateCheck.rules.Rule;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +23,7 @@ import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * This singleton class provides methods to parse a FHEM model.
@@ -59,9 +62,10 @@ public final class FHEMParser {
      * A cache for the currently most recent model.
      */
     private FHEMModel model;
+    private Optional<Set<Rule>> rules = Optional.empty();
 
     /**
-     * Prevent construction of the Parser. Should only happen via getinstance().
+     * Prevent construction of the Parser. Should only happen via getInstance().
      */
     private FHEMParser() {
     }
@@ -89,6 +93,10 @@ public final class FHEMParser {
         return this;
     }
 
+    public Optional<String> getFHEMModelJSON(List<String> permissions) {
+        return getFHEMModelJSON(permissions, "rules.json");
+    }
+
     /**
      * This method returns a JSON-serialized view of the current model where all rooms, sensors and filelogs
      * which are not permitted by the passed permissions are filtered out.
@@ -102,12 +110,16 @@ public final class FHEMParser {
      * @param permissions a list of permissions which limit what information will be given to the caller.
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
-    public Optional<String> getFHEMModelJSON(List<String> permissions) {
+    public Optional<String> getFHEMModelJSON(List<String> permissions, String path) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
                 .create();
         /* Return the mapped Optional.of if present, empty otherwise */
-        return getFHEMModel().map(gson::toJson);
+        return getFHEMModel(path).map(gson::toJson);
+    }
+
+    public Optional<FHEMModel> getFHEMModel() {
+        return getFHEMModel("rules.json");
     }
 
     /**
@@ -116,7 +128,7 @@ public final class FHEMParser {
      *
      * @return a FHEMModel, if present
      */
-    public Optional<FHEMModel> getFHEMModel() {
+    public Optional<FHEMModel> getFHEMModel(String pathToRules) {
         Instant one = PRINT_TIME ? Instant.now() : null;
         if (System.getProperty("user.home").equals("/home/ra")) {
             mock = true;
@@ -170,6 +182,7 @@ public final class FHEMParser {
         if (PRINT_TIME)
             System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
         model = fhemModel;
+        StateChecker.getInstance().evaluate(model, pathToRules);
         return Optional.ofNullable(fhemModel);
     }
 

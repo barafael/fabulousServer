@@ -153,6 +153,10 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         }
     }
 
+    public boolean isSwitchable() {
+        return switchable;
+    }
+
     /**
      * Returns whether any of the logs are permitted to be accessed with the given permissions.
      *
@@ -162,6 +166,26 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     public boolean hasPermittedLogs(List<String> permissions) {
         for (FHEMFileLog log : this) {
             if (log.isPermitted(permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     /**
+     * Returns whether any of the rules are permitted to be accessed with the given permissions.
+     *
+     * @param permissions list of permissions against which to check
+     * @return whether this sensor contains viewable rules
+     */
+    public boolean hasPermittedRules(List<String> permissions) {
+        for (RuleInfo info : passedRules) {
+            if (info.isPermitted(permissions)) {
+                return true;
+            }
+        }
+         for (RuleInfo info : violatedRules) {
+            if (info.isPermitted(permissions)) {
                 return true;
             }
         }

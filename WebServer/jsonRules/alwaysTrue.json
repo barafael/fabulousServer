@@ -1,7 +1,7 @@
 {
     "ruleParams": [
         {
-            "name": "simpleRule",
+            "name": "alwaysTrue",
             "expression": "State matches dry|rain",
             "permission": "permission0",
             "ruleType": "REGEXP",
