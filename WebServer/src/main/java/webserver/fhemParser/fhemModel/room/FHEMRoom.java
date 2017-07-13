@@ -46,10 +46,13 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * @param roomname the name of the new room
      */
     public FHEMRoom(String roomname) {
-        name = roomname.substring(5);
         if (!roomname.startsWith("room_")) {
             System.err.println("Room name does not start with 'room_'!");
         }
+        if (roomname.contains("_")) {
+            roomname = roomname.substring(5);
+        }
+        name = roomname.substring(0, 1).toUpperCase() + roomname.substring(1);
         String fhemPath = FHEMUtils.getGlobVar("FHEMDIR").orElse("");
         pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".png");
         pathToHash = Paths.get(fhemPath + "roomplans/" + roomname + ".hash");
