@@ -184,6 +184,8 @@ public final class FHEMParser {
      */
     public synchronized boolean setSensorPosition(int x, int y, String sensorName) {
         if ((x > 100 || x < 0) || (y > 100 || y < 0)) {
+            x = 50;
+            y = 50;
             System.err.printf("Incorrect percent values for coordinates! x: %d, y: %d", x, y);
         }
 
