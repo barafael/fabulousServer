@@ -283,6 +283,11 @@ public class StateCheckerTest {
         assert sensor.getViolatedRules().size() == 3;
     }
 
+    /**
+     * A rule which depends on it's own evaluation does not make sense and will lead to infinite recursion unless
+     * filtered out.
+     * It is important to catch because it might well happen as a careless and easy-to-make copy-paste error.
+     */
     @Test
     public void testSelfCycleRule() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
@@ -297,8 +302,11 @@ public class StateCheckerTest {
         assert sensor.getViolatedRules().size() == 1;
     }
 
+    /**
+     * A rule for which permissions are given should appear in the output.
+     */
     @Test
-    public void testRulePermissions() {
+    public void testRulePermissionsAllowed() {
         Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList("alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
@@ -309,5 +317,36 @@ public class StateCheckerTest {
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor2 = model.getSensorByName("HM_4F5DAA_Rain").get();
         assert sensor2.getPassedRules().size() == 1;
+    }
+
+    /**
+     * Insufficient permissions for a rule. Sensor should not appear in the output.
+     */
+    @Test
+    public void testRulePermissionsDisallowed() {
+        Optional<String> json_opt = FHEMParser.getInstance()
+                .getFHEMModelJSON(Arrays.asList("insufficientPermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
+        assert json_opt.isPresent();
+        String json = json_opt.get();
+
+        FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
+
+        assert !model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+    }
+
+    /**
+     * Permissions for the sensor and a filelog, but not for a rule.
+     */
+    @Test
+    public void testRulePermissionsDisallowedWithSensor() {
+        Optional<String> json_opt = FHEMParser.getInstance()
+                .getFHEMModelJSON(Arrays.asList("insufficientPermission", "permission1", "S_Regen"), "jsonRules/permissionRule.json");
+        assert json_opt.isPresent();
+        String json = json_opt.get();
+
+        FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getPassedRules().isEmpty();
     }
 }
