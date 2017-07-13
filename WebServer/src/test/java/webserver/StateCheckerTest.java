@@ -2,6 +2,8 @@ package webserver;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import webserver.fhemParser.FHEMParser;
 import webserver.fhemParser.fhemModel.FHEMModel;

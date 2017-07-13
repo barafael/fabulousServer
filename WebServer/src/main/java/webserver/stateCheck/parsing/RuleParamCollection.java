@@ -119,4 +119,26 @@ public class RuleParamCollection {
         }
         return rules;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RuleParamCollection that = (RuleParamCollection) o;
+
+        return ruleParams != null ? ruleParams.equals(that.ruleParams) : that.ruleParams == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return ruleParams != null ? ruleParams.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "RuleParamCollection{" +
+                "ruleParams=" + ruleParams +
+                '}';
+    }
 }

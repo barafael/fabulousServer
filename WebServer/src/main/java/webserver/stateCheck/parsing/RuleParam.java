@@ -115,4 +115,16 @@ public final class RuleParam {
 
         return name.equals(ruleParam.name);
     }
+
+    @Override
+    public String toString() {
+        return "RuleParam{" +
+                "name='" + name + '\'' +
+                ", sensorNames=" + sensorNames +
+                ", ruleType=" + ruleType +
+                ", expression='" + expression + '\'' +
+                ", requiredTrueRules=" + requiredTrueRules +
+                ", requiredFalseRules=" + requiredFalseRules +
+                '}';
+    }
 }
