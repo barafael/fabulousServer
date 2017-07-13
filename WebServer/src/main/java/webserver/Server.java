@@ -653,7 +653,7 @@ public class Server extends AbstractVerticle {
         }
 
         boolean state = Boolean.parseBoolean(routingContext.request().getParam(State_PARAM));
-        String sensorname = routingContext.request().getParam(Id_PARAM);
+        String sensorname = routingContext.request().getParam(SensorName_PARAM);
 
         Future<List<String>> listFuture = Future.future();
         getListOfPermissions(routingContext.user().principal(), listFuture);
@@ -674,8 +674,8 @@ public class Server extends AbstractVerticle {
                                 .end(OK_SERVER_RESPONSE);
                     } else {
                         routingContext.response()
-                                .setStatusCode(Unavailable_HTTP_CODE)
-                                .end(Unavailable_SERVER_RESPONSE);
+                                .setStatusCode(NotModified_HTTP_CODE)
+                                .end(NotModified_SERVER_RESPONSE);
                     }
                 });
             } else {
