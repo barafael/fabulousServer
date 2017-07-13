@@ -55,10 +55,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     private final HashMap<String, String> metaInfo;
     private String icon;
+
     /**
-     * This field contains information about the rules this sensor violates or passes.
+     * True if this sensor can be toggled on or off.
      */
-    private Set<RuleInfo> ruleInfos = new HashSet<>();
+    private boolean switchable = false;
+    /**
+     * This field contains information about the rules this sensor violates.
+     */
+    private Set<RuleInfo> violatedRules = new HashSet<>();
+    /**
+     * This field contains information about the rules this sensor passes.
+     */
+    private Set<RuleInfo> passedRules = new HashSet<>();
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isShowInApp, HashMap<String, String> metaInfo) {
@@ -89,8 +98,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         this.icon = icon;
     }
 
-    public Set<RuleInfo> getRuleInfo() {
-        return ruleInfos;
+    public Set<RuleInfo> getViolatedRules() {
+        return violatedRules;
+    }
+
+    public Set<RuleInfo> getPassedRules() {
+        return passedRules;
     }
 
     public Optional<FHEMFileLog> getLogByName(String filelogName) {
@@ -111,13 +124,32 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      *
      * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
      */
-    public void addRuleInfo(RuleInfo ruleInfo) {
+    public void addViolatedRule(RuleInfo ruleInfo) {
         /* First remove the old info, then put the current one */
-        if (ruleInfos.contains(ruleInfo)) {
-            ruleInfos.remove(ruleInfo);
-            ruleInfos.add(ruleInfo);
+        if (violatedRules.contains(ruleInfo)) {
+            violatedRules.remove(ruleInfo);
+            violatedRules.add(ruleInfo);
         } else {
-            ruleInfos.add(ruleInfo);
+            violatedRules.add(ruleInfo);
+        }
+    }
+
+    /**
+     * This method adds a ruleInfo to this sensor.
+     *
+     * Old rule information is overwritten.
+     * This works because the {@link webserver.stateCheck.rules.RuleInfo#equals(Object) equals}
+     * and {@link webserver.stateCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
+     *
+     * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
+     */
+    public void addPassedRule(RuleInfo ruleInfo) {
+        /* First remove the old info, then put the current one */
+        if (passedRules.contains(ruleInfo)) {
+            passedRules.remove(ruleInfo);
+            passedRules.add(ruleInfo);
+        } else {
+            passedRules.add(ruleInfo);
         }
     }
 

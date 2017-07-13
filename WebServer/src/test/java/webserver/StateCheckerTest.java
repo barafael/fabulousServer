@@ -129,8 +129,8 @@ public class StateCheckerTest {
         StateChecker stateChecker = StateChecker.getInstance();
         stateChecker.evaluate(model, "jsonRules/impossibleRainRule.json");
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 1;
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().stream().findAny().get()
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 1;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().stream().findAny().get()
                 .getName().equals("impossibleRainRule");
     }
 
@@ -148,7 +148,7 @@ public class StateCheckerTest {
         stateChecker.evaluate(model, "jsonRules/alwaysTrue.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 0;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 0;
     }
 
     /**
@@ -164,9 +164,9 @@ public class StateCheckerTest {
         stateChecker.evaluate(model, "jsonRules/dontTryThisWithTheComma.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().size() == 1;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 1;
 
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getRuleInfo().stream()
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().stream()
                 .filter(s -> s.getName().equals("incorrectJSONRule")).count() == 1;
     }
 
@@ -184,7 +184,7 @@ public class StateCheckerTest {
         stateChecker.evaluate(model, "jsonRules/multipleRulesPerSensor.json");
 
         assert model.getSensorByName("HM_56A86F").isPresent();
-        assert model.getSensorByName("HM_56A86F").get().getRuleInfo().size() == 2;
+        assert model.getSensorByName("HM_56A86F").get().getViolatedRules().size() == 2;
     }
 
     /**
@@ -203,7 +203,7 @@ public class StateCheckerTest {
         assert sensor_opt.isPresent();
 
         FHEMSensor sensor = sensor_opt.get();
-        assert sensor.getRuleInfo().size() == 4;
+        assert sensor.getViolatedRules().size() == 4;
     }
 
     /**
@@ -222,8 +222,8 @@ public class StateCheckerTest {
         assert sensor_opt.isPresent();
         FHEMSensor sensor = sensor_opt.get();
 
-        assert sensor.getRuleInfo().size() == 1;
-        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
+        assert sensor.getViolatedRules().size() == 1;
+        assert sensor.getViolatedRules().stream().filter(s -> s.getName().equals("NeverTrue")).count() == 1;
     }
 
     /**
@@ -264,8 +264,8 @@ public class StateCheckerTest {
         assert sensor_opt.isPresent();
         FHEMSensor sensor = sensor_opt.get();
 
-        assert sensor.getRuleInfo().size() == 1;
-        assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("Duplicate")).count() == 1;
+        assert sensor.getViolatedRules().size() == 1;
+        assert sensor.getViolatedRules().stream().filter(s -> s.getName().equals("Duplicate")).count() == 1;
     }
 
     @Test
@@ -279,7 +279,7 @@ public class StateCheckerTest {
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
-        assert sensor.getRuleInfo().size() == 3;
+        assert sensor.getViolatedRules().size() == 3;
     }
 
     @Test
@@ -293,6 +293,6 @@ public class StateCheckerTest {
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
-        assert sensor.getRuleInfo().size() == 1;
+        assert sensor.getViolatedRules().size() == 1;
     }
 }

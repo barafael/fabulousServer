@@ -40,7 +40,7 @@ class State {
                 for (Rule rule : violatingRules) {
                     long timestamp = state.get(sensor.getName()).get(rule.getName());
                     String message = rule.getWarningMessage(timestamp);
-                    sensor.addRuleInfo(new RuleInfo(rule.getName(), false, rule.getPermissionField(), message));
+                    sensor.addViolatedRule(new RuleInfo(rule.getName(), false, rule.getPermissionField(), message));
                 }
             }
         }

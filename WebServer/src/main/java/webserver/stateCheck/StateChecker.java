@@ -45,76 +45,53 @@ public final class StateChecker {
         return StateChecker.instance;
     }
 
+
     public boolean evaluate(FHEMModel model) {
         return evaluate(model, "rules.json");
     }
 
     public boolean evaluate(FHEMModel model, String path) {
         Optional<Set<Rule>> rules_opt = getRules(path);
-        if (!rules_opt.isPresent()) {
-            return false;
-        }
-        Set<Rule> rules = rules_opt.get();
+        return rules_opt.filter(rules -> evaluate(model, rules)).isPresent();
+    }
+
+    public boolean evaluate(FHEMModel model, Set<Rule> rules) {
 
         for (Rule rule : rules) {
             RuleState ruleState = rule.eval(model);
 
             Long now = Instant.now().getEpochSecond();
+            /* Get all names of sensors which are ok */
+            Set<String> okSensorNames = ruleState.getOkSensors().stream().
+                    map(FHEMSensor::getName).collect(Collectors.toSet());
+            for (String sensorName : okSensorNames) {
+                /* Remove ok rules from violated rules of this sensor */
+                Map<String, Long> violatedRules = fhemState.state.get(sensorName);
+                if (violatedRules != null) {
+                    violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
+                } /* else, sensor did not violate any rules (then get() resulted in null) */
 
-            if (ruleState.isOk()) {
-                /* Consistency check */
-                if (!ruleState.getViolatedSensors().isEmpty()) {
-                    System.err.println("Error! Rule is ok but violatedSensors is not empty!");
-                    /* TODO: Mark some violated sensors? */
+                /* If no rules at all are violated now, remove the sensor from the state */
+                if (violatedRules == null || violatedRules.isEmpty()) {
+                    fhemState.state.remove(sensorName);
                 }
-                /* Get all names of sensors which are ok */
-                Set<String> sensorNames = ruleState.getOkSensors().stream().
-                        map(FHEMSensor::getName).collect(Collectors.toSet());
-                for (String sensorName : sensorNames) {
-                    /* Remove ok rules from violated rules of this sensor */
+            }
+
+            /* Get all names of sensors which are not ok */
+            Set<String> violatedSensorNames = ruleState.getViolatedSensors().stream().
+                    map(FHEMSensor::getName).collect(Collectors.toSet());
+            for (String sensorName : violatedSensorNames) {
+                if (fhemState.state.containsKey(sensorName)) {
+                    /* Get a map of violated rules and their timestamps */
                     Map<String, Long> violatedRules = fhemState.state.get(sensorName);
-                    if (violatedRules != null) {
-                        violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
-                    } /* else, sensor did not violate any rules (then get resulted in null) */
-                    /* If no rules at all are violated now, remove the sensor from the state */
-                    if (violatedRules == null || violatedRules.isEmpty()) {
-                        fhemState.state.remove(sensorName);
-                    }
-                }
-            } else {
-                /* ruleState is not ok */
-                /* Get all names of sensors which are ok */
-                Set<String> okSensorNames = ruleState.getOkSensors().stream().
-                        map(FHEMSensor::getName).collect(Collectors.toSet());
-                for (String sensorName : okSensorNames) {
-                    /* Remove ok rules from violated rules of this sensor */
-                    Map<String, Long> violatedRules = fhemState.state.get(sensorName);
-                    if (violatedRules != null) {
-                        violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
-                    } /* else, sensor did not violate any rules (then get resulted in null) */
-
-                    /* If no rules at all are violated now, remove the sensor from the state */
-                    if (violatedRules == null || violatedRules.isEmpty()) {
-                        fhemState.state.remove(sensorName);
-                    }
-                }
-
-                /* Get all names of sensors which are not ok */
-                Set<String> violatedSensorNames = ruleState.getViolatedSensors().stream().
-                        map(FHEMSensor::getName).collect(Collectors.toSet());
-                for (String sensorName : violatedSensorNames) {
-                    if (fhemState.state.containsKey(sensorName)) {
-                        /* Get a map of violated rules and their timestamps */
-                        Map<String, Long> violatedRules = fhemState.state.get(sensorName);
-                        if (!violatedRules.containsKey(rule.getName())) {
-                            /* Rule was not yet violated */
-                            violatedRules.put(rule.getName(), now);
-                        }
-                    } else {
-                        Map<String, Long> violatedRules = new HashMap<>();
+                    if (!violatedRules.containsKey(rule.getName())) {
+                        /* Rule was not yet violated */
                         violatedRules.put(rule.getName(), now);
-                        fhemState.state.put(sensorName, violatedRules);
                     }
+                } else {
+                    Map<String, Long> violatedRules = new HashMap<>();
+                    violatedRules.put(rule.getName(), now);
+                    fhemState.state.put(sensorName, violatedRules);
                 }
             }
         }
