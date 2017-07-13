@@ -1,9 +1,9 @@
 {
     "ruleParams": [
         {
-            "name": "alwaysTrue",
+            "name": "permissionTest",
             "expression": "State matches dry|rain",
-            "permission": "permission0",
+            "permission": "alwaysTruePermission",
             "ruleType": "REGEXP",
             "sensorNames": [
                 "HM_4F5DAA_Rain"

@@ -92,7 +92,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      */
     public boolean hasPermittedSensors(List<String> permissions) {
         for (FHEMSensor sensor : this) {
-            if (sensor.hasPermittedLogs(permissions)) {
+            if (sensor.hasPermittedLogs(permissions) || sensor.hasPermittedRules(permissions)) {
                 return true;
             }
         }

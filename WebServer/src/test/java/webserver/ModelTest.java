@@ -200,6 +200,15 @@ public class ModelTest {
     }
 
     @Test
+    public void testSwitchableSensor() {
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+
+        assert model.get().getSensorByName("HM_52CB8E_Sw").isPresent();
+        assert model.get().getSensorByName("HM_52CB8E_Sw").get().isSwitchable();
+    }
+
+    @Test
     public void serDeRoundtrip() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();

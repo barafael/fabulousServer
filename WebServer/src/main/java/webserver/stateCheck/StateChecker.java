@@ -46,7 +46,7 @@ public final class StateChecker {
         return StateChecker.instance;
     }
 
-   /**
+    /**
      * Get rule parameters from a file and parse them to rules.
      *
      * @param path path to the rules file
@@ -80,6 +80,12 @@ public final class StateChecker {
             RuleState ruleState = rule.eval(model);
 
             for (FHEMSensor sensor : ruleState.getOkSensors()) {
+                sensor.addPassedRule(
+                        new RuleInfo(
+                                rule.getName(),
+                                true,
+                                rule.getPermissionField(),
+                                rule.getOkMessage()));
             }
 
             Long now = Instant.now().getEpochSecond();
