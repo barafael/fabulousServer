@@ -62,6 +62,7 @@ public final class FHEMParser {
      * A cache for the currently most recent model.
      */
     private FHEMModel model;
+    private Optional<Set<Rule>> rules = Optional.empty();
 
     /**
      * Prevent construction of the Parser. Should only happen via getInstance().
