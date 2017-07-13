@@ -67,7 +67,6 @@ public final class FHEMDeviceInternals {
      * This method can be used to guess a correspondence between a sensor and a log.
      *
      * @param sep the char used as separator
-     *
      * @return a prefix of the filelog's regexp, if present
      */
     private Optional<String> getRegexpPrefix(char sep) {

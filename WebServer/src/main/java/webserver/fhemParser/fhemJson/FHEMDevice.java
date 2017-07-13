@@ -169,7 +169,6 @@ public final class FHEMDevice {
      * A room exists in FHEM if it is mentioned in the 'room' String in a device's attributes.
      *
      * @param name name of the room to check.
-     *
      * @return if this device lies in the room given by name
      */
     private boolean isInRoom(String name) {
@@ -208,7 +207,6 @@ public final class FHEMDevice {
      * This method manually checks if a type field was set in jsonList2's internals.
      *
      * @param type the type to check against
-     *
      * @return whether the device is of given type
      */
     private boolean isOfType(String type) {
@@ -254,7 +252,6 @@ public final class FHEMDevice {
      * This is stored in linkedDeviceName, and should only be accessed from devices representing FileLogs.
      *
      * @param sensor the other sensor
-     *
      * @return whether this and the other sensor is linked
      */
     public boolean isLinked(FHEMSensor sensor) {

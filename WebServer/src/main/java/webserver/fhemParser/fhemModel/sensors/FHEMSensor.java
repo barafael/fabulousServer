@@ -157,7 +157,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * Returns whether any of the logs are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
-     *
      * @return whether this sensor contains viewable timeseries
      */
     public boolean hasPermittedLogs(List<String> permissions) {
@@ -178,7 +177,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * such a value was not put in the map.
      *
      * @param field the name of the field in the map
-     *
      * @return the value corresponding to the input key
      */
     public Optional<String> getValueOfField(String field) {

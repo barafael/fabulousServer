@@ -82,7 +82,6 @@ public final class FHEMParser {
      * Setter for the {@link webserver.fhemParser.fhemConnection.FHEMConnection FHEM connection}. Returns itself, enabling builder style.
      *
      * @param con the new FHEMConnection.
-     *
      * @return the instance of {@link webserver.fhemParser this} with the new parser set.
      */
     public FHEMParser setFHEMConnection(FHEMConnection con) {
@@ -101,7 +100,6 @@ public final class FHEMParser {
      * Most of the work is done in the custom {@link webserver.fhemParser.fhemModel.serializers Gson serializers}.
      *
      * @param permissions a list of permissions which limit what information will be given to the caller.
-     *
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions) {
@@ -182,7 +180,6 @@ public final class FHEMParser {
      * @param x          x position in %
      * @param y          y position in %
      * @param sensorName name of sensor
-     *
      * @return whether the operation succeeded
      */
     public synchronized boolean setSensorPosition(int x, int y, String sensorName) {
@@ -209,7 +206,6 @@ public final class FHEMParser {
      *
      * @param roomName which should get the new roomplan
      * @param content  the content of the file
-     *
      * @return whether the operation succeeded
      */
     public synchronized boolean setRoomplan(String roomName, String content) {
@@ -226,7 +222,6 @@ public final class FHEMParser {
      *
      * @param roomName    the desired room's name
      * @param permissions the permissions of the caller
-     *
      * @return the roomplan, if caller's permissions suffice.
      */
     public Optional<String> getRoomplan(String roomName, List<String> permissions) {
@@ -252,7 +247,6 @@ public final class FHEMParser {
      * @param roomName    the desired room's name
      * @param hash        the hash of the file at the caller
      * @param permissions the permissions of the caller
-     *
      * @return the roomplan, if caller's permissions suffice.
      */
     public Optional<String> getRoomplan(String roomName, int hash, List<String> permissions) {
@@ -273,7 +267,6 @@ public final class FHEMParser {
      *
      * @param fileLogID   ID of filelog (name)
      * @param permissions permissions of caller
-     *
      * @return an optional String - the json representation of the timeserie
      */
     public Optional<String> getTimeserie(String fileLogID, List<String> permissions) {
@@ -288,7 +281,6 @@ public final class FHEMParser {
      * @param endTime     end time
      * @param permissions permissions of caller
      * @param fileLogID   ID of filelog (name)
-     *
      * @return an optional String - the json representation of the timeserie
      */
     public Optional<String> getTimeserie(long startTime, long endTime, String fileLogID, List<String> permissions) {
@@ -307,7 +299,6 @@ public final class FHEMParser {
      * Requests a mutex for a given user.
      *
      * @param username the username
-     *
      * @return the ID of a mutex, if successful
      */
     public synchronized Optional<Long> getMutex(String username) {
@@ -326,7 +317,6 @@ public final class FHEMParser {
      * Releases the mutex of a given username.
      *
      * @param username the username
-     *
      * @return true if the user had the mutex, false otherwise
      */
     public synchronized boolean releaseMutex(String username) {

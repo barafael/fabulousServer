@@ -58,7 +58,6 @@ public final class FHEMUtils {
      * This private helper method gets any environment variable.
      *
      * @param var the name of the variable to get
-     *
      * @return the value of the environment variable var
      */
     public static Optional<String> getGlobVar(String var) {

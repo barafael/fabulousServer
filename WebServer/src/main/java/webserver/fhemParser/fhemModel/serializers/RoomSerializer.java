@@ -34,7 +34,6 @@ class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * Custom serializer for room, only parses room if it is permitted.
      *
      * @param room the source room
-     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
 

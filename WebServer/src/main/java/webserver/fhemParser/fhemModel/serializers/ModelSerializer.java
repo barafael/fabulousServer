@@ -37,7 +37,6 @@ public class ModelSerializer implements JsonSerializer<FHEMModel> {
      * Custom serializer for a model, only parses model if it is permitted.
      *
      * @param model the source model
-     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

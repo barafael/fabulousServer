@@ -31,7 +31,6 @@ class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
      * Custom serializer for a ruleinfo, only parses ruleinfo if it is permitted.
      *
      * @param ruleInfo the source filelog
-     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

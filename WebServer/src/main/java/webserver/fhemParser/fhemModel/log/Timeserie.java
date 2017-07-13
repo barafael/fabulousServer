@@ -86,7 +86,6 @@ public final class Timeserie {
                 }
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
-                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
             case PERCENT:
@@ -109,7 +108,6 @@ public final class Timeserie {
                 }
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
-                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
                 xs = new ArrayList<>();
@@ -159,7 +157,6 @@ public final class Timeserie {
                 }
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
-                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             case REAL:
             case PERCENT:
@@ -185,7 +182,6 @@ public final class Timeserie {
                 }
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
-                legend.put((Collections.min(ys) + Collections.max(ys)) / 2, "Middle");
                 break;
             default:
                 xs = new ArrayList<>();

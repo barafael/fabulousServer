@@ -31,7 +31,6 @@ class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
      * Custom serializer for a filelog, only parses filelog if it is permitted.
      *
      * @param fileLog the source filelog
-     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

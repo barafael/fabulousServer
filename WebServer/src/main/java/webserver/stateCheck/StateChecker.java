@@ -45,7 +45,6 @@ public final class StateChecker {
         return StateChecker.instance;
     }
 
-
     public boolean evaluate(FHEMModel model) {
         return evaluate(model, "rules.json");
     }
@@ -53,6 +52,26 @@ public final class StateChecker {
     public boolean evaluate(FHEMModel model, String path) {
         Optional<Set<Rule>> rules_opt = getRules(path);
         return rules_opt.filter(rules -> evaluate(model, rules)).isPresent();
+    }
+
+    /**
+     * Get rule parameters from a file and parse them to rules.
+     *
+     * @param path path to the rules file
+     * @return a set of parsed rules
+     */
+    private Optional<Set<Rule>> getRules(String path) {
+        RuleParamCollection params;
+        try {
+            params = loadRuleParams(path);
+        } catch (IOException e) {
+            System.err.println("The file " + path + " could not be read because there was an IO exception.");
+            return Optional.empty();
+        } catch (JsonSyntaxException e) {
+            System.err.println("There seems to be a syntax error in rules.json.");
+            return Optional.empty();
+        }
+        return Optional.of(params.toRules());
     }
 
     public boolean evaluate(FHEMModel model, Set<Rule> rules) {
@@ -97,27 +116,6 @@ public final class StateChecker {
         }
         fhemState.setRuleInfos(model, rules);
         return true;
-    }
-
-    /**
-     * Get rule parameters from a file and parse them to rules.
-     *
-     * @param path path to the rules file
-     *
-     * @return a set of parsed rules
-     */
-    private Optional<Set<Rule>> getRules(String path) {
-        RuleParamCollection params;
-        try {
-            params = loadRuleParams(path);
-        } catch (IOException e) {
-            System.err.println("The file " + path + " could not be read because there was an IO exception.");
-            return Optional.empty();
-        } catch (JsonSyntaxException e) {
-            System.err.println("There seems to be a syntax error in rules.json.");
-            return Optional.empty();
-        }
-        return Optional.of(params.toRules());
     }
 
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {

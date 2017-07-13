@@ -40,6 +40,7 @@ public final class FHEMFileLog {
 
     /**
      * Constructs a filelog from data obtained in fhemjson.
+     *
      * @param path        path to an timeseries logfile
      * @param name        name of this filelog
      * @param switchable  whether this filelog has switchable permissions
@@ -62,7 +63,6 @@ public final class FHEMFileLog {
      *
      * @param path the path to the FileLog. This has to be read as a file (instead of parsing it immediately)
      *             because parsing happens later on demand but the information is necessary now.
-     *
      * @return the name of the unit of this log
      */
     private static Optional<String> getUnitInFileLog(String path) {
@@ -99,7 +99,6 @@ public final class FHEMFileLog {
      *
      * @param path the path to the FileLog. This has to be read as a file (instead of parsing it immediately)
      *             because parsing happens later on demand but the information is necessary now.
-     *
      * @return the name of the sensor this log belongs to
      */
     private static Optional<String> getSensorInFileLog(String path) {
@@ -127,7 +126,6 @@ public final class FHEMFileLog {
      * Types are defined in the logtypes enum.
      *
      * @param path path to logfile
-     *
      * @return an estimated logtype
      */
     private Logtype guessLogtype(String path) {
@@ -236,7 +234,6 @@ public final class FHEMFileLog {
      *
      * @param startTime the unix timestamp to start with
      * @param endTime   the unix timestamp to end with
-     *
      * @return a subsection of a timeserie
      */
     public Optional<String> subSection(long startTime, long endTime) {
@@ -249,7 +246,6 @@ public final class FHEMFileLog {
      *
      * @param start the start date
      * @param end   the end date
-     *
      * @return a parsed sample representation, if file is present
      */
     private Optional<Timeserie> getTimeserie(long start, long end) {

@@ -33,7 +33,6 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
      * Custom serializer for sensor, only parses sensor if it is permitted.
      *
      * @param sensor the source sensor
-     *
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
     @Override

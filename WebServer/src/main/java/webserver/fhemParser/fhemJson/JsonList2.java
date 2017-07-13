@@ -58,7 +58,6 @@ public class JsonList2 {
      * Parse a jsonList2 object from json using Gson. Fields not present in the json file are left untouched.
      *
      * @param jsonString the input string
-     *
      * @return an instance of jsonList2
      */
     public static @NotNull
