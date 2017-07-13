@@ -299,22 +299,14 @@ public class StateCheckerTest {
 
     @Test
     public void testRulePermissions() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
-
-        assert model_opt.isPresent();
-        FHEMModel model = model_opt.get();
-
-        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
-
         Optional<String> json_opt = FHEMParser.getInstance()
-                .getFHEMModelJSON(Arrays.asList("alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/alwaysTruePermission.json");
+                .getFHEMModelJSON(Arrays.asList("alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
-        FHEMModel model2 = new Gson().fromJson(json, FHEMModel.class);
+        FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
 
-        assert model2.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         FHEMSensor sensor2 = model.getSensorByName("HM_4F5DAA_Rain").get();
         assert sensor2.getPassedRules().size() == 1;
     }

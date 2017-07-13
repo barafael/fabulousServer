@@ -44,9 +44,9 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
                 .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .create().toJsonTree(sensor);
-        if (!sensor.hasPermittedLogs(permissions)) {
-            return JsonNull.INSTANCE;
+        if (sensor.hasPermittedLogs(permissions) || sensor.hasPermittedRules(permissions)) {
+            return jObj;
         }
-        return jObj;
+        return JsonNull.INSTANCE;
     }
 }
