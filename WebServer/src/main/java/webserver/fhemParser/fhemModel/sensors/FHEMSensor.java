@@ -1,6 +1,5 @@
 package webserver.fhemParser.fhemModel.sensors;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
@@ -76,6 +75,9 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     public void addLog(FHEMFileLog log) {
+        if (log.isSwitchable()) {
+            switchable = true;
+        }
         fileLogs.add(log);
     }
 

@@ -19,9 +19,8 @@ public final class RuleInfo {
     /**
      * The state of this rule. True if not violated.
      */
-    @SuppressWarnings ("FieldCanBeLocal")
     private boolean isOk;
-    /* TODO handle permissions similarly to filelogs */
+    /* TODO handle permissions similarly to filelogs. Does it work?*/
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */

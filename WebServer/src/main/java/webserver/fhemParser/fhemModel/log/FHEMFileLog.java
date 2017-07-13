@@ -34,16 +34,22 @@ public final class FHEMFileLog {
     private final transient List<String> permissions;
 
     /**
+     * True if this filelog belongs to a device which can be toggled on/off.
+     */
+    private final boolean switchable;
+
+    /**
      * Constructs a filelog from data obtained in fhemjson.
-     *
      * @param path        path to an timeseries logfile
      * @param name        name of this filelog
+     * @param switchable  whether this filelog has switchable permissions
      * @param isShowInApp whether this filelog should be exposed in the app (this is independent from permissions)
      * @param permissions the permission ID which this filelog requires to access it
      */
-    public FHEMFileLog(String path, String name, boolean isShowInApp, List<String> permissions) {
+    public FHEMFileLog(String path, String name, boolean switchable, boolean isShowInApp, List<String> permissions) {
         this.path = path;
         this.name = name;
+        this.switchable = switchable;
         this.unit = getUnitInFileLog(path).orElse("No unit given");
         this.sensorName = getSensorInFileLog(path).orElse("No sensor name given");
         this.type = guessLogtype(path);
@@ -149,6 +155,10 @@ public final class FHEMFileLog {
                 return DISCRETE;
             }
         }
+    }
+
+    public boolean isSwitchable() {
+        return switchable;
     }
 
     /**
