@@ -192,6 +192,14 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return false;
     }
 
+    public boolean isPermittedSwitch(List<String> permissions){
+        for (FHEMFileLog log: this){
+            if(log.isPermittedSwitch(permissions)){
+                return true;
+            }
+        }
+        return false;
+    }
     public Coordinates getCoords() {
         return coords;
     }

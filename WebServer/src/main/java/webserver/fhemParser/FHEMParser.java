@@ -345,9 +345,17 @@ public final class FHEMParser {
     }
 
     public synchronized boolean setActuator(String sensorName, boolean state, List<String> permissions) {
-        //TODO: implement
+        String set_state = (state ? "on" : "off");
+        if (model.getSensorByName(sensorName).isPresent() && model.getSensorByName(sensorName).get().isPermittedSwitch(permissions)) {
+            try {
+                return fhc.perlCommand("set " + sensorName + " " + set_state);
+            } catch (IOException e) {
+                System.err.println("Couldn't talk to FHEM via Client Mode!");
+            }
+        }
         return false;
     }
+
 
     /**
      * Get the mutex which is set.

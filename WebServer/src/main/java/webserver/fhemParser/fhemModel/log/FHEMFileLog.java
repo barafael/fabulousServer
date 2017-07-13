@@ -159,6 +159,15 @@ public final class FHEMFileLog {
         return switchable;
     }
 
+    public boolean isPermittedSwitch(List<String> permissions) {
+        for (String permission : this.permissions) {
+            if (permissions.contains(permission) && isSwitchable()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Parses a line to obtain the value of the measurement.
      *
@@ -216,7 +225,6 @@ public final class FHEMFileLog {
      * This method checks if given permissions are sufficient to access this filelog.
      *
      * @param allPermissions List of permissions which are available to a user
-     *
      * @return whether the user with given permissions is allowed to access this log
      */
     public boolean isPermitted(List<String> allPermissions) {
