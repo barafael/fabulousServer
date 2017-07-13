@@ -1,6 +1,11 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import webserver.stateCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;

@@ -79,7 +79,7 @@ public class RuleParamCollection {
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
 
             if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size() ||
-                    requiredFalse.size() != ruleParam.getRequiredFalseRules().size() ) {
+                    requiredFalse.size() != ruleParam.getRequiredFalseRules().size()) {
                 System.err.println("Ignoring rule self dependency!");
                 System.err.println("Rule Parameters: " + ruleParam);
             }
