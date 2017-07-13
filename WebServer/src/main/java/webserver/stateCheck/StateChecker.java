@@ -5,6 +5,7 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.stateCheck.parsing.RuleParamCollection;
 import webserver.stateCheck.rules.Rule;
+import webserver.stateCheck.rules.RuleInfo;
 import webserver.stateCheck.rules.RuleState;
 
 import java.io.IOException;
@@ -45,16 +46,7 @@ public final class StateChecker {
         return StateChecker.instance;
     }
 
-    public boolean evaluate(FHEMModel model) {
-        return evaluate(model, "rules.json");
-    }
-
-    public boolean evaluate(FHEMModel model, String path) {
-        Optional<Set<Rule>> rules_opt = getRules(path);
-        return rules_opt.filter(rules -> evaluate(model, rules)).isPresent();
-    }
-
-    /**
+   /**
      * Get rule parameters from a file and parse them to rules.
      *
      * @param path path to the rules file
@@ -74,10 +66,21 @@ public final class StateChecker {
         return Optional.of(params.toRules());
     }
 
-    public boolean evaluate(FHEMModel model, Set<Rule> rules) {
+    public boolean evaluate(FHEMModel model) {
+        return evaluate(model, "rules.json");
+    }
 
+    public boolean evaluate(FHEMModel model, String path) {
+        Optional<Set<Rule>> rules_opt = getRules(path);
+        return rules_opt.filter(rules -> evaluate(model, rules)).isPresent();
+    }
+
+    public boolean evaluate(FHEMModel model, Set<Rule> rules) {
         for (Rule rule : rules) {
             RuleState ruleState = rule.eval(model);
+
+            for (FHEMSensor sensor : ruleState.getOkSensors()) {
+            }
 
             Long now = Instant.now().getEpochSecond();
             /* Get all names of sensors which are ok */
