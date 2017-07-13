@@ -30,6 +30,8 @@ import java.util.Random;
  * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
  * This can be achieved by executing the {@code pull.sh} file from the root directory.
  *
+ * Alternatively, the pullData function (annotated with @BeforeClass) pulls the data if it is not present.
+ *
  * @author Rafael
  */
 public class ModelTest {
@@ -37,6 +39,24 @@ public class ModelTest {
      * An integer between 0 and 100 used for testing hashes and position.
      */
     private static final int RANDOM = new Random().nextInt(101);
+
+    /**
+     * Conditionally pulls the mocking data to the local machine (if it is not yet present).
+     * This can take a moment, depending on load and traffic.
+     *
+     * @throws IOException if there was an I/O error during command execution.
+     */
+    @BeforeClass
+    public static void pullData() throws IOException {
+        if (Files.exists(Paths.get("/tmp/fhemlog/"))) {
+            return;
+        }
+        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./pull.sh"});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        stdin.readLine();
+        stdin.close();
+    }
 
     /**
      * Helper method which writes a FHEM model to a file for manual inspection.
@@ -133,6 +153,24 @@ public class ModelTest {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();
         assert isValidJSON(model.get().toJson());
+    }
+
+    /**
+     * Helper function which tests if a json string can be deserialized without throwing an exception
+     * (which would mean incorrect json format).
+     *
+     * @param json A string which should be tested
+     *
+     * @return whether the input was valid json
+     */
+    private static boolean isValidJSON(String json) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(json, Object.class);
+            return true;
+        } catch (com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
     @Test
@@ -258,22 +296,5 @@ public class ModelTest {
         String json = new Gson().toJson(serie_opt.get(), Timeserie.class);
         Timeserie timeserie = new Gson().fromJson(json, Timeserie.class);
         assert timeserie.equals(serie_opt.get());
-    }
-
-    /**
-     * Helper function which tests if a json string can be deserialized without throwing an exception
-     * (which would mean incorrect json format).
-     *
-     * @param json A string which should be tested
-     * @return whether the input was valid json
-     */
-    private static boolean isValidJSON(String json) {
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(json, Object.class);
-            return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
-            return false;
-        }
     }
 }

@@ -1,6 +1,5 @@
 package webserver;
 
-
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
@@ -330,7 +329,6 @@ public class ServerTest {
                 })
                 .end("trash");
     }
-
 
     @Test
     public void testAuthorized(TestContext testContext) {

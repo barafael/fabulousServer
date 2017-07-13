@@ -2,7 +2,6 @@ package webserver;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import webserver.fhemParser.FHEMParser;
@@ -13,9 +12,10 @@ import webserver.stateCheck.WARNINGLEVEL;
 import webserver.stateCheck.parsing.RuleParam;
 import webserver.stateCheck.parsing.RuleParamCollection;
 import webserver.stateCheck.parsing.RuleType;
-import webserver.stateCheck.rules.Rule;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -33,25 +33,27 @@ import java.util.Set;
  * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
  * This can be achieved by executing the {@code pull.sh} file from the root directory.
  *
+ * Alternatively, the pullData function (annotated with @BeforeClass) pulls the data if it is not present.
+ *
  * @author Rafael
  */
 public class StateCheckerTest {
     /**
-     * Helper function which tests if a json string can be deserialized without throwing an exception
-     * (which would mean incorrect json format).
+     * Conditionally pulls the mocking data to the local machine (if it is not yet present).
+     * This can take a moment, depending on load and traffic.
      *
-     * @param json A string which should be tested
-     *
-     * @return whether the input was valid json
+     * @throws IOException if there was an I/O error during command execution.
      */
-    private static boolean isValidJSON(String json) {
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(json, Object.class);
-            return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
-            return false;
+    @BeforeClass
+    public static void pullData() throws IOException {
+        if (Files.exists(Paths.get("/tmp/fhemlog/"))) {
+            return;
         }
+        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./pull.sh"});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        stdin.readLine();
+        stdin.close();
     }
 
     @Test
@@ -80,6 +82,24 @@ public class StateCheckerTest {
         RuleParamCollection col = new RuleParamCollection(ruleParam);
         String json = gson.toJson(col);
         assert isValidJSON(json);
+    }
+
+    /**
+     * Helper function which tests if a json string can be deserialized without throwing an exception
+     * (which would mean incorrect json format).
+     *
+     * @param json A string which should be tested
+     *
+     * @return whether the input was valid json
+     */
+    private static boolean isValidJSON(String json) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(json, Object.class);
+            return true;
+        } catch (com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
     /**
@@ -246,7 +266,7 @@ public class StateCheckerTest {
 
         assert sensor.getRuleInfo().size() == 1;
         assert sensor.getRuleInfo().stream().filter(s -> s.getName().equals("Duplicate")).count() == 1;
-   }
+    }
 
     @Test
     public void testRuleDependencies() {
