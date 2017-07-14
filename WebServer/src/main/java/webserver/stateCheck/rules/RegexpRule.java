@@ -59,6 +59,7 @@ public class RegexpRule extends Rule {
             }
 
             String value = concField_opt.get();
+
             switch (operator) {
                 case "startsWith":
                     ruleOK = value.startsWith(expr);
