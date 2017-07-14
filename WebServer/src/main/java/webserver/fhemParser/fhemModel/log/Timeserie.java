@@ -182,6 +182,30 @@ public final class Timeserie {
                 }
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
+
+                if (xs.size() > MAX_SIZE) {
+                    int k = xs.size() / MAX_SIZE;
+                    long[] timestampQueue = new long[k];
+                    double[] valueQueue = new double[k];
+
+                    List<Long> newTimestamps = new ArrayList<>();
+                    List<Double> newValues = new ArrayList<>();
+
+                    for (int index = 0; index < xs.size(); index++) {
+                        int minIndex = index % k;
+                        timestampQueue[minIndex] = xs.get(index);
+                        valueQueue[minIndex] = ys.get(index);
+                        if (minIndex == 0) {
+                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).average().orElse(0.0)));
+                            newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
+                        }
+                    }
+                    System.out.println("reduced from " + xs.size() + " to " + newTimestamps.size() + " elements!");
+                    xs.clear();
+                    xs.addAll(newTimestamps);
+                    ys.clear();
+                    ys.addAll(newValues);
+                }
                 break;
             case REAL:
             case PERCENT:
