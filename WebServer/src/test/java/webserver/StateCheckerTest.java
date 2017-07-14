@@ -155,7 +155,7 @@ public class StateCheckerTest {
      */
     @Test
     public void testEvaluateInvalidInput() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/dontTryThisWithTheComma.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectComma.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
