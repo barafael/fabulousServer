@@ -12,7 +12,7 @@ import java.util.Optional;
 import static webserver.fhemParser.fhemModel.log.Logtype.*;
 
 /**
- * This class is a proxy for an actual timeserie, which can be parsed from disk on demand with {@link FHEMFileLog#getTimeserie() getTimeserie()}.
+ * This class is a proxy for an actual time serie, which can be parsed from disk on demand with {@link FHEMFileLog#getTimeserie() getTimeserie()}.
  *
  * @author Rafael
  */
@@ -36,7 +36,7 @@ public final class FHEMFileLog {
     /**
      * True if this filelog belongs to a device which can be toggled on/off.
      */
-    private final boolean switchable;
+    private final transient boolean switchable;
 
     /**
      * Constructs a filelog from data obtained in fhemjson.
