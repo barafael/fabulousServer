@@ -51,6 +51,7 @@ public abstract class Rule {
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     private Set<Rule> requiredTrueRules;
     private Set<Rule> requiredFalseRules;
+    private boolean isVisibleInApp = true;
 
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
@@ -60,10 +61,16 @@ public abstract class Rule {
         okMessage = ruleParam.getOkMessage();
         errorMessages = ruleParam.getErrorMessages();
         escalation = ruleParam.getEscalation();
+        isVisibleInApp = ruleParam.getVisible();
     }
 
     protected abstract RuleState realEval(FHEMModel model);
 
+    /**
+     * Call evaluation with an initially empty set to track the visited rules.
+     * @param model the model to evaluate on
+     * @return a rule state with the violated and passed rules
+     */
     public RuleState eval(FHEMModel model) {
         return eval(model, new HashSet<>());
     }
@@ -108,7 +115,6 @@ public abstract class Rule {
             ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
             return ruleState;
         }
-
         return realEval(model);
     }
 

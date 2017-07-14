@@ -18,7 +18,8 @@
                 "LOW": "something is wrong",
                 "NORMAL": "all good",
                 "HIGH": "hey, fix it!"
-            }
+            },
+            "isVisibleInApp": false
         }
     ]
 }

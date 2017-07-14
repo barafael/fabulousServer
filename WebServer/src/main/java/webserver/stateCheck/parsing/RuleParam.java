@@ -28,6 +28,7 @@ public final class RuleParam {
     private Map<WARNINGLEVEL, String> errorMessages;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    private boolean isVisibleInApp;
 
     public RuleParam(String name,
                      Set<String> sensorNames,
@@ -38,7 +39,8 @@ public final class RuleParam {
                      Set<String> requiredFalseRules,
                      String okMessage,
                      Map<WARNINGLEVEL, String> errorMessages,
-                     Map<Long, WARNINGLEVEL> escalation) {
+                     Map<Long, WARNINGLEVEL> escalation,
+                     boolean isVisibleInApp) {
         this.name = name;
         this.sensorNames = sensorNames;
         this.ruleType = ruleType;
@@ -49,6 +51,7 @@ public final class RuleParam {
         this.okMessage = okMessage;
         this.errorMessages = errorMessages;
         this.escalation = escalation;
+        this.isVisibleInApp = isVisibleInApp;
     }
 
     public RuleType getType() {
@@ -99,6 +102,10 @@ public final class RuleParam {
 
     public Map<Long, WARNINGLEVEL> getEscalation() {
         return escalation != null ? escalation : new HashMap<>();
+    }
+
+    public boolean getVisible() {
+        return isVisibleInApp;
     }
 
     @Override
