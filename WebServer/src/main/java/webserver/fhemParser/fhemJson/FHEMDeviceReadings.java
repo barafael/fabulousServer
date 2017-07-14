@@ -32,25 +32,25 @@ final class FHEMDeviceReadings {
             ret.put("Battery", battery.value);
         }
         if (battery_percent != null) {
-            ret.put("Battery percent", battery_percent.value);
+            ret.put("Battery percent", battery_percent.value + " %");
         }
         if (humidity != null) {
-            ret.put("Humidity", humidity.value);
+            ret.put("Humidity", humidity.value + " %");
         }
         if (temperature != null) {
-            ret.put("Temperature", temperature.value);
+            ret.put("Temperature", temperature.value + " °C");
         }
         if (co2 != null) {
-            ret.put("CO2", co2.value);
+            ret.put("CO2", co2.value + " ppm");
         }
         if (power != null) {
-            ret.put("Power", power.value);
+            ret.put("Power", power.value + " W");
         }
         if (voltage != null) {
-            ret.put("Voltage", voltage.value);
+            ret.put("Voltage", voltage.value + " V");
         }
         if (current != null) {
-            ret.put("Current", current.value);
+            ret.put("Current", current.value + " mA");
         }
         return ret;
     }
