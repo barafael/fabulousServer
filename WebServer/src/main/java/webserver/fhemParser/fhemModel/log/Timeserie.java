@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ public final class Timeserie {
      * A pattern used to check if a string is parseable to a number, decimal or whole.
      */
     private static final transient Pattern NUMBER_PATTERN = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
+    private static final int MAX_SIZE = 2000;
     /**
      * A list of timestamps in unix long format.
      * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive.
@@ -78,7 +80,6 @@ public final class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
-                        /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
@@ -106,8 +107,33 @@ public final class Timeserie {
                     }
                     ys.add(value);
                 }
+
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
+
+                if (xs.size() > MAX_SIZE) {
+                    int k = xs.size() / MAX_SIZE;
+                    long[] timestampQueue = new long[k];
+                    double[] valueQueue = new double[k];
+
+                    List<Long> newTimestamps = new ArrayList<>();
+                    List<Double> newValues = new ArrayList<>();
+
+                    for (int index = 0; index < xs.size(); index++) {
+                        int minIndex = index % k;
+                        timestampQueue[minIndex] = xs.get(index);
+                        valueQueue[minIndex] = ys.get(index);
+                        if (minIndex == 0) {
+                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).average().orElse(0.0)));
+                            newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
+                        }
+                    }
+                    System.out.println("reduced from " + xs.size() + " to " + newTimestamps.size() + " elements!");
+                    xs.clear();
+                    xs.addAll(newTimestamps);
+                    ys.clear();
+                    ys.addAll(newValues);
+                }
                 break;
             default:
                 xs = new ArrayList<>();
@@ -148,7 +174,6 @@ public final class Timeserie {
                         ys.add(currentKey);
                         currentKey++;
                     } else {
-                        /* get() ok because legend.containsvalue(value) */
                         /* get() ok because legend.containsvalue(value) */
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
