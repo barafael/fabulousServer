@@ -1,5 +1,6 @@
 package webserver.stateCheck.rules;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -20,7 +21,6 @@ public final class RuleInfo {
      * The state of this rule. True if not violated.
      */
     private boolean isOk;
-    /* TODO handle permissions similarly to filelogs. Does it work?*/
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
@@ -33,6 +33,12 @@ public final class RuleInfo {
     private String message;
 
     /**
+     * Time of first rule evaluation.
+     */
+    private final long startTime;
+    private long endTime;
+
+    /**
      * Construct a RuleInfo instance.
      *
      * @param name       Name of the rule as shown in app
@@ -40,9 +46,10 @@ public final class RuleInfo {
      * @param permission necessary permissions
      * @param message    the message about the state of the rule
      */
-    public RuleInfo(String name, boolean isOk, String permission, String message) {
+    public RuleInfo(String name, boolean isOk, long startTime, String permission, String message) {
         this.name = name;
         this.isOk = isOk;
+        this.startTime = startTime;
         this.permission = permission;
         this.message = message;
     }
@@ -53,6 +60,10 @@ public final class RuleInfo {
 
     public boolean isOk() {
         return isOk;
+    }
+
+    public void setEnd() {
+        endTime = Instant.now().getEpochSecond();
     }
 
     public String getPermission() {

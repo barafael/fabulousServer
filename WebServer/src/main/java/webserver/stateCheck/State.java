@@ -5,6 +5,7 @@ import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.stateCheck.rules.Rule;
 import webserver.stateCheck.rules.RuleInfo;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,7 +41,7 @@ class State {
                 for (Rule rule : violatingRules) {
                     long timestamp = state.get(sensor.getName()).get(rule.getName());
                     String message = rule.getWarningMessage(timestamp);
-                    sensor.addViolatedRule(new RuleInfo(rule.getName(), false, rule.getPermissionField(), message));
+                    sensor.addViolatedRule(new RuleInfo(rule.getName(), false, Instant.now().getEpochSecond(), rule.getPermissionField(), message));
                 }
             }
         }

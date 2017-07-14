@@ -84,6 +84,7 @@ public final class StateChecker {
                         new RuleInfo(
                                 rule.getName(),
                                 true,
+                                Instant.now().getEpochSecond(),
                                 rule.getPermissionField(),
                                 rule.getOkMessage()));
             }
