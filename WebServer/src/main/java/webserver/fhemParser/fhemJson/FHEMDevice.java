@@ -67,7 +67,7 @@ public final class FHEMDevice {
 
         String alias = attributes.getAlias().orElse("Not supplied");
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isShowInApp(), meta);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
 
         sensor.setIcon(getAttributes().getIcon());
 
@@ -113,7 +113,7 @@ public final class FHEMDevice {
         List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();
-        return Optional.of(new FHEMFileLog(path, name, switchable, isShowInApp(), permissions));
+        return Optional.of(new FHEMFileLog(path, name, switchable, isVisibleInApp(), permissions));
     }
 
     /**
@@ -134,7 +134,7 @@ public final class FHEMDevice {
      *
      * @return whether the room should be shown in the app
      */
-    private boolean isShowInApp() {
+    private boolean isVisibleInApp() {
         if (!isSensor() && !isFileLog()) {
             System.err.println("This might be unintended: "
                     + "FHEM device " + name + " is not sensor or log, but is in app room.");

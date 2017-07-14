@@ -138,12 +138,9 @@ public class StateCheckerTest {
      */
     @Test
     public void testEvaluateAlwaysTrueRuleWithOkInfo() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/alwaysTrue.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
-
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model, "jsonRules/alwaysTrue.json");
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 0;

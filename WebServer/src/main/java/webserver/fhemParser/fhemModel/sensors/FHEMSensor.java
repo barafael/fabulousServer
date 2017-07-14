@@ -48,8 +48,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * Documents whether this should be shown in the frontend.
      */
-    @SuppressWarnings ("FieldCanBeLocal")
-    private final transient boolean isShowInApp;
+    private final boolean isVisibleInApp;
     /**
      * This map contains key-value pairs about meta information of this sensor.
      */
@@ -70,12 +69,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private Set<RuleInfo> passedRules = new HashSet<>();
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
-                      boolean isShowInApp, HashMap<String, String> metaInfo) {
+                      boolean isVisibleInApp, HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.nameInApp = nameInApp;
         this.permissions = permissions;
-        this.isShowInApp = isShowInApp;
+        this.isVisibleInApp = isVisibleInApp;
         this.metaInfo = metaInfo;
     }
 
