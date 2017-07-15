@@ -42,23 +42,6 @@ public class RuleParamCollection {
     }
 
     /**
-     * Keep for now in case I want to change equals() method
-     */
-    private void filterDuplicates() {
-        Set<String> rulenames = ruleParams.stream().map(RuleParam::getName).collect(Collectors.toSet());
-        if (rulenames.size() != ruleParams.size()) {
-            System.err.println("The rules definition contained duplicate entries (entries with duplicate names)!");
-        } else {
-            return;
-        }
-        Set<RuleParam> dedup = new HashSet<>();
-        for (String rulename : rulenames) {
-            dedup.add(ruleParams.stream().filter(ruleParam -> ruleParam.getName().equals(rulename)).findAny().get());
-        }
-        ruleParams = dedup;
-    }
-
-    /**
      * Convert the ist of rule parameters to rules.
      *
      * @return a set of rules generated from the parameters.
