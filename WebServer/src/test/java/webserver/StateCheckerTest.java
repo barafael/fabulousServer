@@ -128,8 +128,9 @@ public class StateCheckerTest {
         FHEMModel model = model_opt.get();
 
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().size() == 1;
-        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().stream().findAny().get()
+        FHEMSensor rainSensor = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert rainSensor.getViolatedRules().stream().findAny().isPresent();
+        assert rainSensor.getViolatedRules().stream().findAny().get()
                 .getName().equals("impossibleRainRule");
     }
 
