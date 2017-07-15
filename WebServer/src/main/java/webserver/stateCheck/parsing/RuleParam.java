@@ -22,8 +22,6 @@ public final class RuleParam {
     private final String name;
     @SerializedName("SensorNames")
     private final Set<String> sensorNames;
-    @SerializedName("RuleType")
-    private final RuleType ruleType;
     @SerializedName("Permission")
     private final String permission;
     @SerializedName("Expression")
@@ -44,7 +42,6 @@ public final class RuleParam {
 
     public RuleParam(String name,
                      Set<String> sensorNames,
-                     RuleType ruleType,
                      String permission,
                      String expression,
                      Set<String> requiredTrueRules,
@@ -55,7 +52,6 @@ public final class RuleParam {
                      boolean isVisibleInApp) {
         this.name = name;
         this.sensorNames = sensorNames;
-        this.ruleType = ruleType;
         this.permission = permission;
         this.expression = expression;
         this.requiredTrueRules = requiredTrueRules;
@@ -67,7 +63,24 @@ public final class RuleParam {
     }
 
     public RuleType getType() {
-        return ruleType;
+        String[] tokens = expression.split(" ");
+
+        if (tokens.length == 3) {
+            if ("!<=>".contains(tokens[1])) {
+                return RuleType.NUMERIC;
+            } else {
+                if (tokens[1].startsWith("not")) {
+                    tokens[1] = tokens[1].substring(3);
+                }
+                if ("equalsmatchescontains".contains(tokens[1])) {
+                    return RuleType.REGEXP;
+                }
+                System.err.println("Unimplemented Rule Type! " + expression);
+            }
+        } else if (tokens.length == 1) {
+            return RuleType.PREDICATE;
+        }
+        return RuleType.UNKNOWN;
     }
 
     public String getName() {
@@ -140,7 +153,6 @@ public final class RuleParam {
         return "RuleParam{"
                 + "name='" + name + '\''
                 + ", sensorNames=" + sensorNames
-                + ", ruleType=" + ruleType
                 + ", expression='" + expression + '\''
                 + ", requiredTrueRules=" + requiredTrueRules
                 + ", requiredFalseRules=" + requiredFalseRules

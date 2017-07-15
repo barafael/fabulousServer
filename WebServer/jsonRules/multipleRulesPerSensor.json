@@ -4,7 +4,6 @@
             "Name": "Rule 1 for door sensor",
             "Expression": "State equals closed",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -25,7 +24,6 @@
             "Name": "Rule 2 for door sensor",
             "Expression": "State equals open",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -46,7 +44,6 @@
             "Name": "Rule 3 for door sensor",
             "Expression": "Battery notequals ok",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_56A86F"
             ],

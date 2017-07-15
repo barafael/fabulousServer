@@ -4,7 +4,6 @@
             "Name": "DryLab",
             "Expression": "State contains dry",
             "Permission": "S_Regen",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

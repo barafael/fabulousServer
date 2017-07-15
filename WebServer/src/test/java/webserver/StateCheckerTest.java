@@ -69,7 +69,6 @@ public class StateCheckerTest {
         escalation.put(100L, WARNINGLEVEL.LOW);
         RuleParam ruleParam = new RuleParam("Fenster1",
                 sensorlist,
-                RuleType.REGEXP,
                 "permission1",
                 "STATE contains dry",
                 reqTrue,

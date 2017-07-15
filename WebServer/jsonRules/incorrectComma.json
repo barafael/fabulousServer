@@ -4,7 +4,6 @@
             "Name": "incorrectJSONRule",
             "Expression": "State matches bl*",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

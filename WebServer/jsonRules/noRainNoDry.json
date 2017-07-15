@@ -4,7 +4,6 @@
             "Name": "NeverTrue",
             "Expression": "State contains noRainNoDry",
             "Permission": "permission1",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

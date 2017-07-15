@@ -4,7 +4,6 @@
             "Name": "PermissionTest",
             "Expression": "State matches dry|rain",
             "Permission": "alwaysTruePermission",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

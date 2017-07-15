@@ -5,7 +5,6 @@
             "comment": "https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms",
             "Expression": "CO2 < 800",
             "Permission": "permission0",
-            "RuleType": "NUMERIC",
             "SensorNames": [
                 "netatmo_D70_ee_50_02_b8_20"
             ],

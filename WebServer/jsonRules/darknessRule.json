@@ -4,7 +4,6 @@
             "Name": "darkness",
             "Expression": "Brightness < 300",
             "Permission": "permission0",
-            "RuleType": "NUMERIC",
             "SensorNames": [
                 "HM_520B89"
             ],

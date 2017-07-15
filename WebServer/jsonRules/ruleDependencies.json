@@ -4,7 +4,6 @@
             "Name": "BasicRule1",
             "Expression": "State matches bl*",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -24,7 +23,6 @@
             "Name": "BasicRule2",
             "Expression": "State matches bl*",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -44,7 +42,6 @@
             "Name": "BasicRule3",
             "Expression": "State matches dry|rain",
             "Permission": "permission0",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -64,7 +61,6 @@
             "Name": "Composite",
             "Expression": "State contains noRainNoDry",
             "Permission": "permission1",
-            "RuleType": "REGEXP",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
