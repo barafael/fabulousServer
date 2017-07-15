@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
  * This rule allows to compare a sensors numeric field to a given value.
  * @author Rafael on 07.07.17.
  */
-public final class ThreshholdRule extends Rule {
-    public ThreshholdRule(RuleParam ruleParam) {
+public final class NumericRule extends Rule {
+    public NumericRule(RuleParam ruleParam) {
         super(ruleParam);
     }
 

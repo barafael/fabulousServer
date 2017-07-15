@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import webserver.stateCheck.rules.PredicateRule;
 import webserver.stateCheck.rules.RegexpRule;
 import webserver.stateCheck.rules.Rule;
-import webserver.stateCheck.rules.ThreshholdRule;
+import webserver.stateCheck.rules.NumericRule;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -93,7 +93,7 @@ public class RuleParamCollection {
                     rules.add(new RegexpRule(ruleParam));
                     break;
                 case THRESHHOLD:
-                    rules.add(new ThreshholdRule(ruleParam));
+                    rules.add(new NumericRule(ruleParam));
                     break;
                 case PREDICATE:
                     rules.add(new PredicateRule(ruleParam));
