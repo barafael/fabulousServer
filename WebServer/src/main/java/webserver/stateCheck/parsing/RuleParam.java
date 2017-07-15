@@ -17,18 +17,18 @@ import java.util.TreeMap;
  * @author Rafael on 07.07.17.
  */
 public final class RuleParam {
-    private String name;
-    private Set<String> sensorNames;
-    private RuleType ruleType;
-    private String permission;
-    private String expression;
-    private Set<String> requiredTrueRules;
-    private Set<String> requiredFalseRules;
-    private String okMessage;
-    private Map<WARNINGLEVEL, String> errorMessages;
+    private final String name;
+    private final Set<String> sensorNames;
+    private final RuleType ruleType;
+    private final String permission;
+    private final String expression;
+    private final Set<String> requiredTrueRules;
+    private final Set<String> requiredFalseRules;
+    private final String okMessage;
+    private final Map<WARNINGLEVEL, String> errorMessages;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    private boolean isVisibleInApp;
+    private final boolean isVisibleInApp;
 
     public RuleParam(String name,
                      Set<String> sensorNames,

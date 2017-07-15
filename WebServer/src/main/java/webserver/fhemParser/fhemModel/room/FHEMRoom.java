@@ -34,11 +34,11 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
     /**
      * A path to a hash file which should be saved on disk and contain the hash of the current plan.
      */
-    transient private Path pathToHash;
+    final transient private Path pathToHash;
     /**
      * A path to the current room plan.
      */
-    transient private Path pathToPlan;
+    final transient private Path pathToPlan;
 
     /**
      * Constructor for this room, which verifies that the room really starts with 'room_' (the prefix for real rooms).

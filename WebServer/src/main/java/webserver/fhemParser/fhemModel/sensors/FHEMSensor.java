@@ -62,11 +62,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * This field contains information about the rules this sensor violates.
      */
-    private Set<RuleInfo> violatedRules = new HashSet<>();
+    private final Set<RuleInfo> violatedRules = new HashSet<>();
     /**
      * This field contains information about the rules this sensor passes.
      */
-    private Set<RuleInfo> passedRules = new HashSet<>();
+    private final Set<RuleInfo> passedRules = new HashSet<>();
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isVisibleInApp, HashMap<String, String> metaInfo) {

@@ -24,19 +24,19 @@ public abstract class Rule {
      * A set of names for which this rule applies.
      * Sensor names should be used (and not aliases) to guarantee uniqueness
      */
-    protected Set<String> sensorNames;
+    final Set<String> sensorNames;
     /**
      * The expression which should be evaluated for each sensor, like 'State matches d*y'.
      */
-    protected String expression;
+    final String expression;
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
-    protected RuleState ruleState;
+    RuleState ruleState;
     /**
      * The name of the rule.
      */
-    String name;
+    final String name;
     /**
      * Whether this rule has already been evaluated.
      */
@@ -44,10 +44,10 @@ public abstract class Rule {
     /**
      * The permissions for this rule to be shown.
      */
-    private String permission;
+    private final String permission;
     @SuppressWarnings ("FieldCanBeLocal")
-    private String okMessage;
-    private Map<WARNINGLEVEL, String> errorMessages;
+    private final String okMessage;
+    private final Map<WARNINGLEVEL, String> errorMessages;
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     private Set<Rule> requiredTrueRules;
     private Set<Rule> requiredFalseRules;

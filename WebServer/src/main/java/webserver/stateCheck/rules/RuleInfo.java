@@ -15,22 +15,22 @@ public final class RuleInfo {
     /**
      * The name of the Rule as shown in the frontend.
      */
-    private String name;
+    private final String name;
 
     /**
      * The state of this rule. True if not violated.
      */
-    private boolean isOk;
+    private final boolean isOk;
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
-    private transient String permission;
+    private final transient String permission;
     /**
      * A message about the state of the rule.
      * This field is needed for serialization
      */
     @SuppressWarnings ("FieldCanBeLocal")
-    private String message;
+    private final String message;
 
     /**
      * Time of first rule evaluation.

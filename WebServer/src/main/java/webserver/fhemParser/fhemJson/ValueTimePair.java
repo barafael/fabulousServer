@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 class ValueTimePair {
     /* Those fields are only written by Gson */
     @SerializedName ("Value")
-    protected String value;
+    String value;
     @SerializedName ("Time")
     private String time;
 }

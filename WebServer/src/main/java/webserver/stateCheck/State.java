@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 class State {
     /* Sensorname -> (Rulename, StartTime) */
-    Map<String, Map<String, Long>> state = new HashMap<>();
+    final Map<String, Map<String, Long>> state = new HashMap<>();
 
     /**
      * Update the warning message and attach a RuleInfo to the sensor.

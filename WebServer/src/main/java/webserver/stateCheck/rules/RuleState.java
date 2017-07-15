@@ -22,7 +22,7 @@ public final class RuleState {
     /**
      * A Rule only has state true if no sensors violate it.
      */
-    private boolean state;
+    private final boolean state;
 
     RuleState(boolean state, Set<FHEMSensor> okSensors, Set<FHEMSensor> violatedSensors) {
         this.state = state;
