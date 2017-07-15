@@ -13,13 +13,13 @@ import webserver.stateCheck.StateChecker;
 import webserver.stateCheck.WARNINGLEVEL;
 import webserver.stateCheck.parsing.RuleParam;
 import webserver.stateCheck.parsing.RuleParamCollection;
-import webserver.stateCheck.parsing.RuleType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -368,6 +368,19 @@ public class StateCheckerTest {
     }
 
     @Test
+    public void testGeneralPredicate() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/generalPredicateRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
+
+        /* For general predicate, all sensors are ignored! */
+        assert sensor.getPassedRules().size() == 0;
+    }
+
+    @Test
     public void testIncorrectSensorPredicate() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectSensorPredicate.json");
         assert model_opt.isPresent();
@@ -388,7 +401,7 @@ public class StateCheckerTest {
     @Test
     public void testSun() {
         PredicateCollection predicateCollection = new PredicateCollection();
-        assert predicateCollection.sunIsUp();
+        assert predicateCollection.sunIsUp(new ArrayList<>());
     }
 
     /**
@@ -400,6 +413,6 @@ public class StateCheckerTest {
     public void testWorkHours() {
         PredicateCollection predicateCollection = new PredicateCollection();
         /* Result obviously depends on the current time... */
-        assert predicateCollection.isWorkingHours();
+        assert predicateCollection.isWorkingHours(new ArrayList<>());
     }
 }

@@ -222,8 +222,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * An example predicate for use with the rule checker. See testSensorPredicate() for usage.
-     * (not linkable from here because it is a unit test).
-     * It is not unused, since
+     * (Not linkable from here because it is a unit test).
+     * It is not unused, but since it is called at runtime via reflection, it cannot be detected at compile time.
+     *
+     * Predicates must be public, return boolean, and take a List<String> (even if they ignore it).
+     *
      * @param arguments the strings defined in the input file
      * @return true, always (to make it more useful, make it return something based on the sensor status)
      */
