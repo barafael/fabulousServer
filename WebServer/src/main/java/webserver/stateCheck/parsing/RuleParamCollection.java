@@ -80,8 +80,11 @@ public class RuleParamCollection {
                 case NUMERIC:
                     rules.add(new NumericRule(ruleParam));
                     break;
-                case PREDICATE:
-                    rules.add(new PredicateRule(ruleParam));
+                case GENERAL_PRED:
+                    rules.add(new GeneralPredicate(ruleParam));
+                    break;
+                case SENSOR_PRED:
+                    rules.add(new SensorPredicate(ruleParam));
                     break;
                 case UNKNOWN:
                     System.err.println("Unimplemented Rule Type! " + ruleParam.getExpression());

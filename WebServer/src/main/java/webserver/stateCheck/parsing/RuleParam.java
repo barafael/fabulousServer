@@ -75,10 +75,13 @@ public final class RuleParam {
                 if ("equalsmatchescontains".contains(tokens[1])) {
                     return RuleType.REGEXP;
                 }
-                System.err.println("Unimplemented Rule Type! " + expression);
             }
-        } else if (tokens.length == 1) {
-            return RuleType.PREDICATE;
+        }
+        if (expression.startsWith("Sensor ") && expression.length() > 7) {
+            return RuleType.SENSOR_PRED;
+        }
+        if (expression.startsWith("Predicate ") && expression.length() > 10) {
+            return RuleType.GENERAL_PRED;
         }
         return RuleType.UNKNOWN;
     }
