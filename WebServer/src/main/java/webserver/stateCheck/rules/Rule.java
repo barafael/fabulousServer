@@ -77,7 +77,7 @@ public abstract class Rule {
 
     private RuleState eval(FHEMModel model, Set<Rule> visited) {
         if (!visited.add(this)) {
-            System.err.println("There was a cyclic rule dependency! Breaking the cycle by assuming this rule is violated.");
+            System.err.println("There was a cyclic rule dependency involving " + visited.size() + " rules! Breaking the cycle by assuming this rule is violated.");
             System.err.println("This will invalidate all rules in the cycle.");
             /* Not setting to evaluated because another eval might still pass by */
             return new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
@@ -162,7 +162,14 @@ public abstract class Rule {
 
         Rule rule = (Rule) o;
 
-        return name.equals(rule.name);
+        /* Due to technical reasons discussed in the rule checker documentation,
+        this ugly hack works but should not be trusted.
+         */
+        boolean equals = name.equals(rule.name);
+        if (equals) {
+            System.err.println("Duplicate rule detected! " + name);
+        }
+        return equals;
     }
 
     @Override

@@ -218,10 +218,6 @@ public class StateCheckerTest {
      */
     @Test
     public void testParamConstruction() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
-        assert model_opt.isPresent();
-        FHEMModel model = model_opt.get();
-
         String json;
         try {
             json = new String(Files.readAllBytes(Paths.get("jsonRules/duplicateRule.json")));
