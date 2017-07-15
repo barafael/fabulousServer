@@ -3,10 +3,7 @@ package webserver.stateCheck.parsing;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import webserver.stateCheck.rules.PredicateRule;
-import webserver.stateCheck.rules.RegexpRule;
-import webserver.stateCheck.rules.Rule;
-import webserver.stateCheck.rules.NumericRule;
+import webserver.stateCheck.rules.*;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -229,7 +229,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     @SuppressWarnings("unused")
     public boolean exampleAlwaysTruePredicate(List<String> arguments) {
-        arguments.forEach(System.out::println);
+        arguments.forEach(s -> System.out.print(s + " "));
+        System.out.println();
         return true;
     }
 

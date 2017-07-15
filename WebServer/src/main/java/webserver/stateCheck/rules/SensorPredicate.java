@@ -57,11 +57,11 @@ public final class SensorPredicate extends Rule {
             try {
                 method = sensor.getClass().getMethod(methodName, List.class);
             } catch (SecurityException e) {
-                System.err.println(sensor + ": There was a security exception! This is unexpected.");
+                System.err.println(sensor + ": There was a security exception when calling "
+                        + methodName + "! This is unexpected.");
                 violatedSensors.add(sensor);
                 e.printStackTrace();
                 continue;
-
             } catch (NoSuchMethodException e) {
                 System.err.println(sensor + ": The method " + methodName + " was not found in the class FHEMSensor.");
                 violatedSensors.add(sensor);
@@ -72,8 +72,8 @@ public final class SensorPredicate extends Rule {
             /* Manual type checks */
             /* Return type */
             if (!method.getReturnType().getName().equals("boolean")) {
-                System.err.println("The method " + " you tried to call on sensor " + sensorName
-                        + " does not return a boolean!");
+                System.err.println("The method " + methodName + " you tried to call on sensor " + sensorName + " "
+                        + "does not return a boolean!");
                 violatedSensors.add(sensor);
                 continue;
             }
@@ -81,7 +81,7 @@ public final class SensorPredicate extends Rule {
             /* Parameter type */
             Class<?>[] actualTypes = method.getParameterTypes();
             /* Cannot check for type of List due to type erasure,
-            but can at least check that the type is List<> and that there is exactly one.
+            but can at least check that the type is List<> and that there is exactly one parameter.
             */
             if (actualTypes.length != 1 || !actualTypes[0].getName().equals("java.util.List")) {
                 violatedSensors.add(sensor);
