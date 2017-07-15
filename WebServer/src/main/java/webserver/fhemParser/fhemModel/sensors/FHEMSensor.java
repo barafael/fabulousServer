@@ -221,6 +221,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
+     * An example predicate for use with the rule checker. See testSensorPredicate() for usage.
+     * (not linkable from here because it is a unit test).
+     * It is not unused, since
+     * @param arguments the strings defined in the input file
+     * @return true, always (to make it more useful, make it return something based on the sensor status)
+     */
+    @SuppressWarnings("unused")
+    public boolean exampleAlwaysTruePredicate(List<String> arguments) {
+        arguments.forEach(System.out::println);
+        return true;
+    }
+
+    /**
      * This method is necessary to be able to iterate over an internal data structure.
      */
     public void forEach(Consumer<? super FHEMFileLog> action) {
