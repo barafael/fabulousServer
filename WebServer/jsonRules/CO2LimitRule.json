@@ -1,0 +1,26 @@
+{
+    "ruleParams": [
+        {
+            "name": "CO2Limit",
+            "comment": "https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms",
+            "expression": "CO2 < 800",
+            "permission": "permission0",
+            "ruleType": "NUMERIC",
+            "sensorNames": [
+                "netatmo_D70_ee_50_02_b8_20"
+            ],
+            "okMessage": "all ok",
+            "requiredTrueRules": [],
+            "requiredFalseRules": [],
+            "escalation": {
+                "100": "LOW"
+            },
+            "errorMessages": {
+                "LOW": "bl*",
+                "NORMAL": "all good bl*",
+                "HIGH": "hey, fix it bl*",
+                "DISASTER": "'tis bad!"
+            }
+        }
+    ]
+}

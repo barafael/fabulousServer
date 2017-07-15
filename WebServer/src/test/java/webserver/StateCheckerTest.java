@@ -325,4 +325,36 @@ public class StateCheckerTest {
         assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getPassedRules().isEmpty();
     }
+
+    /**
+     * Evaluates a rule which should always be true for this sensor.
+     * The regex rule matches dry|rain on the state of the sensor.
+     */
+    @Test
+    public void testEvaluateAlwaysTrueNumericRuleWithOkInfo() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/darknessRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
+        assert sensor.getViolatedRules().size() == 1;
+        assert sensor.getPassedRules().size() == 0;
+    }
+
+    /**
+     * Evaluates a rule which should always be true for this sensor.
+     * The regex rule matches dry|rain on the state of the sensor.
+     */
+    @Test
+    public void testEvaluateCO2Limit() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/CO2LimitRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("netatmo_D70_ee_50_02_b8_20").isPresent();
+        FHEMSensor sensor = model.getSensorByName("netatmo_D70_ee_50_02_b8_20").get();
+        assert sensor.getViolatedRules().size() == 0;
+        assert sensor.getPassedRules().size() == 1;
+    }
 }
