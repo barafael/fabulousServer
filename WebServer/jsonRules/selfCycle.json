@@ -1,20 +1,20 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "Self-referencing rule",
-            "expression": "State matches bl*",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "Self-referencing rule",
+            "Expression": "State matches bl*",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": ["Self-referencing rule"],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": ["Self-referencing rule"],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*"

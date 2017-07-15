@@ -45,7 +45,7 @@ public abstract class Rule {
      * The permissions for this rule to be shown.
      */
     private final String permission;
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
     private final Map<WARNINGLEVEL, String> errorMessages;
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();

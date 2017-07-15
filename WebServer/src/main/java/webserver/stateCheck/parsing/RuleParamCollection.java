@@ -2,6 +2,7 @@ package webserver.stateCheck.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.SerializedName;
 import webserver.stateCheck.rules.PredicateRule;
 import webserver.stateCheck.rules.RegexpRule;
 import webserver.stateCheck.rules.Rule;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * @author Rafael on 07.07.17.
  */
 public class RuleParamCollection {
+    @SerializedName("Rules")
     private Set<RuleParam> ruleParams = new HashSet<>();
 
     /* TODO: Suppress direct creation */

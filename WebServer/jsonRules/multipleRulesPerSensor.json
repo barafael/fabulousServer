@@ -1,20 +1,20 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "Rule 1 for door sensor",
-            "expression": "State equals closed",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "Rule 1 for door sensor",
+            "Expression": "State equals closed",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_56A86F"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*",
@@ -22,20 +22,20 @@
             }
         },
         {
-            "name": "Rule 2 for door sensor",
-            "expression": "State equals open",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "Rule 2 for door sensor",
+            "Expression": "State equals open",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_56A86F"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*",
@@ -43,20 +43,20 @@
             }
         },
         {
-            "name": "Rule 3 for door sensor",
-            "expression": "Battery notequals ok",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "Rule 3 for door sensor",
+            "Expression": "Battery notequals ok",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_56A86F"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*",

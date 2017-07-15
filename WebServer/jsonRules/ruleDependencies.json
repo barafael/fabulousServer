@@ -1,80 +1,80 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "BasicRule1",
-            "expression": "State matches bl*",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "BasicRule1",
+            "Expression": "State matches bl*",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*"
             }
         },
         {
-            "name": "BasicRule2",
-            "expression": "State matches bl*",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "BasicRule2",
+            "Expression": "State matches bl*",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*"
             }
         },
         {
-            "name": "BasicRule3",
-            "expression": "State matches dry|rain",
-            "permission": "permission0",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "BasicRule3",
+            "Expression": "State matches dry|rain",
+            "Permission": "permission0",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*"
             }
         },
         {
-            "name": "Composite",
-            "expression": "State contains noRainNoDry",
-            "permission": "permission1",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "Composite",
+            "Expression": "State contains noRainNoDry",
+            "Permission": "permission1",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": ["BasicRule1", "BasicRule2", "BasicRule3"],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": ["BasicRule1", "BasicRule2", "BasicRule3"],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "something is wrong",
                 "NORMAL": "all good",
                 "HIGH": "hey, fix it!"

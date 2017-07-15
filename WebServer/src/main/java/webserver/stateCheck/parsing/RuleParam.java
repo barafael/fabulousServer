@@ -1,5 +1,6 @@
 package webserver.stateCheck.parsing;
 
+import com.google.gson.annotations.SerializedName;
 import webserver.stateCheck.WARNINGLEVEL;
 
 import java.util.HashMap;
@@ -17,17 +18,28 @@ import java.util.TreeMap;
  * @author Rafael on 07.07.17.
  */
 public final class RuleParam {
+    @SerializedName("Name")
     private final String name;
+    @SerializedName("SensorNames")
     private final Set<String> sensorNames;
+    @SerializedName("RuleType")
     private final RuleType ruleType;
+    @SerializedName("Permission")
     private final String permission;
+    @SerializedName("Expression")
     private final String expression;
+    @SerializedName("RequiredTrueRules")
     private final Set<String> requiredTrueRules;
+    @SerializedName("RequiredFalseRules")
     private final Set<String> requiredFalseRules;
+    @SerializedName("OkMessage")
     private final String okMessage;
+    @SerializedName("ErrorMessages")
     private final Map<WARNINGLEVEL, String> errorMessages;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
+    @SerializedName("Escalation")
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    @SerializedName("IsVisibleInApp")
     private final boolean isVisibleInApp;
 
     public RuleParam(String name,

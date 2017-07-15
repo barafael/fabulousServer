@@ -1,20 +1,20 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "NeverTrue",
-            "expression": "State contains noRainNoDry",
-            "permission": "permission1",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "NeverTrue",
+            "Expression": "State contains noRainNoDry",
+            "Permission": "permission1",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "something is wrong",
                 "NORMAL": "all good",
                 "HIGH": "hey, fix it!"

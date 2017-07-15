@@ -1,20 +1,20 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "permissionTest",
-            "expression": "State matches dry|rain",
-            "permission": "alwaysTruePermission",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "PermissionTest",
+            "Expression": "State matches dry|rain",
+            "Permission": "alwaysTruePermission",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*",

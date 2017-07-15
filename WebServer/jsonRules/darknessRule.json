@@ -1,20 +1,20 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "darkness",
-            "expression": "Brightness < 300",
-            "permission": "permission0",
-            "ruleType": "NUMERIC",
-            "sensorNames": [
+            "Name": "darkness",
+            "Expression": "Brightness < 300",
+            "Permission": "permission0",
+            "RuleType": "NUMERIC",
+            "SensorNames": [
                 "HM_520B89"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "bl*",
                 "NORMAL": "all good bl*",
                 "HIGH": "hey, fix it bl*",

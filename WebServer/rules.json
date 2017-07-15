@@ -1,25 +1,25 @@
 {
-    "ruleParams": [
+    "Rules": [
         {
-            "name": "DryLab",
-            "expression": "State contains dry",
-            "permission": "S_Regen",
-            "ruleType": "REGEXP",
-            "sensorNames": [
+            "Name": "DryLab",
+            "Expression": "State contains dry",
+            "Permission": "S_Regen",
+            "RuleType": "REGEXP",
+            "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "okMessage": "all ok",
-            "requiredTrueRules": [],
-            "requiredFalseRules": [],
-            "escalation": {
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
                 "100": "LOW"
             },
-            "errorMessages": {
+            "ErrorMessages": {
                 "LOW": "something is wrong",
                 "NORMAL": "all good",
                 "HIGH": "hey, fix it!"
             },
-            "isVisibleInApp": false
+            "IsVisibleInApp": false
         }
     ]
 }
