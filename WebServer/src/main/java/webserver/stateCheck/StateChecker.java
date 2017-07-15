@@ -66,16 +66,16 @@ public final class StateChecker {
         return Optional.of(params.toRules());
     }
 
-    public boolean evaluate(FHEMModel model) {
-        return evaluate(model, "rules.json");
+    public void evaluate(FHEMModel model) {
+        evaluate(model, "rules.json");
     }
 
-    public boolean evaluate(FHEMModel model, String path) {
+    public void evaluate(FHEMModel model, String path) {
         Optional<Set<Rule>> rules_opt = getRules(path);
-        return rules_opt.filter(rules -> evaluate(model, rules)).isPresent();
+        rules_opt.ifPresent(rules -> evaluate(model, rules));
     }
 
-    public boolean evaluate(FHEMModel model, Set<Rule> rules) {
+    private void evaluate(FHEMModel model, Set<Rule> rules) {
         for (Rule rule : rules) {
             RuleState ruleState = rule.eval(model);
 
@@ -125,7 +125,6 @@ public final class StateChecker {
             }
         }
         fhemState.setRuleInfos(model, rules);
-        return true;
     }
 
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
