@@ -75,7 +75,7 @@ public class RuleParamCollection {
                 case REGEXP:
                     rules.add(new RegexpRule(ruleParam));
                     break;
-                case THRESHHOLD:
+                case NUMERIC:
                     rules.add(new NumericRule(ruleParam));
                     break;
                 case PREDICATE:
