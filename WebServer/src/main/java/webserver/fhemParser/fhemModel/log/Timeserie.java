@@ -91,48 +91,49 @@ public final class Timeserie {
             case REAL:
             case PERCENT:
                 /* avoid realloc */
-                xs = new ArrayList<>(samples.size() + 5);
-                ys = new ArrayList<>(samples.size() + 5);
+                List<Long> local_xs = new ArrayList<>(samples.size() + 5);
+                List<Double> local_ys = new ArrayList<>(samples.size() + 5);
                 for (String entry : samples) {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
                     long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    xs.add(epoch);
+                    local_xs.add(epoch);
 
                     double value = 0.0;
                     Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
                     if (numberMatch.matches()) {
                         value = Double.parseDouble(items[3]);
                     }
-                    ys.add(value);
+                    local_ys.add(value);
                 }
 
-                legend.put(Collections.max(ys) + 1, "Upper");
-                legend.put(Collections.min(ys) - 1, "Lower");
+                legend.put(Collections.max(local_ys) + 1, "Upper");
+                legend.put(Collections.min(local_ys) - 1, "Lower");
 
-                if (xs.size() > MAX_SIZE) {
-                    int k = xs.size() / MAX_SIZE;
+                if (local_xs.size() <= MAX_SIZE) {
+                    xs = local_xs;
+                    ys = local_ys;
+                } else {
+                    int k = local_xs.size() / MAX_SIZE;
                     long[] timestampQueue = new long[k];
                     double[] valueQueue = new double[k];
 
                     List<Long> newTimestamps = new ArrayList<>();
                     List<Double> newValues = new ArrayList<>();
 
-                    for (int index = 0; index < xs.size(); index++) {
+                    for (int index = 0; index < local_xs.size(); index++) {
                         int minIndex = index % k;
-                        timestampQueue[minIndex] = xs.get(index);
-                        valueQueue[minIndex] = ys.get(index);
+                        timestampQueue[minIndex] = local_xs.get(index);
+                        valueQueue[minIndex] = local_ys.get(index);
                         if (minIndex == 0) {
                             newTimestamps.add(Math.round(Arrays.stream(timestampQueue).average().orElse(0.0)));
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("reduced from " + xs.size() + " to " + newTimestamps.size() + " elements!");
-                    xs.clear();
-                    xs.addAll(newTimestamps);
-                    ys.clear();
-                    ys.addAll(newValues);
+                    System.out.println("reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    xs = newTimestamps;
+                    ys = newValues;
                 }
                 break;
             default:
@@ -155,8 +156,8 @@ public final class Timeserie {
             case UNKNOWN:
             case DISCRETE:
                 /* avoid realloc */
-                xs = new ArrayList<>(samples.size() + 5);
-                ys = new ArrayList<>(samples.size() + 5);
+                List<Long> local_xs = new ArrayList<>(samples.size() + 5);
+                List<Double> local_ys = new ArrayList<>(samples.size() + 5);
                 double currentKey = 0;
                 for (String entry : samples) {
                     String[] items = entry.split(" ");
@@ -166,45 +167,46 @@ public final class Timeserie {
                     if (epoch < start || epoch > end) {
                         continue;
                     }
-                    xs.add(epoch);
+                    local_xs.add(epoch);
 
                     String value = items[3];
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
-                        ys.add(currentKey);
+                        local_ys.add(currentKey);
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
-                        ys.add(legend.entrySet().stream()
+                        local_ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
-                legend.put(Collections.max(ys) + 1, "Upper");
-                legend.put(Collections.min(ys) - 1, "Lower");
+                legend.put(Collections.max(local_ys) + 1, "Upper");
+                legend.put(Collections.min(local_ys) - 1, "Lower");
 
-                if (xs.size() > MAX_SIZE) {
-                    int k = xs.size() / MAX_SIZE;
+                if (local_xs.size() <= MAX_SIZE) {
+                    xs = local_xs;
+                    ys = local_ys;
+                } else {
+                    int k = local_xs.size() / MAX_SIZE;
                     long[] timestampQueue = new long[k];
                     double[] valueQueue = new double[k];
 
                     List<Long> newTimestamps = new ArrayList<>();
                     List<Double> newValues = new ArrayList<>();
 
-                    for (int index = 0; index < xs.size(); index++) {
+                    for (int index = 0; index < local_xs.size(); index++) {
                         int minIndex = index % k;
-                        timestampQueue[minIndex] = xs.get(index);
-                        valueQueue[minIndex] = ys.get(index);
+                        timestampQueue[minIndex] = local_xs.get(index);
+                        valueQueue[minIndex] = local_ys.get(index);
                         if (minIndex == 0) {
                             newTimestamps.add(Math.round(Arrays.stream(timestampQueue).average().orElse(0.0)));
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("reduced from " + xs.size() + " to " + newTimestamps.size() + " elements!");
-                    xs.clear();
-                    xs.addAll(newTimestamps);
-                    ys.clear();
-                    ys.addAll(newValues);
+                    System.out.println("reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    xs = newTimestamps;
+                    ys = newValues;
                 }
                 break;
             case REAL:
