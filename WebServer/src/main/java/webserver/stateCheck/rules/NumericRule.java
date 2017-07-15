@@ -85,7 +85,7 @@ public final class NumericRule extends Rule {
                     ruleOK = val != expr;
                     break;
                 default:
-                    System.err.println("This operator " + operator + " is unimplemented!");
+                    System.err.println("This operator " + operator + " is unimplemented for NUMERIC rule!");
                     ruleOK = false;
             }
 

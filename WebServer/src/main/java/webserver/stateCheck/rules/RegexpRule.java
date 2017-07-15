@@ -86,7 +86,7 @@ public class RegexpRule extends Rule {
                     ruleOK = !value.matches(expr);
                     break;
                 default:
-                    System.err.println("This operator " + operator + " is unimplemented!");
+                    System.err.println("This operator " + operator + " is unimplemented for REGEXP rule!");
                     ruleOK = false;
             }
 
