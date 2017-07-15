@@ -104,10 +104,15 @@ public final class SensorPredicate extends Rule {
                 e.printStackTrace();
                 continue;
             } catch (InvocationTargetException e) {
-                System.err.println("The function " + methodName + " caused a " + e.getTargetException()
-                        + " on the sensor " + sensorName);
-                violatedSensors.add(sensor);
+                if (e.getTargetException() instanceof ClassCastException) {
+                    System.err.println("You might have defined a predicate with the wrong parameter types! " +
+                            "Parameter type must be exactly one List<String>.");
+                } else {
+                    System.err.println("The function " + methodName + " caused a " + e.getTargetException()
+                            + " on the sensor " + sensorName);
+                }
                 e.printStackTrace();
+                violatedSensors.add(sensor);
                 continue;
             }
 
