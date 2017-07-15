@@ -64,7 +64,7 @@ public abstract class Rule {
         isVisibleInApp = ruleParam.getVisible();
     }
 
-    protected abstract RuleState realEval(FHEMModel model);
+    protected abstract RuleState specificEval(FHEMModel model);
 
     /**
      * Call evaluation with an initially empty set to track the visited rules.
@@ -115,7 +115,7 @@ public abstract class Rule {
             ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
             return ruleState;
         }
-        return realEval(model);
+        return specificEval(model);
     }
 
     public String getName() {

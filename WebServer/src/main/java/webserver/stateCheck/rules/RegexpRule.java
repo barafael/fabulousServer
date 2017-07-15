@@ -20,7 +20,7 @@ public class RegexpRule extends Rule {
     }
 
     @Override
-    public RuleState realEval(FHEMModel model) {
+    public RuleState specificEval(FHEMModel model) {
         Set<FHEMSensor> okSensors = new HashSet<>();
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 

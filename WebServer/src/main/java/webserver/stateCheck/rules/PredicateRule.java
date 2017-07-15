@@ -13,7 +13,7 @@ public final class PredicateRule extends Rule {
     }
 
     @Override
-    public RuleState realEval(FHEMModel model) {
+    public RuleState specificEval(FHEMModel model) {
         return null;
     }
 }
