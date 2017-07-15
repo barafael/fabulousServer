@@ -13,7 +13,6 @@ import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.serializers.ModelSerializer;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
 import webserver.stateCheck.StateChecker;
-import webserver.stateCheck.rules.Rule;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,7 +22,6 @@ import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * This singleton class provides methods to parse a FHEM model.
