@@ -354,4 +354,52 @@ public class StateCheckerTest {
         assert sensor.getViolatedRules().size() == 0;
         assert sensor.getPassedRules().size() == 1;
     }
+
+    @Test
+    public void testSensorPredicate() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/sensorPredicateRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
+
+        assert sensor.getPassedRules().size() == 1;
+    }
+
+    @Test
+    public void testIncorrectSensorPredicate() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectSensorPredicate.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
+
+        assert sensor.getPassedRules().size() == 0;
+        assert sensor.getViolatedRules().size() == 0;
+    }
+
+    /**
+     * This test is useful as an entry point for debugging only, as
+     * it's success depends literally on the position of the stars.
+     */
+    @Ignore("Time dependent success")
+    @Test
+    public void testSun() {
+        PredicateCollection predicateCollection = new PredicateCollection();
+        assert predicateCollection.sunIsUp();
+    }
+
+    /**
+     * This test is useful as an entry point for debugging only, as
+     * it's success depends on the time of day.
+     */
+    @Ignore("Time dependent success")
+    @Test
+    public void testWorkHours() {
+        PredicateCollection predicateCollection = new PredicateCollection();
+        /* Result obviously depends on the current time... */
+        assert predicateCollection.isWorkingHours();
+    }
 }
