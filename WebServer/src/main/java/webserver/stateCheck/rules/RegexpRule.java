@@ -36,7 +36,7 @@ public class RegexpRule extends Rule {
 
         String field = tokens[0];
         String operator = tokens[1];
-        String expr = tokens[2];
+        String literal = tokens[2];
 
         for (String sensorName : sensorNames) {
             Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorName);
@@ -62,28 +62,28 @@ public class RegexpRule extends Rule {
 
             switch (operator) {
                 case "startsWith":
-                    ruleOK = value.startsWith(expr);
+                    ruleOK = value.startsWith(literal);
                     break;
                 case "endsWith":
-                    ruleOK = value.endsWith(expr);
+                    ruleOK = value.endsWith(literal);
                     break;
                 case "contains":
-                    ruleOK = value.contains(expr);
+                    ruleOK = value.contains(literal);
                     break;
                 case "equals":
-                    ruleOK = value.equals(expr);
+                    ruleOK = value.equals(literal);
                     break;
                 case "matches":
-                    ruleOK = value.matches(expr);
+                    ruleOK = value.matches(literal);
                     break;
                 case "notcontains":
-                    ruleOK = !value.contains(expr);
+                    ruleOK = !value.contains(literal);
                     break;
                 case "notequals":
-                    ruleOK = !value.equals(expr);
+                    ruleOK = !value.equals(literal);
                     break;
                 case "notmatches":
-                    ruleOK = !value.matches(expr);
+                    ruleOK = !value.matches(literal);
                     break;
                 default:
                     System.err.println("This operator " + operator + " is unimplemented for REGEXP rule!");

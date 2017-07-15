@@ -26,7 +26,7 @@ public final class NumericRule extends Rule {
 
         String[] tokens = expression.split(" ");
         if (tokens.length != 3) {
-            System.err.println("Expression for RegexRule must have three elements separated by a space.");
+            System.err.println("Expression for numeric rule must have three elements separated by a space.");
             /* Return false to draw attention to formulation error (?) */
             violatedSensors.addAll(model.getSensorsByCollection(sensorNames));
             isEvaluated = true;
@@ -36,7 +36,7 @@ public final class NumericRule extends Rule {
 
         String field = tokens[0];
         String operator = tokens[1];
-        double expr = Double.parseDouble(tokens[2]);
+        double numberLiteral = Double.parseDouble(tokens[2]);
 
         for (String sensorName : sensorNames) {
             Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorName);
@@ -67,22 +67,22 @@ public final class NumericRule extends Rule {
 
             switch (operator) {
                 case "<":
-                    ruleOK = val < expr;
+                    ruleOK = val < numberLiteral;
                     break;
                 case "<=":
-                    ruleOK = val <= expr;
+                    ruleOK = val <= numberLiteral;
                     break;
                 case "==":
-                    ruleOK = val == expr;
+                    ruleOK = val == numberLiteral;
                     break;
                 case ">=":
-                    ruleOK = val >= expr;
+                    ruleOK = val >= numberLiteral;
                     break;
                 case ">":
-                    ruleOK = val > expr;
+                    ruleOK = val > numberLiteral;
                     break;
                 case "!=":
-                    ruleOK = val != expr;
+                    ruleOK = val != numberLiteral;
                     break;
                 default:
                     System.err.println("This operator " + operator + " is unimplemented for NUMERIC rule!");

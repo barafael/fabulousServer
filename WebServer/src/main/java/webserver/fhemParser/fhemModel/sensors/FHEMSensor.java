@@ -27,7 +27,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * Name of the sensor as it should be shown in the frontend.
      */
-    @SerializedName ("alias")
+    @SerializedName("alias")
     private final String nameInApp;
     /**
      * Coordinates of sensor in percent.
@@ -39,7 +39,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * In FHEM, a userattr is always global. And any device will have it.
      * This means that the sensor has a permission field which could be used in the future but is unused now.
      */
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final transient List<String> permissions;
     /**
      * All filelogs which belong to this sensor.
@@ -171,7 +171,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return false;
     }
 
-     /**
+    /**
      * Returns whether any of the rules are permitted to be accessed with the given permissions.
      *
      * @param permissions list of permissions against which to check
@@ -183,7 +183,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
                 return true;
             }
         }
-         for (RuleInfo info : violatedRules) {
+        for (RuleInfo info : violatedRules) {
             if (info.isPermitted(permissions)) {
                 return true;
             }
@@ -200,6 +200,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return false;
     }
 
+    @SuppressWarnings("unused")
     public Coordinates getCoords() {
         return coords;
     }
