@@ -11,7 +11,7 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

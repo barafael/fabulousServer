@@ -6,7 +6,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import webserver.stateCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.List;

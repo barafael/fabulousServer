@@ -1,4 +1,4 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 

@@ -1,9 +1,9 @@
-package webserver.stateCheck.parsing;
+package webserver.ruleCheck.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import webserver.stateCheck.rules.*;
+import webserver.ruleCheck.rules.*;
 
 import java.util.Arrays;
 import java.util.HashMap;

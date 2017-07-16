@@ -1,7 +1,7 @@
-package webserver.stateCheck.parsing;
+package webserver.ruleCheck.parsing;
 
 import com.google.gson.annotations.SerializedName;
-import webserver.stateCheck.WARNINGLEVEL;
+import webserver.ruleCheck.WARNINGLEVEL;
 
 import java.util.HashMap;
 import java.util.HashSet;

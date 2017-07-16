@@ -1,9 +1,8 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
-import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.PredicateCollection;
-import webserver.stateCheck.parsing.RuleParam;
+import webserver.ruleCheck.PredicateCollection;
+import webserver.ruleCheck.parsing.RuleParam;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,7 +10,7 @@ import java.util.*;
 
 /**
  * This rule allows to call a public predicate method in
- * {@link webserver.stateCheck.PredicateCollection PredicateCollection},
+ * {@link webserver.ruleCheck.PredicateCollection PredicateCollection},
  * which will be evaluated and its result used as evaluation for the concrete rule.
  *
  * @author Rafael on 07.07.17.

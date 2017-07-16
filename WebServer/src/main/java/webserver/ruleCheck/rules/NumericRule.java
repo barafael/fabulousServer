@@ -1,21 +1,21 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.parsing.RuleParam;
+import webserver.ruleCheck.parsing.RuleParam;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * A specific rule implementation for a rule to match on fields of sensors via regex or literal terms.
- *
+ * This rule allows to compare a sensors numeric field to a given value.
  * @author Rafael on 07.07.17.
  */
-public class RegexpRule extends Rule {
-
-    public RegexpRule(RuleParam ruleParam) {
+public final class NumericRule extends Rule {
+    public NumericRule(RuleParam ruleParam) {
         super(ruleParam);
     }
 
@@ -26,7 +26,7 @@ public class RegexpRule extends Rule {
 
         String[] tokens = expression.split(" ");
         if (tokens.length != 3) {
-            System.err.println("Expression for RegexRule must have three elements separated by a space.");
+            System.err.println("Expression for numeric rule must have three elements separated by a space.");
             /* Return false to draw attention to formulation error (?) */
             violatedSensors.addAll(model.getSensorsByCollection(sensorNames));
             isEvaluated = true;
@@ -36,7 +36,7 @@ public class RegexpRule extends Rule {
 
         String field = tokens[0];
         String operator = tokens[1];
-        String literal = tokens[2];
+        double numberLiteral = Double.parseDouble(tokens[2]);
 
         for (String sensorName : sensorNames) {
             Optional<FHEMSensor> sensor_opt = model.getSensorByName(sensorName);
@@ -59,34 +59,33 @@ public class RegexpRule extends Rule {
             }
 
             String value = concField_opt.get();
+            Matcher matcher = Pattern.compile("(\\d+(.\\d+)?)").matcher(value);
+            if (!matcher.find()) {
+                System.err.println("No number found in sensor status '" + field + "'");
+            }
+            double val = Double.valueOf(matcher.group());
 
             switch (operator) {
-                case "startsWith":
-                    ruleOK = value.startsWith(literal);
+                case "<":
+                    ruleOK = val < numberLiteral;
                     break;
-                case "endsWith":
-                    ruleOK = value.endsWith(literal);
+                case "<=":
+                    ruleOK = val <= numberLiteral;
                     break;
-                case "contains":
-                    ruleOK = value.contains(literal);
+                case "==":
+                    ruleOK = val == numberLiteral;
                     break;
-                case "equals":
-                    ruleOK = value.equals(literal);
+                case ">=":
+                    ruleOK = val >= numberLiteral;
                     break;
-                case "matches":
-                    ruleOK = value.matches(literal);
+                case ">":
+                    ruleOK = val > numberLiteral;
                     break;
-                case "notcontains":
-                    ruleOK = !value.contains(literal);
-                    break;
-                case "notequals":
-                    ruleOK = !value.equals(literal);
-                    break;
-                case "notmatches":
-                    ruleOK = !value.matches(literal);
+                case "!=":
+                    ruleOK = val != numberLiteral;
                     break;
                 default:
-                    System.err.println("This operator " + operator + " is unimplemented for REGEXP rule!");
+                    System.err.println("This operator " + operator + " is unimplemented for NUMERIC rule!");
                     ruleOK = false;
             }
 

@@ -1,4 +1,4 @@
-package webserver.stateCheck;
+package webserver.ruleCheck;
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;

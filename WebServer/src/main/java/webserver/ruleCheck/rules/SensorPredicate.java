@@ -1,8 +1,8 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.parsing.RuleParam;
+import webserver.ruleCheck.parsing.RuleParam;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

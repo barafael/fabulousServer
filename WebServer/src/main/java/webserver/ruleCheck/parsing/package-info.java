@@ -3,4 +3,4 @@
  *
  * @author Rafael on 11.07.17.
  */
-package webserver.stateCheck.parsing;
+package webserver.ruleCheck.parsing;

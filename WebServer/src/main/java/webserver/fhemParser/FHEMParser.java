@@ -12,7 +12,7 @@ import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.serializers.ModelSerializer;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
-import webserver.stateCheck.StateChecker;
+import webserver.ruleCheck.RuleChecker;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -179,7 +179,7 @@ public final class FHEMParser {
         if (PRINT_TIME)
             System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
         model = fhemModel;
-        StateChecker.getInstance().evaluate(model, pathToRules);
+        RuleChecker.getInstance().evaluate(model, pathToRules);
         return Optional.ofNullable(fhemModel);
     }
 

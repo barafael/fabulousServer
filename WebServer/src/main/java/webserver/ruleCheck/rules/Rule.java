@@ -1,8 +1,8 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
-import webserver.stateCheck.WARNINGLEVEL;
-import webserver.stateCheck.parsing.RuleParam;
+import webserver.ruleCheck.WARNINGLEVEL;
+import webserver.ruleCheck.parsing.RuleParam;
 
 import java.time.Instant;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package webserver.stateCheck.parsing;
+package webserver.ruleCheck.parsing;
 
 /**
  * Enum of possible types of a Rule.

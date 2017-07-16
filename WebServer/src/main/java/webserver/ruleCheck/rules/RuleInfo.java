@@ -1,4 +1,4 @@
-package webserver.stateCheck.rules;
+package webserver.ruleCheck.rules;
 
 import java.time.Instant;
 import java.util.List;

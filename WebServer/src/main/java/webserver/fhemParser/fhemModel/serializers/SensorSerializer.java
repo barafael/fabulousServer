@@ -8,7 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.List;

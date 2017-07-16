@@ -1,12 +1,12 @@
-package webserver.stateCheck;
+package webserver.ruleCheck;
 
 import com.google.gson.JsonSyntaxException;
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.parsing.RuleParamCollection;
-import webserver.stateCheck.rules.Rule;
-import webserver.stateCheck.rules.RuleInfo;
-import webserver.stateCheck.rules.RuleState;
+import webserver.ruleCheck.parsing.RuleParamCollection;
+import webserver.ruleCheck.rules.Rule;
+import webserver.ruleCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleState;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,24 +25,24 @@ import java.util.stream.Collectors;
  *
  * @author Rafael
  */
-public final class StateChecker {
-    private static StateChecker instance;
+public final class RuleChecker {
+    private static RuleChecker instance;
     /* (Sensorname -> (Rulename -> timeAtViolation)) */
     private final State fhemState = new State();
 
-    private StateChecker() {
+    private RuleChecker() {
     }
 
     /**
-     * Acquisitor for StateChecker instance.
+     * Acquisitor for RuleChecker instance.
      *
      * @return the instance of this singleton
      */
-    public static synchronized StateChecker getInstance() {
-        if (StateChecker.instance == null) {
-            StateChecker.instance = new StateChecker();
+    public static synchronized RuleChecker getInstance() {
+        if (RuleChecker.instance == null) {
+            RuleChecker.instance = new RuleChecker();
         }
-        return StateChecker.instance;
+        return RuleChecker.instance;
     }
 
     /**

@@ -8,11 +8,11 @@ import org.junit.Test;
 import webserver.fhemParser.FHEMParser;
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.PredicateCollection;
-import webserver.stateCheck.StateChecker;
-import webserver.stateCheck.WARNINGLEVEL;
-import webserver.stateCheck.parsing.RuleParam;
-import webserver.stateCheck.parsing.RuleParamCollection;
+import webserver.ruleCheck.PredicateCollection;
+import webserver.ruleCheck.RuleChecker;
+import webserver.ruleCheck.WARNINGLEVEL;
+import webserver.ruleCheck.parsing.RuleParam;
+import webserver.ruleCheck.parsing.RuleParamCollection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Tests for the StateChecker. Some tests depend on json files in the root directory.
+ * Tests for the RuleChecker. Some tests depend on json files in the root directory.
  * <p>
  * All tests which get a FHEM model depend on a local copy of jsonList2.
  * The directory $FHEMMOCKDIR (defined as a global shell environment variable) should contain
@@ -39,7 +39,7 @@ import java.util.Set;
  *
  * @author Rafael
  */
-public class StateCheckerTest {
+public class RuleCheckerTest {
     /**
      * Conditionally pulls the mocking data to the local machine (if it is not yet present).
      * This can take a moment, depending on load and traffic.
@@ -114,8 +114,8 @@ public class StateCheckerTest {
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
-        StateChecker stateChecker = StateChecker.getInstance();
-        stateChecker.evaluate(model);
+        RuleChecker ruleChecker = RuleChecker.getInstance();
+        ruleChecker.evaluate(model);
     }
 
     /**

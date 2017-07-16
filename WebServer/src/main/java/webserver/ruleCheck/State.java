@@ -1,9 +1,9 @@
-package webserver.stateCheck;
+package webserver.ruleCheck;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.stateCheck.rules.Rule;
-import webserver.stateCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.Rule;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.time.Instant;
 import java.util.HashMap;

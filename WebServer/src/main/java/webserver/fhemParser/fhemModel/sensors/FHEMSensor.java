@@ -3,7 +3,7 @@ package webserver.fhemParser.fhemModel.sensors;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
-import webserver.stateCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,8 +118,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This method adds a ruleInfo to this sensor.
      *
      * Old rule information is overwritten.
-     * This works because the {@link webserver.stateCheck.rules.RuleInfo#equals(Object) equals}
-     * and {@link webserver.stateCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
+     * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
+     * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
      *
      * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
      */
@@ -137,8 +137,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This method adds a ruleInfo to this sensor.
      *
      * Old rule information is overwritten.
-     * This works because the {@link webserver.stateCheck.rules.RuleInfo#equals(Object) equals}
-     * and {@link webserver.stateCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
+     * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
+     * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
      *
      * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
      */
