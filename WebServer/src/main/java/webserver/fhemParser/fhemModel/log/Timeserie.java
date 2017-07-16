@@ -131,7 +131,7 @@ public final class Timeserie {
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    System.out.println("Reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
                 }
@@ -156,9 +156,40 @@ public final class Timeserie {
             case UNKNOWN:
             case DISCRETE:
                 /* avoid realloc */
+                xs = new ArrayList<>(samples.size() + 5);
+                ys = new ArrayList<>(samples.size() + 5);
+                double currentKey = 0;
+                for (String entry : samples) {
+                    String[] items = entry.split(" ");
+
+                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
+                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
+                    if (epoch < start || epoch > end) {
+                        continue;
+                    }
+                    xs.add(epoch);
+
+                    String value = items[3];
+                    if (!legend.containsValue(value)) {
+                        legend.put(currentKey, value);
+                        ys.add(currentKey);
+                        currentKey++;
+                    } else {
+                        /* get() ok because legend.containsvalue(value) */
+                        ys.add(legend.entrySet().stream()
+                                .filter(e -> e.getValue()
+                                        .equals(value)).findFirst().get().getKey());
+                    }
+                }
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
+                break;
+
+            case REAL:
+            case PERCENT:
+                /* avoid realloc */
                 List<Long> local_xs = new ArrayList<>(samples.size() + 5);
                 List<Double> local_ys = new ArrayList<>(samples.size() + 5);
-                double currentKey = 0;
                 for (String entry : samples) {
                     String[] items = entry.split(" ");
 
@@ -169,17 +200,12 @@ public final class Timeserie {
                     }
                     local_xs.add(epoch);
 
-                    String value = items[3];
-                    if (!legend.containsValue(value)) {
-                        legend.put(currentKey, value);
-                        local_ys.add(currentKey);
-                        currentKey++;
-                    } else {
-                        /* get() ok because legend.containsvalue(value) */
-                        local_ys.add(legend.entrySet().stream()
-                                .filter(e -> e.getValue()
-                                        .equals(value)).findFirst().get().getKey());
+                    double value = 0.0;
+                    Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
+                    if (numberMatch.matches()) {
+                        value = Double.parseDouble(items[3]);
                     }
+                    local_ys.add(value);
                 }
                 legend.put(Collections.max(local_ys) + 1, "Upper");
                 legend.put(Collections.min(local_ys) - 1, "Lower");
@@ -204,35 +230,10 @@ public final class Timeserie {
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    System.out.println("Reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
                 }
-                break;
-            case REAL:
-            case PERCENT:
-                /* avoid realloc */
-                xs = new ArrayList<>(samples.size() + 5);
-                ys = new ArrayList<>(samples.size() + 5);
-                for (String entry : samples) {
-                    String[] items = entry.split(" ");
-
-                    LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    if (epoch < start || epoch > end) {
-                        continue;
-                    }
-                    xs.add(epoch);
-
-                    double value = 0.0;
-                    Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
-                    if (numberMatch.matches()) {
-                        value = Double.parseDouble(items[3]);
-                    }
-                    ys.add(value);
-                }
-                legend.put(Collections.max(ys) + 1, "Upper");
-                legend.put(Collections.min(ys) - 1, "Lower");
                 break;
             default:
                 xs = new ArrayList<>();

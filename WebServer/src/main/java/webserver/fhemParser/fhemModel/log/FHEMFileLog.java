@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemModel.log;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import webserver.fhemParser.fhemModel.serializers.DoubleSerializer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -195,13 +196,13 @@ public final class FHEMFileLog {
      * @return a parsed sample representation, if file is present
      */
     public Optional<Timeserie> getTimeserie() {
-        List<String> filelog;
+        List<String> lines;
         String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            filelog = new ArrayList<>();
+            lines = new ArrayList<>();
             while ((line = bufferedReader.readLine()) != null) {
-                filelog.add(line);
+                lines.add(line);
             }
             bufferedReader.close();
         } catch (IOException e) {
@@ -213,10 +214,10 @@ public final class FHEMFileLog {
             case REAL:
             case PERCENT:
             case DISCRETE:
-                return Optional.of(new Timeserie(filelog, logtype));
+                return Optional.of(new Timeserie(lines, logtype));
             case UNKNOWN:
                 System.err.println("Couldn't guess type of log! " + path);
-                return Optional.of(new Timeserie(filelog, logtype));
+                return Optional.of(new Timeserie(lines, logtype));
             default:
                 System.err.println("Unimplemented logtype! " + logtype.name());
                 return Optional.empty();
@@ -247,7 +248,10 @@ public final class FHEMFileLog {
      */
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> timeserie_opt = getTimeserie(startTime, endTime);
-        return timeserie_opt.map(timeserie -> new Gson().toJson(timeserie, Timeserie.class));
+        return timeserie_opt.map(timeserie -> new GsonBuilder()
+                .registerTypeAdapter(Double.class, new DoubleSerializer())
+                .create()
+                .toJson(timeserie, Timeserie.class));
     }
 
     /**
