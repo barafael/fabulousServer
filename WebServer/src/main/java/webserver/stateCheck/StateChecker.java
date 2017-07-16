@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public final class StateChecker {
     private static StateChecker instance;
     /* (Sensorname -> (Rulename -> timeAtViolation)) */
-    /* If a rule is violated, it appears in the hashmap with its start time */
     private final State fhemState = new State();
 
     private StateChecker() {
@@ -95,14 +94,14 @@ public final class StateChecker {
                     map(FHEMSensor::getName).collect(Collectors.toSet());
             for (String sensorName : okSensorNames) {
                 /* Remove ok rules from violated rules of this sensor */
-                Map<String, Long> violatedRules = fhemState.state.get(sensorName);
+                Map<String, Long> violatedRules = fhemState.violatedRules.get(sensorName);
                 if (violatedRules != null) {
                     violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
                 } /* else, sensor did not violate any rules (then get() resulted in null) */
 
                 /* If no rules at all are violated now, remove the sensor from the state */
                 if (violatedRules == null || violatedRules.isEmpty()) {
-                    fhemState.state.remove(sensorName);
+                    fhemState.violatedRules.remove(sensorName);
                 }
             }
 
@@ -110,9 +109,9 @@ public final class StateChecker {
             Set<String> violatedSensorNames = ruleState.getViolatedSensors().stream().
                     map(FHEMSensor::getName).collect(Collectors.toSet());
             for (String sensorName : violatedSensorNames) {
-                if (fhemState.state.containsKey(sensorName)) {
+                if (fhemState.violatedRules.containsKey(sensorName)) {
                     /* Get a map of violated rules and their timestamps */
-                    Map<String, Long> violatedRules = fhemState.state.get(sensorName);
+                    Map<String, Long> violatedRules = fhemState.violatedRules.get(sensorName);
                     if (!violatedRules.containsKey(rule.getName())) {
                         /* Rule was not yet violated */
                         violatedRules.put(rule.getName(), now);
@@ -120,11 +119,11 @@ public final class StateChecker {
                 } else {
                     Map<String, Long> violatedRules = new HashMap<>();
                     violatedRules.put(rule.getName(), now);
-                    fhemState.state.put(sensorName, violatedRules);
+                    fhemState.violatedRules.put(sensorName, violatedRules);
                 }
             }
         }
-        fhemState.setRuleInfos(model, rules);
+        fhemState.setRuleInfos(model, rules, null);
     }
 
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
