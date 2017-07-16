@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemModel.log;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import webserver.fhemParser.fhemModel.serializers.DoubleSerializer;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,7 +25,8 @@ public final class Timeserie {
     /**
      * A formatter used to parse the FHEM date format.
      */
-    private static final transient DateTimeFormatter FHEM_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+    private static final transient DateTimeFormatter FHEM_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
     /**
      * A ZoneId, needed for timezone-independence.
      */
@@ -47,7 +49,8 @@ public final class Timeserie {
 
     /**
      * This legend associates certain y-values with names.
-     * This can be used for 'open', 'closed' samples, or for markings on the y-axis
+     * This can be used for 'open', 'closed' samples, or for markings on the y-axis,
+     * or size limits.
      */
     private Map<Double, String> legend = new HashMap<>();
 
@@ -70,8 +73,8 @@ public final class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    xs.add(epoch);
+                    long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
+                    xs.add(epochSecond);
 
                     String value = items[items.length - 1];
                     if (!legend.containsValue(value)) {
@@ -85,8 +88,10 @@ public final class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
+
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
+
                 break;
             case REAL:
             case PERCENT:
@@ -97,8 +102,8 @@ public final class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    local_xs.add(epoch);
+                    long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
+                    local_xs.add(epochSecond);
 
                     double value = 0.0;
                     Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
@@ -131,7 +136,8 @@ public final class Timeserie {
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("Reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    System.out.println("Reduced from " + local_xs.size() + " to "
+                            + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
                 }
@@ -150,7 +156,7 @@ public final class Timeserie {
      * @param start   unix timestamp to start with
      * @param end     unix timestamp to end with
      */
-    public Timeserie(List<String> samples, Logtype logtype, long start, long end) {
+    Timeserie(List<String> samples, Logtype logtype, long start, long end) {
         this.legend = new HashMap<>();
         switch (logtype) {
             case UNKNOWN:
@@ -163,11 +169,11 @@ public final class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    if (epoch < start || epoch > end) {
+                    long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
+                    if (epochSecond < start || epochSecond >= end) {
                         continue;
                     }
-                    xs.add(epoch);
+                    xs.add(epochSecond);
 
                     String value = items[3];
                     if (!legend.containsValue(value)) {
@@ -181,8 +187,10 @@ public final class Timeserie {
                                         .equals(value)).findFirst().get().getKey());
                     }
                 }
+
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
+
                 break;
 
             case REAL:
@@ -194,11 +202,11 @@ public final class Timeserie {
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
-                    long epoch = dateTime.atZone(ZONE_ID).toEpochSecond();
-                    if (epoch < start || epoch > end) {
+                    long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
+                    if (epochSecond < start || epochSecond >= end) {
                         continue;
                     }
-                    local_xs.add(epoch);
+                    local_xs.add(epochSecond);
 
                     double value = 0.0;
                     Matcher numberMatch = NUMBER_PATTERN.matcher(items[3]);
@@ -207,6 +215,7 @@ public final class Timeserie {
                     }
                     local_ys.add(value);
                 }
+
                 legend.put(Collections.max(local_ys) + 1, "Upper");
                 legend.put(Collections.min(local_ys) - 1, "Lower");
 
@@ -230,7 +239,8 @@ public final class Timeserie {
                             newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
                         }
                     }
-                    System.out.println("Reduced from " + local_xs.size() + " to " + newTimestamps.size() + " elements!");
+                    System.out.println("Reduced from " + local_xs.size() + " to "
+                            + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
                 }
@@ -263,6 +273,7 @@ public final class Timeserie {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this, Timeserie.class);
+        return new GsonBuilder().registerTypeAdapter(Double.class, new DoubleSerializer()).create()
+                .toJson(this, Timeserie.class);
     }
 }

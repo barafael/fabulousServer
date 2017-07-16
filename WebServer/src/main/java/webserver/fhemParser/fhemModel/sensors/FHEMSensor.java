@@ -127,10 +127,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         /* First remove the old info, then put the current one */
         if (violatedRules.contains(ruleInfo)) {
             violatedRules.remove(ruleInfo);
-            violatedRules.add(ruleInfo);
-        } else {
-            violatedRules.add(ruleInfo);
         }
+        violatedRules.add(ruleInfo);
     }
 
     /**
@@ -146,10 +144,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         /* First remove the old info, then put the current one */
         if (passedRules.contains(ruleInfo)) {
             passedRules.remove(ruleInfo);
-            passedRules.add(ruleInfo);
-        } else {
-            passedRules.add(ruleInfo);
         }
+        passedRules.add(ruleInfo);
     }
 
     public boolean isSwitchable() {

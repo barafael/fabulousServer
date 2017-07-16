@@ -76,8 +76,10 @@ public final class RuleChecker {
 
     private void evaluate(FHEMModel model, Set<Rule> rules) {
         for (Rule rule : rules) {
+            /* Rulestate contains information about all passed and violated sensors */
             RuleState ruleState = rule.eval(model);
 
+            /* Add ok ruleinfo to the sensors where this rule was alright */
             for (FHEMSensor sensor : ruleState.getOkSensors()) {
                 sensor.addPassedRule(
                         new RuleInfo(
@@ -90,10 +92,10 @@ public final class RuleChecker {
 
             Long now = Instant.now().getEpochSecond();
             /* Get all names of sensors which are ok */
-            Set<String> okSensorNames = ruleState.getOkSensors().stream().
-                    map(FHEMSensor::getName).collect(Collectors.toSet());
+            Set<String> okSensorNames = ruleState.getOkSensors().stream()
+                    .map(FHEMSensor::getName).collect(Collectors.toSet());
             for (String sensorName : okSensorNames) {
-                /* Remove ok rules from violated rules of this sensor */
+                /* Remove passed rules from violated rules of this sensor */
                 Map<String, Long> violatedRules = fhemState.violatedRules.get(sensorName);
                 if (violatedRules != null) {
                     violatedRules.keySet().removeIf(s -> s.equals(rule.getName()));
