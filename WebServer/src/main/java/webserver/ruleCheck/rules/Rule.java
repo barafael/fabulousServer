@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * This abstract class contains the attributes of a rule in fhem, most notably the eval(model) method.
  *
  * @author Rafael
- *         TODO: implement AND and OR rules?
  *         TODO: implement 'invisible' attribute, which makes a rule invisible for the app but can still be used from other rules?
  */
 public abstract class Rule {
@@ -81,7 +80,7 @@ public abstract class Rule {
             System.err.println("There was a cyclic rule dependency involving " + visited.size() + " rules! Breaking the cycle by assuming this rule is violated.");
             System.err.println("This will invalidate all rules in the cycle.");
             /* Not setting to evaluated because another eval might still pass by */
-            return new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
+            return new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));
         }
 
         /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
@@ -113,7 +112,7 @@ public abstract class Rule {
         if (!trueRulesOK || !falseRulesOK) {
             isEvaluated = true;
             /* Not all preconditions have been met. This rule is violated. */
-            ruleState = new RuleState(false, new HashSet<>(), model.getSensorsByCollection(sensorNames));
+            ruleState = new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));
             return ruleState;
         }
         return specificEval(model);
@@ -166,11 +165,14 @@ public abstract class Rule {
         /* Due to technical reasons discussed in the rule checker documentation,
         this ugly hack works but should not be trusted.
          */
+        /* TODO: Find a better way to do this or don't do it and update the documentation
         boolean equals = name.equals(rule.name);
         if (equals) {
             System.err.println("Duplicate rule detected! " + name);
         }
         return equals;
+        */
+        return name.equals(rule.name);
     }
 
     @Override

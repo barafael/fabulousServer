@@ -31,7 +31,7 @@ public final class GeneralPredicate extends Rule {
                     "Expression for general predicate rule must have at least a function name after the 'Predicate' prefix");
             /* Return false to draw attention to formulation error (?) */
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         }
 
@@ -58,7 +58,7 @@ public final class GeneralPredicate extends Rule {
                     + " from the predicate collection! This is unexpected.");
             e.printStackTrace();
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
 
         } catch (NoSuchMethodException e) {
@@ -66,7 +66,7 @@ public final class GeneralPredicate extends Rule {
                     + methodName + " was not found in the predicate collection.");
             e.printStackTrace();
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         }
 
@@ -76,7 +76,7 @@ public final class GeneralPredicate extends Rule {
             System.err.println("The method " + methodName + " you tried to call in the predicate collection "
                     + "does not return a boolean!");
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         }
 
@@ -88,13 +88,13 @@ public final class GeneralPredicate extends Rule {
                     + methodName + " on the predicate collection.");
             e.printStackTrace();
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         } catch (IllegalAccessException e) {
             System.err.println("There was an illegal access: called " + methodName + " on the predicate collection");
             e.printStackTrace();
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof ClassCastException) {
@@ -106,11 +106,11 @@ public final class GeneralPredicate extends Rule {
             }
             e.printStackTrace();
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
+            ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
         }
         isEvaluated = true;
-        ruleState = new RuleState(ruleOK, new HashSet<>(), new HashSet<>());
+        ruleState = new RuleState(ruleOK, this);
         return ruleState;
     }
 }
