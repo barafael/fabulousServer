@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @author Rafael on 02.06.17.
  */
-@SuppressWarnings ("unused")
+@SuppressWarnings("unused")
 class FHEMDeviceAttributes {
     /* Json attributes */
     /**
@@ -43,7 +43,7 @@ class FHEMDeviceAttributes {
      * Rooms in FHEM really are just String tags.
      */
     /* More than one room is possible! */
-    @SerializedName ("room")
+    @SerializedName("room")
     private String rooms;
     private String icon_in_app;
     /**

@@ -34,11 +34,11 @@ public final class RuleParam {
     private final String okMessage;
     @SerializedName("ErrorMessages")
     private final Map<WARNINGLEVEL, String> errorMessages;
+    @SerializedName("IsVisibleInApp")
+    private final boolean isVisibleInApp;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("Escalation")
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    @SerializedName("IsVisibleInApp")
-    private final boolean isVisibleInApp;
 
     public RuleParam(String name,
                      Set<String> sensorNames,

@@ -40,7 +40,7 @@ public final class Timeserie {
      * A list of timestamps in unix long format.
      * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive.
      */
-    @SuppressWarnings ("MismatchedQueryAndUpdateOfCollection")
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final List<Long> xs;
     /**
      * A list of readings parsed from a file.

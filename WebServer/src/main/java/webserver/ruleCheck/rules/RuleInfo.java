@@ -29,7 +29,7 @@ public final class RuleInfo {
      * A message about the state of the rule.
      * This field is needed for serialization
      */
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings("FieldCanBeLocal")
     private final String message;
 
     /**

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *         This class represents the relevant attributes of the
  *         elements of the 'Results' array in jsonList2.json.
  */
-@SuppressWarnings ("unused")
+@SuppressWarnings("unused")
 public final class FHEMDevice {
     /* Class Attributes */
     /**
@@ -28,25 +28,25 @@ public final class FHEMDevice {
     /**
      * Name as defined in FHEM.
      */
-    @SerializedName ("Name")
+    @SerializedName("Name")
     private String name;
 
     /**
      * Json Map in jsonList2, contains internal FHEM information and state.
      */
-    @SerializedName ("Internals")
+    @SerializedName("Internals")
     private FHEMDeviceInternals internals;
 
     /**
      * Json Map in jsonList2, contains attributes like coordinates and other user attributes.
      */
-    @SerializedName ("Attributes")
+    @SerializedName("Attributes")
     private FHEMDeviceAttributes attributes;
 
     /**
      * Json Map in jsonList2, contains readings which are value-time pairs and may contain useful information.
      */
-    @SerializedName ("Readings")
+    @SerializedName("Readings")
     private FHEMDeviceReadings readings;
 
     /**

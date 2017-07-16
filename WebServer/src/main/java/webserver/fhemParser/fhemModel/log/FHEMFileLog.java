@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static webserver.fhemParser.fhemModel.log.Logtype.*;
+import static webserver.fhemParser.fhemModel.log.Logtype.DISCRETE;
+import static webserver.fhemParser.fhemModel.log.Logtype.PERCENT;
+import static webserver.fhemParser.fhemModel.log.Logtype.REAL;
+import static webserver.fhemParser.fhemModel.log.Logtype.UNKNOWN;
 
 /**
  * This class is a proxy for an actual time serie, which can be parsed from disk on demand with {@link FHEMFileLog#getTimeserie() getTimeserie()}.
@@ -20,12 +23,12 @@ import static webserver.fhemParser.fhemModel.log.Logtype.*;
 public final class FHEMFileLog {
     /* Json attributes, which are needed for deserialization.
        Static analysis reports false positives. */
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings("FieldCanBeLocal")
     private final Logtype type;
     private final String name;
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings("FieldCanBeLocal")
     private final String sensorName;
-    @SuppressWarnings ("FieldCanBeLocal")
+    @SuppressWarnings("FieldCanBeLocal")
     private final String unit;
     private final transient String path;
 

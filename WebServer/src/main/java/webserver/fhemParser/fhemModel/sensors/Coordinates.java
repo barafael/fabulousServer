@@ -13,13 +13,13 @@ public final class Coordinates {
     /**
      * A coordinate in x between 0 (inclusive) and 100 (inclusive).
      */
-    @SerializedName ("x")
+    @SerializedName("x")
     private int coordX;
 
     /**
      * A coordinate in y between 0 (inclusive) and 100 (inclusive).
      */
-    @SerializedName ("y")
+    @SerializedName("y")
     private int coordY;
 
     /**

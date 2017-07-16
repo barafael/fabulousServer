@@ -25,9 +25,9 @@ class State {
     /**
      * Update the warning message and attach a RuleInfo to the sensor.
      *
-     * @param model the model which should be checked. RuleInfos will be added for the sensors.
+     * @param model     the model which should be checked. RuleInfos will be added for the sensors.
      * @param violating the set of violating rules which were evaluated
-     * @param passed the set of passed rules which were evaluated
+     * @param passed    the set of passed rules which were evaluated
      */
     void setRuleInfos(FHEMModel model, Set<Rule> violating, Set<Rule> passed) {
         for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {

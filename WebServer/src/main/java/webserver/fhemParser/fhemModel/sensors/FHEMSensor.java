@@ -53,12 +53,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This map contains key-value pairs about meta information of this sensor.
      */
     private final HashMap<String, String> metaInfo;
-    private String icon;
-
-    /**
-     * True if this sensor can be toggled on or off.
-     */
-    private boolean switchable = false;
     /**
      * This field contains information about the rules this sensor violates.
      */
@@ -67,6 +61,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This field contains information about the rules this sensor passes.
      */
     private final Set<RuleInfo> passedRules = new HashSet<>();
+    private String icon;
+    /**
+     * True if this sensor can be toggled on or off.
+     */
+    private boolean switchable = false;
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isVisibleInApp, HashMap<String, String> metaInfo) {
@@ -116,7 +115,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * This method adds a ruleInfo to this sensor.
-     *
+     * <p>
      * Old rule information is overwritten.
      * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
      * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
@@ -133,7 +132,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * This method adds a ruleInfo to this sensor.
-     *
+     * <p>
      * Old rule information is overwritten.
      * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
      * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
@@ -220,7 +219,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * An example predicate for use with the rule checker. See testSensorPredicate() for usage.
      * (Not linkable from here because it is a unit test).
      * It is not unused, but since it is called at runtime via reflection, it cannot be detected at compile time.
-     *
+     * <p>
      * Predicates must be public, return boolean, and take a List<String> (even if they ignore it).
      *
      * @param arguments the strings defined in the input file

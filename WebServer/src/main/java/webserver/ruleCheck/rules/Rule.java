@@ -30,17 +30,9 @@ public abstract class Rule {
      */
     final String expression;
     /**
-     * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
-     */
-    RuleState ruleState;
-    /**
      * The name of the rule.
      */
     final String name;
-    /**
-     * Whether this rule has already been evaluated.
-     */
-    boolean isEvaluated = false;
     /**
      * The permissions for this rule to be shown.
      */
@@ -48,6 +40,14 @@ public abstract class Rule {
     @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
     private final Map<WARNINGLEVEL, String> errorMessages;
+    /**
+     * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
+     */
+    RuleState ruleState;
+    /**
+     * Whether this rule has already been evaluated.
+     */
+    boolean isEvaluated = false;
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     private Set<Rule> requiredTrueRules;
     private Set<Rule> requiredFalseRules;
@@ -68,6 +68,7 @@ public abstract class Rule {
 
     /**
      * Call evaluation with an initially empty set to track the visited rules.
+     *
      * @param model the model to evaluate on
      * @return a rule state with the violated and passed rules
      */

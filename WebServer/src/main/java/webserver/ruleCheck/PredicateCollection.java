@@ -27,7 +27,7 @@ public class PredicateCollection {
      * An example predicate for use with the rule checker. See testGeneralPredicate() for usage.
      * (Not linkable from here because it is a unit test).
      * It is not unused, but since it is called at runtime via reflection, it cannot be detected at compile time.
-     *
+     * <p>
      * Predicates must be public, return boolean, and take a List<String> (even if they ignore it).
      *
      * @param arguments the strings defined in the input file

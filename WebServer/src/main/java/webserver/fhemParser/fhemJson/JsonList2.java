@@ -42,12 +42,12 @@ public class JsonList2 {
     /**
      * List of all defined FHEM devices matching devicespec (if given; else all of them).
      **/
-    @SerializedName ("Results")
+    @SerializedName("Results")
     private final FHEMDevice[] results = null;
     /**
      * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...).
      */
-    @SerializedName ("Arg")
+    @SerializedName("Arg")
     private String arg;
     /**
      * Number of devices in FHEM matching the <devicespec> (or all of them if empty).
