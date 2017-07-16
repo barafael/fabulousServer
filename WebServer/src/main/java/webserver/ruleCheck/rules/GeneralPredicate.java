@@ -77,18 +77,6 @@ public final class GeneralPredicate extends Rule {
             return ruleState;
         }
 
-        /* Parameter type */
-        Class<?>[] actualTypes = method.getParameterTypes();
-        /* Cannot check for type of List due to type erasure,
-        but can at least check that the type is List<> and that there is exactly one parameter.
-        */
-        if (actualTypes.length != 1 || !actualTypes[0].getName().equals("java.util.List")) {
-            System.err.println("The parameter of " + methodName + " must be exactly one List<String>.");
-            isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), new HashSet<>());
-            return ruleState;
-        }
-
         /* Invoke method with arguments and get back the result */
         try {
             ruleOK = Boolean.parseBoolean(method.invoke(predicateCollection, arguments).toString());

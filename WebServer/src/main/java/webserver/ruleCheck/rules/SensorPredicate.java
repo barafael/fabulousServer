@@ -78,17 +78,6 @@ public final class SensorPredicate extends Rule {
                 continue;
             }
 
-            /* Parameter type */
-            Class<?>[] actualTypes = method.getParameterTypes();
-            /* Cannot check for type of List due to type erasure,
-            but can at least check that the type is List<> and that there is exactly one parameter.
-            */
-            if (actualTypes.length != 1 || !actualTypes[0].getName().equals("java.util.List")) {
-                violatedSensors.add(sensor);
-                System.err.println("The parameter of " + methodName + " must be exactly one List<String>.");
-                continue;
-            }
-
             /* Invoke method with arguments and get back the result */
             try {
                 ruleOK = Boolean.parseBoolean(method.invoke(sensor, arguments).toString());

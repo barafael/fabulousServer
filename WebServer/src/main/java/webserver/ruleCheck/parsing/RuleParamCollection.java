@@ -84,7 +84,8 @@ public class RuleParamCollection {
                     rules.add(new SensorPredicate(ruleParam));
                     break;
                 case UNKNOWN:
-                    System.err.println("Unimplemented Rule Type! " + ruleParam.getExpression());
+                    System.err.println("Unimplemented Rule Type! Expression was: '" + ruleParam.getExpression() + "'. "
+                            + "Maybe you need to add arguments?");
             }
         }
 
