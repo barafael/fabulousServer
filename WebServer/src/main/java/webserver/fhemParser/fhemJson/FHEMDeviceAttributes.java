@@ -45,7 +45,6 @@ class FHEMDeviceAttributes {
     /* More than one room is possible! */
     @SerializedName("room")
     private String rooms;
-    private String icon_in_app;
     /**
      * SubType as defined in FHEM. TODO read this in metainfo
      */
@@ -116,15 +115,5 @@ class FHEMDeviceAttributes {
      */
     Optional<String> getAlias() {
         return Optional.ofNullable(alias);
-    }
-
-    /**
-     * Acessor for the userattr 'icon' in FHEM.
-     *
-     * @return the userattr 'icon' in FHEM
-     */
-    /* TODO: deliver icon svg maybe? */
-    String getIcon() {
-        return icon_in_app;
     }
 }

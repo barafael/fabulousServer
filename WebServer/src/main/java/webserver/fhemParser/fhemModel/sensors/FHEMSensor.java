@@ -61,7 +61,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This field contains information about the rules this sensor passes.
      */
     private final Set<RuleInfo> passedRules = new HashSet<>();
-    private String icon;
     /**
      * True if this sensor can be toggled on or off.
      */
@@ -90,10 +89,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     public String getName() {
         return name;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
     }
 
     public Set<RuleInfo> getViolatedRules() {
