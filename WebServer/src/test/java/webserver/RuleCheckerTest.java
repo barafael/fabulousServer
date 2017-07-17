@@ -112,7 +112,7 @@ public class RuleCheckerTest {
         RuleParam ruleParam = new RuleParam("Fenster1",
                 sensorlist,
                 "permission1",
-                "STATE contains dry",
+                "Readings contains dry",
                 reqTrue,
                 reqFalse,
                 "all ok",

@@ -1,0 +1,24 @@
+{
+    "Rules": [
+        {
+            "Name": "open window",
+            "Expression": "State contains open",
+            "Permission": "S_Fenster",
+            "SensorNames": [
+                "HM_56A1E8"
+            ],
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "Escalation": {
+                "100": "LOW"
+            },
+            "ErrorMessages": {
+                "LOW": "something is wrong",
+                "NORMAL": "all good",
+                "HIGH": "hey, fix it!"
+            },
+            "IsVisibleInApp": false
+        }
+    ]
+}
