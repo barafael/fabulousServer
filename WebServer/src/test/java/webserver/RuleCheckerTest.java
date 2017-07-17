@@ -80,6 +80,24 @@ public class RuleCheckerTest {
         stdin.close();
     }
 
+    /**
+     * Helper function which tests if a json string can be deserialized without throwing an exception
+     * (which would mean incorrect json format).
+     *
+     * @param json A string which should be tested
+     *
+     * @return whether the input was valid json
+     */
+    private static boolean isValidJSON(String json) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(json, Object.class);
+            return true;
+        } catch (com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
+    }
+
     @Test
     public void testConstructRuleParam() {
         Set<String> sensorlist = new HashSet<>(Arrays.asList("sensor1", "sensor2", "sensor3"));
@@ -106,24 +124,6 @@ public class RuleCheckerTest {
         RuleParamCollection col = new RuleParamCollection(ruleParam);
         String json = gson.toJson(col);
         assert isValidJSON(json);
-    }
-
-    /**
-     * Helper function which tests if a json string can be deserialized without throwing an exception
-     * (which would mean incorrect json format).
-     *
-     * @param json A string which should be tested
-     *
-     * @return whether the input was valid json
-     */
-    private static boolean isValidJSON(String json) {
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(json, Object.class);
-            return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
-            return false;
-        }
     }
 
     /**

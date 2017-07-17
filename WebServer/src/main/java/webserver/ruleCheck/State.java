@@ -117,7 +117,7 @@ class State {
             FHEMSensor sensor = model.getSensorByName(sensorName)
                     .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
             // TODO implement event log
-            System.out.println(sensor);
+            //System.out.println(sensor);
         }
     }
 

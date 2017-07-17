@@ -354,7 +354,6 @@ public final class FHEMParser {
         return false;
     }
 
-
     /**
      * Get the mutex which is set.
      *
