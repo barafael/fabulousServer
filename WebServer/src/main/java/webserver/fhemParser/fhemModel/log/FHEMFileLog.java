@@ -91,9 +91,13 @@ public final class FHEMFileLog {
             unit = unit.substring(0, unit.length() - 1);
         }
 
+        unit = unit.substring(0, 1).toUpperCase() + unit.substring(1);
+        if (unit.equals("Co2")) {
+            unit = "CO2";
+        }
         /* Duck-type extra handling for switches */
         if (unit.equals("on") || unit.equals("off")) {
-            unit = "switch";
+            unit = "Switch";
         }
 
         return Optional.of(unit);
