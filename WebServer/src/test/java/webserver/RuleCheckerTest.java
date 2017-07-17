@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,11 +33,7 @@ import java.util.Set;
  * Tests for the RuleChecker. Some tests depend on json files in the root directory.
  * <p>
  * All tests which get a FHEM model depend on a local copy of jsonList2.
- * The directory $FHEMMOCKDIR (defined as a global shell environment variable) should contain
- * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
- * This can be achieved by executing the {@code pull.sh} file from the root directory.
- *
- * Alternatively, the pullData function (annotated with @BeforeClass) pulls the data if it is not present.
+ * The pullData function (annotated with @BeforeClass) pulls the mocking data if it is not present.
  *
  * @author Rafael
  */
@@ -169,7 +166,7 @@ public class RuleCheckerTest {
 
     /**
      * Evaluates a rule which should always be true for this sensor.
-     * The regex rule matches dry|rain on the state of the sensor.
+     * The regexp rule matches dry|rain on the state of the sensor.
      */
     @Test
     public void testEvaluateAlwaysTrueRuleWithOkInfo() {
@@ -183,7 +180,8 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Evaluates a rule which should be incorrect JSON which gson incorrectly ignores currently.
+     * Evaluates a rule which should be incorrect JSON.
+     * Gson incorrectly parses the input anyway, but it is filtered out later to avoid NullPointerExceptions.
      */
     @Test
     public void testEvaluateInvalidInput() {
@@ -213,7 +211,7 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Evaluates a rule which can never be true. The Regexp will not be fulfilled by this rule.
+     * Handle a cyclic dependency in the input.
      */
     @Test
     public void testCyclicRules() {
@@ -229,7 +227,7 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Evaluates a rule which can never be true. The Regexp will not be fulfilled by this rule.
+     * Evaluates a rule which will never be true.
      */
     @Test
     public void testNeverTrueRule() {
@@ -263,7 +261,7 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Test filter of duplicate rules, without direct construction.
+     * Test ignoring of duplicate rules, without direct construction.
      * The input file contains a duplicate rule, which should be filtered out.
      */
     @Test
@@ -280,6 +278,9 @@ public class RuleCheckerTest {
         assert sensor.getViolatedRules().stream().filter(s -> s.getName().equals("Duplicate")).count() == 1;
     }
 
+    /**
+     * Evaluate a rule which depends on multiple other rules.
+     */
     @Test
     public void testRuleDependencies() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/ruleDependencies.json");
@@ -340,7 +341,7 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Permissions for the sensor and a filelog, but not for a rule.
+     * Sufficient permissions for the sensor and a filelog, but not for a rule.
      */
     @Test
     public void testRulePermissionsDisallowedWithSensor() {
@@ -356,24 +357,29 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Evaluates a rule which should always be true for this sensor.
-     * The regex rule matches dry|rain on the state of the sensor.
+     * Evaluates a numeric rule which is false at night.
+     * This test might not pass during dawn or dusk.
      */
     @Test
-    public void testEvaluateAlwaysTrueNumericRuleWithOkInfo() {
+    public void testEvaluateNumericRuleWithOkInfo() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/darknessRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
         assert model.getSensorByName("HM_520B89").isPresent();
         FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
-        assert sensor.getViolatedRules().size() == 1;
-        assert sensor.getPassedRules().size() == 0;
+        PredicateCollection pc = new PredicateCollection();
+        if (pc.sunIsUp(Collections.emptyList())) {
+            assert sensor.getViolatedRules().size() == 1;
+            assert sensor.getPassedRules().size() == 0;
+        } else {
+            assert sensor.getViolatedRules().size() == 0;
+            assert sensor.getPassedRules().size() == 1;
+        }
     }
 
     /**
-     * Evaluates a rule which should always be true for this sensor.
-     * The regex rule matches dry|rain on the state of the sensor.
+     * Evaluates a numeric rule which is true if the air is ok.
      */
     @Test
     public void testEvaluateCO2Limit() {
@@ -387,6 +393,9 @@ public class RuleCheckerTest {
         assert sensor.getPassedRules().size() == 1;
     }
 
+    /**
+     * Evaluate a sensor predicate rule which will always be true.
+     */
     @Test
     public void testSensorPredicate() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/sensorPredicateRule.json");
@@ -399,6 +408,9 @@ public class RuleCheckerTest {
         assert sensor.getPassedRules().size() == 1;
     }
 
+    /**
+     * Evaluate a general predicate rule which will always be true.
+     */
     @Test
     public void testGeneralPredicate() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/generalPredicateRule.json");
@@ -410,8 +422,12 @@ public class RuleCheckerTest {
 
         /* For general predicate, all sensors are ignored! */
         assert sensor.getPassedRules().size() == 0;
+        assert sensor.getViolatedRules().size() == 0;
     }
 
+    /**
+     * Evaluate a sensor rule with incorrect expression.
+     */
     @Test
     public void testIncorrectSensorPredicate() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectSensorPredicate.json");

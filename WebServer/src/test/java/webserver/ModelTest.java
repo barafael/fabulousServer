@@ -28,11 +28,8 @@ import java.util.Random;
 
 /**
  * This class contains tests for the FHEM Model.
- * All tests which get a FHEM model depend on local copies of FHEM state files.
- * The directory $FHEMMOCKDIR (defined as a global shell environment variable) should contain
- * filelogs from fhem as well as a current copy of the output of FHEM's jsonList2 command.
- * This can be achieved by executing the {@code pull.sh} file from the root directory.
  *
+ * All tests which get a FHEM model depend on local copies of FHEM state files.
  * Alternatively, the pullData function (annotated with @BeforeClass) pulls the data if it is not present.
  *
  * @author Rafael
@@ -79,6 +76,9 @@ public class ModelTest {
         }
     }
 
+    /**
+     * Test the model iterator.
+     */
     @Test
     public void modelRoomIterator() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
@@ -93,6 +93,10 @@ public class ModelTest {
         System.out.println(count + " rooms.");
     }
 
+    /**
+     * Test the sensor iterator.
+     * Every sensor in the entire model is iterated.
+     */
     @Test
     public void modelSensorIterator() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
@@ -108,6 +112,10 @@ public class ModelTest {
         System.out.println(count + " sensors.");
     }
 
+    /**
+     * Test the filelog iterator.
+     * Every filelog in the entire model is iterated.
+     */
     @Test
     public void modelLogIterator() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
@@ -129,14 +137,18 @@ public class ModelTest {
     @Test
     public void modelParseTimeWithoutPermissions() {
         Instant now = Instant.now();
-        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
-        if (model.isPresent()) {
-            System.out.println("Without permissions: " + Duration.between(now, Instant.now()).toMillis());
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        if (model_opt.isPresent()) {
+            System.out.println("Without permissions or serialization: "
+                    + Duration.between(now, Instant.now()).toMillis());
         } else {
             assert false;
         }
     }
 
+    /**
+     * This test checks the time it takes to parse the raw FHEM model and handle serialization and permissions.
+     */
     @Test
     public void modelParseTimeOnlyPermissions() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
@@ -151,6 +163,9 @@ public class ModelTest {
         }
     }
 
+    /**
+     * This test checks the time it takes to parse the raw FHEM model and handle permissions.
+     */
     @Test
     public void parseWithoutPermissionsJSON() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -176,6 +191,9 @@ public class ModelTest {
         }
     }
 
+    /**
+     * Assert that the toString() of FHEMModel returns valid json.
+     */
     @Test
     public void modelWithoutPermissionsToString() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -183,6 +201,9 @@ public class ModelTest {
         assert isValidJSON(model.get().toString());
     }
 
+    /**
+     * Test the model as JSON with permission handling.
+     */
     @Test
     public void toJSONWithPermissions() {
         List<String> permissions = Arrays.asList("Permission1", "S_Fenster");
@@ -191,6 +212,9 @@ public class ModelTest {
         assert isValidJSON(json.get());
     }
 
+    /**
+     * Test the model as JSON with emtpy string as permission.
+     */
     @Test
     public void toJSONWithEmptyStringPermissions() {
         List<String> permissions = Collections.singletonList("");
@@ -199,6 +223,9 @@ public class ModelTest {
         assert isValidJSON(json.get());
     }
 
+    /**
+     * Test that a switchable sensor is correctly detected.
+     */
     @Test
     public void testSwitchableSensor() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -208,6 +235,9 @@ public class ModelTest {
         assert model.get().getSensorByName("HM_52CB8E_Sw").get().isSwitchable();
     }
 
+    /**
+     * Serialize and deserialize again, comparing the results.
+     */
     @Test
     public void serDeRoundtrip() {
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
@@ -219,6 +249,9 @@ public class ModelTest {
         assert json1.length() == json2.length();
     }
 
+    /**
+     * Test model serialization with permissions which are not fulfilled.
+     */
     @Test
     public void toJSONWithPermissionsNoMatch() {
         FHEMParser parser = FHEMParser.getInstance();
@@ -278,6 +311,9 @@ public class ModelTest {
         parser.setRoomplan("room_testing", "that's no moon.\n");
     }
 
+    /**
+     * Test getting a discrete timeserie.
+     */
     @Test
     public void testGetTimeserieDiscrete() {
         String sensorName = "HM_4F5DAA_Rain";
@@ -294,6 +330,9 @@ public class ModelTest {
         assert timeserie.equals(serie_opt.get());
     }
 
+    /**
+     * Test getting a real timeserie via the same interface that the server uses.
+     */
     @Test
     public void testGetTimeserieRealFromParser() {
         String sensorName = "HM_52CB59_Sw";
@@ -306,13 +345,14 @@ public class ModelTest {
         assert logname.isPresent();
         Optional<String> json_opt = FHEMParser.getInstance().getTimeserie(logname.get(), permissions);
         assert json_opt.isPresent();
-        System.out.println(json_opt.get());
     }
 
+    /**
+     * Test getting a real timeserie using the internal interface.
+     */
     @Test
     public void testGetTimeserieRealInternal() {
         String sensorName = "HM_52CB59_Sw";
-        List<String> permissions = Collections.singletonList("A_Steckdose_Lasercutter");
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();
         Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
@@ -326,6 +366,9 @@ public class ModelTest {
         assert timeserie.equals(serie_opt.get());
     }
 
+    /**
+     * Test getting the timeserie of a window.
+     */
     @Test
     public void testGetTimeserieWindow() {
         String sensorName = "HM_56A27C";
@@ -338,6 +381,5 @@ public class ModelTest {
         assert logname.isPresent();
         Optional<String> json_opt = FHEMParser.getInstance().getTimeserie(logname.get(), permissions);
         assert json_opt.isPresent();
-        System.out.println(json_opt.get());
     }
 }
