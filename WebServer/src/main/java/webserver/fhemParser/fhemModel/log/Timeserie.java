@@ -79,7 +79,7 @@ public final class Timeserie {
 
 
                     String value;
-                    if (items.length != 4) {
+                    if (items.length <= 4) {
                         value = items[items.length - 1];
                     } else {
                         value = items[3];
@@ -184,7 +184,7 @@ public final class Timeserie {
                     xs.add(epochSecond);
 
                     String value;
-                    if (items.length != 4) {
+                    if (items.length <= 4) {
                         value = items[items.length - 1];
                     } else {
                         value = items[3];
