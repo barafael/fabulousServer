@@ -35,7 +35,7 @@ public final class Timeserie {
      * A pattern used to check if a string is parseable to a number (decimal or integer).
      */
     private static final transient Pattern NUMBER_PATTERN = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
-    private static final int MAX_SIZE = 2000;
+    private static final int MAX_SIZE = 600;
     /**
      * A list of timestamps in unix long format.
      * Because this array is actually read by Gson, the mismatchedQueryAndUpdate warning is a false positive.
