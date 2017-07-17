@@ -3,7 +3,6 @@ package webserver.fhemParser.fhemModel.sensors;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
-import webserver.ruleCheck.rules.Rule;
 import webserver.ruleCheck.rules.RuleInfo;
 
 import java.util.Collection;
@@ -11,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -125,7 +123,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     public void addRuleInfos(Collection<RuleInfo> ruleInfos) {
         passedRules.clear();
         violatedRules.clear();
-        for(RuleInfo ruleInfo : ruleInfos) {
+        for (RuleInfo ruleInfo : ruleInfos) {
             if (ruleInfo.isOk()) {
                 passedRules.add(ruleInfo);
             } else {

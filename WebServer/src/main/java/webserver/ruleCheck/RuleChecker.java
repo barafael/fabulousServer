@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
  */
 public final class RuleChecker {
     private static RuleChecker instance;
-    /* (Sensorname -> (Rulename -> timeAtViolation)) */
     private final State fhemState = new State();
 
     private RuleChecker() {
@@ -136,5 +135,9 @@ public final class RuleChecker {
         /* TODO add translations for rules? */
         String content = new String(Files.readAllBytes(Paths.get(path)));
         return RuleParamCollection.fromJson(content);
+    }
+
+    public void clear() {
+        fhemState.clear();
     }
 }

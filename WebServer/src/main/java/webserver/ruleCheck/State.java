@@ -120,4 +120,8 @@ class State {
             System.out.println(sensor);
         }
     }
+
+    public void clear() {
+        stateMap.clear();
+    }
 }
