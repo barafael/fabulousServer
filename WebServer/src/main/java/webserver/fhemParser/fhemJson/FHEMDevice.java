@@ -69,6 +69,8 @@ public final class FHEMDevice {
 
         FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
 
+        sensor.setIcon(getAttributes().getIcon());
+
         /* Add metadata which might or might not be supplied for every sensor */
         if (alias.contains("Licht")) {
             String reading = internals.getState().orElse("No brightness reading supplied");
