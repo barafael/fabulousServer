@@ -39,6 +39,7 @@ public abstract class Rule {
     @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
     private final Map<WARNINGLEVEL, String> errorMessages;
+    private final Set<String> relatedLogNames;
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
@@ -50,7 +51,13 @@ public abstract class Rule {
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     private Set<Rule> requiredTrueRules;
     private Set<Rule> requiredFalseRules;
-    private boolean isVisibleInApp = true;
+
+    /**
+     * Whether the attribute should be applied to model.
+     * Reverse logic necessary because gson defaults to false
+     * for booleans if a field is not set at all in the input.
+     */
+    private final boolean invisible;
 
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
@@ -60,7 +67,8 @@ public abstract class Rule {
         okMessage = ruleParam.getOkMessage();
         errorMessages = ruleParam.getErrorMessages();
         escalation = ruleParam.getEscalation();
-        isVisibleInApp = ruleParam.getVisible();
+        invisible = ruleParam.getVisible();
+        relatedLogNames = ruleParam.getRelatedLogs();
     }
 
     protected abstract RuleState specificEval(FHEMModel model);
@@ -148,6 +156,10 @@ public abstract class Rule {
 
     public String getOkMessage() {
         return okMessage;
+    }
+
+    public boolean isVisible() {
+        return !invisible;
     }
 
     @Override

@@ -115,7 +115,8 @@ public class RuleCheckerTest {
                 "all ok",
                 warnings,
                 true,
-                escalation
+                escalation,
+                Collections.emptySet()
                 );
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

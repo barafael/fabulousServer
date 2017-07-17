@@ -35,12 +35,12 @@ public final class RuleParam {
     @SerializedName("ErrorMessages")
     private final Map<WARNINGLEVEL, String> errorMessages;
     @SerializedName("IsVisibleInApp")
-    private final boolean isVisibleInApp;
+    private boolean isVisibleInApp = true;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("Escalation")
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    @SerializedName("RelevantFileLogs")
-    private final Set<String> relevantFileLogNames = new HashSet<>();
+    @SerializedName("RelatedFileLogs")
+    private final Set<String> relatedFileLogNames = new HashSet<>();
 
     public RuleParam(String name,
                      Set<String> sensorNames,
@@ -50,7 +50,8 @@ public final class RuleParam {
                      Set<String> requiredFalseRules,
                      String okMessage, Map<WARNINGLEVEL, String> errorMessages,
                      boolean isVisibleInApp,
-                     Map<Long, WARNINGLEVEL> escalation) {
+                     Map<Long, WARNINGLEVEL> escalation,
+                     Set<String> relatedFileLogNames) {
         this.name = name;
         this.sensorNames = sensorNames;
         this.permission = permission;
@@ -61,6 +62,7 @@ public final class RuleParam {
         this.errorMessages = errorMessages;
         this.isVisibleInApp = isVisibleInApp;
         this.escalation = escalation;
+        this.relatedFileLogNames.addAll(relatedFileLogNames);
     }
 
     public RuleType getType() {
@@ -135,6 +137,10 @@ public final class RuleParam {
 
     public boolean getVisible() {
         return isVisibleInApp;
+    }
+
+    public Set<String> getRelatedLogs() {
+        return relatedFileLogNames;
     }
 
     @Override

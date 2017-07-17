@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class keeps a state which can be applied to a FHEM model.
@@ -107,7 +108,9 @@ class State {
         for (String sensorName : stateMap.keySet()) {
             FHEMSensor sensor = model.getSensorByName(sensorName)
                     .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
-            sensor.addRuleInfos(stateMap.get(sensorName).values());
+            Set<RuleInfo> shownInApp = stateMap.get(sensorName).keySet().stream().filter(Rule::isVisible)
+                    .map(rule -> stateMap.get(sensorName).get(rule)).collect(Collectors.toSet());
+            sensor.addRuleInfos(shownInApp);
         }
     }
 

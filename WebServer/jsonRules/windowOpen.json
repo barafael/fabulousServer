@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "open window",
-            "Expression": "State contains open",
+            "Expression": "Reading contains open",
             "Permission": "S_Fenster",
             "SensorNames": [
                 "HM_56A1E8"
