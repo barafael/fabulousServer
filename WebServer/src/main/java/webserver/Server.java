@@ -420,7 +420,7 @@ public class Server extends AbstractVerticle {
                         System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
-                        future.complete(answerData_opt.get());
+                        future.handle(Future.succeededFuture(answerData_opt.get()));
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
@@ -516,7 +516,7 @@ public class Server extends AbstractVerticle {
                         System.err.println("getRoomplan: AnswerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
-                        future.complete(answerData_opt.get());
+                        future.handle(Future.succeededFuture(answerData_opt.get()));
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
@@ -734,7 +734,7 @@ public class Server extends AbstractVerticle {
                         System.err.println("getTimeseries: AnswerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
-                        future.complete(answerData_opt.get());
+                        future.handle(Future.succeededFuture(answerData_opt.get()));
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
