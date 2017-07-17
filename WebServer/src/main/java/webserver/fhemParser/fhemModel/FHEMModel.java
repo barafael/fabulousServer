@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,6 +27,11 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * A set of rooms.
      */
     private final HashSet<FHEMRoom> rooms;
+
+    /**
+     * A report about all the passed and violated rules.
+     */
+    private final Set<RuleInfo> report = new HashSet<>();
 
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
@@ -57,6 +63,18 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      */
     public Optional<FHEMRoom> getRoomByName(String roomname) {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
+    }
+
+    /**
+     * Update the set of rule information.
+     *
+     * @param report the new rule information
+     */
+    public void addReport(Set<RuleInfo> report) {
+        if (report != null) {
+            this.report.clear();
+            this.report.addAll(report);
+        }
     }
 
     @Override
