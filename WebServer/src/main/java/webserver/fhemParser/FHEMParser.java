@@ -142,7 +142,7 @@ public final class FHEMParser {
             try {
                 jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
             } catch (IOException e) {
-                System.err.println("FHEM might not be running or the logs might not be there.");
+                System.err.println("FHEM might not be running or jsonList2 might not be accessible.");
                 System.err.println(
                         "You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
                                 + "FHEMPORT (fhem telnet port) in your $HOME/.profile");
@@ -160,7 +160,7 @@ public final class FHEMParser {
             try {
                 jsonList2_str = fhc.getJsonList2();
             } catch (FHEMNotFoundException e) {
-                System.err.println("FHEM might not be running or the logs might not be there.");
+                System.err.println("FHEM might not be running or jsonList2 might not be accessible.");
                 System.err.println(
                         "You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
                                 + "FHEMPORT (fhem telnet port) in your $HOME/.profile");
