@@ -77,8 +77,9 @@ public class RuleCheckerTest {
                 reqFalse,
                 "all ok",
                 warnings,
-                escalation,
-                true);
+                true,
+                escalation
+                );
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         RuleParamCollection col = new RuleParamCollection(ruleParam);

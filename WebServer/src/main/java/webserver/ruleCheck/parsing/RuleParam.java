@@ -5,6 +5,7 @@ import webserver.ruleCheck.WARNINGLEVEL;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -39,6 +40,8 @@ public final class RuleParam {
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("Escalation")
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    @SerializedName("RelevantFileLogs")
+    private final Set<String> relevantFileLogNames = new HashSet<>();
 
     public RuleParam(String name,
                      Set<String> sensorNames,
@@ -46,10 +49,9 @@ public final class RuleParam {
                      String expression,
                      Set<String> requiredTrueRules,
                      Set<String> requiredFalseRules,
-                     String okMessage,
-                     Map<WARNINGLEVEL, String> errorMessages,
-                     Map<Long, WARNINGLEVEL> escalation,
-                     boolean isVisibleInApp) {
+                     String okMessage, Map<WARNINGLEVEL, String> errorMessages,
+                     boolean isVisibleInApp,
+                     Map<Long, WARNINGLEVEL> escalation) {
         this.name = name;
         this.sensorNames = sensorNames;
         this.permission = permission;
@@ -58,8 +60,8 @@ public final class RuleParam {
         this.requiredFalseRules = requiredFalseRules;
         this.okMessage = okMessage;
         this.errorMessages = errorMessages;
-        this.escalation = escalation;
         this.isVisibleInApp = isVisibleInApp;
+        this.escalation = escalation;
     }
 
     public RuleType getType() {

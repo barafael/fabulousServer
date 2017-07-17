@@ -77,11 +77,12 @@ public final class Timeserie {
                     long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
                     xs.add(epochSecond);
 
+
                     String value;
-                    if (items.length == 4) {
-                        value = items[3];
-                    } else {
+                    if (items.length != 4) {
                         value = items[items.length - 1];
+                    } else {
+                        value = items[3];
                     }
 
                     if (!legend.containsValue(value)) {
@@ -183,10 +184,10 @@ public final class Timeserie {
                     xs.add(epochSecond);
 
                     String value;
-                    if (items.length == 4) {
-                        value = items[3];
-                    } else {
+                    if (items.length != 4) {
                         value = items[items.length - 1];
+                    } else {
+                        value = items[3];
                     }
 
                     if (!legend.containsValue(value)) {

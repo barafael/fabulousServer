@@ -325,4 +325,19 @@ public class ModelTest {
         Timeserie timeserie = new Gson().fromJson(json, Timeserie.class);
         assert timeserie.equals(serie_opt.get());
     }
+
+    @Test
+    public void testGetTimeserieWindow() {
+        String sensorName = "HM_56A27C";
+        List<String> permissions = Collections.singletonList("S_Fenster");
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
+        Optional<String> logname = sensor.get().getLogs().stream().findFirst().map(FHEMFileLog::getName);
+        assert logname.isPresent();
+        Optional<String> json_opt = FHEMParser.getInstance().getTimeserie(logname.get(), permissions);
+        assert json_opt.isPresent();
+        System.out.println(json_opt.get());
+    }
 }
