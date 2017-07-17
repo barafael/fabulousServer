@@ -2,6 +2,7 @@ package webserver.ruleCheck.rules;
 
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,8 @@ public final class RuleInfo {
      */
     private String message;
 
+    private final Set<String> relatedLogNames = new HashSet<>();
+
     private final Map<Long, Boolean> changeStamps = new TreeMap<>();
 
     /**
@@ -49,11 +52,16 @@ public final class RuleInfo {
      * @param permission necessary permissions
      * @param message    the message about the state of the rule
      */
-    public RuleInfo(String name, boolean isOk, String permission, String message) {
+    public RuleInfo(String name,
+                    boolean isOk,
+                    String permission,
+                    String message,
+                    Set<String> relatedLogNames) {
         this.name = name;
         this.isOk = isOk;
         this.permission = permission;
         this.message = message;
+        this.relatedLogNames.addAll(relatedLogNames);
 
         changeStamps.put(Instant.now().getEpochSecond(), isOk);
     }

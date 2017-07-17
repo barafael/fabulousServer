@@ -140,7 +140,7 @@ public final class RuleParam {
     }
 
     public Set<String> getRelatedLogs() {
-        return relatedFileLogNames;
+        return relatedFileLogNames == null ? new HashSet<>() : relatedFileLogNames;
     }
 
     @Override

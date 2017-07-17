@@ -38,7 +38,11 @@ class State {
                 if (!stateMap.containsKey(sensor.getName())) {
                     Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
                     newSensorMap.put(rule, new RuleInfo(
-                            rule.getName(), true, rule.getPermissionField(), rule.getOkMessage()
+                            rule.getName(),
+                            true,
+                            rule.getPermissionField(),
+                            rule.getOkMessage(),
+                            rule.getRelatedLogs()
                     ));
                     stateMap.put(sensor.getName(), newSensorMap);
                     continue;
@@ -48,7 +52,11 @@ class State {
 
                 if (!sensorRules.containsKey(rule)) {
                     RuleInfo ruleInfo = new RuleInfo(
-                            rule.getName(), true, rule.getPermissionField(), rule.getOkMessage());
+                            rule.getName(),
+                            true,
+                            rule.getPermissionField(),
+                            rule.getOkMessage(),
+                            rule.getRelatedLogs());
                     sensorRules.put(rule, ruleInfo);
                     continue;
                 }
@@ -67,7 +75,8 @@ class State {
                             rule.getName(),
                             false,
                             rule.getPermissionField(),
-                            rule.getWarningMessage(Instant.now().getEpochSecond())
+                            rule.getWarningMessage(Instant.now().getEpochSecond()),
+                            rule.getRelatedLogs()
                     ));
                     stateMap.put(sensor.getName(), newSensorMap);
                     continue;
@@ -80,7 +89,8 @@ class State {
                             rule.getName(),
                             false,
                             rule.getPermissionField(),
-                            rule.getWarningMessage(Instant.now().getEpochSecond())
+                            rule.getWarningMessage(Instant.now().getEpochSecond()),
+                            rule.getRelatedLogs()
                     );
                     sensorRules.put(rule, ruleInfo);
                     continue;
@@ -124,7 +134,7 @@ class State {
         }
     }
 
-    public void clear() {
+    void clear() {
         stateMap.clear();
     }
 }

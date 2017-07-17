@@ -39,7 +39,7 @@ public abstract class Rule {
     @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
     private final Map<WARNINGLEVEL, String> errorMessages;
-    private final Set<String> relatedLogNames;
+    private final Set<String> relatedLogNames = new HashSet<>();
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
@@ -68,7 +68,7 @@ public abstract class Rule {
         errorMessages = ruleParam.getErrorMessages();
         escalation = ruleParam.getEscalation();
         invisible = ruleParam.getVisible();
-        relatedLogNames = ruleParam.getRelatedLogs();
+        relatedLogNames.addAll(ruleParam.getRelatedLogs());
     }
 
     protected abstract RuleState specificEval(FHEMModel model);
@@ -194,5 +194,9 @@ public abstract class Rule {
                 + ", permission='" + permission + '\''
                 + ", expression='" + expression + '\''
                 + '}';
+    }
+
+    public Set<String> getRelatedLogs() {
+        return relatedLogNames;
     }
 }
