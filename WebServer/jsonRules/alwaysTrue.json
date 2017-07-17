@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "alwaysTrue",
-            "Expression": "State matches dry|rain",
+            "Expression": "Reading matches dry|rain",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

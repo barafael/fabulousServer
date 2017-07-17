@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "Duplicate",
-            "Expression": "State matches bl*",
+            "Expression": "Reading matches bl*",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
@@ -21,7 +21,7 @@
         },
         {
             "Name": "Duplicate",
-            "Expression": "State contains noRainNoDry",
+            "Expression": "Reading contains noRainNoDry",
             "Permission": "permission1",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

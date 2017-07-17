@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "PermissionTest",
-            "Expression": "State matches dry|rain",
+            "Expression": "Reading matches dry|rain",
             "Permission": "alwaysTruePermission",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

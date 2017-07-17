@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "NeverTrue",
-            "Expression": "State contains noRainNoDry",
+            "Expression": "Reading contains noRainNoDry",
             "Permission": "permission1",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

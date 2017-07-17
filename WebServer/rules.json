@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "DryLab",
-            "Expression": "State contains dry",
+            "Expression": "Reading contains dry",
             "Permission": "S_Regen",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

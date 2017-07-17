@@ -77,7 +77,7 @@ public final class FHEMDevice {
             reading = reading.substring(3) + " HomeMatic-Lumen";
             sensor.addMeta("Brightness", reading);
         }
-        sensor.addMeta("FHEM State", internals.getState().orElse("No state supplied by sensor!"));
+        sensor.addMeta("Reading", internals.getState().orElse("No state supplied by sensor!"));
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);

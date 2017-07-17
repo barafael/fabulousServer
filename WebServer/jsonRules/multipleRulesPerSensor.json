@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "Rule 1 for door sensor",
-            "Expression": "State equals closed",
+            "Expression": "Reading equals closed",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_56A86F"
@@ -22,7 +22,7 @@
         },
         {
             "Name": "Rule 2 for door sensor",
-            "Expression": "State equals open",
+            "Expression": "Reading equals open",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_56A86F"

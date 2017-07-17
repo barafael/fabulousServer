@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "impossibleRainRule",
-            "Expression": "State matches bl*",
+            "Expression": "Reading matches bl*",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"

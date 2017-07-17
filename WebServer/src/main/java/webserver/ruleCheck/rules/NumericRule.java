@@ -52,8 +52,8 @@ public final class NumericRule extends Rule {
 
             Optional<String> concField_opt = sensor.getValueOfField(field);
             if (!concField_opt.isPresent()) {
-                System.err.println("The field " + field
-                        + " specified in this rule: " + name
+                System.err.println("The field '" + field
+                        + "' specified in this rule: " + name
                         + " is not implemented or does not exist in this sensor: " + sensor.getName());
                 violatedSensors.add(sensor);
                 continue;

@@ -2,7 +2,7 @@
     "Rules": [
         {
             "Name": "Rule 1",
-            "Expression": "State matches rain|dry",
+            "Expression": "Reading matches rain|dry",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
@@ -21,7 +21,7 @@
         },
         {
             "Name": "Rule 2",
-            "Expression": "State matches rain|dry",
+            "Expression": "Reading matches rain|dry",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
@@ -40,7 +40,7 @@
         },
         {
             "Name": "Rule 3",
-            "Expression": "State matches rain|dry",
+            "Expression": "Reading matches rain|dry",
             "Permission": "permission0",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
@@ -59,7 +59,7 @@
         },
         {
             "Name": "Rule 4",
-            "Expression": "State matches rain|dry",
+            "Expression": "Reading matches rain|dry",
             "Permission": "permission1",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
