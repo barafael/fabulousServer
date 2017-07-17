@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * @author Johannes Köstler (github@johanneskoestler.de)
  *         on 16.06.17.
  */
-class Server extends AbstractVerticle {
+public class Server extends AbstractVerticle {
     private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";
     private static final String ChangedRoomplan_SERVER_RESPONSE = "Changed Roomplan";
