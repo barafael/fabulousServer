@@ -32,7 +32,7 @@ public final class Timeserie {
      */
     private static final transient ZoneId ZONE_ID = ZoneId.systemDefault();
     /**
-     * A pattern used to check if a string is parseable to a number, decimal or whole.
+     * A pattern used to check if a string is parseable to a number (decimal or integer).
      */
     private static final transient Pattern NUMBER_PATTERN = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
     private static final int MAX_SIZE = 2000;
@@ -91,6 +91,7 @@ public final class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        //noinspection ConstantConditions
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
@@ -196,6 +197,7 @@ public final class Timeserie {
                         currentKey++;
                     } else {
                         /* get() ok because legend.containsvalue(value) */
+                        //noinspection ConstantConditions
                         ys.add(legend.entrySet().stream()
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());

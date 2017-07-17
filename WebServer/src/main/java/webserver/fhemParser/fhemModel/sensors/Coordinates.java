@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Rafael
  */
 //TODO before final: privatize this, only public for testing
-public final class Coordinates {
+final class Coordinates {
     /**
      * A coordinate in x between 0 (inclusive) and 100 (inclusive).
      */

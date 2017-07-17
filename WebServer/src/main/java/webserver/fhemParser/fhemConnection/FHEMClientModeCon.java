@@ -122,19 +122,12 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * @throws IOException if there was an I/O error
      */
     public Optional<String> execCommand(String command) throws IOException {
-        /* TODO: maybe verify command here */
-        boolean permitted = true;
-        if (permitted) {
-            Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
-            BufferedReader stdin = new BufferedReader(new
-                    InputStreamReader(process.getInputStream()));
-            String line = stdin.readLine();
-            stdin.close();
-            /* No news is good news */
-            return Optional.of(line == null ? "" : line);
-        }
-        System.out.println("Could not connect to fhem");
-        return Optional.empty();
+        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        String line = stdin.readLine();
+        stdin.close();
+        return Optional.of(line == null ? "" : line);
     }
 
     /**
@@ -147,21 +140,12 @@ public final class FHEMClientModeCon implements FHEMConnection {
      */
     @Override
     public boolean perlCommand(String command) throws IOException {
-        /* TODO: maybe verify command here */
-        boolean permitted = true;
-        if (permitted) {
-            Process process = Runtime.getRuntime().exec(new String[]
-                    {"sudo", "-u", "fhem", "perl", path, "localhost:" + port, command});
-            BufferedReader stdin = new BufferedReader(new
-                    InputStreamReader(process.getInputStream()));
-            String line = stdin.readLine();
-            stdin.close();
-            System.out.println(command);
-            /* No news is good news */
-            System.out.println("Return from FHEM(should be empty) : " + line);
-            return true;
-        }
-        System.out.println("Could not talk to fhem");
-        return false;
+        Process process = Runtime.getRuntime().exec(new String[]
+                {"sudo", "-u", "fhem", "perl", path, "localhost:" + port, command});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        String line = stdin.readLine();
+        stdin.close();
+        return true;
     }
 }

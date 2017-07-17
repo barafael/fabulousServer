@@ -49,8 +49,8 @@ public class RegexpRule extends Rule {
 
             boolean ruleOK;
 
-            Optional<String> concField_opt = sensor.getValueOfField(field);
-            if (!concField_opt.isPresent()) {
+            Optional<String> value_opt = sensor.getValueOfField(field);
+            if (!value_opt.isPresent()) {
                 System.err.println("The field '" + field
                         + "' specified in this rule: " + name
                         + " is not implemented or does not exist in this sensor: " + sensor.getName());
@@ -58,7 +58,7 @@ public class RegexpRule extends Rule {
                 continue;
             }
 
-            String value = concField_opt.get();
+            String value = value_opt.get();
 
             switch (operator) {
                 case "startsWith":

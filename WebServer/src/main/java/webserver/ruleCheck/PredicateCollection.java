@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class PredicateCollection {
-    /* GPS location for the FABLAB */
+    /* FabLab GPS location */
     private static final Location location = new Location("48.5657463", "13.450155799999948");
     private static final SunriseSunsetCalculator calculator =
             new SunriseSunsetCalculator(location, "Vienna/Europe");
@@ -33,14 +33,14 @@ public class PredicateCollection {
      * @param arguments the strings defined in the input file
      * @return true, always (to make it more useful, make it return something)
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "SameReturnValue"})
     public boolean exampleAlwaysTruePredicate(List<String> arguments) {
         arguments.forEach(s -> System.out.print(s + " "));
         System.out.println();
         return true;
     }
 
-    public boolean isWorkingHours(List<String> _ignored) {
+    public boolean isWorkingHours(@SuppressWarnings("unused") List<String> _ignored) {
         long startTime = timeOfTodayInUNIXSeconds(6, 0);
         long endTime = timeOfTodayInUNIXSeconds(20, 0);
         long now = Instant.now().getEpochSecond();
@@ -48,14 +48,15 @@ public class PredicateCollection {
         return now > startTime && now < endTime;
     }
 
-    public boolean sunIsUp(List<String> _ignored) {
+    public boolean sunIsUp(@SuppressWarnings("unused") List<String> _ignored) {
         long sunrise = officialSunrise.getTimeInMillis() / 1000L;
         long sunset = officialSunset.getTimeInMillis() / 1000L;
         long now = Instant.now().getEpochSecond();
         return now > sunrise && now < sunset;
     }
 
-    public boolean noWeatherWarnings(List<String> _ignored) {
+    @SuppressWarnings({"unused", "SameReturnValue"})
+    public boolean noWeatherWarnings(@SuppressWarnings("unused") List<String> _ignored) {
         // Just an idea...
         // https://openweathermap.org/triggers
         return true;

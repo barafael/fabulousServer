@@ -39,7 +39,7 @@ public final class RuleInfo {
      */
     private String message;
 
-    private Map<Long, Boolean> changeStamps = new TreeMap<>();
+    private final Map<Long, Boolean> changeStamps = new TreeMap<>();
 
     /**
      * Construct a RuleInfo instance.

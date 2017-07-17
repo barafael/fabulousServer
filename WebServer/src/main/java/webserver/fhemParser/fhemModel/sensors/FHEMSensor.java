@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 /**
  * This class represents the data about a sensor gathered from FHEM.
- * It also contains the FileLog stubs needed to acquire timeseries.
+ * It also contains the FileLog stubs needed to get timeseries.
  *
  * @author Rafael
  */
@@ -200,7 +200,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * @param arguments the strings defined in the input file
      * @return true, always (to make it more useful, make it return something based on the sensor status)
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "SameReturnValue"})
     public boolean exampleAlwaysTruePredicate(List<String> arguments) {
         arguments.forEach(s -> System.out.print(s + " "));
         System.out.println();

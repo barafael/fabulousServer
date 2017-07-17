@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class ModelSerializer implements JsonSerializer<FHEMModel> {
     /**
-     * A list of permision identifiers that are used to remove/retain json elements.
+     * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
 

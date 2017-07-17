@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public final class Main {
     public static final Vertx vertx = Vertx.vertx();
-    static FHEMParser parser = FHEMParser.getInstance();
+    static final FHEMParser parser = FHEMParser.getInstance();
     static long parserTimerID;
     private static FHEMModel fhemModel;
 

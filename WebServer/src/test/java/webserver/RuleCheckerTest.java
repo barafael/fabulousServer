@@ -141,6 +141,7 @@ public class RuleCheckerTest {
 
         boolean interactive_testing = false;
 
+        //noinspection ConstantConditions
         while(interactive_testing) {
             jullData();
             model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
