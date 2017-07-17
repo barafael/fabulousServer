@@ -1,12 +1,14 @@
 package webserver.ruleCheck.rules;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * A class containing information about a rule.
- * This cannot be solved easily by marking fields in Rule as transient,
- * because they have to be deserialized.
  *
  * @author Rafael
  */
@@ -18,25 +20,26 @@ public final class RuleInfo {
     private final String name;
 
     /**
-     * The state of this rule. True if not violated.
+     * The state of this rule. False if violated.
      */
-    private final boolean isOk;
+    private boolean isOk;
+
+    /**
+     * How many changes of state will be recorded until the oldest is discarded.
+     */
+    private static final int CHANGE_THRESHHOLD = 15;
+
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
     private final transient String permission;
-    /**
-     * A message about the state of the rule.
-     * This field is needed for serialization
-     */
-    @SuppressWarnings("FieldCanBeLocal")
-    private final String message;
 
     /**
-     * Time of first rule evaluation.
+     * A message about the state of the rule.
      */
-    private final long startTime;
-    private long endTime;
+    private String message;
+
+    private Map<Long, Boolean> changeStamps = new TreeMap<>();
 
     /**
      * Construct a RuleInfo instance.
@@ -46,11 +49,16 @@ public final class RuleInfo {
      * @param permission necessary permissions
      * @param message    the message about the state of the rule
      */
-    public RuleInfo(String name, boolean isOk, long startTime, String permission, String message) {
+    public RuleInfo(String name, boolean isOk, String permission, String message) {
         this.name = name;
         this.isOk = isOk;
-        this.startTime = startTime;
         this.permission = permission;
+        this.message = message;
+
+        changeStamps.put(Instant.now().getEpochSecond(), isOk);
+    }
+
+    public void setMessage(String message) {
         this.message = message;
     }
 
@@ -62,26 +70,47 @@ public final class RuleInfo {
         return isOk;
     }
 
-    public void setEnd() {
-        endTime = Instant.now().getEpochSecond();
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
     public boolean isPermitted(List<String> permissions) {
         return permissions.contains(permission);
     }
 
+    public void setOk() {
+        if (isOk) {
+            return;
+        }
+        isOk = true;
+        changeStamps.put(Instant.now().getEpochSecond(), true);
+
+        /* TODO: exploit TreeMap */
+        if (changeStamps.size() > CHANGE_THRESHHOLD) {
+            Set<Long> timestamps = changeStamps.keySet();
+            timestamps.removeIf((Long l) -> l.longValue() == Collections.min(timestamps).longValue());
+        }
+    }
+
+    public void setNotOk() {
+        if (!isOk) {
+            return;
+        }
+        isOk = false;
+        changeStamps.put(Instant.now().getEpochSecond(), false);
+
+        /* TODO: exploit TreeMap */
+        if (changeStamps.size() > CHANGE_THRESHHOLD) {
+            Set<Long> timestamps = changeStamps.keySet();
+            timestamps.removeIf((Long l) -> l.longValue() == Collections.min(timestamps).longValue());
+        }
+    }
+
     @Override
     public String toString() {
-        return "RuleInfo{"
-                + "name='" + name + '\''
-                + ", isOk=" + isOk
-                + ", permission='" + permission + '\''
-                + ", message='" + message + '\''
-                + '}';
+        return "RuleInfo{" +
+                "name='" + name + '\'' +
+                ", isOk=" + isOk +
+                ", permission='" + permission + '\'' +
+                ", message='" + message + '\'' +
+                ", changeStamps=" + changeStamps +
+                '}';
     }
 
     @Override
@@ -97,5 +126,9 @@ public final class RuleInfo {
         RuleInfo ruleInfo = (RuleInfo) o;
 
         return name.equals(ruleInfo.name);
+    }
+
+    public long getLastStamp() {
+        return Collections.max(changeStamps.keySet());
     }
 }

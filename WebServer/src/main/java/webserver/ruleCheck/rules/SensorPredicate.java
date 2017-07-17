@@ -37,7 +37,7 @@ public final class SensorPredicate extends Rule {
             /* Return false to draw attention to formulation error (?) */
             violatedSensors.addAll(model.getSensorsByCollection(sensorNames));
             isEvaluated = true;
-            ruleState = new RuleState(false, new HashSet<>(), violatedSensors);
+            ruleState = new RuleState(this, new HashSet<>(), violatedSensors);
             return ruleState;
         }
 
@@ -117,8 +117,7 @@ public final class SensorPredicate extends Rule {
             }
         }
         isEvaluated = true;
-        boolean state = violatedSensors.isEmpty() && !okSensors.isEmpty();
-        ruleState = new RuleState(state, okSensors, violatedSensors);
+        ruleState = new RuleState(this, okSensors, violatedSensors);
         return ruleState;
     }
 }

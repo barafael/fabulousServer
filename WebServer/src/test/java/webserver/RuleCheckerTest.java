@@ -2,6 +2,7 @@ package webserver;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -54,8 +55,47 @@ public class RuleCheckerTest {
         Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./pull.sh"});
         BufferedReader stdin = new BufferedReader(new
                 InputStreamReader(process.getInputStream()));
+        /* To wait until done */
         stdin.readLine();
         stdin.close();
+    }
+
+    @Before
+    public void cleanState() {
+        RuleChecker.getInstance().clear();
+    }
+
+    /**
+     * Conditionally pulls jsonList2 to local machine
+     * This can take a moment, depending on load and traffic.
+     *
+     * @throws IOException if there was an I/O error during command execution.
+     */
+    private static void jullData() throws IOException {
+        Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./jull.sh"});
+        BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()));
+        /* To wait until done */
+        stdin.readLine();
+        stdin.close();
+    }
+
+    /**
+     * Helper function which tests if a json string can be deserialized without throwing an exception
+     * (which would mean incorrect json format).
+     *
+     * @param json A string which should be tested
+     *
+     * @return whether the input was valid json
+     */
+    private static boolean isValidJSON(String json) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(json, Object.class);
+            return true;
+        } catch (com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
     @Test
@@ -88,35 +128,25 @@ public class RuleCheckerTest {
     }
 
     /**
-     * Helper function which tests if a json string can be deserialized without throwing an exception
-     * (which would mean incorrect json format).
-     *
-     * @param json A string which should be tested
-     *
-     * @return whether the input was valid json
-     */
-    private static boolean isValidJSON(String json) {
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(json, Object.class);
-            return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
-            return false;
-        }
-    }
-
-    /**
      * The default rules are in the top-lvl dir 'rules.json'.
      * Evaluating these is inconclusive because the content changes over time.
      */
     @Test
-    public void testStateCheckerEvaluateDefaultRules() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+    public void testStateCheckerEvaluateDefaultRules() throws IOException {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
         RuleChecker ruleChecker = RuleChecker.getInstance();
-        ruleChecker.evaluate(model);
+
+        boolean interactive_testing = false;
+
+        while(interactive_testing) {
+            jullData();
+            model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
+            assert model_opt.isPresent();
+            model = model_opt.get();
+        }
     }
 
     /**

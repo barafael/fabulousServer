@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.ruleCheck.rules.RuleInfo;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -109,41 +110,34 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * This method adds a ruleInfo to this sensor.
-     * <p>
-     * Old rule information is overwritten.
-     * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
-     * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
+     * This method adds a set of ruleInfos to this sensor.
+     * It replaces whichever infos were there before.
      *
-     * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
+     * @param ruleInfos the set of ruleInfos which will replace the previous one.
      */
-    public void addViolatedRule(RuleInfo ruleInfo) {
-        /* First remove the old info, then put the current one */
-        if (violatedRules.contains(ruleInfo)) {
-            violatedRules.remove(ruleInfo);
+    public void addRuleInfos(Collection<RuleInfo> ruleInfos) {
+        passedRules.clear();
+        violatedRules.clear();
+        for (RuleInfo ruleInfo : ruleInfos) {
+            if (ruleInfo.isOk()) {
+                passedRules.add(ruleInfo);
+            } else {
+                violatedRules.add(ruleInfo);
+            }
         }
-        violatedRules.add(ruleInfo);
-    }
-
-    /**
-     * This method adds a ruleInfo to this sensor.
-     * <p>
-     * Old rule information is overwritten.
-     * This works because the {@link webserver.ruleCheck.rules.RuleInfo#equals(Object) equals}
-     * and {@link webserver.ruleCheck.rules.RuleInfo#hashCode hashCode} methods of RuleInfo only care about the name
-     *
-     * @param ruleInfo the information which should be added to the set of ruleinfos of this sensor
-     */
-    public void addPassedRule(RuleInfo ruleInfo) {
-        /* First remove the old info, then put the current one */
-        if (passedRules.contains(ruleInfo)) {
-            passedRules.remove(ruleInfo);
-        }
-        passedRules.add(ruleInfo);
     }
 
     public boolean isSwitchable() {
         return switchable;
+    }
+
+    public boolean isPermittedSwitch(List<String> permissions) {
+        for (FHEMFileLog log : this) {
+            if (log.isPermittedSwitch(permissions)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -179,20 +173,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
             }
         }
         return false;
-    }
-
-    public boolean isPermittedSwitch(List<String> permissions) {
-        for (FHEMFileLog log : this) {
-            if (log.isPermittedSwitch(permissions)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unused")
-    public Coordinates getCoords() {
-        return coords;
     }
 
     /**
@@ -256,7 +236,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        webserver.fhemParser.fhemModel.sensors.FHEMSensor that = (webserver.fhemParser.fhemModel.sensors.FHEMSensor) o;
+        FHEMSensor that = (webserver.fhemParser.fhemModel.sensors.FHEMSensor) o;
 
         return name.equals(that.name);
     }

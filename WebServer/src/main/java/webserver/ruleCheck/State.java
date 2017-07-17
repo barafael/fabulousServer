@@ -4,49 +4,124 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.ruleCheck.rules.Rule;
 import webserver.ruleCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleState;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
- * This class keeps an intermediate state which can later be applied to a FHEM model.
+ * This class keeps a state which can be applied to a FHEM model.
  *
  * @author Rafael
  */
 class State {
-    /* Sensorname -> (Rulename, StartTime) */
-    final Map<String, Map<String, Long>> violatedRules = new HashMap<>();
-    final Map<String, Map<String, Long>> okRules = new HashMap<>();
-
     /**
-     * Update the warning message and attach a RuleInfo to the sensor.
-     *
-     * @param model     the model which should be checked. RuleInfos will be added for the sensors.
-     * @param violating the set of violating rules which were evaluated
-     * @param passed    the set of passed rules which were evaluated
+     * Map a sensor name to the rules it passes or violates.
+     * The key is a string because the model may reload at any moment
+     * (the sensor may or may not change, but the name will stay the same or be
+     * {@link webserver.ruleCheck.State#prune(FHEMModel) pruned}).
      */
-    void setRuleInfos(FHEMModel model, Set<Rule> violating, Set<Rule> passed) {
-        for (Iterator<FHEMSensor> it = model.eachSensor(); it.hasNext(); ) {
-            FHEMSensor sensor = it.next();
+    private final Map<String, Map<Rule, RuleInfo>> stateMap = new HashMap<>();
 
-            /* Get the names of the rules which the sensor already violated last time */
-            Map<String, Long> violatedRulesOfSensor = violatedRules.get(sensor.getName());
-            /* If sensor even has violating rules in the violatedRules map */
-            if (violatedRulesOfSensor != null) {
-                Set<String> oldViolatingRuleNames = violatedRulesOfSensor.keySet();
+    void update(Set<RuleState> states) {
 
-                Set<Rule> currentViolatingRules = violating.stream().
-                        filter(s -> oldViolatingRuleNames.contains(s.getName())).collect(Collectors.toSet());
-                for (Rule rule : currentViolatingRules) {
-                    long timestamp = violatedRules.get(sensor.getName()).get(rule.getName());
-                    String message = rule.getWarningMessage(timestamp);
-                    sensor.addViolatedRule(new RuleInfo(rule.getName(), false, Instant.now().getEpochSecond(), rule.getPermissionField(), message));
+        for (RuleState state : states) {
+
+            Rule rule = state.getRule();
+
+            Set<FHEMSensor> passedSensors = state.getPassedSensors();
+
+            for (FHEMSensor sensor : passedSensors) {
+                if (!stateMap.containsKey(sensor.getName())) {
+                    Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
+                    newSensorMap.put(rule, new RuleInfo(
+                            rule.getName(), true, rule.getPermissionField(), rule.getOkMessage()
+                    ));
+                    stateMap.put(sensor.getName(), newSensorMap);
+                    continue;
                 }
+
+                Map<Rule, RuleInfo> sensorRules = stateMap.get(sensor.getName());
+
+                if (!sensorRules.containsKey(rule)) {
+                    RuleInfo ruleInfo = new RuleInfo(
+                            rule.getName(), true, rule.getPermissionField(), rule.getOkMessage());
+                    sensorRules.put(rule, ruleInfo);
+                    continue;
+                }
+
+                RuleInfo ruleInfo = sensorRules.get(rule);
+                ruleInfo.setOk();
+                ruleInfo.setMessage(rule.getOkMessage());
+            }
+
+            Set<FHEMSensor> violatedSensors = state.getViolatedSensors();
+
+            for (FHEMSensor sensor : violatedSensors) {
+                if (!stateMap.containsKey(sensor.getName())) {
+                    Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
+                    newSensorMap.put(rule, new RuleInfo(
+                            rule.getName(),
+                            false,
+                            rule.getPermissionField(),
+                            rule.getWarningMessage(Instant.now().getEpochSecond())
+                    ));
+                    stateMap.put(sensor.getName(), newSensorMap);
+                    continue;
+                }
+
+                Map<Rule, RuleInfo> sensorRules = stateMap.get(sensor.getName());
+
+                if (!sensorRules.containsKey(rule)) {
+                    RuleInfo ruleInfo = new RuleInfo(
+                            rule.getName(),
+                            false,
+                            rule.getPermissionField(),
+                            rule.getWarningMessage(Instant.now().getEpochSecond())
+                    );
+                    sensorRules.put(rule, ruleInfo);
+                    continue;
+                }
+
+                RuleInfo ruleInfo = sensorRules.get(rule);
+                ruleInfo.setNotOk();
+                ruleInfo.setMessage(rule.getWarningMessage(ruleInfo.getLastStamp()));
             }
         }
+    }
+
+    private void prune(FHEMModel model) {
+        Set<String> sensorNames = stateMap.keySet();
+        sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
+    }
+
+    /**
+     * Attach RuleInfos to all sensors with current warning messages.
+     *
+     * @param model the model which should be annotated. RuleInfos will be added for the sensors.
+     */
+    void apply(FHEMModel model) {
+        prune(model);
+        for (String sensorName : stateMap.keySet()) {
+            FHEMSensor sensor = model.getSensorByName(sensorName)
+                    .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
+            sensor.addRuleInfos(stateMap.get(sensorName).values());
+        }
+    }
+
+    void report(FHEMModel model) {
+        prune(model);
+        for (String sensorName : stateMap.keySet()) {
+            FHEMSensor sensor = model.getSensorByName(sensorName)
+                    .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
+            // TODO implement event log
+            //System.out.println(sensor);
+        }
+    }
+
+    public void clear() {
+        stateMap.clear();
     }
 }
