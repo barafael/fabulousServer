@@ -295,8 +295,24 @@ public class ModelTest {
     }
 
     @Test
-    public void testGetTimeserieReal() {
-        String sensorName = "HM_521A72";
+    public void testGetTimeserieRealFromParser() {
+        String sensorName = "HM_52CB59_Sw";
+        List<String> permissions = Collections.singletonList("A_Steckdose_Lasercutter");
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
+        Optional<String> logname = sensor.get().getLogs().stream().findFirst().map(FHEMFileLog::getName);
+        assert logname.isPresent();
+        Optional<String> json_opt = FHEMParser.getInstance().getTimeserie(logname.get(), permissions);
+        assert json_opt.isPresent();
+        System.out.println(json_opt.get());
+    }
+
+    @Test
+    public void testGetTimeserieRealInternal() {
+        String sensorName = "HM_52CB59_Sw";
+        List<String> permissions = Collections.singletonList("A_Steckdose_Lasercutter");
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();
         Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);

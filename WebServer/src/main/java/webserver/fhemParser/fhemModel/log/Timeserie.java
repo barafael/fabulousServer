@@ -60,6 +60,7 @@ public final class Timeserie {
      * @param samples a list of strings directly from a FileLog
      * @param logtype the desired filelog type
      */
+    //TODO: simplify by using range from 0 to now
     Timeserie(List<String> samples, Logtype logtype) {
         this.legend = new HashMap<>();
         switch (logtype) {
@@ -76,7 +77,13 @@ public final class Timeserie {
                     long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
                     xs.add(epochSecond);
 
-                    String value = items[items.length - 1];
+                    String value;
+                    if (items.length == 4) {
+                        value = items[3];
+                    } else {
+                        value = items[items.length - 1];
+                    }
+
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
                         ys.add(currentKey);
@@ -175,7 +182,13 @@ public final class Timeserie {
                     }
                     xs.add(epochSecond);
 
-                    String value = items[3];
+                    String value;
+                    if (items.length == 4) {
+                        value = items[3];
+                    } else {
+                        value = items[items.length - 1];
+                    }
+
                     if (!legend.containsValue(value)) {
                         legend.put(currentKey, value);
                         ys.add(currentKey);
