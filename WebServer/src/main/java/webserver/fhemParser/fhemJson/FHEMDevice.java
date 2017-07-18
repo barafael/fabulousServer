@@ -74,7 +74,7 @@ public final class FHEMDevice {
         /* Add metadata which might or might not be supplied for every sensor */
         if (alias.contains("Licht")) {
             String reading = internals.getState().orElse("No brightness reading supplied");
-            reading = reading.substring(3) + " HomeMatic-Lumen";
+            reading = reading.substring(3) + "Lux";
             sensor.addMeta("Brightness", reading);
         }
         sensor.addMeta("Reading", internals.getState().orElse("No state supplied by sensor!"));
