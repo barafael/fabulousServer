@@ -47,10 +47,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     private final HashSet<FHEMFileLog> fileLogs = new HashSet<>();
     /**
-     * Documents whether this should be shown in the frontend.
-     */
-    private final boolean isVisibleInApp;
-    /**
      * This map contains key-value pairs about meta information of this sensor.
      */
     private final HashMap<String, String> metaInfo;
@@ -62,6 +58,10 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This field contains information about the rules this sensor passes.
      */
     private final Set<RuleInfo> passedRules = new HashSet<>();
+    /**
+     * The icon name of this sensor, which will be deserialized.
+     */
+    @SuppressWarnings("FieldCanBeLocal")
     private String icon;
     /**
      * True if this sensor can be toggled on or off.
@@ -69,12 +69,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private boolean switchable = false;
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
-                      boolean isVisibleInApp, HashMap<String, String> metaInfo) {
+                      HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.nameInApp = nameInApp;
         this.permissions = permissions;
-        this.isVisibleInApp = isVisibleInApp;
         this.metaInfo = metaInfo;
     }
 
@@ -112,6 +111,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
             }
         }
         return Optional.empty();
+    }
+
+    public Set<RuleInfo> getRuleInfos() {
+        Set<RuleInfo> all = new HashSet<>(passedRules);
+        all.addAll(violatedRules);
+        return all;
     }
 
     /**

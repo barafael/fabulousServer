@@ -125,20 +125,6 @@ class State {
         }
     }
 
-    void report(FHEMModel model) {
-        prune(model);
-
-        Set<RuleInfo> report = new HashSet<>();
-
-        for (String sensorName : stateMap.keySet()) {
-            FHEMSensor sensor = model.getSensorByName(sensorName)
-                    .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
-            report.addAll(stateMap.get(sensorName).values());
-        }
-
-        model.addReport(report);
-    }
-
     void clear() {
         stateMap.clear();
     }

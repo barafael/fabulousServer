@@ -67,7 +67,7 @@ public final class FHEMDevice {
 
         String alias = attributes.getAlias().orElse("Not supplied");
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, meta);
 
         sensor.setIcon(getAttributes().getIcon());
 
@@ -114,7 +114,7 @@ public final class FHEMDevice {
         List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();
-        return Optional.of(new FHEMFileLog(path, name, switchable, isVisibleInApp(), permissions));
+        return Optional.of(new FHEMFileLog(path, name, switchable, permissions));
     }
 
     /**

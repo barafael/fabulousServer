@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class RuleParamCollection {
     @SerializedName("Rules")
-    private Set<RuleParam> ruleParams = new HashSet<>();
+    private final Set<RuleParam> ruleParams = new HashSet<>();
 
     /* TODO: Suppress direct creation */
     /* Currently open because testing */

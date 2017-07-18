@@ -34,13 +34,13 @@ public final class RuleParam {
     private final String okMessage;
     @SerializedName("ErrorMessages")
     private final Map<WARNINGLEVEL, String> errorMessages;
+    @SerializedName("RelatedFileLogs")
+    private final Set<String> relatedFileLogNames = new HashSet<>();
     @SerializedName("IsVisibleInApp")
     private boolean isVisibleInApp = true;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("Escalation")
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    @SerializedName("RelatedFileLogs")
-    private final Set<String> relatedFileLogNames = new HashSet<>();
 
     public RuleParam(String name,
                      Set<String> sensorNames,

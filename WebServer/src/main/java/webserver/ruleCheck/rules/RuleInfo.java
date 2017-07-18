@@ -13,36 +13,39 @@ import java.util.TreeMap;
  *
  * @author Rafael
  */
-
 public final class RuleInfo {
-    /**
-     * The name of the Rule as shown in the frontend.
-     */
-    private final String name;
-
-    /**
-     * The state of this rule. False if violated.
-     */
-    private boolean isOk;
-
     /**
      * How many changes of state will be recorded until the oldest is discarded.
      */
     private static final int CHANGE_THRESHHOLD = 15;
-
+    /**
+     * The name of the Rule as shown in the frontend.
+     */
+    private final String name;
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
     private final transient String permission;
-
+    /**
+     * The names of logs which the corresponding rule should affect.
+     */
+    @SuppressWarnings("FieldCanBeLocal")
+    private final Set<String> relatedLogNames = new HashSet<>();
+    private final Map<Long, Boolean> changeStamps = new TreeMap<>();
+    /**
+     * The state of this rule. False if violated.
+     */
+    private boolean isOk;
     /**
      * A message about the state of the rule.
      */
     private String message;
-
-    private final Set<String> relatedLogNames = new HashSet<>();
-
-    private final Map<Long, Boolean> changeStamps = new TreeMap<>();
+    /**
+     * Record whether a new message has been set.
+     * In this case, a notification should appear.
+     */
+    @SuppressWarnings("FieldCanBeLocal")
+    private boolean hasNewMessage;
 
     /**
      * Construct a RuleInfo instance.
@@ -67,6 +70,7 @@ public final class RuleInfo {
     }
 
     public void setMessage(String message) {
+        this.hasNewMessage = !this.message.equals(message);
         this.message = message;
     }
 
@@ -110,15 +114,8 @@ public final class RuleInfo {
         }
     }
 
-    @Override
-    public String toString() {
-        return "RuleInfo{" +
-                "name='" + name + '\'' +
-                ", isOk=" + isOk +
-                ", permission='" + permission + '\'' +
-                ", message='" + message + '\'' +
-                ", changeStamps=" + changeStamps +
-                '}';
+    public long getLastStamp() {
+        return Collections.max(changeStamps.keySet());
     }
 
     @Override
@@ -136,7 +133,14 @@ public final class RuleInfo {
         return name.equals(ruleInfo.name);
     }
 
-    public long getLastStamp() {
-        return Collections.max(changeStamps.keySet());
+    @Override
+    public String toString() {
+        return "RuleInfo{" +
+                "name='" + name + '\'' +
+                ", isOk=" + isOk +
+                ", permission='" + permission + '\'' +
+                ", message='" + message + '\'' +
+                ", changeStamps=" + changeStamps +
+                '}';
     }
 }

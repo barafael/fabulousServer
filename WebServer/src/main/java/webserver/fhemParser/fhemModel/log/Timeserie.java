@@ -77,7 +77,6 @@ public final class Timeserie {
                     long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
                     xs.add(epochSecond);
 
-
                     String value;
                     if (items.length <= 4) {
                         value = items[items.length - 1];

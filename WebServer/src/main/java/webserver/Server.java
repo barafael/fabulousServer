@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
  * @author Johannes Köstler (github@johanneskoestler.de)
  *         on 16.06.17.
  */
+@SuppressWarnings("WeakerAccess")
 public class Server extends AbstractVerticle {
     private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";
@@ -66,6 +67,7 @@ public class Server extends AbstractVerticle {
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
     private final FHEMParser parser = Main.parser;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int DATABASE_KEEP_ALIVE = 15 * 60 * 1000;
     private JDBCAuth authProvider;
     private Router router;

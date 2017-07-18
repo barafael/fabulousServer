@@ -72,7 +72,6 @@ public final class RuleChecker {
         Set<RuleState> states = rules.stream().map(rule -> rule.eval(model)).collect(Collectors.toSet());
         fhemState.update(states);
         fhemState.apply(model);
-        fhemState.report(model);
     }
 
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {

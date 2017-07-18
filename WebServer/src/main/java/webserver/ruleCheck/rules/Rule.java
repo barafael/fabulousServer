@@ -41,6 +41,12 @@ public abstract class Rule {
     private final Map<WARNINGLEVEL, String> errorMessages;
     private final Set<String> relatedLogNames = new HashSet<>();
     /**
+     * Whether the attribute should be applied to model.
+     * Reverse logic necessary because gson defaults to false
+     * for booleans if a field is not set at all in the input.
+     */
+    private final boolean invisible;
+    /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
     RuleState ruleState;
@@ -51,13 +57,6 @@ public abstract class Rule {
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     private Set<Rule> requiredTrueRules;
     private Set<Rule> requiredFalseRules;
-
-    /**
-     * Whether the attribute should be applied to model.
-     * Reverse logic necessary because gson defaults to false
-     * for booleans if a field is not set at all in the input.
-     */
-    private final boolean invisible;
 
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
