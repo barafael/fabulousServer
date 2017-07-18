@@ -146,6 +146,6 @@ public final class FHEMClientModeCon implements FHEMConnection {
                 InputStreamReader(process.getInputStream()));
         String line = stdin.readLine();
         stdin.close();
-        return true;
+        return line == null || line.isEmpty();
     }
 }
