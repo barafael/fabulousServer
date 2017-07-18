@@ -167,12 +167,18 @@ public final class RuleInfo {
 
     @Override
     public String toString() {
-        return "RuleInfo{" +
-                "name='" + name + '\'' +
-                ", isOk=" + isOk +
-                ", permission='" + permission + '\'' +
-                ", message='" + message + '\'' +
-                ", changeStamps=" + changeStamps +
-                '}';
+        return "RuleInfo{"
+                + "name='"
+                + name
+                + '\''
+                + ", isOk="
+                + isOk
+                + ", permission='"
+                + permission + '\''
+                + ", message='"
+                + message + '\''
+                + ", changeStamps="
+                + changeStamps
+                + '}';
     }
 }

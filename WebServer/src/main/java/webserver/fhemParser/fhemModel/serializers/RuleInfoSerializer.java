@@ -9,20 +9,33 @@ import com.google.gson.JsonSerializer;
 import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This serializer gets a list of permissions and, when serializing, uses them to filter out fields which should not be visible.
+ * This serializer gets a list of permissions and, when serializing, uses them to filter out
+ * fields which should not be visible.
  * It is intended to be chained together with other serializers.
  *
  * @author Rafael on 22.06.17.
  */
 class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
     /**
-     * A list of permision identifiers that are used to remove/retain json elements.
+     * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
 
+    /**
+     * Prevent direct construction without parameters.
+     */
+    private RuleInfoSerializer() {
+        permissions = new ArrayList<>();
+    }
+
+    /**
+     * Construct this serializer, setting the permissions. Any RuleInfo not permitted for them will be filtered out.
+     * @param permissions the permissions to use as filter
+     */
     RuleInfoSerializer(List<String> permissions) {
         this.permissions = permissions;
     }

@@ -15,12 +15,21 @@ import java.util.List;
  * @author Rafael
  */
 
-public class PredicateCollection {
-    /* FabLab GPS location */
-    private static final Location location = new Location("48.5657463", "13.450155799999948");
+public final class PredicateCollection {
+    /** FabLab GPS location */
+    private static final Location LOCATION = new Location("48.5657463", "13.450155799999948");
+    /**
+     * Localised sun calculator.
+     */
     private static final SunriseSunsetCalculator calculator =
-            new SunriseSunsetCalculator(location, "Vienna/Europe");
+            new SunriseSunsetCalculator(LOCATION, "Vienna/Europe");
+    /**
+     * Localised sunrise calculator.
+     */
     private final Calendar officialSunrise = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance());
+    /**
+     * Localised sunset calculator.
+     */
     private final Calendar officialSunset = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance());
 
     /**
@@ -86,6 +95,9 @@ public class PredicateCollection {
      * @return the absolute unix timestamp of the hour and minute given on this day
      */
     private long timeOfTodayInUNIXSeconds(int hour, int minute) {
+        hour = hour % 24;
+        minute = minute % 60;
+
         Calendar time = new GregorianCalendar();
         time.set(Calendar.HOUR_OF_DAY, hour);
         time.set(Calendar.MINUTE, minute);

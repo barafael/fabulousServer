@@ -79,6 +79,10 @@ public final class FHEMFileLog {
         this.permissions = permissions;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * The filelogs in FHEM which are blessed should all be crafted in a way that the unit name appears
      * in the third column (the first being the date). This should be the FHEM default though.
@@ -220,10 +224,6 @@ public final class FHEMFileLog {
         } else {
             return splitted[splitted.length - 1];
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     /**

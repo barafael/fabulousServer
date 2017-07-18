@@ -34,11 +34,11 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
     /**
      * A path to a hash file which should be saved on disk and contain the hash of the current plan.
      */
-    final transient private Path pathToHash;
+    private final transient Path pathToHash;
     /**
      * A path to the current room plan.
      */
-    final transient private Path pathToPlan;
+    private final transient Path pathToPlan;
 
     /**
      * Constructor for this room, which verifies that the room really starts with 'room_' (the prefix for real rooms).
@@ -56,6 +56,10 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         String fhemPath = FHEMUtils.getGlobVar("FHEMDIR").orElse("");
         pathToPlan = Paths.get(fhemPath + "roomplans/" + roomname + ".png");
         pathToHash = Paths.get(fhemPath + "roomplans/" + roomname + ".hash");
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**
@@ -82,10 +86,6 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      */
     public boolean isAppRoom() {
         return name.startsWith("room_");
-    }
-
-    public String getName() {
-        return name;
     }
 
     /**

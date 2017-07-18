@@ -23,12 +23,24 @@ import java.util.Map;
  *
  * @author Rafael on 22.06.17.
  */
-public class ModelSerializer implements JsonSerializer<FHEMModel> {
+public final class ModelSerializer implements JsonSerializer<FHEMModel> {
     /**
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
 
+    /**
+     *
+     * Prevent direct construction without parameters.
+     */
+    private ModelSerializer() {
+        permissions = new ArrayList<>();
+    }
+
+    /**
+     * Construct this serializer, setting the permissions. Any model not permitted for them will be filtered out.
+     * @param permissions the permissions to use as filter
+     */
     public ModelSerializer(List<String> permissions) {
         this.permissions = permissions;
     }

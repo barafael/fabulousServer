@@ -8,7 +8,6 @@ import webserver.ruleCheck.rules.RuleState;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;

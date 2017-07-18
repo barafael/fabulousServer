@@ -23,7 +23,10 @@ import java.util.stream.Collectors;
  *
  * @author Rafael on 07.07.17.
  */
-public class RuleParamCollection {
+public final class RuleParamCollection {
+    /**
+     * A set of parameters from which to construct rules.
+     */
     @SerializedName("Rules")
     private final Set<RuleParam> ruleParams = new HashSet<>();
 

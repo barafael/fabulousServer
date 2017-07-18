@@ -96,6 +96,68 @@ public abstract class Rule {
         relatedLogNames.addAll(ruleParam.getRelatedLogs());
     }
 
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the rules which are true prerequisites.
+     * @param requiredTrue the rules to set as true prerequisites
+     */
+    public void setRequiredTrue(Set<Rule> requiredTrue) {
+        this.requiredTrueRules = requiredTrue;
+    }
+
+    /**
+     * Set the rules which are false prerequisites.
+     * @param requiredFalse the rules to set as false prerequisites
+     */
+    public void setRequiredFalse(Set<Rule> requiredFalse) {
+        this.requiredFalseRules = requiredFalse;
+    }
+
+    /**
+     * Compute a warning message for this rule from a given start time.
+     * @param startTime a start time
+     * @return a warning message
+     */
+    public String getWarningMessage(long startTime) {
+        long elapsedTime = Instant.now().getEpochSecond() - startTime;
+        List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
+        for (long key : keys) {
+            if (elapsedTime <= key) {
+                return errorMessages.get(escalation.get(key));
+            }
+        }
+        /* elapsed time was higher than all keys in list */
+        return errorMessages.get(WARNINGLEVEL.DISASTER);
+    }
+
+    public String getPermissionField() {
+        return permission;
+    }
+
+    public String getOkMessage() {
+        return okMessage;
+    }
+
+    public boolean isVisible() {
+        return !invisible;
+    }
+
+    /**
+     * Getter for logs which were set related so that the information can be used from the frontend.
+     * @return the related logs
+     */
+    public Set<String> getRelatedLogs() {
+        return relatedLogNames;
+    }
+
+    /**
+     * Specific evaluation of a concrete rule on a model.
+     * @param model the model to use information from
+     * @return the rule state, containing violated and passed sensors
+     */
     protected abstract RuleState specificEval(FHEMModel model);
 
     /**
@@ -165,42 +227,6 @@ public abstract class Rule {
         return specificEval(model);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setRequiredTrue(Set<Rule> requiredTrue) {
-        this.requiredTrueRules = requiredTrue;
-    }
-
-    public String getWarningMessage(long startTime) {
-        long elapsedTime = Instant.now().getEpochSecond() - startTime;
-        List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
-        for (long key : keys) {
-            if (elapsedTime <= key) {
-                return errorMessages.get(escalation.get(key));
-            }
-        }
-        /* elapsed time was higher than all keys in list */
-        return errorMessages.get(WARNINGLEVEL.DISASTER);
-    }
-
-    public void setRequiredFalse(Set<Rule> requiredFalse) {
-        this.requiredFalseRules = requiredFalse;
-    }
-
-    public String getPermissionField() {
-        return permission;
-    }
-
-    public String getOkMessage() {
-        return okMessage;
-    }
-
-    public boolean isVisible() {
-        return !invisible;
-    }
-
     @Override
     public int hashCode() {
         return name.hashCode();
@@ -233,9 +259,5 @@ public abstract class Rule {
                 + ", permission='" + permission + '\''
                 + ", expression='" + expression + '\''
                 + '}';
-    }
-
-    public Set<String> getRelatedLogs() {
-        return relatedLogNames;
     }
 }

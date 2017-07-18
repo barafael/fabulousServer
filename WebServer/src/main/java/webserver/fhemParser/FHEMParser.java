@@ -215,8 +215,8 @@ public final class FHEMParser {
         }
 
         try {
-            return fhc.perlCommand("attr " + sensorName + " coordX " + x) &&
-                    fhc.perlCommand("attr " + sensorName + " coordY " + y);
+            return fhc.perlCommand("attr " + sensorName + " coordX " + x)
+                    && fhc.perlCommand("attr " + sensorName + " coordY " + y);
         } catch (IOException e) {
             System.err.println("Couldn't talk to FHEM via Client Mode!");
             return false;
