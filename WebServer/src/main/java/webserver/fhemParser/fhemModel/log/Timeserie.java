@@ -42,7 +42,6 @@ public final class Timeserie {
      * {@link Timeserie#Timeserie(java.util.List, webserver.fhemParser.fhemModel.log.LogType) the constructor} and
      * {@link Timeserie#Timeserie(java.util.List, webserver.fhemParser.fhemModel.log.LogType, long, long)
      * the range constructor}
-     *
      */
     private static final int MAX_SIZE = 600;
     /**
@@ -62,6 +61,9 @@ public final class Timeserie {
      * or size limits.
      */
     private Map<Double, String> legend = new HashMap<>();
+
+    private long oldestStamp;
+    private long newestStamp;
 
     /**
      * Constructor for a timeserie, which parses samples given in a list of strings.
@@ -104,6 +106,11 @@ public final class Timeserie {
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
+                }
+
+                if (xs.size() > 1) {
+                    oldestStamp = xs.get(0);
+                    newestStamp = xs.get(xs.size() - 1);
                 }
 
                 legend.put(Collections.max(ys) + 1, "Upper");
@@ -154,6 +161,11 @@ public final class Timeserie {
                             + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
+                }
+
+                if (xs.size() > 1) {
+                    oldestStamp = xs.get(0);
+                    newestStamp = xs.get(xs.size() - 1);
                 }
 
                 legend.put(Collections.max(ys) + 1, "Upper");
@@ -213,6 +225,11 @@ public final class Timeserie {
                     }
                 }
 
+                if (xs.size() > 1) {
+                    oldestStamp = xs.get(0);
+                    newestStamp = xs.get(xs.size() - 1);
+                }
+
                 legend.put(Collections.max(ys) + 1, "Upper");
                 legend.put(Collections.min(ys) - 1, "Lower");
 
@@ -241,7 +258,7 @@ public final class Timeserie {
                     local_ys.add(value);
                 }
 
-               if (local_xs.size() <= MAX_SIZE) {
+                if (local_xs.size() <= MAX_SIZE) {
                     xs = local_xs;
                     ys = local_ys;
                 } else {
@@ -265,6 +282,11 @@ public final class Timeserie {
                             + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
+                }
+
+                if (xs.size() > 1) {
+                    oldestStamp = xs.get(0);
+                    newestStamp = xs.get(xs.size() - 1);
                 }
 
                 legend.put(Collections.max(ys) + 1, "Upper");

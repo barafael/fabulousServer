@@ -22,6 +22,7 @@ public final class RuleInfo {
      * The name of the Rule as shown in the frontend.
      */
     private final String name;
+
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
