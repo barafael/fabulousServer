@@ -58,6 +58,7 @@ public final class Main {
                     fhemModel = (FHEMModel) res.result();
                 } else {
                     System.out.println("System exiting: Periodic Parser returned with error!");
+                    res.cause().printStackTrace();
                     vertx.cancelTimer(parserTimerID);
                     vertx.close();
                 }

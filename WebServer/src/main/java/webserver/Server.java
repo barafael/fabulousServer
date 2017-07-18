@@ -724,19 +724,19 @@ public class Server extends AbstractVerticle {
         getListOfPermissions(routingContext.user().principal(), listFuture);
         listFuture.setHandler(res -> {
             if (listFuture.succeeded()) {
-                List<String> perm = listFuture.result();
                 vertx.executeBlocking(future -> {
+                    List<String> perm = listFuture.result();
                     Optional<String> answerData_opt;
                     if (hasTargetTime) {
                         answerData_opt = parser.getTimeserie(startTime, endTime, ID, perm);
                     } else {
                         answerData_opt = parser.getTimeserie(ID, perm);
                     }
-                    if (!answerData_opt.isPresent()) {
+                    if (answerData_opt.isPresent()) {
+                        future.handle(Future.succeededFuture(answerData_opt.get()));
+                    } else {
                         System.err.println("getTimeseries: AnswerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
-                    } else {
-                        future.handle(Future.succeededFuture(answerData_opt.get()));
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
@@ -746,6 +746,8 @@ public class Server extends AbstractVerticle {
                                 .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                        System.out.println(res2.cause());
+
                     }
                 });
             } else {
