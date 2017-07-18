@@ -67,7 +67,7 @@ public final class FHEMDevice {
 
         String alias = attributes.getAlias().orElse("Not supplied");
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, meta);
+        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
 
         sensor.setIcon(getAttributes().getIcon());
 

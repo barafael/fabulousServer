@@ -58,6 +58,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * This field contains information about the rules this sensor passes.
      */
     private final Set<RuleInfo> passedRules = new HashSet<>();
+
+    /**
+     * Whether this sensor should be shown in the application.
+     */
+    private final boolean isVisibleInApp;
     /**
      * The icon name of this sensor, which will be deserialized.
      */
@@ -69,11 +74,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private boolean switchable = false;
 
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
-                      HashMap<String, String> metaInfo) {
+                      boolean isVisibleInApp, HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.nameInApp = nameInApp;
         this.permissions = permissions;
+        this.isVisibleInApp = isVisibleInApp;
         this.metaInfo = metaInfo;
     }
 
