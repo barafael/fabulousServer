@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 /**
  * This class represents a chronological, sequential list of samples obtained from a FileLog in FHEM.
  *
+ * TODO simplify timeserie parsing, dedup
  * @author Rafael
  */
 //TODO before final: privatize this, only public for testing
@@ -129,9 +130,6 @@ public final class Timeserie {
                     local_ys.add(value);
                 }
 
-                legend.put(Collections.max(local_ys) + 1, "Upper");
-                legend.put(Collections.min(local_ys) - 1, "Lower");
-
                 if (local_xs.size() <= MAX_SIZE) {
                     xs = local_xs;
                     ys = local_ys;
@@ -157,6 +155,10 @@ public final class Timeserie {
                     xs = newTimestamps;
                     ys = newValues;
                 }
+
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
+
                 break;
             default:
                 xs = new ArrayList<>();
@@ -239,10 +241,7 @@ public final class Timeserie {
                     local_ys.add(value);
                 }
 
-                legend.put(Collections.max(local_ys) + 1, "Upper");
-                legend.put(Collections.min(local_ys) - 1, "Lower");
-
-                if (local_xs.size() <= MAX_SIZE) {
+               if (local_xs.size() <= MAX_SIZE) {
                     xs = local_xs;
                     ys = local_ys;
                 } else {
@@ -267,6 +266,10 @@ public final class Timeserie {
                     xs = newTimestamps;
                     ys = newValues;
                 }
+
+                legend.put(Collections.max(ys) + 1, "Upper");
+                legend.put(Collections.min(ys) - 1, "Lower");
+
                 break;
             default:
                 xs = new ArrayList<>();
