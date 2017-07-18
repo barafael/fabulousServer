@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static webserver.fhemParser.fhemModel.log.Logtype.DISCRETE;
-import static webserver.fhemParser.fhemModel.log.Logtype.PERCENT;
-import static webserver.fhemParser.fhemModel.log.Logtype.REAL;
-import static webserver.fhemParser.fhemModel.log.Logtype.UNKNOWN;
+import static webserver.fhemParser.fhemModel.log.LogType.DISCRETE;
+import static webserver.fhemParser.fhemModel.log.LogType.PERCENT;
+import static webserver.fhemParser.fhemModel.log.LogType.REAL;
+import static webserver.fhemParser.fhemModel.log.LogType.UNKNOWN;
 
 /**
  * This class is a proxy for an actual time serie, which can be parsed from disk on demand with {@link FHEMFileLog#getTimeserie() getTimeserie()}.
@@ -24,7 +24,7 @@ public final class FHEMFileLog {
     /* Json attributes, which are needed for deserialization.
        Static analysis reports false positives. */
     @SuppressWarnings("FieldCanBeLocal")
-    private final Logtype type;
+    private final LogType type;
     private final String name;
     @SuppressWarnings("FieldCanBeLocal")
     private final String sensorName;
@@ -136,7 +136,7 @@ public final class FHEMFileLog {
      * @param path path to logfile
      * @return an estimated logtype
      */
-    private Logtype guessLogtype(String path) {
+    private LogType guessLogtype(String path) {
         String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
@@ -144,7 +144,7 @@ public final class FHEMFileLog {
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return Logtype.UNKNOWN;
+            return LogType.UNKNOWN;
         }
         if (line == null) {
             System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
@@ -214,17 +214,17 @@ public final class FHEMFileLog {
             e.printStackTrace();
             return Optional.empty();
         }
-        Logtype logtype = guessLogtype(path);
-        switch (logtype) {
+        LogType logType = guessLogtype(path);
+        switch (logType) {
             case REAL:
             case PERCENT:
             case DISCRETE:
-                return Optional.of(new Timeserie(lines, logtype));
+                return Optional.of(new Timeserie(lines, logType));
             case UNKNOWN:
                 System.err.println("Couldn't guess type of log! " + path);
-                return Optional.of(new Timeserie(lines, logtype));
+                return Optional.of(new Timeserie(lines, logType));
             default:
-                System.err.println("Unimplemented logtype! " + logtype.name());
+                System.err.println("Unimplemented logType! " + logType.name());
                 return Optional.empty();
         }
     }
@@ -280,17 +280,17 @@ public final class FHEMFileLog {
             e.printStackTrace();
             return Optional.empty();
         }
-        Logtype logtype = guessLogtype(path);
-        switch (logtype) {
+        LogType logType = guessLogtype(path);
+        switch (logType) {
             case REAL:
             case PERCENT:
             case DISCRETE:
-                return Optional.of(new Timeserie(filelog, logtype, start, end));
+                return Optional.of(new Timeserie(filelog, logType, start, end));
             case UNKNOWN:
                 System.err.println("Couldn't guess type of log! " + path);
-                return Optional.of(new Timeserie(filelog, logtype, start, end));
+                return Optional.of(new Timeserie(filelog, logType, start, end));
             default:
-                System.err.println("Unimplemented logtype! " + logtype.name());
+                System.err.println("Unimplemented logType! " + logType.name());
                 return Optional.empty();
         }
 

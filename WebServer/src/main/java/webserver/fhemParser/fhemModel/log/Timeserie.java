@@ -58,12 +58,12 @@ public final class Timeserie {
      * Constructor for a timeserie, which parses samples given in a list of strings.
      *
      * @param samples a list of strings directly from a FileLog
-     * @param logtype the desired filelog type
+     * @param logType the desired filelog type
      */
     //TODO: simplify by using range from 0 to now
-    Timeserie(List<String> samples, Logtype logtype) {
+    Timeserie(List<String> samples, LogType logType) {
         this.legend = new HashMap<>();
-        switch (logtype) {
+        switch (logType) {
             case UNKNOWN:
             case DISCRETE:
                 /* avoid realloc */
@@ -160,13 +160,13 @@ public final class Timeserie {
      * Constructor for a timeserie, which parses samples given in a list of strings.
      *
      * @param samples a list of strings directly from a FileLog
-     * @param logtype the desired filelog type
+     * @param logType the desired filelog type
      * @param start   unix timestamp to start with
      * @param end     unix timestamp to end with
      */
-    Timeserie(List<String> samples, Logtype logtype, long start, long end) {
+    Timeserie(List<String> samples, LogType logType, long start, long end) {
         this.legend = new HashMap<>();
-        switch (logtype) {
+        switch (logType) {
             case UNKNOWN:
             case DISCRETE:
                 /* avoid realloc */

@@ -5,6 +5,6 @@ package webserver.fhemParser.fhemModel.log;
  *
  * @author Rafael on 16.06.17.
  */
-public enum Logtype {
+public enum LogType {
     REAL, PERCENT, DISCRETE, UNKNOWN,
 }
