@@ -27,12 +27,18 @@ public class RuleParamCollection {
     @SerializedName("Rules")
     private final Set<RuleParam> ruleParams = new HashSet<>();
 
-    /* TODO: Suppress direct creation */
-    /* Currently open because testing */
+    /** TODO: Suppress direct creation
+     Currently open for unit tests */
     public RuleParamCollection(RuleParam... ruleParam) {
         ruleParams.addAll(Arrays.asList(ruleParam));
     }
 
+    /**
+     * Construct an instance of this class directly from the given JSON.
+     * @param json a string containing a valid rule definition
+     * @return a set of rule parameters
+     * @throws JsonSyntaxException if the input string was not valid JSON
+     */
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
         RuleParamCollection ruleParamCollection = gson.fromJson(json, RuleParamCollection.class);

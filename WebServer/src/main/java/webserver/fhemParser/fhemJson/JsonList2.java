@@ -71,7 +71,7 @@ public class JsonList2 {
     }
 
     /**
-     * This method converts a parsed jsonList2 to a FHEMModel
+     * This method converts a parsed jsonList2 to a FHEMModel.
      *
      * @return a FHEMModel generated from the contents of jsonList2.
      */

@@ -9,17 +9,19 @@ import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This serializer gets a list of permissions and, when serializing, uses them to filter out fields which should not be visible.
+ * This serializer gets a list of permissions and, when serializing, uses them to filter out
+ * fields which should not be visible.
  * It is intended to be chained together with other serializers.
  *
  * @author Rafael on 22.06.17.
  */
 class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
     /**
-     * A list of permision identifiers that are used to remove/retain json elements.
+     * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
 

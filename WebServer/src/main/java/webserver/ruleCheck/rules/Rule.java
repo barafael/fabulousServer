@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * This abstract class contains the attributes of a rule in fhem, most notably the eval(model) method.
  *
  * @author Rafael
- *         TODO: implement 'invisible' attribute, which makes a rule invisible for the app but can still be used from other rules?
  */
 public abstract class Rule {
     /**
@@ -36,9 +35,19 @@ public abstract class Rule {
      * The permissions for this rule to be shown.
      */
     private final String permission;
+    /**
+     * The 'OK' message.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
+    /**
+     * A map of warninglevels to strings
+     * TODO generify this, get rid of warning levels
+     */
     private final Map<WARNINGLEVEL, String> errorMessages;
+    /**
+     * The names of related logs.
+     */
     private final Set<String> relatedLogNames = new HashSet<>();
     /**
      * Whether the attribute should be applied to model.
@@ -46,18 +55,35 @@ public abstract class Rule {
      * for booleans if a field is not set at all in the input.
      */
     private final boolean invisible;
+
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
-    RuleState ruleState;
+    protected RuleState ruleState;
+
     /**
      * Whether this rule has already been evaluated.
      */
-    boolean isEvaluated = false;
+    protected boolean isEvaluated = false;
+    /**
+     * A map of durations to their warning levels.
+     */
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
+    /**
+     * Required true prerequisites.
+     */
     private Set<Rule> requiredTrueRules;
+    /**
+     * Required false prerequisites.
+     */
     private Set<Rule> requiredFalseRules;
 
+    /**
+     * Construct a rule from rule parameters.
+     * If some values in the rule parameters aren't set, default values are used.
+     *
+     * @param ruleParam the rule parameters
+     */
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
         permission = ruleParam.getPermissionField();
@@ -82,6 +108,20 @@ public abstract class Rule {
         return eval(model, new HashSet<>());
     }
 
+    /**
+     * Evaluate a rule.
+     * If the evaluation already happened, the result will be cached.
+     * The evaluation keeps track of visited places to avoid getting stuck in an infinite loop (cycle).
+     * Then, the preconditions are evaluated (required true/false rules).
+     * Lastly, the specific evaluation of the concrete underlying rule is called.
+     * This is a recursive method with many subcalls, but every call that results in a successful evaluation
+     * will cache the result. As a consequence, only n * m rules are evaluated, with n being the number of rules,
+     * and m being the amount of sensors.
+     *
+     * @param model the model to acquire information from
+     * @param visited the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
+     * @return the state of this rule, consisting of passed and violated sensors
+     */
     private RuleState eval(FHEMModel model, Set<Rule> visited) {
         if (!visited.add(this)) {
             System.err.println("There was a cyclic rule dependency involving " + visited.size() + " rules! Breaking the cycle by assuming this rule is violated.");

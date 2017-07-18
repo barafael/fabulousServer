@@ -28,6 +28,14 @@ public final class RuleState {
     private final Set<FHEMSensor> violatedSensors;
     private final boolean isOk;
 
+    /**
+     * Construct a rule state given a rule, passed, and violated sensors.
+     * The state is set to ok if there were passed but no violated sensors.
+     *
+     * @param rule the evaluated rule
+     * @param passedSensors the passed sensors
+     * @param violatedSensors the violated sensors
+     */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
         this.rule = rule;
         this.passedSensors = passedSensors;
@@ -35,6 +43,16 @@ public final class RuleState {
         isOk = !passedSensors.isEmpty() && violatedSensors.isEmpty();
     }
 
+    /**
+     * Specific constructor for general predicate.
+     * This is necessary because the state of a general predicate is not dependent on it's
+     * passed or violated rules.
+     * Instead, the general predicate is evaluated independently from the input,
+     * and it's state is set in this constructor.
+     *
+     * @param ruleOK whether the rule passed
+     * @param generalPredicate the general predicate which was evaluated
+     */
     public RuleState(boolean ruleOK, GeneralPredicate generalPredicate) {
         isOk = ruleOK;
         this.rule = generalPredicate;

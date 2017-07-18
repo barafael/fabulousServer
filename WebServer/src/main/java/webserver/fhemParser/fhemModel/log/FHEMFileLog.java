@@ -23,13 +23,32 @@ import static webserver.fhemParser.fhemModel.log.LogType.UNKNOWN;
 public final class FHEMFileLog {
     /* Json attributes, which are needed for deserialization.
        Static analysis reports false positives. */
+    /**
+     * The 'guessed' type of this log (discrete, percent, real, or unknown).
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final LogType type;
+
+    /**
+     * The name of this log, as set in FHEM.
+     */
     private final String name;
+
+    /**
+     * The name of the corresponding sensor.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String sensorName;
+
+    /**
+     * The 'guessed' unit of this log.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String unit;
+
+    /**
+     * The path to the actual logfile on disk.
+     */
     private final transient String path;
 
     /**
@@ -163,10 +182,22 @@ public final class FHEMFileLog {
         }
     }
 
+    /**
+     * This log is 'switchable' if the permission is set to A_.*
+     * TODO update this
+     * @return whether this log belongs to a switchable sensor
+     */
     public boolean isSwitchable() {
         return switchable;
     }
 
+    /**
+     * A log belongs to a permitted switch if the necessary permissions exist and
+     * start with A_.*
+     * TODO update this
+     * @param permissions
+     * @return
+     */
     public boolean isPermittedSwitch(List<String> permissions) {
         for (String permission : this.permissions) {
             if (permissions.contains(permission) && isSwitchable()) {

@@ -18,7 +18,7 @@ public final class FHEMUtils {
     }
 
     /**
-     * Accessor for the $FHEMPORT environment variable
+     * Accessor for the $FHEMPORT environment variable.
      *
      * @return the value of the $FHEMPORT environment variable
      */

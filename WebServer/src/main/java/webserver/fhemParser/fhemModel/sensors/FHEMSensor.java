@@ -73,6 +73,16 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     private boolean switchable = false;
 
+    /**
+     * Construct a FHEMSensor.
+     * @param coordX the x coordinate in percent
+     * @param coordY the y coordinate in percent
+     * @param name the name of the sensor in FHEM
+     * @param nameInApp the name of the sensor in the app, should be the FHEM alias
+     * @param permissions the permissions of this sensor, read from FHEM
+     * @param isVisibleInApp whether this sensor should be visible in the app
+     * @param metaInfo meta information like readings and custom variables which are useful for display
+     */
     public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
                       boolean isVisibleInApp, HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
@@ -83,10 +93,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         this.metaInfo = metaInfo;
     }
 
+    /**
+     * Add meta information to this sensor.
+     * @param key the variable's name
+     * @param value the value to set it to
+     */
     public void addMeta(@NotNull String key, @NotNull String value) {
         metaInfo.put(key, value);
     }
 
+    /**
+     * Add a log to this sensor.
+     * @param log the log to add
+     */
     public void addLog(FHEMFileLog log) {
         if (log.isSwitchable()) {
             switchable = true;
@@ -98,18 +117,45 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return name;
     }
 
+    /**
+     * Set the icon of this sensor (as name of icon in the app).
+     * @param icon the name of the icon
+     */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
+    /**
+     * Access the violated rules of this sensor as ruleinfo.
+     * @return the violated rules' information
+     */
     public Set<RuleInfo> getViolatedRules() {
         return violatedRules;
     }
 
+    /**
+     * Access the violated rules of this sensor as ruleinfo.
+     * @return the violated rules' information
+     */
     public Set<RuleInfo> getPassedRules() {
         return passedRules;
     }
 
+    /**
+     * Get all rule infos, whether passed or violated.
+     * @return a set of all ruleinfos
+     */
+    public Set<RuleInfo> getRuleInfos() {
+        Set<RuleInfo> all = new HashSet<>(passedRules);
+        all.addAll(violatedRules);
+        return all;
+    }
+
+    /**
+     * Get a log of this sensor by name.
+     * @param filelogName the name of the log
+     * @return the filelog of this name, or empty if not present
+     */
     public Optional<FHEMFileLog> getLogByName(String filelogName) {
         for (FHEMFileLog log : fileLogs) {
             if (log.getName().equals(filelogName)) {
@@ -117,12 +163,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
             }
         }
         return Optional.empty();
-    }
-
-    public Set<RuleInfo> getRuleInfos() {
-        Set<RuleInfo> all = new HashSet<>(passedRules);
-        all.addAll(violatedRules);
-        return all;
     }
 
     /**
@@ -143,10 +183,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         }
     }
 
+    /**
+     * This device is switchable if it contains 'switchable' logs.
+     * @return if this device can be switched on or off
+     */
     public boolean isSwitchable() {
         return switchable;
     }
 
+    /**
+     * A sensor is a permitted switch if permissions suffice and it is switchable.
+     * @param permissions the caller's permissions
+     * @return whether this device can be switched on and off
+     */
     public boolean isPermittedSwitch(List<String> permissions) {
         for (FHEMFileLog log : this) {
             if (log.isPermittedSwitch(permissions)) {
@@ -202,6 +251,10 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return Optional.ofNullable(metaInfo.get(field));
     }
 
+    /**
+     * Get all logs of this sensor.
+     * @return a set of logs which contain data about this sensor
+     */
     public HashSet<FHEMFileLog> getLogs() {
         return fileLogs;
     }
@@ -225,6 +278,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * This method is necessary to be able to iterate over an internal data structure.
+     * @param action the consumer for each element of the iteration
      */
     public void forEach(Consumer<? super FHEMFileLog> action) {
         fileLogs.forEach(action);

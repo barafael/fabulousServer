@@ -10,6 +10,9 @@ import com.google.gson.annotations.SerializedName;
  */
 class ValueTimePair {
     /* Those fields are only written by Gson */
+    /**
+     * A value from a reading.
+     */
     @SerializedName("Value")
     String value;
     /* // Time; currently unused.

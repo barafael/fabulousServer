@@ -21,10 +21,19 @@ import java.util.Set;
  * @author Rafael on 07.07.17.
  */
 public final class SensorPredicate extends Rule {
+    /**
+     * Construct a sensor predicate.
+     * @param ruleParam the parameters of the general predicate
+     */
     public SensorPredicate(RuleParam ruleParam) {
         super(ruleParam);
     }
 
+    /**
+     * Specific evaluation of a sensor predicate rule on a model.
+     * @param model the model to use information from
+     * @return the rule state, containing violated and passed sensors
+     */
     @Override
     public RuleState specificEval(FHEMModel model) {
         Set<FHEMSensor> okSensors = new HashSet<>();
@@ -99,8 +108,8 @@ public final class SensorPredicate extends Rule {
                 continue;
             } catch (InvocationTargetException e) {
                 if (e.getTargetException() instanceof ClassCastException) {
-                    System.err.println("You might have defined a predicate with the wrong parameter types! " +
-                            "Parameter type must be exactly one List<String>.");
+                    System.err.println("You might have defined a predicate with the wrong parameter types! "
+                            + "Parameter type must be exactly one List<String>.");
                 } else {
                     System.err.println("The function " + methodName + " caused a " + e.getTargetException()
                             + " on the sensor " + sensorName);

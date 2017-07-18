@@ -57,6 +57,9 @@ public class RuleCheckerTest {
         stdin.close();
     }
 
+    /**
+     * Reset the FHEM state.
+     */
     @Before
     public void cleanState() {
         RuleChecker.getInstance().clear();
@@ -95,6 +98,9 @@ public class RuleCheckerTest {
         }
     }
 
+    /**
+     * Construct a rule directly from parameters.
+     */
     @Test
     public void testConstructRuleParam() {
         Set<String> sensorlist = new HashSet<>(Arrays.asList("sensor1", "sensor2", "sensor3"));
@@ -128,6 +134,8 @@ public class RuleCheckerTest {
     /**
      * The default rules are in the top-lvl dir 'rules.json'.
      * Evaluating these is inconclusive because the content changes over time.
+     *
+     * @throws IOException if I/O goes wrong
      */
     @Test
     public void testStateCheckerEvaluateDefaultRules() throws IOException {
@@ -140,7 +148,7 @@ public class RuleCheckerTest {
         boolean interactive_testing = false;
 
         //noinspection ConstantConditions
-        while(interactive_testing) {
+        while (interactive_testing) {
             jullData();
             model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
             assert model_opt.isPresent();

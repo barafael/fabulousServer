@@ -19,10 +19,19 @@ import java.util.List;
  * @author Rafael on 07.07.17.
  */
 public final class GeneralPredicate extends Rule {
+    /**
+     * Construct a general predicate.
+     * @param ruleParam the parameters of the general predicate
+     */
     public GeneralPredicate(RuleParam ruleParam) {
         super(ruleParam);
     }
 
+    /**
+     * Specific evaluation of a general predicate on a model.
+     * @param model the model to use information from
+     * @return the rule state, containing violated and passed sensors
+     */
     @Override
     public RuleState specificEval(FHEMModel model) {
         String[] tokens = expression.split(" ");
@@ -98,8 +107,8 @@ public final class GeneralPredicate extends Rule {
             return ruleState;
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof ClassCastException) {
-                System.err.println("You might have defined a predicate with the wrong parameter types! " +
-                        "Parameter type must be exactly one List<String>.");
+                System.err.println("You might have defined a predicate with the wrong parameter types! "
+                        + "Parameter type must be exactly one List<String>.");
             } else {
                 System.err.println("The function " + methodName + " caused a " + e.getTargetException()
                         + " on the predicate collection.");

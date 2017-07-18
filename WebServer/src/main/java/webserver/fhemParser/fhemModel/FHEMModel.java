@@ -201,6 +201,10 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
+    /**
+     * Generate a report of all the ruleinfos in the sensors of this model.
+     * @return a set of ruleinfos which are set in this model
+     */
     public Set<RuleInfo> getReport() {
         Set<RuleInfo> report = new HashSet<>();
         for (FHEMRoom room : this) {

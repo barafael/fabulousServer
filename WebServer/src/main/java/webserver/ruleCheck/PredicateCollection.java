@@ -40,6 +40,11 @@ public class PredicateCollection {
         return true;
     }
 
+    /**
+     * A predicate to check if hours are between 6am and 8pm.
+     * @param _ignored ignored parameter list
+     * @return whether the current time is a working hour
+     */
     public boolean isWorkingHours(@SuppressWarnings("unused") List<String> _ignored) {
         long startTime = timeOfTodayInUNIXSeconds(6, 0);
         long endTime = timeOfTodayInUNIXSeconds(20, 0);
@@ -48,6 +53,11 @@ public class PredicateCollection {
         return now > startTime && now < endTime;
     }
 
+    /**
+     * A predicate to check if the sun is up at this moment.
+     * @param _ignored ignored parameter list
+     * @return whether the sun is up at this moment
+     */
     public boolean sunIsUp(@SuppressWarnings("unused") List<String> _ignored) {
         long sunrise = officialSunrise.getTimeInMillis() / 1000L;
         long sunset = officialSunset.getTimeInMillis() / 1000L;
@@ -55,6 +65,11 @@ public class PredicateCollection {
         return now > sunrise && now < sunset;
     }
 
+    /**
+     * Weather warning predicate, only to show the concept.
+     * @param _ignored ignored parameter list
+     * @return always true
+     */
     @SuppressWarnings({"unused", "SameReturnValue"})
     public boolean noWeatherWarnings(@SuppressWarnings("unused") List<String> _ignored) {
         // Just an idea...
@@ -62,6 +77,14 @@ public class PredicateCollection {
         return true;
     }
 
+    /**
+     * Calculates a time of the current day as absolute unix seconds.
+     * If hours and minutes are not in range, their modulo is used.
+     *
+     * @param hour an int from 0(inclusive) to 24(exclusive)
+     * @param minute an int from 0(inclusive) to 60(exclusive)
+     * @return the absolute unix timestamp of the hour and minute given on this day
+     */
     private long timeOfTodayInUNIXSeconds(int hour, int minute) {
         Calendar time = new GregorianCalendar();
         time.set(Calendar.HOUR_OF_DAY, hour);

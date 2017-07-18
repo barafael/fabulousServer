@@ -16,10 +16,19 @@ import java.util.regex.Pattern;
  * @author Rafael on 07.07.17.
  */
 public final class NumericRule extends Rule {
+    /**
+     * Construct a numeric rule.
+     * @param ruleParam the parameters of the general predicate
+     */
     public NumericRule(RuleParam ruleParam) {
         super(ruleParam);
     }
 
+    /**
+     * Specific evaluation of a numeric rule on a model.
+     * @param model the model to use information from
+     * @return the rule state, containing violated and passed sensors
+     */
     @Override
     public RuleState specificEval(FHEMModel model) {
         Set<FHEMSensor> okSensors = new HashSet<>();

@@ -59,7 +59,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
     }
 
     /**
-     * Getter for this rooms sensor set
+     * Getter for this room's sensor set.
      *
      * @return a set of sensors contained in this room
      */
@@ -67,6 +67,10 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         return sensors;
     }
 
+    /**
+     * Add a sensor to this room.
+     * @param sensor the sensor to add
+     */
     public void addSensor(@NotNull FHEMSensor sensor) {
         sensors.add(sensor);
     }

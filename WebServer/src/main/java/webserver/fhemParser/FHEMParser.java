@@ -90,6 +90,11 @@ public final class FHEMParser {
         return this;
     }
 
+    /**
+     * Get a FHEM model as (optional) JSON, using the default rules to evaluate.
+     * @param permissions the permissions to apply to this model, filtering out everything else
+     * @return the filtered and evaluated model
+     */
     public Optional<String> getFHEMModelJSON(List<String> permissions) {
         return getFHEMModelJSON(permissions, "rules.json");
     }
@@ -104,7 +109,8 @@ public final class FHEMParser {
      * Then, the ignored fields are filtered out
      * Most of the work is done in the custom {@link webserver.fhemParser.fhemModel.serializers Gson serializers}.
      *
-     * @param permissions a list of permissions which limit what information will be given to the caller.
+     * @param permissions a list of permissions which limit what information will be given to the caller
+     * @param path the path to the rules file, relative to the server root directory
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions, String path) {
@@ -115,6 +121,10 @@ public final class FHEMParser {
         return getFHEMModel(path).map(gson::toJson);
     }
 
+    /**
+     * Use the default rules and no permissions to generate an (optional) FHEM model.
+     * @return an optional FHEM model
+     */
     public Optional<FHEMModel> getFHEMModel() {
         return getFHEMModel("rules.json");
     }
@@ -123,6 +133,7 @@ public final class FHEMParser {
      * This method gets a FHEM model. Depending on where it is running, it gets data from different sources,
      * permitting easy mocking of real data. Pulling FHEM data to the local machine: ./pull.sh from the top-lvl dir.
      *
+     * @param pathToRules path to rules file
      * @return a FHEMModel, if present
      */
     public Optional<FHEMModel> getFHEMModel(String pathToRules) {
@@ -342,6 +353,13 @@ public final class FHEMParser {
         }
     }
 
+    /**
+     * Set a FHEM actuator to a given state, checking for permissions.
+     * @param sensorName the name of the sensor to set
+     * @param state the state to set the sensor to
+     * @param permissions the permissions of the caller
+     * @return true if the operation succeeded
+     */
     public synchronized boolean setActuator(String sensorName, boolean state, List<String> permissions) {
         String set_state = (state ? "on" : "off");
         if (model.getSensorByName(sensorName).isPresent() && model.getSensorByName(sensorName).get().isPermittedSwitch(permissions)) {

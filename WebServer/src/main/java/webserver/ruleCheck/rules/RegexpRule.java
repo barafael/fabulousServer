@@ -13,12 +13,20 @@ import java.util.Set;
  *
  * @author Rafael on 07.07.17.
  */
-public class RegexpRule extends Rule {
-
+public final class RegexpRule extends Rule {
+    /**
+     * Construct a regexp rule.
+     * @param ruleParam the parameters of the general predicate
+     */
     public RegexpRule(RuleParam ruleParam) {
         super(ruleParam);
     }
 
+    /**
+     * Specific evaluation of a regexp rule on a model.
+     * @param model the model to use information from
+     * @return the rule state, containing violated and passed sensors
+     */
     @Override
     public RuleState specificEval(FHEMModel model) {
         Set<FHEMSensor> okSensors = new HashSet<>();

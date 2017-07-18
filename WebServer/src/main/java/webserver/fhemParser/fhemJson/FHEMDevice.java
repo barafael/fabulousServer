@@ -110,6 +110,7 @@ public final class FHEMDevice {
         }
         String permissionField = attributes.getPermissionField().orElse("");
         /* Switchable permissions MUST start with A_ */
+        /* TODO handle multiple permissions and comma-separation */
         boolean switchable = permissionField.startsWith("A_");
         List<String> permissions = Arrays.asList(permissionField.split(","));
 

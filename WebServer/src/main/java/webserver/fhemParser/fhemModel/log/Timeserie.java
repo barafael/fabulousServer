@@ -35,6 +35,14 @@ public final class Timeserie {
      * A pattern used to check if a string is parseable to a number (decimal or integer).
      */
     private static final transient Pattern NUMBER_PATTERN = Pattern.compile("[+-]?([0-9]+[.])?[0-9]+");
+    /**
+     * This size is used to limit the length of the timeserie.
+     * Averaging is done in
+     * {@link Timeserie#Timeserie(java.util.List, webserver.fhemParser.fhemModel.log.LogType) the constructor} and
+     * {@link Timeserie#Timeserie(java.util.List, webserver.fhemParser.fhemModel.log.LogType, long, long)
+     * the range constructor}
+     *
+     */
     private static final int MAX_SIZE = 600;
     /**
      * A list of timestamps in unix long format.

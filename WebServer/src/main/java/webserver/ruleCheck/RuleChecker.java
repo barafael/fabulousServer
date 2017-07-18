@@ -21,7 +21,13 @@ import java.util.stream.Collectors;
  * @author Rafael
  */
 public final class RuleChecker {
+    /**
+     * The singleton instance.
+     */
     private static RuleChecker instance;
+    /**
+     * The static state of FHEM, consisting of passed and violated rules and their history.
+     */
     private final State fhemState = new State();
 
     private RuleChecker() {
@@ -59,27 +65,53 @@ public final class RuleChecker {
         return Optional.of(params.toRules());
     }
 
+    /**
+     * Evaluate a model with the default rule set.
+     * @param model the model to acquire the information from
+     */
     public void evaluate(FHEMModel model) {
         evaluate(model, "rules.json");
     }
 
+    /**
+     * Evaluate a model, given the path to a rules file.
+     * @param model the model to evaluate
+     * @param path the path to the set of rules
+     */
     public void evaluate(FHEMModel model, String path) {
         Optional<Set<Rule>> rules_opt = getRules(path);
         rules_opt.ifPresent(rules -> evaluate(model, rules));
     }
 
+    /**
+     * Evaluate a model given a set of rules
+     * @param model the model to evaluate
+     * @param rules the set of rules
+     */
     private void evaluate(FHEMModel model, Set<Rule> rules) {
         Set<RuleState> states = rules.stream().map(rule -> rule.eval(model)).collect(Collectors.toSet());
         fhemState.update(states);
         fhemState.apply(model);
     }
 
+    /**
+     * Load rule parameters from a given file.
+     * @param path a string containing a path to the rules file
+     * @return a collection of rule parameters
+     *
+     * @throws IOException if reading the rules file went wrong
+     * @throws JsonSyntaxException if the syntax of the rules file was incorrect json
+     */
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
         /* TODO add translations for rules? */
         String content = new String(Files.readAllBytes(Paths.get(path)));
         return RuleParamCollection.fromJson(content);
     }
 
+    /**
+     * Completely reset the FHEM state.
+     * Useful for unit tests.
+     */
     public void clear() {
         fhemState.clear();
     }

@@ -113,6 +113,7 @@ class FHEMDeviceAttributes {
      * @return the userattr 'permissions' in FHEM
      */
     Optional<String> getPermissionField() {
+        //TODO handle comma-separation?
         return Optional.ofNullable(permissions);
     }
 

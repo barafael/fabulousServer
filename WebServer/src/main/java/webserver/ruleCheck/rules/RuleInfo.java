@@ -31,6 +31,9 @@ public final class RuleInfo {
      */
     @SuppressWarnings("FieldCanBeLocal")
     private final Set<String> relatedLogNames = new HashSet<>();
+    /**
+     * A map of timestamps to states of rules. False if violated.
+     */
     private final Map<Long, Boolean> changeStamps = new TreeMap<>();
     /**
      * The state of this rule. False if violated.
@@ -50,10 +53,11 @@ public final class RuleInfo {
     /**
      * Construct a RuleInfo instance.
      *
-     * @param name       Name of the rule as shown in app
-     * @param isOk       state of the rule; true if ok
-     * @param permission necessary permissions
-     * @param message    the message about the state of the rule
+     * @param name            Name of the rule as shown in app
+     * @param isOk            state of the rule; true if ok
+     * @param permission      necessary permissions
+     * @param message         the message about the state of the rule
+     * @param relatedLogNames the set of names of related logfiles
      */
     public RuleInfo(String name,
                     boolean isOk,
@@ -69,6 +73,11 @@ public final class RuleInfo {
         changeStamps.put(Instant.now().getEpochSecond(), isOk);
     }
 
+    /**
+     * Set the current message. If there is a change to the old message, hasNewMessage is true.
+     *
+     * @param message the new or old message
+     */
     public void setMessage(String message) {
         this.hasNewMessage = !this.message.equals(message);
         this.message = message;
@@ -82,10 +91,22 @@ public final class RuleInfo {
         return isOk;
     }
 
+    /**
+     * This rule is permitted if it's permission is contained in the given permissions.
+     *
+     * @param permissions the caller's permissions
+     * @return whether the info is permitted
+     */
     public boolean isPermitted(List<String> permissions) {
         return permissions.contains(permission);
     }
 
+    /**
+     * Set the state to ok.
+     * If the state is already ok, then the set is ignored.
+     * If the state was not ok, the changestamps are updated.
+     * The changestamps are never more than CHANGE_THRESHHOLD.
+     */
     public void setOk() {
         if (isOk) {
             return;
@@ -100,6 +121,12 @@ public final class RuleInfo {
         }
     }
 
+    /**
+     * Set the state to not ok.
+     * If the state is already not ok, then the set is ignored.
+     * If the state was ok, the changestamps are updated.
+     * The changestamps are never more than CHANGE_THRESHHOLD.
+     */
     public void setNotOk() {
         if (!isOk) {
             return;
@@ -114,6 +141,11 @@ public final class RuleInfo {
         }
     }
 
+    /**
+     * Get the timestamp of the last change.
+     *
+     * @return the timestamp of the last change
+     */
     public long getLastStamp() {
         return Collections.max(changeStamps.keySet());
     }

@@ -15,6 +15,8 @@ import java.util.TreeMap;
  * All the getters from this class never return null. When they are not set in the corresponding entry
  * in the rules file, they are set to a standard value.
  *
+ * See documentation of rule checker for a description of all the single arguments.
+ *
  * @author Rafael on 07.07.17.
  */
 public final class RuleParam {

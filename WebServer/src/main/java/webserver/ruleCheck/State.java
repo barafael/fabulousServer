@@ -27,6 +27,10 @@ class State {
      */
     private final Map<String, Map<Rule, RuleInfo>> stateMap = new HashMap<>();
 
+    /**
+     * Update the static state with new results from an evaluation.
+     * @param states the new results
+     */
     void update(Set<RuleState> states) {
 
         for (RuleState state : states) {
@@ -104,6 +108,10 @@ class State {
         }
     }
 
+    /**
+     * Remove sensors which are not in the given FHEM model from the static state.
+     * @param model the model to use to check for sensors
+     */
     private void prune(FHEMModel model) {
         Set<String> sensorNames = stateMap.keySet();
         sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
@@ -125,6 +133,10 @@ class State {
         }
     }
 
+    /**
+     * Reset the static state.
+     * Useful for unit tests.
+     */
     void clear() {
         stateMap.clear();
     }

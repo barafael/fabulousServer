@@ -36,8 +36,7 @@ class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
     @Override
     public JsonElement serialize(RuleInfo ruleInfo, Type type, JsonSerializationContext jsc) {
         /* All lower serializers need to be reattached here since the custom serializer actually uses
-        a separate instance of gson
-         */
+        a separate instance of gson */
         JsonObject jObj = (JsonObject) new GsonBuilder()
                 .create().toJsonTree(ruleInfo);
         if (!ruleInfo.isPermitted(permissions)) {
