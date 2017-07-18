@@ -27,7 +27,8 @@ public final class FHEMDeviceInternals {
     /**
      * This fields' presence marks a supersensor which is not useful for the frontend.
      */
-    private String channel_01;
+    @SerializedName("channel_01")
+    private String channel01;
     /**
      * This fields' presence marks a supersensor which is not useful for the frontend.
      */
@@ -94,14 +95,26 @@ public final class FHEMDeviceInternals {
         return Optional.ofNullable(currentlogfile);
     }
 
+    /**
+     * Access the FHEM type attribute.
+     * @return optional of the value of the FHEM type attribute
+     */
     public Optional<String> getType() {
         return Optional.ofNullable(type);
     }
 
+    /**
+     * Access the FHEM state attribute.
+     * @return optional of the FHEM state attribute
+     */
     public Optional<String> getState() {
         return Optional.ofNullable(state);
     }
 
+    /**
+     * Access the FHEM regexp attribute (in FileLogs).
+     * @return optional of the FHEM regexp attribute
+     */
     public Optional<String> getRegexp() {
         return Optional.ofNullable(regexp);
     }
@@ -112,6 +125,6 @@ public final class FHEMDeviceInternals {
      * @return whether the internals belong to a supersensor
      */
     public boolean isSupersensor() {
-        return channel_01 != null || clients != null;
+        return channel01 != null || clients != null;
     }
 }

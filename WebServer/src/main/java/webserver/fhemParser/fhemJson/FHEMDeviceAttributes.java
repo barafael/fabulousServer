@@ -43,9 +43,17 @@ class FHEMDeviceAttributes {
      * Rooms in FHEM really are just String tags.
      */
     /* More than one room is possible! */
+    /**
+     * The comma-separated string containing room names of the device.
+     */
     @SerializedName("room")
     private String rooms;
-    private String icon_in_app;
+
+    /**
+     * A user attribute set to the icon name.
+     */
+    @SerializedName("icon_in_app")
+    private String iconInApp;
     /**
      * SubType as defined in FHEM. TODO read this in metainfo
      */
@@ -101,10 +109,9 @@ class FHEMDeviceAttributes {
 
     /**
      * Accessor for the userattr 'permissions' in FHEM.
-     *
+     * ('Field' because getPermission sounds like a permission inquiry.)
      * @return the userattr 'permissions' in FHEM
      */
-    /* Field because getPermissions() sounds weird */
     Optional<String> getPermissionField() {
         return Optional.ofNullable(permissions);
     }
@@ -121,10 +128,9 @@ class FHEMDeviceAttributes {
     /**
      * Acessor for the userattr 'icon' in FHEM.
      *
-     * @return the userattr 'icon' in FHEM
+     * @return the userattr 'icon_in_app' in FHEM
      */
-    /* TODO: deliver icon svg maybe? */
     String getIcon() {
-        return icon_in_app;
+        return iconInApp;
     }
 }

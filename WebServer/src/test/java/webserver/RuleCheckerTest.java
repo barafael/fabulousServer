@@ -144,7 +144,6 @@ public class RuleCheckerTest {
             jullData();
             model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
             assert model_opt.isPresent();
-            model = model_opt.get();
         }
     }
 

@@ -45,7 +45,7 @@ public interface FHEMConnection {
     Optional<String> execCommand(String command) throws IOException;
 
     /**
-     * Executes a perl command in FHEM
+     * Executes a perl command in FHEM.
      *
      * @param command the FHEM perl command to execute
      * @return the return stdout from the FHEM command, most often empty ('no news is good news')

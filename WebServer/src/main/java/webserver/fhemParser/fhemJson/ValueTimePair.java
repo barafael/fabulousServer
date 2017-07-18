@@ -12,6 +12,8 @@ class ValueTimePair {
     /* Those fields are only written by Gson */
     @SerializedName("Value")
     String value;
+    /* // Time; currently unused.
     @SerializedName("Time")
     private String time;
+    */
 }

@@ -1,5 +1,7 @@
 package webserver.fhemParser.fhemJson;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +13,8 @@ import java.util.Map;
 final class FHEMDeviceReadings {
     /* Fields only written by Gson */
     private ValueTimePair battery;
-    private ValueTimePair battery_percent;
+    @SerializedName("battery_percent")
+    private ValueTimePair batteryPercent;
     private ValueTimePair humidity;
     private ValueTimePair temperature;
     private ValueTimePair co2;
@@ -31,8 +34,8 @@ final class FHEMDeviceReadings {
         if (battery != null) {
             ret.put("Battery", battery.value);
         }
-        if (battery_percent != null) {
-            ret.put("Battery percent", battery_percent.value + " %");
+        if (batteryPercent != null) {
+            ret.put("Battery percent", batteryPercent.value + " %");
         }
         if (humidity != null) {
             ret.put("Humidity", humidity.value + " %");
