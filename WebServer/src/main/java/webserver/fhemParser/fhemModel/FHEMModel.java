@@ -29,10 +29,9 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     private final HashSet<FHEMRoom> rooms;
 
     /**
-     * A report about all the passed and violated rules.
+     * Construct a new model with given rooms.
+     * @param rooms
      */
-    private final Set<RuleInfo> report = new HashSet<>();
-
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;
     }
@@ -63,18 +62,6 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      */
     public Optional<FHEMRoom> getRoomByName(String roomname) {
         return rooms.stream().filter(r -> r.getName().equals(roomname)).findFirst();
-    }
-
-    /**
-     * Update the set of rule information.
-     *
-     * @param report the new rule information
-     */
-    public void addReport(Set<RuleInfo> report) {
-        if (report != null) {
-            this.report.clear();
-            this.report.addAll(report);
-        }
     }
 
     @Override
