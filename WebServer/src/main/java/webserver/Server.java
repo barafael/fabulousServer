@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * @author Johannes Köstler (github@johanneskoestler.de)
  *         on 16.06.17.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "ThrowablePrintedToSystemOut"})
 public class Server extends AbstractVerticle {
     private static final String OK_SERVER_RESPONSE = "OK";
     private static final String Registered_SERVER_RESPONSE = "Registered";
@@ -243,11 +243,13 @@ public class Server extends AbstractVerticle {
         System.out.println("Server abs uri: " + routingContext.request().absoluteURI());
         System.out.println("Server params: " + routingContext.request().params());
         if (routingContext.user() != null) {
-            System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal().getString(Username_PARAM)).orElse("no name specified"));
+            System.out.println("Server user: " + Optional.ofNullable(routingContext.user().principal()
+                    .getString(Username_PARAM)).orElse("no name specified"));
         } else {
             System.out.println("Server user: not specified");
         }
-        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: " + (!h.getKey().contains("uthorization") ? h : "Authorization=Basic ***********")));
+        routingContext.request().headers().forEach(h -> System.out.println("Server requestHeader: "
+                + (!h.getKey().contains("uthorization") ? h : "Authorization=Basic ***********")));
     }
 
     /**

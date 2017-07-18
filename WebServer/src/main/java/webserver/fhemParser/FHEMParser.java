@@ -80,7 +80,8 @@ public final class FHEMParser {
     }
 
     /**
-     * Setter for the {@link webserver.fhemParser.fhemConnection.FHEMConnection FHEM connection}. Returns itself, enabling builder style.
+     * Setter for the {@link webserver.fhemParser.fhemConnection.FHEMConnection FHEM connection}.
+     * Returns itself, enabling builder style.
      *
      * @param con the new FHEMConnection.
      * @return the instance of {@link webserver.fhemParser this} with the new parser set.
@@ -102,7 +103,8 @@ public final class FHEMParser {
     /**
      * This method returns a JSON-serialized view of the current model where all rooms, sensors and filelogs
      * which are not permitted by the passed permissions are filtered out.
-     * Returns a string to avoid copying the entire model (as it has to be serialized anyway) and data races on the model.
+     * Returns a string to avoid copying the entire model
+     * (as it has to be serialized anyway) and data races on the model.
      * <p>
      * Custom serialization for the FHEM model:
      * First, everything is copied, marking non-permitted fields.
@@ -155,10 +157,12 @@ public final class FHEMParser {
             } catch (IOException e) {
                 System.err.println("FHEM might not be running or jsonList2 might not be accessible.");
                 System.err.println(
-                        "You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
+                        "You also might have to set global variables FHEMDIR "
+                                + "(path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
                                 + "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                 System.err.println("Otherwise, is your telnet port password protected by FHEM? "
-                        + "Client Mode won't work if this is the case because of FHEM. You should consider removing the password and instead blocking the port.");
+                        + "Client Mode won't work if this is the case because of FHEM."
+                        + " You should consider removing the password and instead blocking the port.");
                 return Optional.empty();
             }
             if (PRINT_TIME) System.out.println("Got file at: " + Duration.between(one, Instant.now()).toMillis());
@@ -173,10 +177,12 @@ public final class FHEMParser {
             } catch (FHEMNotFoundException e) {
                 System.err.println("FHEM might not be running or jsonList2 might not be accessible.");
                 System.err.println(
-                        "You also might have to set global variables FHEMDIR (path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
+                        "You also might have to set global variables FHEMDIR"
+                                + " (path to dir that contains fhem.pl, like '/opt/fhem/') and\n"
                                 + "FHEMPORT (fhem telnet port) in your $HOME/.profile");
                 System.err.println("Otherwise, is your telnet port password protected by FHEM? "
-                        + "Client Mode won't work if this is the case because of FHEM. You should consider removing the password and instead blocking the port.");
+                        + "Client Mode won't work if this is the case because of FHEM."
+                        + " You should consider removing the password and instead blocking the port.");
                 return Optional.empty();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -362,7 +368,8 @@ public final class FHEMParser {
      */
     public synchronized boolean setActuator(String sensorName, boolean state, List<String> permissions) {
         String set_state = (state ? "on" : "off");
-        if (model.getSensorByName(sensorName).isPresent() && model.getSensorByName(sensorName).get().isPermittedSwitch(permissions)) {
+        if (model.getSensorByName(sensorName).isPresent()
+                && model.getSensorByName(sensorName).get().isPermittedSwitch(permissions)) {
             try {
                 return fhc.perlCommand("set " + sensorName + " " + set_state);
             } catch (IOException e) {

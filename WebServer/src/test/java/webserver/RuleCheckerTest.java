@@ -161,7 +161,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateImpossibleRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/impossibleRainRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/impossibleRainRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -178,7 +179,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateAlwaysTrueRuleWithOkInfo() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/alwaysTrue.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/alwaysTrue.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -193,7 +195,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateInvalidInput() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectComma.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/incorrectComma.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -210,7 +213,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateMultipleRulesPerSensor() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/multipleRulesPerSensor.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/multipleRulesPerSensor.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -223,7 +227,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testCyclicRules() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/cyclicRuleDependencies.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/cyclicRuleDependencies.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -239,7 +244,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testNeverTrueRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/noRainNoDry.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/noRainNoDry.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -259,7 +265,8 @@ public class RuleCheckerTest {
     public void testParamConstruction() {
         String json;
         try {
-            json = new String(Files.readAllBytes(Paths.get("jsonRules/duplicateRule.json")));
+            json = new String(Files.readAllBytes(Paths.get(
+                    "jsonRules/duplicateRule.json")));
         } catch (IOException e) {
             e.printStackTrace();
             assert false;
@@ -274,7 +281,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testDuplicateRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/duplicateRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/duplicateRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -291,7 +299,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testRuleDependencies() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/ruleDependencies.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/ruleDependencies.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -307,7 +316,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testSelfCycleRule() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/selfCycle.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/selfCycle.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -339,7 +349,8 @@ public class RuleCheckerTest {
     @Test
     public void testRulePermissionsDisallowed() {
         Optional<String> json_opt = FHEMParser.getInstance()
-                .getFHEMModelJSON(Arrays.asList("insufficientPermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
+                .getFHEMModelJSON(Arrays.asList(
+                        "insufficientPermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -354,7 +365,8 @@ public class RuleCheckerTest {
     @Test
     public void testRulePermissionsDisallowedWithSensor() {
         Optional<String> json_opt = FHEMParser.getInstance()
-                .getFHEMModelJSON(Arrays.asList("insufficientPermission", "permission1", "S_Regen"), "jsonRules/permissionRule.json");
+                .getFHEMModelJSON(Arrays.asList(
+                        "insufficientPermission", "permission1", "S_Regen"), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -370,7 +382,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateNumericRuleWithOkInfo() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/darknessRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/darknessRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -391,7 +404,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testEvaluateCO2Limit() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/CO2LimitRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/CO2LimitRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -406,7 +420,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testSensorPredicate() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/sensorPredicateRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/sensorPredicateRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -421,7 +436,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testGeneralPredicate() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/generalPredicateRule.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/generalPredicateRule.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 
@@ -438,7 +454,8 @@ public class RuleCheckerTest {
      */
     @Test
     public void testIncorrectSensorPredicate() {
-        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/incorrectSensorPredicate.json");
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/incorrectSensorPredicate.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
 

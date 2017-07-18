@@ -37,7 +37,8 @@ public final class GeneralPredicate extends Rule {
         String[] tokens = expression.split(" ");
         if (tokens.length <= 1 || !tokens[0].equals("Predicate")) {
             System.err.println(
-                    "Expression for general predicate rule must have at least a function name after the 'Predicate' prefix");
+                    "Expression for general predicate rule must have at least"
+                            + " a function name after the 'Predicate' prefix");
             /* Return false to draw attention to formulation error (?) */
             isEvaluated = true;
             ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());

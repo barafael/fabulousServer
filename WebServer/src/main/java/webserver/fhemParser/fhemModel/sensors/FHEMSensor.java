@@ -62,6 +62,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * Whether this sensor should be shown in the application.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private final boolean isVisibleInApp;
     /**
      * The icon name of this sensor, which will be deserialized.

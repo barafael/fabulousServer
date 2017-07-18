@@ -30,7 +30,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * Construct a new model with given rooms.
-     * @param rooms
+     * @param rooms a set of rooms
      */
     public FHEMModel(HashSet<FHEMRoom> rooms) {
         this.rooms = rooms;

@@ -67,6 +67,10 @@ public final class RuleParam {
         this.relatedFileLogNames.addAll(relatedFileLogNames);
     }
 
+    /**
+     * The type of the rule is deduced from the provided expression.
+     * @return the type of the rule
+     */
     public RuleType getType() {
         String[] tokens = expression.split(" ");
 

@@ -16,7 +16,8 @@ import static webserver.fhemParser.fhemModel.log.LogType.REAL;
 import static webserver.fhemParser.fhemModel.log.LogType.UNKNOWN;
 
 /**
- * This class is a proxy for an actual time serie, which can be parsed from disk on demand with {@link FHEMFileLog#getTimeserie() getTimeserie()}.
+ * This class is a proxy for an actual time serie, which can be parsed from disk on demand with
+ * {@link FHEMFileLog#getTimeserie() getTimeserie()}.
  *
  * @author Rafael
  */
@@ -200,7 +201,7 @@ public final class FHEMFileLog {
      * start with A_.*
      * TODO update this
      * @param permissions
-     * @return
+     * @return whether this is can be switched and is permitted
      */
     public boolean isPermittedSwitch(List<String> permissions) {
         for (String permission : this.permissions) {

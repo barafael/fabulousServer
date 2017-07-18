@@ -59,12 +59,12 @@ public abstract class Rule {
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
-    protected RuleState ruleState;
+    RuleState ruleState;
 
     /**
      * Whether this rule has already been evaluated.
      */
-    protected boolean isEvaluated = false;
+    boolean isEvaluated = false;
     /**
      * A map of durations to their warning levels.
      */
@@ -186,7 +186,8 @@ public abstract class Rule {
      */
     private RuleState eval(FHEMModel model, Set<Rule> visited) {
         if (!visited.add(this)) {
-            System.err.println("There was a cyclic rule dependency involving " + visited.size() + " rules! Breaking the cycle by assuming this rule is violated.");
+            System.err.println("There was a cyclic rule dependency involving " + visited.size()
+                    + " rules! Breaking the cycle by assuming this rule is violated.");
             System.err.println("This will invalidate all rules in the cycle.");
             /* Not setting to evaluated because another eval might still pass by */
             return new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));

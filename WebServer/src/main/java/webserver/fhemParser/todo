@@ -1,6 +1,3 @@
-energyCalc: 666.6
-2017-06-03_00:06:41 HM_52CC96_Pwr energy:
-
 DONE: Handle Readings in percent HOW? Duck Typing again?
 
 DONE: Possible sensor attributes:
@@ -10,9 +7,8 @@ DONE: Possible Timeseries attributes:
 DONE: percentreading: boolean
 
 DONE: getRooms
-    PENDING: SVGRoomPlan HOW?
 
-duck typing in attributes/Readings
+DONE: duck typing in attributes/Readings
 
 DONE: move rpi/ logs to timeseries
 

@@ -269,7 +269,8 @@ public class ServerTest {
                     ans.headers().forEach(h -> System.out.println("testGetPermissions_answerHeader: " + h));
                     ans.bodyHandler(body -> {
                         System.out.println("Client received: " + body.toJsonArray());
-                        //System.out.println("Client received: [msg, length]: " + body.toJsonObject().toString() + ", " + body.toJsonObject().toString().length());
+                        //System.out.println("Client received: [msg, length]: " + body.toJsonObject()
+                        // .toString() + ", " + body.toJsonObject().toString().length());
                         //testContext.assertEquals(body.toJsonArray(), jsonAns);
                         async.complete();
                     });
@@ -340,7 +341,8 @@ public class ServerTest {
     public void testAuthorized(TestContext testContext) {
         final Async async = testContext.async();
         httpClient.get("/api/getPermissions")
-                .putHeader("Authorization", "Basic aGFuczpzb25uZTEyMw==") // user: hans, password: sonne123 in base64
+                // user: hans, password: sonne123 in base64
+                .putHeader("Authorization", "Basic aGFuczpzb25uZTEyMw==")
                 .handler(ans -> {
                     ans.headers().forEach(h -> System.out.println("testAuthorized_answerHeader: " + h));
                     System.out.println("Response status message: " + ans.statusCode() + ": " + ans.statusMessage());

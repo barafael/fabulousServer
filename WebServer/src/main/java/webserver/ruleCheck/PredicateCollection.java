@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public final class PredicateCollection {
-    /** FabLab GPS location */
+    /** FabLab GPS location. */
     private static final Location LOCATION = new Location("48.5657463", "13.450155799999948");
     /**
      * Localised sun calculator.

@@ -42,7 +42,8 @@ public final class SensorPredicate extends Rule {
         String[] tokens = expression.split(" ");
         if (tokens.length <= 1 || !tokens[0].equals("Sensor")) {
             System.err.println(
-                    "Expression for sensor predicate rule must have at least a function name after the 'Sensor' prefix");
+                    "Expression for sensor predicate rule must have at least "
+                            + "a function name after the 'Sensor' prefix");
             /* Return false to draw attention to formulation error (?) */
             violatedSensors.addAll(model.getSensorsByCollection(sensorNames));
             isEvaluated = true;
