@@ -10,13 +10,10 @@
             "OkMessage": "all ok",
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
-            "Escalation": {
-                "100": "LOW"
-            },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*"
             }
         },
         {
@@ -30,12 +27,12 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "LOW"
+                "100": "10"
             },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*"
             }
         },
         {
@@ -49,12 +46,12 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "LOW"
+                "100": "10"
             },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*"
             }
         },
         {
@@ -68,12 +65,12 @@
             "RequiredTrueRules": ["BasicRule1", "BasicRule2", "BasicRule3"],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "LOW"
+                "100": "10"
             },
             "ErrorMessages": {
-                "LOW": "something is wrong",
-                "NORMAL": "all good",
-                "HIGH": "hey, fix it!"
+                "10": "something is wrong",
+                "100": "all good",
+                "500": "hey, fix it!"
             }
         }
 

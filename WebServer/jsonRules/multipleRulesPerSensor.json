@@ -10,14 +10,11 @@
             "OkMessage": "all ok",
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
-            "Escalation": {
-                "100": "LOW"
-            },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*",
-                "DISASTER": "'tis bad!"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
             }
         },
         {
@@ -31,13 +28,13 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "LOW"
+                "100": "10"
             },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*",
-                "DISASTER": "'tis bad!"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
             }
         },
         {
@@ -51,13 +48,13 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "LOW"
+                "100": "10"
             },
             "ErrorMessages": {
-                "LOW": "bl*",
-                "NORMAL": "all good bl*",
-                "HIGH": "hey, fix it bl*",
-                "DISASTER": "'tis bad!"
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
             }
         }
     ]

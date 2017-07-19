@@ -1,7 +1,6 @@
 package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
-import webserver.ruleCheck.WARNINGLEVEL;
 import webserver.ruleCheck.parsing.RuleParam;
 
 import java.time.Instant;
@@ -42,12 +41,12 @@ public abstract class Rule {
     @SuppressWarnings("FieldCanBeLocal")
     private final String okMessage;
     /**
+     * A map of durations to their warning levels.
+     */
+    private Map<Long, String> errorMessages = new TreeMap<>();
+    /**
      * A map of warninglevels to strings
      * TODO generify this, get rid of warning levels
-     */
-    private final Map<WARNINGLEVEL, String> errorMessages;
-    /**
-     * The names of related logs.
      */
     private final Set<String> relatedLogNames = new HashSet<>();
     /**
@@ -74,10 +73,6 @@ public abstract class Rule {
      */
     boolean isEvaluated = false;
     /**
-     * A map of durations to their warning levels.
-     */
-    private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
-    /**
      * Required true prerequisites.
      */
     private Set<Rule> requiredTrueRules;
@@ -98,11 +93,10 @@ public abstract class Rule {
         sensorNames = ruleParam.getSensorNames();
         expression = ruleParam.getExpression();
         okMessage = ruleParam.getOkMessage();
-        errorMessages = ruleParam.getErrorMessages();
-        escalation = ruleParam.getEscalation();
         invisible = ruleParam.getVisible();
         relatedLogNames.addAll(ruleParam.getRelatedLogs());
         this.priority = ruleParam.getPriority();
+        this.errorMessages = ruleParam.getErrorMessages();
     }
 
     public String getName() {
@@ -111,6 +105,7 @@ public abstract class Rule {
 
     /**
      * Set the rules which are true prerequisites.
+     *
      * @param requiredTrue the rules to set as true prerequisites
      */
     public void setRequiredTrue(Set<Rule> requiredTrue) {
@@ -119,6 +114,7 @@ public abstract class Rule {
 
     /**
      * Set the rules which are false prerequisites.
+     *
      * @param requiredFalse the rules to set as false prerequisites
      */
     public void setRequiredFalse(Set<Rule> requiredFalse) {
@@ -127,19 +123,23 @@ public abstract class Rule {
 
     /**
      * Compute a warning message for this rule from a given start time.
+     *
      * @param startTime a start time
      * @return a warning message
      */
     public String getWarningMessage(long startTime) {
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
-        List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
+        List<Long> keys = errorMessages.keySet().stream().sorted().collect(Collectors.toList());
+        long hook = 0;
         for (long key : keys) {
-            if (elapsedTime <= key) {
-                return errorMessages.get(escalation.get(key));
+            if (elapsedTime < key) {
+                return errorMessages.get(hook);
+            } else {
+                hook = key;
             }
         }
         /* elapsed time was higher than all keys in list */
-        return errorMessages.get(WARNINGLEVEL.DISASTER);
+        return errorMessages.get(Collections.max(keys));
     }
 
     public String getPermissionField() {
@@ -156,6 +156,7 @@ public abstract class Rule {
 
     /**
      * Getter for logs which were set related so that the information can be used from the frontend.
+     *
      * @return the related logs
      */
     public Set<String> getRelatedLogs() {
@@ -164,6 +165,7 @@ public abstract class Rule {
 
     /**
      * Specific evaluation of a concrete rule on a model.
+     *
      * @param model the model to use information from
      * @return the rule state, containing violated and passed sensors
      */

@@ -1,7 +1,6 @@
 package webserver.ruleCheck.parsing;
 
 import com.google.gson.annotations.SerializedName;
-import webserver.ruleCheck.WARNINGLEVEL;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,12 +34,10 @@ public final class RuleParam {
     @SerializedName("OkMessage")
     private final String okMessage;
     @SerializedName("ErrorMessages")
-    private final Map<WARNINGLEVEL, String> errorMessages;
+    private final Map<Long, String> errorMessages = new HashMap<>();
     @SerializedName("IsVisibleInApp")
     private boolean isVisibleInApp = true;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
-    @SerializedName("Escalation")
-    private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     @SerializedName("RelatedFileLogs")
     private final Set<String> relatedFileLogNames = new HashSet<>();
     @SerializedName("Priority")
@@ -52,9 +49,9 @@ public final class RuleParam {
                      String expression,
                      Set<String> requiredTrueRules,
                      Set<String> requiredFalseRules,
-                     String okMessage, Map<WARNINGLEVEL, String> errorMessages,
+                     String okMessage,
+                     Map<Long, String> errorMessages,
                      boolean isVisibleInApp,
-                     Map<Long, WARNINGLEVEL> escalation,
                      Set<String> relatedFileLogNames,
                      int priority) {
         this.name = name;
@@ -64,9 +61,8 @@ public final class RuleParam {
         this.requiredTrueRules = requiredTrueRules;
         this.requiredFalseRules = requiredFalseRules;
         this.okMessage = okMessage;
-        this.errorMessages = errorMessages;
+        this.errorMessages.putAll(errorMessages);
         this.isVisibleInApp = isVisibleInApp;
-        this.escalation = escalation;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
         this.priority = priority;
     }
@@ -137,12 +133,13 @@ public final class RuleParam {
         return expression != null ? expression : "";
     }
 
-    public Map<WARNINGLEVEL, String> getErrorMessages() {
-        return errorMessages != null ? errorMessages : new HashMap<>();
-    }
-
-    public Map<Long, WARNINGLEVEL> getEscalation() {
-        return escalation != null ? escalation : new HashMap<>();
+    public Map<Long, String> getErrorMessages() {
+        if (errorMessages == null || errorMessages.isEmpty()) {
+            HashMap<Long, String> map = new HashMap<>();
+            map.put(0L, "No error messages defined!");
+            return map;
+        }
+        return errorMessages;
     }
 
     public boolean getVisible() {

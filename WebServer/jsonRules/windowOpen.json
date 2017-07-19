@@ -10,13 +10,10 @@
             "OkMessage": "all ok",
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
-            "Escalation": {
-                "100": "LOW"
-            },
             "ErrorMessages": {
-                "LOW": "something is wrong",
-                "NORMAL": "all good",
-                "HIGH": "hey, fix it!"
+                "10": "something is wrong",
+                "100": "all good",
+                "500": "hey, fix it!"
             },
             "IsVisibleInApp": false
         }

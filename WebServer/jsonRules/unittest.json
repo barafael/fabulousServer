@@ -21,15 +21,10 @@
       ],
       "OkMessage": "all ok",
       "ErrorMessages": {
-        "LOW": "something is wrong",
-        "HIGH": "hey, fix it!",
-        "NORMAL": "all good"
+        "10": "something is wrong",
+        "500": "hey, fix it!",
+        "100": "all good"
       },
-      "Escalation": {
-        "200": "LOW",
-        "300": "HIGH",
-        "500": "DISASTER"
-      }
     }
   ]
 }

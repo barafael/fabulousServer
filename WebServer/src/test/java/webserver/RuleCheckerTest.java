@@ -11,7 +11,6 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.ruleCheck.PredicateCollection;
 import webserver.ruleCheck.RuleChecker;
-import webserver.ruleCheck.WARNINGLEVEL;
 import webserver.ruleCheck.parsing.RuleParam;
 import webserver.ruleCheck.parsing.RuleParamCollection;
 
@@ -106,22 +105,20 @@ public class RuleCheckerTest {
         Set<String> sensorlist = new HashSet<>(Arrays.asList("sensor1", "sensor2", "sensor3"));
         Set<String> reqTrue = new HashSet<>(Arrays.asList("testRule", "anotherRule", "yetAnotherRule"));
         Set<String> reqFalse = new HashSet<>(Arrays.asList("Rule1", "Rule2", "Rule3"));
-        Map<WARNINGLEVEL, String> warnings = new HashMap<>();
-        warnings.put(WARNINGLEVEL.NORMAL, "all good");
-        warnings.put(WARNINGLEVEL.LOW, "something is wrong");
-        warnings.put(WARNINGLEVEL.HIGH, "hey, fix it!");
-        Map<Long, WARNINGLEVEL> escalation = new HashMap<>();
-        escalation.put(100L, WARNINGLEVEL.LOW);
+        Map<Long, String> errorMessages = new HashMap<>();
+        errorMessages.put(10L, "There is a 10 second problem");
+        errorMessages.put(60L, "wrong for a minute");
+        errorMessages.put(600L, "It is getting important");
+        errorMessages.put(1000L, "FIX IT!!!");
         RuleParam ruleParam = new RuleParam("Fenster1",
                 sensorlist,
                 "permission1",
                 "Readings contains dry",
                 reqTrue,
                 reqFalse,
-                "all ok",
-                warnings,
+                "All Good",
+                errorMessages,
                 true,
-                escalation,
                 Collections.emptySet(),
                 12
                 );
