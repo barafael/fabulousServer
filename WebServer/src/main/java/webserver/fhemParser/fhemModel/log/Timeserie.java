@@ -3,6 +3,7 @@ package webserver.fhemParser.fhemModel.log;
 import com.google.gson.GsonBuilder;
 import webserver.fhemParser.fhemModel.serializers.DoubleSerializer;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

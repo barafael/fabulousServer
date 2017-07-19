@@ -122,7 +122,8 @@ public class RuleCheckerTest {
                 warnings,
                 true,
                 escalation,
-                Collections.emptySet()
+                Collections.emptySet(),
+                12
                 );
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

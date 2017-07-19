@@ -43,6 +43,8 @@ public final class RuleParam {
     private Map<Long, WARNINGLEVEL> escalation = new TreeMap<>();
     @SerializedName("RelatedFileLogs")
     private final Set<String> relatedFileLogNames = new HashSet<>();
+    @SerializedName("Priority")
+    private final int priority;
 
     public RuleParam(String name,
                      Set<String> sensorNames,
@@ -53,7 +55,8 @@ public final class RuleParam {
                      String okMessage, Map<WARNINGLEVEL, String> errorMessages,
                      boolean isVisibleInApp,
                      Map<Long, WARNINGLEVEL> escalation,
-                     Set<String> relatedFileLogNames) {
+                     Set<String> relatedFileLogNames,
+                     int priority) {
         this.name = name;
         this.sensorNames = sensorNames;
         this.permission = permission;
@@ -65,6 +68,7 @@ public final class RuleParam {
         this.isVisibleInApp = isVisibleInApp;
         this.escalation = escalation;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
+        this.priority = priority;
     }
 
     /**
@@ -149,6 +153,9 @@ public final class RuleParam {
         return relatedFileLogNames == null ? new HashSet<>() : relatedFileLogNames;
     }
 
+    public int getPriority() {
+        return priority;
+    }
     @Override
     public int hashCode() {
         return name.hashCode();

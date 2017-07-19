@@ -57,6 +57,13 @@ public abstract class Rule {
     private final boolean invisible;
 
     /**
+     * How important this rule is with regards to other rules.
+     * Should be a positive number, with a higher number indicating a higher priority.
+     * This is set by the rule parameters.
+     */
+    private int priority;
+
+    /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
     RuleState ruleState;
@@ -94,6 +101,7 @@ public abstract class Rule {
         escalation = ruleParam.getEscalation();
         invisible = ruleParam.getVisible();
         relatedLogNames.addAll(ruleParam.getRelatedLogs());
+        this.priority = ruleParam.getPriority();
     }
 
     public String getName() {
