@@ -95,7 +95,7 @@ public final class RuleParam {
     }
 
     public String getName() {
-        return name != null ? name : "";
+        return name != null ? name : "Nameless Rule";
     }
 
     public String getPermissionField() {

@@ -21,16 +21,16 @@ public final class PredicateCollection {
     /**
      * Localised sun calculator.
      */
-    private static final SunriseSunsetCalculator calculator =
+    private static final SunriseSunsetCalculator CALCULATOR =
             new SunriseSunsetCalculator(LOCATION, "Vienna/Europe");
     /**
      * Localised sunrise calculator.
      */
-    private final Calendar officialSunrise = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance());
+    private final Calendar officialSunrise = CALCULATOR.getOfficialSunriseCalendarForDate(Calendar.getInstance());
     /**
      * Localised sunset calculator.
      */
-    private final Calendar officialSunset = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance());
+    private final Calendar officialSunset = CALCULATOR.getOfficialSunsetCalendarForDate(Calendar.getInstance());
 
     /**
      * An example predicate for use with the rule checker. See testGeneralPredicate() for usage.
@@ -80,7 +80,7 @@ public final class PredicateCollection {
      * @return always true
      */
     @SuppressWarnings({"unused", "SameReturnValue"})
-    public boolean noWeatherWarnings(@SuppressWarnings("unused") List<String> _ignored) {
+    public boolean weatherWarnings(@SuppressWarnings("unused") List<String> _ignored) {
         // Just an idea...
         // https://openweathermap.org/triggers
         return true;

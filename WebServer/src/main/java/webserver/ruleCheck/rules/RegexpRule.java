@@ -103,7 +103,7 @@ public final class RegexpRule extends Rule {
                     ruleOK = !value.matches(literal);
                     break;
                 default:
-                    System.err.println("This operator " + operator + " is unimplemented for REGEXP rule!");
+                    System.err.println("This operator " + operator + " is unimplemented for regexp rule!");
                     ruleOK = false;
             }
 

@@ -112,15 +112,15 @@ public final class FHEMParser {
      * Most of the work is done in the custom {@link webserver.fhemParser.fhemModel.serializers Gson serializers}.
      *
      * @param permissions a list of permissions which limit what information will be given to the caller
-     * @param path the path to the rules file, relative to the server root directory
+     * @param pathToRules the path to the rules file, relative to the server root directory
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
-    public Optional<String> getFHEMModelJSON(List<String> permissions, String path) {
+    public Optional<String> getFHEMModelJSON(List<String> permissions, String pathToRules) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
                 .create();
         /* Return the mapped Optional.of if present, empty otherwise */
-        return getFHEMModel(path).map(gson::toJson);
+        return getFHEMModel(pathToRules).map(gson::toJson);
     }
 
     /**
