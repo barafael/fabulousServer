@@ -109,9 +109,8 @@ public final class FHEMDevice {
             return Optional.empty();
         }
         String permissionField = attributes.getPermissionField().orElse("");
-        /* Switchable permissions MUST start with A_ */
-        /* TODO handle multiple permissions and comma-separation */
-        boolean switchable = permissionField.startsWith("A_");
+
+        boolean switchable = isInRoom("actuators");
         List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();

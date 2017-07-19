@@ -14,7 +14,7 @@ class ValueTimePair {
      * A value from a reading.
      */
     @SerializedName("Value")
-    String value;
+    protected String value;
     /* // Time; currently unused.
     @SerializedName("Time")
     private String time;

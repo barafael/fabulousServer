@@ -22,11 +22,11 @@ public abstract class Rule {
      * A set of names for which this rule applies.
      * Sensor names should be used (and not aliases) to guarantee uniqueness
      */
-    final Set<String> sensorNames;
+    protected final Set<String> sensorNames;
     /**
      * The expression which should be evaluated for each sensor, like 'State matches d*y'.
      */
-    final String expression;
+    protected final String expression;
     /**
      * The name of the rule.
      */
@@ -65,12 +65,12 @@ public abstract class Rule {
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
      */
-    RuleState ruleState;
+    protected RuleState ruleState;
 
     /**
      * Whether this rule has already been evaluated.
      */
-    boolean isEvaluated = false;
+    protected boolean isEvaluated = false;
     /**
      * Required true prerequisites.
      */
