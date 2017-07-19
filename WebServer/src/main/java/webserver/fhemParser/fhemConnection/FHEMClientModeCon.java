@@ -48,7 +48,8 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * Set this connection to use the magic methods in FHEMUtils.
      * (It tries to guess based on `whereis` and global variables in ~/.profile)
      *
-     * @return this instance of the * {@link webserver.fhemParser.fhemConnection.FHEMConnection fhem connection},
+     * @return this instance of the
+     * {@link webserver.fhemParser.fhemConnection.FHEMConnection fhem connection},
      * enabling builder style.
      */
     public FHEMClientModeCon useGlobalVariables() {
