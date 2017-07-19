@@ -374,6 +374,21 @@ public class RuleCheckerTest {
         assert model.getSensorByName("HM_4F5DAA_Rain").get().getPassedRules().isEmpty();
     }
 
+    @Test
+    public void testWindowOpenDuringRain() {
+                Optional<String> json_opt = FHEMParser.getInstance()
+                .getFHEMModelJSON(Arrays.asList(
+                        "insufficientPermission", "permission1", "S_Regen"), "jsonRules/windowsOpenDuringRain.json");
+        assert json_opt.isPresent();
+        String json = json_opt.get();
+
+        FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getPassedRules().size() == 1;
+        assert model.getSensorByName("HM_4F5DAA_Rain").get().getViolatedRules().isEmpty();
+    }
+
     /**
      * Evaluates a numeric rule which is false at night.
      * This test might not pass during dawn or dusk.
