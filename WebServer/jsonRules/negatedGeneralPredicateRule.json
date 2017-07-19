@@ -1,0 +1,38 @@
+{
+    "Rules": [
+        {
+            "Name": "general predicate",
+            "Expression": "Predicate notexampleAlwaysTruePredicate with some arguments",
+            "OkPermission": "permission0",
+            "SensorNames": [
+                "HM_520B89"
+            ],
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "ErrorMessages": {
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
+            },
+            "IsVisibleInApp":false
+        },
+        {
+            "Name": "Test Dependent Rule",
+            "Expression": "Reading matches dry|rain",
+            "SensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "OkMessage": "(There is rain OR there is no rain) AND the general predicate is true",
+            "RequiredTrueRules": ["general predicate"],
+            "RequiredFalseRules": [],
+            "ErrorMessages": {
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
+            }
+        }
+    ]
+}

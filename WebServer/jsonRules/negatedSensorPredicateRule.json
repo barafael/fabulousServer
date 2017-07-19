@@ -1,0 +1,22 @@
+{
+    "Rules": [
+        {
+            "Name": "sensor predicate",
+            "Expression": "Sensor notexampleAlwaysTruePredicate some arguments here which will be passed as List<String>",
+            "OkPermission": "permission0",
+            "SensorNames": [
+                "HM_520B89"
+            ],
+            "OkMessage": "all ok",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": [],
+            "ErrorMessages": {
+                "10": "bl*",
+                "100": "all good bl*",
+                "500": "hey, fix it bl*",
+                "1000": "'tis bad!"
+            },
+            "Invisible": "false"
+        }
+    ]
+}
