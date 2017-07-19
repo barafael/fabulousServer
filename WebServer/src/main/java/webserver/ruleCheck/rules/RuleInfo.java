@@ -36,6 +36,7 @@ public final class RuleInfo {
      * A map of timestamps to states of rules. False if violated.
      */
     private final Map<Long, Boolean> changeStamps = new TreeMap<>();
+    private final int priority;
     /**
      * The state of this rule. False if violated.
      */
@@ -64,12 +65,14 @@ public final class RuleInfo {
                     boolean isOk,
                     String permission,
                     String message,
-                    Set<String> relatedLogNames) {
+                    Set<String> relatedLogNames,
+                    int priority) {
         this.name = name;
         this.isOk = isOk;
         this.permission = permission;
         this.message = message;
         this.relatedLogNames.addAll(relatedLogNames);
+        this.priority = priority;
 
         changeStamps.put(Instant.now().getEpochSecond(), isOk);
     }

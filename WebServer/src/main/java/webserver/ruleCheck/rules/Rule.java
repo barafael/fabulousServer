@@ -5,6 +5,7 @@ import webserver.ruleCheck.WARNINGLEVEL;
 import webserver.ruleCheck.parsing.RuleParam;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -188,7 +189,7 @@ public abstract class Rule {
      * will cache the result. As a consequence, only n * m rules are evaluated, with n being the number of rules,
      * and m being the amount of sensors.
      *
-     * @param model the model to acquire information from
+     * @param model   the model to acquire information from
      * @param visited the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
      * @return the state of this rule, consisting of passed and violated sensors
      */
@@ -234,6 +235,10 @@ public abstract class Rule {
             return ruleState;
         }
         return specificEval(model);
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     @Override

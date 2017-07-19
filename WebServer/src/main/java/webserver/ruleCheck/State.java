@@ -46,7 +46,8 @@ class State {
                             true,
                             rule.getPermissionField(),
                             rule.getOkMessage(),
-                            rule.getRelatedLogs()
+                            rule.getRelatedLogs(),
+                            rule.getPriority()
                     ));
                     stateMap.put(sensor.getName(), newSensorMap);
                     continue;
@@ -60,7 +61,9 @@ class State {
                             true,
                             rule.getPermissionField(),
                             rule.getOkMessage(),
-                            rule.getRelatedLogs());
+                            rule.getRelatedLogs(),
+                            rule.getPriority()
+                            );
                     sensorRules.put(rule, ruleInfo);
                     continue;
                 }
@@ -80,7 +83,8 @@ class State {
                             false,
                             rule.getPermissionField(),
                             rule.getWarningMessage(Instant.now().getEpochSecond()),
-                            rule.getRelatedLogs()
+                            rule.getRelatedLogs(),
+                            rule.getPriority()
                     ));
                     stateMap.put(sensor.getName(), newSensorMap);
                     continue;
@@ -94,7 +98,8 @@ class State {
                             false,
                             rule.getPermissionField(),
                             rule.getWarningMessage(Instant.now().getEpochSecond()),
-                            rule.getRelatedLogs()
+                            rule.getRelatedLogs(),
+                            rule.getPriority()
                     );
                     sensorRules.put(rule, ruleInfo);
                     continue;
