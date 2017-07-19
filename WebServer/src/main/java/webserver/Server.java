@@ -131,15 +131,11 @@ public class Server extends AbstractVerticle {
 
     private void databaseKeepAlive() {
         DatabaseAliveTimer = vertx.setPeriodic(DATABASE_KEEP_ALIVE, id -> {
-            Future<List<String>> future = Future.future();
-            getListOfPermissions(new JsonObject().put(Username_PARAM, "noperms"), future);
-            future.setHandler(res -> {
-                if (!future.succeeded()) {
+            getListOfPermissions(new JsonObject().put(Username_PARAM, "noperms"), res -> {
+                if (!res.succeeded()) {
                     System.err.println("database connection died, trying to reconnect!");
                     /* reconnect Database  */
-                    Future<SQLConnection> databaseFuture = Future.future();
-                    jdbcClient.getConnection(databaseFuture.completer());
-                    databaseFuture.setHandler(res2 -> {
+                    jdbcClient.getConnection(res2 -> {
                         if (res2.failed()) {
                             System.err.println("database seems offline, exiting!");
                             System.exit(12);
@@ -160,17 +156,17 @@ public class Server extends AbstractVerticle {
      * @param next Handler which gets called, whenever the database action has been finished
      */
     private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
-        String username = user.getString(Username_PARAM);
+        final String username = user.getString(Username_PARAM);
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
             return;
         }
-        String query = "SELECT perm FROM `ROLE_PERM` INNER JOIN `USER_ROLE` ON `ROLE_PERM`.role=`USER_ROLE`.role where `user`=?";
-        JsonArray params = new JsonArray().add(username);
+        final String query = "SELECT perm FROM `ROLE_PERM` INNER JOIN `USER_ROLE` ON `ROLE_PERM`.role=`USER_ROLE`.role where `user`=?";
+        final JsonArray params = new JsonArray().add(username);
         connection.queryWithParams(query, params, res -> {
             if (res.succeeded()) {
-                ResultSet result = res.result();
-                List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
+                final ResultSet result = res.result();
+                final List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
                 next.handle(Future.succeededFuture(list));
             } else {
                 next.handle(Future.failedFuture(res.cause()));
@@ -203,24 +199,18 @@ public class Server extends AbstractVerticle {
      */
     private void register(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.getBodyAsJson().getString(Username_PARAM) == null
-                || routingContext.getBodyAsJson().getString(Username_PARAM).isEmpty()
-                || routingContext.getBodyAsJson().getString(Password_PARAM) == null
-                || routingContext.getBodyAsJson().getString(Password_PARAM).isEmpty()) {
+        final JsonObject body = routingContext.getBodyAsJson();
+        final String username = body.getString(Username_PARAM, "");
+        final String password = body.getString(Password_PARAM, "");
+        final String prename = body.getString(Prename_PARAM, "");
+        final String surname = body.getString(Surname_PARAM, "");
+
+        if (username.isEmpty() || password.isEmpty()) {
             routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String username = routingContext.getBodyAsJson().getString(Username_PARAM);
-        String password = routingContext.getBodyAsJson().getString(Password_PARAM);
-        /* set optional keys to empty string if not given */
-        String prename = routingContext.getBodyAsJson().getString(Prename_PARAM) != null
-                ? routingContext.getBodyAsJson().getString(Prename_PARAM) : "";
-        String surname = routingContext.getBodyAsJson().getString(Surname_PARAM) != null
-                ? routingContext.getBodyAsJson().getString(Surname_PARAM) : "";
-        Future<Void> databaseWriteFuture = Future.future();
-        storeUserInDatabase(username, password, prename, surname, databaseWriteFuture);
-        databaseWriteFuture.setHandler(res -> {
-            if (databaseWriteFuture.succeeded()) {
+        storeUserInDatabase(username, password, prename, surname, res -> {
+            if (res.succeeded()) {
                 routingContext.response()
                         .setStatusCode(OK_HTTP_CODE)
                         .end(Registered_SERVER_RESPONSE);
@@ -263,9 +253,9 @@ public class Server extends AbstractVerticle {
      */
     private void storeUserInDatabase(String username, String password, String prename, String surname,
                                      Handler<AsyncResult<Void>> next) {
-        String salt = authProvider.generateSalt();
-        String hash = authProvider.computeHash(password, salt);
-        JsonArray params = new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname);
+        final String salt = authProvider.generateSalt();
+        final String hash = authProvider.computeHash(password, salt);
+        final JsonArray params = new JsonArray().add(username).add(hash).add(salt).add(prename).add(surname);
         connection.updateWithParams("INSERT INTO USER VALUES (?, ?, ?, ?, ?)", params, res -> {
             if (res.succeeded()) {
                 next.handle(Future.succeededFuture());
@@ -285,24 +275,21 @@ public class Server extends AbstractVerticle {
      */
     private void setRoomplan(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(Room_PARAM) == null
-                || routingContext.request().getParam(Room_PARAM).isEmpty()) {
+        final String room = routingContext.request().getParam(Room_PARAM);
+        if (room == null || room.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
-
-        darfErDasFuture.setHandler(res -> {
-            if (res.succeeded() && darfErDasFuture.result()) {
-                String file = routingContext.getBodyAsString();
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
+                final String file = routingContext.getBodyAsString();
                 vertx.executeBlocking(future -> {
                     if (!parser.readMutex().equals(routingContext.user().principal().getString(Username_PARAM))) {
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
-                        Boolean status = parser.setRoomplan(routingContext.request().getParam(Room_PARAM), file);
+                        final Boolean status = parser.setRoomplan(room, file);
                         if (status) {
                             future.handle(Future.succeededFuture(true));
                         } else {
@@ -334,11 +321,9 @@ public class Server extends AbstractVerticle {
      * @param resultHandler Handler which gets called, whenever the database action has been finished
      */
     private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
-        Future<List<String>> future = Future.future();
-        getListOfPermissions(user.principal(), future.completer());
-        future.setHandler(res -> {
-            if (future.succeeded()) {
-                resultHandler.handle(Future.succeededFuture(future.result().contains(permission)));
+        getListOfPermissions(user.principal(), res -> {
+            if (res.succeeded()) {
+                resultHandler.handle(Future.succeededFuture(res.result().contains(permission)));
             } else {
                 System.out.println("Server failed darferdas");
                 resultHandler.handle(Future.failedFuture(res.cause()));
@@ -356,31 +341,30 @@ public class Server extends AbstractVerticle {
      */
     private void setSensorPosition(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(SensorName_PARAM) == null
-                || routingContext.request().getParam(SensorName_PARAM).isEmpty()
-                || routingContext.request().getParam(coordX_PARAM) == null
-                || routingContext.request().getParam(coordX_PARAM).isEmpty()
-                || routingContext.request().getParam(coordY_PARAM) == null
-                || routingContext.request().getParam(coordY_PARAM).isEmpty()) {
+        final String sensorName = routingContext.request().getParam(SensorName_PARAM);
+        final String coordX_string = routingContext.request().getParam(coordX_PARAM);
+        final String coordY_string = routingContext.request().getParam(coordY_PARAM);
+        if (sensorName == null
+                || sensorName.isEmpty()
+                || coordX_string == null
+                || coordX_string.isEmpty()
+                || coordY_string == null
+                || coordY_string.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String sensorName = routingContext.request().getParam(SensorName_PARAM);
-        int coordX = Integer.parseInt(routingContext.request().getParam(coordX_PARAM));
-        int coordY = Integer.parseInt(routingContext.request().getParam(coordY_PARAM));
+        final int coordX = Integer.parseInt(coordX_string);
+        final int coordY = Integer.parseInt(coordY_string);
 
-        Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
-
-        darfErDasFuture.setHandler(res -> {
-            if (res.succeeded() && darfErDasFuture.result()) {
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
                 vertx.executeBlocking(future -> {
                     if (!parser.readMutex().equals(routingContext.user().principal().getString(Username_PARAM))) {
                         future.handle(Future.failedFuture(future.cause()));
                     } else {
-                        Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
+                        final Boolean result = parser.setSensorPosition(coordX, coordY, sensorName);
                         if (result) {
                             future.handle(Future.succeededFuture());
                         } else {
@@ -413,13 +397,11 @@ public class Server extends AbstractVerticle {
      */
     private void getModel(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        Future<List<String>> permissionFuture = Future.future();
-        getListOfPermissions(routingContext.user().principal(), permissionFuture);
-        permissionFuture.setHandler(res -> {
-            if (permissionFuture.succeeded()) {
-                List<String> perm = permissionFuture.result();
+        getListOfPermissions(routingContext.user().principal(), res -> {
+            if (res.succeeded()) {
+                final List<String> perm = res.result();
                 vertx.executeBlocking(future -> {
-                    Optional<String> answerData_opt = parser.getFHEMModelJSON(perm);
+                    final Optional<String> answerData_opt = parser.getFHEMModelJSON(perm);
                     if (!answerData_opt.isPresent()) {
                         System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
@@ -428,7 +410,7 @@ public class Server extends AbstractVerticle {
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
-                        String answerData = (String) res2.result();
+                        final String answerData = (String) res2.result();
                         if (!answerData.equals("null")) {
                             routingContext.response().setStatusCode(OK_HTTP_CODE)
                                     .putHeader(ContentType_HEADER, ContentType_VALUE)
@@ -438,12 +420,12 @@ public class Server extends AbstractVerticle {
                         }
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res2.cause());
+                        System.out.println(res2.cause().getMessage());
                     }
                 });
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -457,18 +439,16 @@ public class Server extends AbstractVerticle {
      */
     private void getPermissions(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        Future<List<String>> future = Future.future();
-        getListOfPermissions(routingContext.user().principal(), future);
-        future.setHandler(res -> {
-            if (future.succeeded()) {
-                List<String> perm = future.result();
-                String permString = new Gson().toJson(perm);
+        getListOfPermissions(routingContext.user().principal(), res -> {
+            if (res.succeeded()) {
+                final List<String> perm = res.result();
+                final String permString = new Gson().toJson(perm);
                 routingContext.response().setStatusCode(OK_HTTP_CODE)
                         .putHeader(ContentType_HEADER, ContentType_VALUE)
                         .end(permString);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -485,32 +465,30 @@ public class Server extends AbstractVerticle {
      */
     private void getRoomplan(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(Room_PARAM) == null
-                || routingContext.request().getParam(Room_PARAM).isEmpty()) {
+        final String room = routingContext.request().getParam(Room_PARAM);
+        if (room == null || room.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String room = routingContext.request().getParam(Room_PARAM);
-        boolean hasHash;
-        int hash;
-        if (routingContext.request().getParam(Hash_PARAM) != null
-                && !(routingContext.request().getParam(Hash_PARAM).isEmpty())
-                && routingContext.request().getParam(Hash_PARAM).equals(0 + "")) {
-            hash = Integer.parseInt(routingContext.request().getParam(Hash_PARAM));
+        final boolean hasHash;
+        final int hash;
+        final String hash_string = routingContext.request().getParam(Hash_PARAM);
+        if (hash_string != null
+                && !(hash_string.isEmpty())
+                && hash_string.equals(0 + "")) {
+            hash = Integer.parseInt(hash_string);
             hasHash = true;
         } else {
             hash = 0;
             hasHash = false;
         }
-        Future<List<String>> listFuture = Future.future();
-        getListOfPermissions(routingContext.user().principal(), listFuture);
-        listFuture.setHandler(res -> {
-            if (listFuture.succeeded()) {
-                List<String> perm = listFuture.result();
+        getListOfPermissions(routingContext.user().principal(), res -> {
+            if (res.succeeded()) {
+                final List<String> perm = res.result();
                 vertx.executeBlocking(future -> {
-                    Optional<String> answerData_opt;
+                    final Optional<String> answerData_opt;
                     if (hasHash) {
                         answerData_opt = parser.getRoomplan(room, hash, perm);
                     } else {
@@ -524,7 +502,7 @@ public class Server extends AbstractVerticle {
                     }
                 }, res2 -> {
                     if (res2.succeeded()) {
-                        String answerData = (String) res2.result();
+                        final String answerData = (String) res2.result();
                         if (!answerData.equals("null")) {
                             routingContext.response().setStatusCode(OK_HTTP_CODE)
                                     .putHeader(ContentType_HEADER, ContentType_VALUE)
@@ -538,7 +516,7 @@ public class Server extends AbstractVerticle {
                 });
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -551,10 +529,8 @@ public class Server extends AbstractVerticle {
      */
     private void getEditMutex(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        Future<Boolean> darfErDasFuture = Future.future();
-        darfErDas(routingContext.user(), Edit_PERMISSION, darfErDasFuture.completer());
-        darfErDasFuture.setHandler(res -> {
-            if (res.succeeded() && darfErDasFuture.result()) {
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
                 vertx.executeBlocking(future -> {
                     Optional<Long> result = parser.getMutex(routingContext.user().principal().getString(Username_PARAM));
                     if (result.isPresent()) {
@@ -566,7 +542,7 @@ public class Server extends AbstractVerticle {
                     if (res2.succeeded()) {
                         TimerofMutexID = (Long) res2.result();
                         System.out.println("set TimerofMutexID to: " + TimerofMutexID);
-                        String str = res2.result().toString();
+                        final String str = res2.result().toString();
                         routingContext.response()
                                 .putHeader(MutexID_HEADER, str)
                                 .setStatusCode(OK_HTTP_CODE)
@@ -593,14 +569,14 @@ public class Server extends AbstractVerticle {
      */
     private void releaseEditMutex(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(MutexID_PARAM) == null
-                || routingContext.request().getParam(MutexID_PARAM).isEmpty()) {
+        final String mutexID = routingContext.request().getParam(MutexID_PARAM);
+        if (mutexID == null || mutexID.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        long timerID = Long.parseLong(routingContext.request().getParam(MutexID_PARAM));
+        final long timerID = Long.parseLong(mutexID);
         vertx.executeBlocking(future -> {
             if (timerID != TimerofMutexID) {
                 System.out.println("Server not matching: timerID=" + timerID + ", TimerofMutexID=" + TimerofMutexID);
@@ -609,7 +585,7 @@ public class Server extends AbstractVerticle {
                         .end(Unavailable_SERVER_RESPONSE);
                 return;
             }
-            boolean result = parser.releaseMutex(routingContext.user().principal().getString(Username_PARAM));
+            final boolean result = parser.releaseMutex(routingContext.user().principal().getString(Username_PARAM));
             if (result) {
                 future.handle(Future.succeededFuture());
             } else {
@@ -641,31 +617,23 @@ public class Server extends AbstractVerticle {
 
     private void setActuator(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(SensorName_PARAM) == null
-                || routingContext.request().getParam(SensorName_PARAM).isEmpty()) {
-            routingContext.response()
-                    .setStatusCode(BadRequest_HTTP_CODE)
-                    .end(BadRequest_SERVER_RESPONSE);
-            return;
-        }
-        if (routingContext.request().getParam(State_PARAM) == null
-                || routingContext.request().getParam(State_PARAM).isEmpty()) {
+        final String sensorName = routingContext.request().getParam(SensorName_PARAM);
+        final String state_param = routingContext.request().getParam(State_PARAM);
+        if (sensorName == null || sensorName.isEmpty()
+                || state_param == null || state_param.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
 
-        boolean state = Boolean.parseBoolean(routingContext.request().getParam(State_PARAM));
-        String sensorname = routingContext.request().getParam(SensorName_PARAM);
+        final boolean state = Boolean.parseBoolean(state_param);
 
-        Future<List<String>> listFuture = Future.future();
-        getListOfPermissions(routingContext.user().principal(), listFuture);
-        listFuture.setHandler(res -> {
-            if (listFuture.succeeded()) {
-                List<String> perm = listFuture.result();
+        getListOfPermissions(routingContext.user().principal(), res -> {
+            if (res.succeeded()) {
+                List<String> perm = res.result();
                 vertx.executeBlocking(future -> {
-                    Boolean status = parser.setActuator(sensorname, state, perm);
+                    Boolean status = parser.setActuator(sensorName, state, perm);
                     if (status) {
                         future.handle(Future.succeededFuture(true));
                     } else {
@@ -684,7 +652,7 @@ public class Server extends AbstractVerticle {
                 });
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
@@ -699,40 +667,38 @@ public class Server extends AbstractVerticle {
      */
     private void getTimeSeries(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        if (routingContext.request().getParam(Id_PARAM) == null
-                || routingContext.request().getParam(Id_PARAM).isEmpty()) {
+        final String id_param = routingContext.request().getParam(Id_PARAM);
+        final String startTime_param = routingContext.request().getParam(startTime_PARAM);
+        final String endTime_param = routingContext.request().getParam(endTime_PARAM);
+
+        if (id_param == null || id_param.isEmpty()) {
             routingContext.response()
                     .setStatusCode(BadRequest_HTTP_CODE)
                     .end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        String ID = routingContext.request().getParam(Id_PARAM);
-        boolean hasTargetTime;
-        long startTime;
-        long endTime;
-        if (routingContext.request().getParam(startTime_PARAM) == null
-                || routingContext.request().getParam(startTime_PARAM).isEmpty()
-                || routingContext.request().getParam(endTime_PARAM) == null
-                || routingContext.request().getParam(endTime_PARAM).isEmpty()) {
+        final boolean hasTargetTime;
+        final long endTime;
+        final long startTime;
+        if (startTime_param == null || startTime_param.isEmpty()
+                || endTime_param == null || endTime_param.isEmpty()) {
             hasTargetTime = false;
             startTime = 0;
             endTime = 0;
         } else {
-            startTime = Long.parseLong(routingContext.request().getParam(startTime_PARAM));
-            endTime = Long.parseLong(routingContext.request().getParam(endTime_PARAM));
+            startTime = Long.parseLong(startTime_param);
+            endTime = Long.parseLong(endTime_param);
             hasTargetTime = true;
         }
-        Future<List<String>> listFuture = Future.future();
-        getListOfPermissions(routingContext.user().principal(), listFuture);
-        listFuture.setHandler(res -> {
-            if (listFuture.succeeded()) {
+        getListOfPermissions(routingContext.user().principal(), res -> {
+            if (res.succeeded()) {
                 vertx.executeBlocking(future -> {
-                    List<String> perm = listFuture.result();
+                    List<String> perm = res.result();
                     Optional<String> answerData_opt;
                     if (hasTargetTime) {
-                        answerData_opt = parser.getTimeserie(startTime, endTime, ID, perm);
+                        answerData_opt = parser.getTimeserie(startTime, endTime, id_param, perm);
                     } else {
-                        answerData_opt = parser.getTimeserie(ID, perm);
+                        answerData_opt = parser.getTimeserie(id_param, perm);
                     }
                     if (answerData_opt.isPresent()) {
                         future.handle(Future.succeededFuture(answerData_opt.get()));
@@ -748,13 +714,12 @@ public class Server extends AbstractVerticle {
                                 .end(answerData);
                     } else {
                         routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
-                        System.out.println(res2.cause());
-
+                        System.out.println(res2.cause().getMessage());
                     }
                 });
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                System.out.println(res.cause());
+                System.out.println(res.cause().getMessage());
             }
         });
     }
