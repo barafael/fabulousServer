@@ -46,6 +46,13 @@ public final class GeneralPredicate extends Rule {
         }
 
         String methodName = tokens[1];
+
+        boolean negate = false;
+        if (methodName.startsWith("not")) {
+            negate = true;
+            methodName = methodName.substring(3);
+        }
+
         List<String> arguments = new ArrayList<>();
         if (tokens.length > 2) {
             arguments.addAll(Arrays.asList(tokens).subList(2, tokens.length));
@@ -93,6 +100,9 @@ public final class GeneralPredicate extends Rule {
         /* Invoke method with arguments and get back the result */
         try {
             ruleOK = Boolean.parseBoolean(method.invoke(predicateCollection, arguments).toString());
+            if (negate) {
+                ruleOK = !ruleOK;
+            }
         } catch (IllegalArgumentException e) {
             System.err.println("There was an illegal argument exception when calling "
                     + methodName + " on the predicate collection.");

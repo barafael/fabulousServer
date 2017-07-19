@@ -93,7 +93,7 @@ public abstract class Rule {
         sensorNames = ruleParam.getSensorNames();
         expression = ruleParam.getExpression();
         okMessage = ruleParam.getOkMessage();
-        invisible = ruleParam.getVisible();
+        invisible = ruleParam.getInvisible();
         relatedLogNames.addAll(ruleParam.getRelatedLogs());
         this.priority = ruleParam.getPriority();
         this.errorMessages = ruleParam.getErrorMessages();

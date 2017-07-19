@@ -35,8 +35,8 @@ public final class RuleParam {
     private final String okMessage;
     @SerializedName("ErrorMessages")
     private final Map<Long, String> errorMessages = new HashMap<>();
-    @SerializedName("IsVisibleInApp")
-    private boolean isVisibleInApp = true;
+    @SerializedName("Invisible")
+    private boolean invisibleInApp = false;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("RelatedFileLogs")
     private final Set<String> relatedFileLogNames = new HashSet<>();
@@ -51,7 +51,7 @@ public final class RuleParam {
                      Set<String> requiredFalseRules,
                      String okMessage,
                      Map<Long, String> errorMessages,
-                     boolean isVisibleInApp,
+                     boolean invisibleInApp,
                      Set<String> relatedFileLogNames,
                      int priority) {
         this.name = name;
@@ -62,7 +62,7 @@ public final class RuleParam {
         this.requiredFalseRules = requiredFalseRules;
         this.okMessage = okMessage;
         this.errorMessages.putAll(errorMessages);
-        this.isVisibleInApp = isVisibleInApp;
+        this.invisibleInApp = invisibleInApp;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
         this.priority = priority;
     }
@@ -142,8 +142,8 @@ public final class RuleParam {
         return errorMessages;
     }
 
-    public boolean getVisible() {
-        return isVisibleInApp;
+    public boolean getInvisible() {
+        return invisibleInApp;
     }
 
     public Set<String> getRelatedLogs() {

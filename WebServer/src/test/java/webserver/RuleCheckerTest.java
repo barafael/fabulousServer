@@ -430,6 +430,22 @@ public class RuleCheckerTest {
     }
 
     /**
+     * Evaluate a sensor predicate rule which will always be true.
+     */
+    @Test
+    public void testNegatedSensorPredicate() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/negatedSensorPredicateRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_520B89").get();
+
+        assert sensor.getViolatedRules().size() == 1;
+    }
+
+    /**
      * Evaluate a general predicate rule which will always be true.
      */
     @Test
@@ -445,6 +461,32 @@ public class RuleCheckerTest {
         /* For general predicate, all sensors are ignored! */
         assert sensor.getPassedRules().size() == 0;
         assert sensor.getViolatedRules().size() == 0;
+    }
+
+    /**
+     * Evaluate a negated general predicate rule which will always be false.
+     * The direct result has no influence and is marked as isShowInApp=false,
+     * but another rule in the same file depends on the negated general predicate.
+     */
+    @Test
+    public void testNegatedGeneralPredicate() {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel(
+                "jsonRules/negatedGeneralPredicateRule.json");
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor = model.getSensorByName("HM_4F5DAA_Rain").get();
+
+        assert model.getSensorByName("HM_520B89").isPresent();
+        FHEMSensor sensorUnaffected = model.getSensorByName("HM_520B89").get();
+
+        /* For general predicate, all sensors are ignored! */
+        assert sensorUnaffected.getPassedRules().size() == 0;
+        assert sensorUnaffected.getViolatedRules().size() == 0;
+
+        assert sensor.getPassedRules().size() == 0;
+        assert sensor.getViolatedRules().size() == 1;
     }
 
     /**
