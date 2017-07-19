@@ -62,7 +62,13 @@ public final class Timeserie {
      */
     private Map<Double, String> legend = new HashMap<>();
 
+    /**
+     * The oldest encountered unix timestamp.
+     */
     private long oldestStamp;
+    /**
+     * The newest encountered unix timestamp.
+     */
     private long newestStamp;
 
     /**

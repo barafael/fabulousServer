@@ -8,8 +8,8 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 
 /**
- * This serializer gets a list of permissions and, when serializing, uses them to filter out
- * fields which should not be visible.
+ * This serializer can be used to serialize doubles lossy. It rounds
+ * any double or Double to 2 digits.
  * It is intended to be chained together with other serializers.
  *
  * @author Rafael on 22.06.17.

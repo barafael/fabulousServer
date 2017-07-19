@@ -76,8 +76,8 @@ public final class RuleParamCollection {
             Set<String> requiredFalse = ruleParam.getRequiredFalseRules().stream().
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
 
-            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size() ||
-                    requiredFalse.size() != ruleParam.getRequiredFalseRules().size()) {
+            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size()
+                    || requiredFalse.size() != ruleParam.getRequiredFalseRules().size()) {
                 System.err.println("Ignoring rule self dependency!");
                 System.err.println("Rule Parameters: " + ruleParam);
             }
@@ -100,6 +100,7 @@ public final class RuleParamCollection {
                     rules.add(new SensorPredicate(ruleParam));
                     break;
                 case UNKNOWN:
+                default:
                     System.err.println("Unimplemented Rule Type! Expression was: '" + ruleParam.getExpression() + "'. "
                             + "Maybe you need to add arguments?");
             }

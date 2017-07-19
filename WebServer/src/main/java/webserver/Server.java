@@ -150,7 +150,7 @@ public class Server extends AbstractVerticle {
     }
 
     /**
-     * lists all permissions an user has from the database to a List<String>
+     * lists all permissions an user has from the database to a List&lt;String&gt;
      *
      * @param user the user given by the RoutingContext on a route
      * @param next Handler which gets called, whenever the database action has been finished
@@ -432,7 +432,7 @@ public class Server extends AbstractVerticle {
 
     /**
      * handles the REST-Api call for Route /api/getPermissions
-     * lists all permissions an user has to a List<String>
+     * lists all permissions an user has to a List&lt;String&gt;
      * which is returned as Json in the response body
      *
      * @param routingContext the context in a route given by the router

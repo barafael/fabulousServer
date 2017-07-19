@@ -45,12 +45,13 @@ public class JsonList2 {
     @SerializedName("Results")
     private final FHEMDevice[] results = null;
     /**
-     * Arguments which were passed to jsonList2 FHEM command (grammar: <devicespec> <value1> <value2> ...).
+     * Arguments which were passed to jsonList2 FHEM command
+     * (grammar: &lt;devicespec&gt; &lt;value1&gt; &lt;value2&gt; ...).
      */
     @SerializedName("Arg")
     private String arg;
     /**
-     * Number of devices in FHEM matching the <devicespec> (or all of them if empty).
+     * Number of devices in FHEM matching the &lt;devicespec&gt; (or all of them if empty).
      **/
     private int totalResultsReturned;
 
@@ -60,8 +61,7 @@ public class JsonList2 {
      * @param jsonString the input string
      * @return an instance of jsonList2
      */
-    public static @NotNull
-    JsonList2 parseFrom(String jsonString) {
+    public static @NotNull JsonList2 parseFrom(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
 

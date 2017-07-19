@@ -20,6 +20,8 @@ import java.util.Map;
 
 /**
  * This custom serializer class for a FHEM model filters out all elements for which there are insufficient permissions.
+ * The work is done in the private, recursive method
+ * {@link webserver.fhemParser.fhemModel.serializers.ModelSerializer#cleanNull(JsonElement) cleanNull}.
  *
  * @author Rafael on 22.06.17.
  */

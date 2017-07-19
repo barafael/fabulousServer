@@ -84,7 +84,7 @@ public final class RuleChecker {
     }
 
     /**
-     * Evaluate a model given a set of rules
+     * Evaluate a model given a set of rules.
      * @param model the model to evaluate
      * @param rules the set of rules
      */

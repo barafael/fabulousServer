@@ -26,6 +26,9 @@ public final class RuleState {
      * A set of sensors for which this rule does not hold.
      */
     private final Set<FHEMSensor> violatedSensors;
+    /**
+     * Whether the corresponding rule was ok.
+     */
     private final boolean isOk;
 
     /**

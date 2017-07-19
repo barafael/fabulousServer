@@ -36,9 +36,15 @@ public final class SensorPredicate extends Rule {
      */
     @Override
     public RuleState specificEval(FHEMModel model) {
+        /*
+        Result accumulators
+         */
         Set<FHEMSensor> okSensors = new HashSet<>();
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 
+        /*
+        Input validation
+        */
         String[] tokens = expression.split(" ");
         if (tokens.length <= 1 || !tokens[0].equals("Sensor")) {
             System.err.println(
@@ -51,6 +57,9 @@ public final class SensorPredicate extends Rule {
             return ruleState;
         }
 
+        /*
+        Function and argument parsing
+         */
         String methodName = tokens[1];
 
         boolean negate = false;
@@ -91,8 +100,9 @@ public final class SensorPredicate extends Rule {
                 continue;
             }
 
-            /* Manual type checks */
-            /* Return type */
+            /* Manual type checks
+             * If getMethod() succeeded, the parameter types matched
+             */
             if (!method.getReturnType().getName().equals("boolean")) {
                 System.err.println("The method " + methodName + " you tried to call on sensor " + sensorName + " "
                         + "does not return a boolean!");

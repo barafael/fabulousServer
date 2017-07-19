@@ -188,8 +188,7 @@ public final class FHEMFileLog {
     }
 
     /**
-     * This log is 'switchable' if the permission is set to A_.*
-     * TODO update this
+     * This log is 'switchable' if it is in the 'actuators' room.
      * @return whether this log belongs to a switchable sensor
      */
     public boolean isSwitchable() {
@@ -197,10 +196,8 @@ public final class FHEMFileLog {
     }
 
     /**
-     * A log belongs to a permitted switch if the necessary permissions exist and
-     * start with A_.*
-     * TODO update this
-     * @param permissions
+     * A log belongs to a permitted switch if the necessary permissions exist and the log is in the 'actuators' room.
+     * @param permissions the list of permissions of the caller
      * @return whether this is can be switched and is permitted
      */
     public boolean isPermittedSwitch(List<String> permissions) {

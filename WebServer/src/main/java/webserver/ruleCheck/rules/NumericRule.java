@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public final class NumericRule extends Rule {
     /**
      * Construct a numeric rule.
+     *
      * @param ruleParam the parameters of the general predicate
      */
     public NumericRule(RuleParam ruleParam) {
@@ -26,15 +27,23 @@ public final class NumericRule extends Rule {
 
     /**
      * Specific evaluation of a numeric rule on a model.
+     *
      * @param model the model to use information from
      * @return the rule state, containing violated and passed sensors
      */
     @Override
     public RuleState specificEval(FHEMModel model) {
+        /*
+        Result accumulators
+        */
         Set<FHEMSensor> okSensors = new HashSet<>();
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 
+        /*
+        Input validation
+        */
         String[] tokens = expression.split(" ");
+
         if (tokens.length != 3) {
             System.err.println("Expression for numeric rule must have three elements separated by a space.");
             /* Return false to draw attention to formulation error (?) */
@@ -44,6 +53,9 @@ public final class NumericRule extends Rule {
             return ruleState;
         }
 
+        /*
+        Espression parsing
+        */
         String field = tokens[0];
         String operator = tokens[1];
         double numberLiteral = Double.parseDouble(tokens[2]);

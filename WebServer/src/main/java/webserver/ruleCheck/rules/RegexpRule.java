@@ -29,9 +29,15 @@ public final class RegexpRule extends Rule {
      */
     @Override
     public RuleState specificEval(FHEMModel model) {
+        /*
+        Result accumulators
+        */
         Set<FHEMSensor> okSensors = new HashSet<>();
         Set<FHEMSensor> violatedSensors = new HashSet<>();
 
+        /*
+        Input validation
+        */
         String[] tokens = expression.split(" ");
         if (tokens.length != 3) {
             System.err.println("Expression for RegexRule must have three elements separated by a space.");
@@ -42,6 +48,9 @@ public final class RegexpRule extends Rule {
             return ruleState;
         }
 
+        /*
+        Espression parsing
+        */
         String field = tokens[0];
         String operator = tokens[1];
         String literal = tokens[2];

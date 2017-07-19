@@ -45,8 +45,7 @@ public abstract class Rule {
      */
     private Map<Long, String> errorMessages = new TreeMap<>();
     /**
-     * A map of warninglevels to strings
-     * TODO generify this, get rid of warning levels
+     * A set of related log names.
      */
     private final Set<String> relatedLogNames = new HashSet<>();
     /**
@@ -150,7 +149,14 @@ public abstract class Rule {
         return okMessage;
     }
 
+    /**
+     * A rule can be set invisible to more elegantly define rules which depend on others.
+     * @return whether this rule should directly be shown in the frontend.
+     */
     public boolean isVisible() {
+        /* Yoda logic: necessary, because otherwise a field which is not set in the rule definitions
+         * will be set to false. This way, invisible is set to false.
+         */
         return !invisible;
     }
 

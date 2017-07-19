@@ -36,6 +36,9 @@ public final class RuleInfo {
      * A map of timestamps to states of rules. False if violated.
      */
     private final Map<Long, Boolean> changeStamps = new TreeMap<>();
+    /**
+     * The priority this rule has over others.
+     */
     private final int priority;
     /**
      * The state of this rule. False if violated.
@@ -60,6 +63,7 @@ public final class RuleInfo {
      * @param permission      necessary permissions
      * @param message         the message about the state of the rule
      * @param relatedLogNames the set of names of related logfiles
+     * @param priority        the priority of this rule, higher number means higher priority
      */
     public RuleInfo(String name,
                     boolean isOk,

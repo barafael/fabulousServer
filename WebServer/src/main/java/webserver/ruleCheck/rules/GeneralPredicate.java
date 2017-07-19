@@ -21,6 +21,7 @@ import java.util.List;
 public final class GeneralPredicate extends Rule {
     /**
      * Construct a general predicate.
+     *
      * @param ruleParam the parameters of the general predicate
      */
     public GeneralPredicate(RuleParam ruleParam) {
@@ -29,11 +30,16 @@ public final class GeneralPredicate extends Rule {
 
     /**
      * Specific evaluation of a general predicate on a model.
+     *
      * @param model the model to use information from
      * @return the rule state, containing violated and passed sensors
      */
     @Override
     public RuleState specificEval(FHEMModel model) {
+
+        /*
+        Input validation
+        */
         String[] tokens = expression.split(" ");
         if (tokens.length <= 1 || !tokens[0].equals("Predicate")) {
             System.err.println(
@@ -45,6 +51,9 @@ public final class GeneralPredicate extends Rule {
             return ruleState;
         }
 
+        /*
+        Function and argument parsing
+         */
         String methodName = tokens[1];
 
         boolean negate = false;
@@ -58,15 +67,19 @@ public final class GeneralPredicate extends Rule {
             arguments.addAll(Arrays.asList(tokens).subList(2, tokens.length));
         }
 
+        /*
+        Rule-specific checks
+         */
         if (!sensorNames.isEmpty()) {
             System.err.println("Found a general predicate rule which depends on sensors. The sensors will be ignored. "
                     + "Use a sensor predicate rule if you want the rule to depend on a sensor's state.");
         }
 
+        /* Return value */
         boolean ruleOK;
 
+        /* Get method from predicate collection */
         PredicateCollection predicateCollection = new PredicateCollection();
-        /* Get method */
         Method method;
         try {
             method = predicateCollection.getClass().getMethod(methodName, List.class);
@@ -77,7 +90,6 @@ public final class GeneralPredicate extends Rule {
             isEvaluated = true;
             ruleState = new RuleState(this, new HashSet<>(), new HashSet<>());
             return ruleState;
-
         } catch (NoSuchMethodException e) {
             System.err.println(predicateCollection + ": The method "
                     + methodName + " was not found in the predicate collection.");
@@ -87,8 +99,8 @@ public final class GeneralPredicate extends Rule {
             return ruleState;
         }
 
-        /* Manual type checks */
-        /* Return type */
+        /* Manual type checks
+         * If getMethod() succeeded, the parameter types matched */
         if (!method.getReturnType().getName().equals("boolean")) {
             System.err.println("The method " + methodName + " you tried to call in the predicate collection "
                     + "does not return a boolean!");
