@@ -47,7 +47,7 @@ public final class RuleInfo {
     /**
      * A message about the state of the rule.
      */
-    private String message;
+    private String message = "";
     /**
      * Record whether a new message has been set.
      * In this case, a notification should appear.
@@ -74,7 +74,7 @@ public final class RuleInfo {
         this.name = name;
         this.isOk = isOk;
         this.permission = permission;
-        this.message = message;
+        this.message = message != null ? message : "";
         this.relatedLogNames.addAll(relatedLogNames);
         this.priority = priority;
 

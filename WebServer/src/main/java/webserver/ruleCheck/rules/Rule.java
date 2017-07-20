@@ -129,7 +129,7 @@ public abstract class Rule {
     public String getWarningMessage(long startTime) {
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = errorMessages.keySet().stream().sorted().collect(Collectors.toList());
-        long hook = 0;
+        long hook = Collections.min(keys);
         for (long key : keys) {
             if (elapsedTime < key) {
                 return errorMessages.get(hook);
