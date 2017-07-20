@@ -35,7 +35,7 @@ final class FHEMDeviceReadings {
             ret.put("Battery", battery.value);
         }
         if (batteryPercent != null) {
-            ret.put("Battery percent", batteryPercent.value + " %");
+            ret.put("BatteryPercent", batteryPercent.value + " %");
         }
         if (humidity != null) {
             ret.put("Humidity", humidity.value + " %");
