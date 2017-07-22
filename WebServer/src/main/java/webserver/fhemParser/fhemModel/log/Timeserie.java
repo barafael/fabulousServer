@@ -166,6 +166,7 @@ public final class Timeserie {
                     ys = local_ys;
                 } else {
                     int k = local_xs.size() / MAX_SIZE;
+
                     long[] timestampQueue = new long[k];
                     double[] valueQueue = new double[k];
 

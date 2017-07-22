@@ -69,7 +69,7 @@ public final class FHEMDevice {
 
         FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
 
-        sensor.setIcon(getAttributes().getIcon());
+        sensor.setIcon(attributes.getIcon());
 
         /* Add metadata which might or might not be supplied for every sensor */
         if (alias.contains("Licht")) {
@@ -100,12 +100,12 @@ public final class FHEMDevice {
          *  A regex must be present, starting with the sensor name this data belongs to.
          *  */
         if (!getInternals().getRegexpPrefix().isPresent()) {
-            System.err.println("FileLog has no REGEXP prefix: " + getName());
+            System.err.println("FileLog has no REGEXP prefix: " + name);
             return Optional.empty();
         }
         Optional<String> path_opt = internals.getCurrentLogfileField();
         if (!path_opt.isPresent()) {
-            System.err.println("No logfile specified for log: " + getName());
+            System.err.println("No logfile specified for log: " + name);
             return Optional.empty();
         }
         String permissionField = attributes.getPermissionField().orElse("");
@@ -281,9 +281,9 @@ public final class FHEMDevice {
      * @return the room in which this device lies, which is annotated with prefix 'room_'
      */
     FHEMRoom getAppRoom() {
-        Optional<String> rooms_opt = getAttributes().getRooms();
+        Optional<String> rooms_opt = attributes.getRooms();
         if (!rooms_opt.isPresent()) {
-            System.err.println("Found a device which is not in any room. Adding it to orphan room. " + getName());
+            System.err.println("Found a device which is not in any room. Adding it to orphan room. " + name);
             return new FHEMRoom("room_orphaned");
         }
         String rooms_str = rooms_opt.get();
@@ -297,7 +297,7 @@ public final class FHEMDevice {
             System.err.println("Found device which belongs to multiple rooms in the app. Choosing the first one.");
             appRoom = appRooms.get(0);
         } else if (appRooms.size() == 0) {
-            System.err.println("Found a device which belongs to no app room. Adding it to orphan room. " + getName());
+            System.err.println("Found a device which belongs to no app room. Adding it to orphan room. " + name);
             appRoom = new FHEMRoom("room_orphaned");
         } else {
             appRoom = appRooms.get(0);
