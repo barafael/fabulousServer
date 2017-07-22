@@ -178,8 +178,8 @@ public final class Timeserie {
                         timestampQueue[minIndex] = local_xs.get(index);
                         valueQueue[minIndex] = local_ys.get(index);
                         if (minIndex == 0) {
-                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).average().orElse(0.0)));
-                            newValues.add(Arrays.stream(valueQueue).average().orElse(0.0));
+                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).limit(minIndex + 1).average().orElse(0.0)));
+                            newValues.add(Arrays.stream(valueQueue).limit(minIndex + 1).average().orElse(0.0));
                         }
                     }
                     System.out.println("Reduced from " + local_xs.size() + " to "
