@@ -2,6 +2,7 @@ package webserver.ruleCheck.parsing;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,20 +21,22 @@ import java.util.Set;
 public final class RuleParam {
     @SerializedName("Name")
     private final String name;
-    @SerializedName("SensorNames")
-    private final Set<String> sensorNames;
-    @SerializedName("Permission")
-    private final String permission;
     @SerializedName("Expression")
     private final String expression;
+    @SerializedName("ViewPermissions")
+    private final Set<String> viewPermissions;
+    @SerializedName("SensorNames")
+    private final Set<String> sensorNames;
+    @SerializedName("OkMessage")
+    private final String okMessage;
     @SerializedName("RequiredTrueRules")
     private final Set<String> requiredTrueRules;
     @SerializedName("RequiredFalseRules")
     private final Set<String> requiredFalseRules;
-    @SerializedName("OkMessage")
-    private final String okMessage;
     @SerializedName("ErrorMessages")
     private final Map<Long, String> errorMessages = new HashMap<>();
+    @SerializedName("Escalation")
+    private final Map<Long, Set<String>> escalation = new HashMap<>();
     @SerializedName("Invisible")
     private boolean invisibleInApp = false;
     /* Must always be sorted after the natural order of keys, therefore TreeSet */
@@ -44,23 +47,25 @@ public final class RuleParam {
 
     public RuleParam(String name,
                      Set<String> sensorNames,
-                     String permission,
+                     Set<String> viewPermissions,
                      String expression,
                      Set<String> requiredTrueRules,
                      Set<String> requiredFalseRules,
                      String okMessage,
                      Map<Long, String> errorMessages,
+                     Map<Long, Set<String>> escalation,
                      boolean invisibleInApp,
                      Set<String> relatedFileLogNames,
                      int priority) {
         this.name = name;
         this.sensorNames = sensorNames;
-        this.permission = permission;
+        this.viewPermissions = viewPermissions;
         this.expression = expression;
         this.requiredTrueRules = requiredTrueRules;
         this.requiredFalseRules = requiredFalseRules;
         this.okMessage = okMessage;
         this.errorMessages.putAll(errorMessages);
+        this.escalation.putAll(escalation);
         this.invisibleInApp = invisibleInApp;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
         this.priority = priority;
@@ -98,8 +103,8 @@ public final class RuleParam {
         return name != null ? name : "Nameless Rule";
     }
 
-    public String getPermissionField() {
-        return permission != null ? permission : "";
+    public Set<String> getViewPermissions() {
+        return viewPermissions != null ? viewPermissions : new HashSet<>();
     }
 
     public Set<String> getSensorNames() {
@@ -139,6 +144,15 @@ public final class RuleParam {
             return map;
         }
         return errorMessages;
+    }
+
+    public Map<Long, Set<String>> getEscalation() {
+        if (escalation == null || escalation.isEmpty()) {
+            HashMap<Long, Set<String>> map = new HashMap<>();
+            map.put(0L, new HashSet<>(Collections.singletonList("")));
+            return map;
+        }
+        return escalation;
     }
 
     public boolean getInvisible() {

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -32,9 +33,9 @@ public abstract class Rule {
      */
     final String name;
     /**
-     * The permissions for this rule to be shown.
+     * The viewPermissions for this rule to be shown.
      */
-    private final String permission;
+    private final Set<String> viewPermissions;
     /**
      * The 'OK' message.
      */
@@ -44,6 +45,11 @@ public abstract class Rule {
      * A map of durations to their warning levels.
      */
     private Map<Long, String> errorMessages = new TreeMap<>();
+
+    /**
+     * A map of duration to permissions which should be notified.
+     */
+    private final Map<Long, Set<String>> escalation;
     /**
      * A set of related log names.
      */
@@ -60,7 +66,7 @@ public abstract class Rule {
      * Should be a positive number, with a higher number indicating a higher priority.
      * This is set by the rule parameters.
      */
-    private int priority;
+    private final int priority;
 
     /**
      * The state of this rule, consisting of a state holder boolean, and sets of sensors which are ok/violated.
@@ -88,7 +94,7 @@ public abstract class Rule {
      */
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
-        permission = ruleParam.getPermissionField();
+        viewPermissions = ruleParam.getViewPermissions();
         sensorNames = ruleParam.getSensorNames();
         expression = ruleParam.getExpression();
         okMessage = ruleParam.getOkMessage();
@@ -96,6 +102,7 @@ public abstract class Rule {
         relatedLogNames.addAll(ruleParam.getRelatedLogs());
         this.priority = ruleParam.getPriority();
         this.errorMessages = ruleParam.getErrorMessages();
+        this.escalation = ruleParam.getEscalation();
     }
 
     public String getName() {
@@ -129,6 +136,9 @@ public abstract class Rule {
     public String getWarningMessage(long startTime) {
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = errorMessages.keySet().stream().sorted().collect(Collectors.toList());
+        if (keys.isEmpty()) {
+            return "No warning messages defined!";
+        }
         long hook = Collections.min(keys);
         for (long key : keys) {
             if (elapsedTime < key) {
@@ -141,8 +151,26 @@ public abstract class Rule {
         return errorMessages.get(Collections.max(keys));
     }
 
-    public String getPermissionField() {
-        return permission;
+    public Optional<Set<String>> getEscalationLevelPermissions(long startTime) {
+        long elapsedTime = Instant.now().getEpochSecond() - startTime;
+        List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
+        if (keys.isEmpty()) {
+            return Optional.empty();
+        }
+        long hook = Collections.min(keys);
+        for (long key : keys) {
+            if (elapsedTime < key) {
+                return Optional.of(escalation.get(hook));
+            } else {
+                hook = key;
+            }
+        }
+        /* elapsed time was higher than all keys in list */
+        return Optional.of(escalation.get(Collections.max(keys)));
+    }
+
+    public Set<String> getViewPermissions() {
+        return viewPermissions;
     }
 
     public String getOkMessage() {
@@ -278,7 +306,7 @@ public abstract class Rule {
     public String toString() {
         return "Rule{"
                 + "name='" + name + '\''
-                + ", permission='" + permission + '\''
+                + ", viewPermissions='" + viewPermissions + '\''
                 + ", expression='" + expression + '\''
                 + '}';
     }

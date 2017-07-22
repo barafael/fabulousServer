@@ -44,7 +44,7 @@ class State {
                     newSensorMap.put(rule, new RuleInfo(
                             rule.getName(),
                             true,
-                            rule.getPermissionField(),
+                            rule.getViewPermissions(),
                             rule.getOkMessage(),
                             rule.getRelatedLogs(),
                             rule.getPriority()
@@ -59,7 +59,7 @@ class State {
                     RuleInfo ruleInfo = new RuleInfo(
                             rule.getName(),
                             true,
-                            rule.getPermissionField(),
+                            rule.getViewPermissions(),
                             rule.getOkMessage(),
                             rule.getRelatedLogs(),
                             rule.getPriority()
@@ -81,7 +81,7 @@ class State {
                     newSensorMap.put(rule, new RuleInfo(
                             rule.getName(),
                             false,
-                            rule.getPermissionField(),
+                            rule.getViewPermissions(),
                             rule.getWarningMessage(Instant.now().getEpochSecond()),
                             rule.getRelatedLogs(),
                             rule.getPriority()
@@ -96,7 +96,7 @@ class State {
                     RuleInfo ruleInfo = new RuleInfo(
                             rule.getName(),
                             false,
-                            rule.getPermissionField(),
+                            rule.getViewPermissions(),
                             rule.getWarningMessage(Instant.now().getEpochSecond()),
                             rule.getRelatedLogs(),
                             rule.getPriority()

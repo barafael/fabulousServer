@@ -3,7 +3,7 @@
         {
             "Name": "general predicate",
             "Expression": "Predicate notexampleAlwaysTruePredicate with some arguments",
-            "OkPermission": "permission0",
+            "OkViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_520B89"
             ],

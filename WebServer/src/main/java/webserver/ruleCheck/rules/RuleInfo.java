@@ -1,9 +1,9 @@
 package webserver.ruleCheck.rules;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -26,11 +26,11 @@ public final class RuleInfo {
     /**
      * The necessary permissions to be able to see this information in a sensor.
      */
-    private final transient String permission;
+    private final transient Set<String> permissions;
     /**
      * The names of logs which the corresponding rule should affect.
      */
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "MismatchedQueryAndUpdateOfCollection"})
     private final Set<String> relatedLogNames = new HashSet<>();
     /**
      * A map of timestamps to states of rules. False if violated.
@@ -38,7 +38,9 @@ public final class RuleInfo {
     private final Map<Long, Boolean> changeStamps = new TreeMap<>();
     /**
      * The priority this rule has over others.
+     * (Used through deserialization only)
      */
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final int priority;
     /**
      * The state of this rule. False if violated.
@@ -60,20 +62,20 @@ public final class RuleInfo {
      *
      * @param name            Name of the rule as shown in app
      * @param isOk            state of the rule; true if ok
-     * @param permission      necessary permissions
+     * @param permissions      necessary permissions
      * @param message         the message about the state of the rule
      * @param relatedLogNames the set of names of related logfiles
      * @param priority        the priority of this rule, higher number means higher priority
      */
     public RuleInfo(String name,
                     boolean isOk,
-                    String permission,
+                    Set<String> permissions,
                     String message,
                     Set<String> relatedLogNames,
                     int priority) {
         this.name = name;
         this.isOk = isOk;
-        this.permission = permission;
+        this.permissions = permissions;
         this.message = message != null ? message : "";
         this.relatedLogNames.addAll(relatedLogNames);
         this.priority = priority;
@@ -100,13 +102,18 @@ public final class RuleInfo {
     }
 
     /**
-     * This rule is permitted if it's permission is contained in the given permissions.
+     * This rule is permitted to view if it's permissions is contained in the given permissions.
      *
-     * @param permissions the caller's permissions
+     * @param callerPermissions the caller's permissions
      * @return whether the info is permitted
      */
-    public boolean isPermitted(List<String> permissions) {
-        return permissions.contains(permission);
+    public boolean isPermitted(Collection<String> callerPermissions) {
+        for (String permission : callerPermissions) {
+            if (this.permissions.contains(permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -181,8 +188,8 @@ public final class RuleInfo {
                 + '\''
                 + ", isOk="
                 + isOk
-                + ", permission='"
-                + permission + '\''
+                + ", permissions='"
+                + permissions + '\''
                 + ", message='"
                 + message + '\''
                 + ", changeStamps="

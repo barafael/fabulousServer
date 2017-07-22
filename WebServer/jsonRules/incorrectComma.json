@@ -3,7 +3,7 @@
         {
             "Name": "incorrectJSONRule",
             "Expression": "Reading matches bl*",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

@@ -3,7 +3,7 @@
         {
             "Name": "sensor predicate",
             "Expression": "Predicate exampleAlwaysTruePredicate with some arguments",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_520B89"
             ],

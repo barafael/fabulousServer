@@ -3,7 +3,7 @@
         {
             "Name": "Rule 1 for door sensor",
             "Expression": "Reading equals closed",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -20,7 +20,7 @@
         {
             "Name": "Rule 2 for door sensor",
             "Expression": "Reading equals open",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -28,7 +28,7 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "bl*",
@@ -40,7 +40,7 @@
         {
             "Name": "Rule 3 for door sensor",
             "Expression": "Battery notequals ok",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -48,7 +48,7 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "bl*",

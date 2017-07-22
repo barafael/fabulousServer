@@ -3,7 +3,7 @@
         {
             "Name": "Duplicate",
             "Expression": "Reading matches bl*",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -19,7 +19,7 @@
         {
             "Name": "Duplicate",
             "Expression": "Reading contains noRainNoDry",
-            "Permission": "permission1",
+            "ViewPermissions": ["permission1"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -27,7 +27,7 @@
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "something is wrong",

@@ -7,7 +7,7 @@
         "sensor3",
         "sensor1"
       ],
-      "Permission": "permission1",
+      "ViewPermissions": ["permission1"],
       "Expression": "STATE contains dry",
       "RequiredTrueRules": [
         "anotherRule",
@@ -24,7 +24,7 @@
         "10": "something is wrong",
         "500": "hey, fix it!",
         "100": "all good"
-      },
+      }
     }
   ]
 }

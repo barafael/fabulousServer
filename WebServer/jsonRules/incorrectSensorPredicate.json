@@ -3,7 +3,7 @@
         {
             "Name": "incorrect sensor predicate",
             "Expression": "Sensor ",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_520B89"
             ],

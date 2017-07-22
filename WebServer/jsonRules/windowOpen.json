@@ -3,7 +3,7 @@
         {
             "Name": "open window",
             "Expression": "Reading contains open",
-            "Permission": "S_Fenster",
+            "ViewPermissions": ["S_Fenster"],
             "SensorNames": [
                 "HM_56A1E8"
             ],

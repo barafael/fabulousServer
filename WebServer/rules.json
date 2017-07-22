@@ -3,7 +3,9 @@
         {
             "Name": "All windows are closed",
             "Expression": "Reading equals closed",
-            "Permission": "S_Fenster",
+            "ViewPermissions": [
+                "S_Fenster"
+            ],
             "SensorNames": [
                 "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
             ],
@@ -15,16 +17,18 @@
         {
             "Name": "Dry Lab",
             "Expression": "Reading contains dry",
-            "Permission": "S_Regen",
+            "ViewPermissions": [
+                "S_Regen"
+            ],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
+            "RequiredTrueRules": ["All windows are closed"],
             "RequiredFalseRules": [],
             "Escalation": {
-                "10": "U_Mitarbeiter",
-                "600": "U_Admin"
+                "10": ["U_Mitarbeiter"],
+                "600": ["U_Admin"]
             },
             "ErrorMessages": {
                 "10": "The windows are open during rain!",

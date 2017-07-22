@@ -3,7 +3,7 @@
         {
             "Name": "sensor predicate",
             "Expression": "Sensor notexampleAlwaysTruePredicate some arguments here which will be passed as List<String>",
-            "OkPermission": "permission0",
+            "OkViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_520B89"
             ],

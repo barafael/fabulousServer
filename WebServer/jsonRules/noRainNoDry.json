@@ -3,7 +3,7 @@
         {
             "Name": "NeverTrue",
             "Expression": "Reading contains noRainNoDry",
-            "Permission": "permission1",
+            "ViewPermissions": ["permission1"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],

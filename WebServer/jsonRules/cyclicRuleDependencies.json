@@ -3,7 +3,7 @@
         {
             "Name": "Rule 1",
             "Expression": "Reading matches rain|dry",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -19,7 +19,7 @@
         {
             "Name": "Rule 2",
             "Expression": "Reading matches rain|dry",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -27,7 +27,7 @@
             "RequiredTrueRules": ["Rule 3"],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "bl*",
@@ -38,7 +38,7 @@
         {
             "Name": "Rule 3",
             "Expression": "Reading matches rain|dry",
-            "Permission": "permission0",
+            "ViewPermissions": ["permission0"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -46,7 +46,7 @@
             "RequiredTrueRules": ["Rule 4"],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "bl*",
@@ -57,7 +57,7 @@
         {
             "Name": "Rule 4",
             "Expression": "Reading matches rain|dry",
-            "Permission": "permission1",
+            "ViewPermissions": ["permission1"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
@@ -65,7 +65,7 @@
             "RequiredTrueRules": ["Rule 1"],
             "RequiredFalseRules": [],
             "Escalation": {
-                "100": "10"
+                "100": ["10"]
             },
             "ErrorMessages": {
                 "10": "something is wrong",

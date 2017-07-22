@@ -67,6 +67,7 @@ public class RuleCheckerTest {
     /**
      * Conditionally pulls jsonList2 to local machine
      * This can take a moment, depending on load and traffic.
+     * It is like pull.sh, except for jsonList2.json only.
      *
      * @throws IOException if there was an I/O error during command execution.
      */
@@ -99,6 +100,9 @@ public class RuleCheckerTest {
 
     /**
      * Construct a rule directly from parameters.
+     * This is also useful to check out how Gson deserializes a ruleparam.
+     * After adding a new feature to the parameters, it can be used to
+     * find out how to correctly write the rule in the first place.
      */
     @Test
     public void testConstructRuleParam() {
@@ -112,12 +116,13 @@ public class RuleCheckerTest {
         errorMessages.put(1000L, "FIX IT!!!");
         RuleParam ruleParam = new RuleParam("Fenster1",
                 sensorlist,
-                "permission1",
+                new HashSet<>(Collections.singletonList("permission1")),
                 "Readings contains dry",
                 reqTrue,
                 reqFalse,
                 "All Good",
                 errorMessages,
+                new HashMap<>(),
                 true,
                 Collections.emptySet(),
                 12
@@ -357,6 +362,23 @@ public class RuleCheckerTest {
         assert !model.getSensorByName("HM_4F5DAA_Rain").isPresent();
     }
 
+    /**
+     * A rule for which permissions are given should appear in the output.
+     */
+    @Test
+    public void testRulePermissionsOnlyRule() {
+        Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
+                "permission1", "S_Regen", "S_Regenregel"), "jsonRules/complexPermissionsRule.json");
+        assert json_opt.isPresent();
+        String json = json_opt.get();
+
+        FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
+
+        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
+        FHEMSensor sensor2 = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert sensor2.getPassedRules().size() == 1;
+        assert sensor2.getViolatedRules().size() == 0;
+    }
     /**
      * Sufficient permissions for the sensor and a filelog, but not for a rule.
      */
