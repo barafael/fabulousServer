@@ -335,8 +335,8 @@ public class ModelTest {
      */
     @Test
     public void testGetTimeserieRealFromParser() {
-        String sensorName = "HM_52CB59_Sw";
-        List<String> permissions = Collections.singletonList("A_Steckdose_Lasercutter");
+        String sensorName = "HM_521A72";
+        List<String> permissions = Collections.singletonList("S_Licht");
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();
         Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
