@@ -15,7 +15,7 @@
             "Invisible": "true"
         },
         {
-            "Name": "Dry Lab",
+            "Name": "There is no rain",
             "Expression": "Reading contains dry",
             "ViewPermissions": [
                 "S_Regen"
@@ -24,12 +24,26 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": ["All windows are closed"],
+            "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
                 "10": ["U_Mitarbeiter"],
                 "600": ["U_Admin"]
             },
+
+            "Invisible": "true"
+        },
+        {
+            "Name": "There is rain and the windows are open",
+            "ViewPermissions": [
+                "S_Fenster, S_Regen"
+            ],
+            "SensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "OkMessage": "The windows are closed or it is not raining",
+            "RequiredTrueRules": [],
+            "RequiredFalseRules": ["There is no rain", "All windows are closed"],
             "ErrorMessages": {
                 "10": "The windows are open during rain!",
                 "60": "The windows are still open and it is still raining!",

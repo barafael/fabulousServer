@@ -63,6 +63,22 @@ public final class RuleState {
         violatedSensors = new HashSet<>();
     }
 
+    /**
+     * Specific constructor for meta predicate.
+     * This is necessary because the state of a meta predicate is not dependent on it's
+     * passed or violated rules.
+     * Instead, the meta predicate is evaluated only depending on requiredtrue/requiredfalse rules.
+     *
+     * @param ruleOK whether the rule passed
+     * @param metaPredicate the meta predicate which was evaluated
+     */
+    public RuleState(boolean ruleOK, Meta metaPredicate) {
+        isOk = ruleOK;
+        this.rule = metaPredicate;
+        passedSensors = new HashSet<>();
+        violatedSensors = new HashSet<>();
+    }
+
     public Rule getRule() {
         return rule;
     }

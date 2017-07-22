@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import webserver.ruleCheck.rules.GeneralPredicate;
+import webserver.ruleCheck.rules.Meta;
 import webserver.ruleCheck.rules.NumericRule;
 import webserver.ruleCheck.rules.RegexpRule;
 import webserver.ruleCheck.rules.Rule;
@@ -98,6 +99,9 @@ public final class RuleParamCollection {
                     break;
                 case SENSOR_PRED:
                     rules.add(new SensorPredicate(ruleParam));
+                    break;
+                case META:
+                    rules.add(new Meta(ruleParam));
                     break;
                 case UNKNOWN:
                 default:

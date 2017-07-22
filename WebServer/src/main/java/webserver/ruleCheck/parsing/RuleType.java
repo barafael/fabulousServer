@@ -6,5 +6,5 @@ package webserver.ruleCheck.parsing;
  * @author Rafael on 07.07.17.
  */
 public enum RuleType {
-    REGEXP, NUMERIC, UNKNOWN, SENSOR_PRED, GENERAL_PRED,
+    REGEXP, NUMERIC, UNKNOWN, SENSOR_PRED, GENERAL_PRED, META,
 }

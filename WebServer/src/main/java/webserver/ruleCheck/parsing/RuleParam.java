@@ -1,6 +1,7 @@
 package webserver.ruleCheck.parsing;
 
 import com.google.gson.annotations.SerializedName;
+import webserver.ruleCheck.rules.Rule;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,6 +77,11 @@ public final class RuleParam {
      * @return the type of the rule
      */
     public RuleType getType() {
+
+        if (expression == null || expression.isEmpty()) {
+            return RuleType.META;
+        }
+
         String[] tokens = expression.split(" ");
 
         if (tokens.length == 3) {
