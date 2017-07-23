@@ -1,7 +1,6 @@
 package webserver.ruleCheck.parsing;
 
 import com.google.gson.annotations.SerializedName;
-import webserver.ruleCheck.rules.Rule;
 
 import java.util.Collections;
 import java.util.HashMap;

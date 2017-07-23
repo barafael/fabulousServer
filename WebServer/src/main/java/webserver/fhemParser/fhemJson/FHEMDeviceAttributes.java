@@ -39,12 +39,9 @@ class FHEMDeviceAttributes {
     private String model;
 
     /**
-     * A list of rooms this device is annotated with.
+     * The comma-separated string containing room names of the device is
+     * a list of rooms this device is annotated with.
      * Rooms in FHEM really are just String tags.
-     */
-    /* More than one room is possible! */
-    /**
-     * The comma-separated string containing room names of the device.
      */
     @SerializedName("room")
     private String rooms;

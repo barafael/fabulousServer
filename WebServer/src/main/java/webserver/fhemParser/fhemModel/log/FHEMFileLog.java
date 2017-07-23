@@ -202,7 +202,7 @@ public final class FHEMFileLog {
      */
     public boolean isPermittedSwitch(List<String> permissions) {
         for (String permission : this.permissions) {
-            if (permissions.contains(permission) && isSwitchable()) {
+            if (permissions.contains(permission) && switchable) {
                 return true;
             }
         }

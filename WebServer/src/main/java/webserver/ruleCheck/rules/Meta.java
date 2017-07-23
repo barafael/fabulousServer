@@ -1,15 +1,7 @@
 package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
-import webserver.ruleCheck.PredicateCollection;
 import webserver.ruleCheck.parsing.RuleParam;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * @author Rafael

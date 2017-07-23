@@ -129,7 +129,7 @@ class State {
     void apply(FHEMModel model) {
         prune(model);
         for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
-            FHEMSensor sensor = model.getSensorByName((String) stringMapEntry.getKey())
+            FHEMSensor sensor = model.getSensorByName(stringMapEntry.getKey())
                     .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
             Set<RuleInfo> shownInApp = stringMapEntry.getValue().keySet().stream().filter(Rule::isVisible)
                     .map(rule -> stringMapEntry.getValue().get(rule)).collect(Collectors.toSet());

@@ -195,8 +195,8 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     public Set<RuleInfo> getReport() {
         Set<RuleInfo> report = new HashSet<>();
         for (FHEMRoom room : this) {
-            for (Iterator<FHEMSensor> sensorsIterator = room.iterator(); sensorsIterator.hasNext(); ) {
-                report.addAll(sensorsIterator.next().getRuleInfos());
+            for (FHEMSensor sensor : room) {
+                report.addAll(sensor.getRuleInfos());
             }
         }
         return report;
