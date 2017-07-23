@@ -13,7 +13,7 @@ import java.util.Set;
  * It should be deserialized from a rules file.
  * All the getters from this class never return null. When they are not set in the corresponding entry
  * in the rules file, they are set to a standard value.
- *
+ * <p>
  * See documentation of rule checker for a description of all the single arguments.
  *
  * @author Rafael on 07.07.17.
@@ -64,11 +64,13 @@ public final class RuleParam {
         this.escalation.putAll(escalation);
         this.invisibleInApp = invisibleInApp;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
+        System.out.println(priority);
         this.priority = priority;
     }
 
     /**
      * The type of the rule is deduced from the provided expression.
+     *
      * @return the type of the rule
      */
     public RuleType getType() {
@@ -158,6 +160,7 @@ public final class RuleParam {
     public int getPriority() {
         return priority;
     }
+
     @Override
     public int hashCode() {
         return name.hashCode();

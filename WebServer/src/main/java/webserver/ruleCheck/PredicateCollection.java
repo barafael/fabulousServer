@@ -1,22 +1,36 @@
 package webserver.ruleCheck;
 
+/* Sunrise and sunset calculator.
+ * Apache 2.0
+ */
+//https://github.com/mikereedell/sunrisesunsetlib-java
+
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
+import de.jollyday.Holiday;
+import de.jollyday.HolidayCalendar;
+import de.jollyday.HolidayManager;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A collection of predicates which can be called from a general predicate rule.
- * Predicates must be public, return boolean, and take a List<String> (even if they ignore it).
+ * Predicates must be public, return boolean, and take a List&lt;String&gt; (even if they ignore it).
  *
  * @author Rafael
  */
 
 public final class PredicateCollection {
-    /** FabLab GPS location. */
+    /**
+     * FabLab GPS location.
+     */
     private static final Location LOCATION = new Location("48.5657463", "13.450155799999948");
     /**
      * Localised sun calculator.
@@ -64,6 +78,7 @@ public final class PredicateCollection {
 
     /**
      * A predicate to check if the sun is up at this moment.
+     *
      * @param _ignored ignored parameter list
      * @return whether the sun is up at this moment
      */
@@ -76,6 +91,7 @@ public final class PredicateCollection {
 
     /**
      * Weather warning predicate, only to show the concept.
+     *
      * @param _ignored ignored parameter list
      * @return always true
      */
@@ -90,7 +106,7 @@ public final class PredicateCollection {
      * Calculates a time of the current day as absolute unix seconds.
      * If hours and minutes are not in range, their modulo is used.
      *
-     * @param hour an int from 0(inclusive) to 24(exclusive)
+     * @param hour   an int from 0(inclusive) to 24(exclusive)
      * @param minute an int from 0(inclusive) to 60(exclusive)
      * @return the absolute unix timestamp of the hour and minute given on this day
      */

@@ -28,7 +28,7 @@ import java.util.Random;
 
 /**
  * This class contains tests for the FHEM Model.
- *
+ * <p>
  * All tests which get a FHEM model depend on local copies of FHEM state files.
  * Alternatively, the pullData function (annotated with @BeforeClass) pulls the data if it is not present.
  *
@@ -178,7 +178,6 @@ public class ModelTest {
      * (which would mean incorrect json format).
      *
      * @param json A string which should be tested
-     *
      * @return whether the input was valid json
      */
     private static boolean isValidJSON(String json) {

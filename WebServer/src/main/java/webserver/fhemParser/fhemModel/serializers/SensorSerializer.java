@@ -36,6 +36,7 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
 
     /**
      * Construct this serializer, setting the permissions. Any sensor not permitted for them will be filtered out.
+     *
      * @param permissions the permissions to use as filter
      */
     SensorSerializer(List<String> permissions) {

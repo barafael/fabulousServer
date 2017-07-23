@@ -85,7 +85,6 @@ public class RuleCheckerTest {
      * (which would mean incorrect json format).
      *
      * @param json A string which should be tested
-     *
      * @return whether the input was valid json
      */
     private static boolean isValidJSON(String json) {
@@ -124,7 +123,7 @@ public class RuleCheckerTest {
                 true,
                 Collections.emptySet(),
                 12
-                );
+        );
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         RuleParamCollection col = new RuleParamCollection(ruleParam);
@@ -384,6 +383,7 @@ public class RuleCheckerTest {
         assert sensor2.getPassedRules().size() == 1;
         assert sensor2.getViolatedRules().size() == 0;
     }
+
     /**
      * Sufficient permissions for the sensor and a filelog, but not for a rule.
      */
@@ -403,7 +403,7 @@ public class RuleCheckerTest {
 
     @Test
     public void testWindowOpenDuringRain() {
-                Optional<String> json_opt = FHEMParser.getInstance()
+        Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList(
                         "insufficientPermission", "permission1", "S_Regen"), "jsonRules/windowsOpenDuringRain.json");
         assert json_opt.isPresent();

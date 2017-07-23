@@ -107,6 +107,7 @@ class FHEMDeviceAttributes {
     /**
      * Accessor for the userattr 'permissions' in FHEM.
      * ('Field' because getPermission sounds like a permission inquiry.)
+     *
      * @return the userattr 'permissions' in FHEM
      */
     Optional<String> getPermissionField() {

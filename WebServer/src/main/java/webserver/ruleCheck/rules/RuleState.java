@@ -35,8 +35,8 @@ public final class RuleState {
      * Construct a rule state given a rule, passed, and violated sensors.
      * The state is set to ok if there were passed but no violated sensors.
      *
-     * @param rule the evaluated rule
-     * @param passedSensors the passed sensors
+     * @param rule            the evaluated rule
+     * @param passedSensors   the passed sensors
      * @param violatedSensors the violated sensors
      */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
@@ -53,7 +53,7 @@ public final class RuleState {
      * Instead, the general predicate is evaluated independently from the input,
      * and it's state is set in this constructor.
      *
-     * @param ruleOK whether the rule passed
+     * @param ruleOK           whether the rule passed
      * @param generalPredicate the general predicate which was evaluated
      */
     public RuleState(boolean ruleOK, GeneralPredicate generalPredicate) {
@@ -69,7 +69,7 @@ public final class RuleState {
      * passed or violated rules.
      * Instead, the meta predicate is evaluated only depending on requiredtrue/requiredfalse rules.
      *
-     * @param ruleOK whether the rule passed
+     * @param ruleOK        whether the rule passed
      * @param metaPredicate the meta predicate which was evaluated
      */
     public RuleState(boolean ruleOK, Meta metaPredicate) {

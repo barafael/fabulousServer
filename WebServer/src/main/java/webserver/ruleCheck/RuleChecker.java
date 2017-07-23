@@ -67,6 +67,7 @@ public final class RuleChecker {
 
     /**
      * Evaluate a model with the default rule set.
+     *
      * @param model the model to acquire the information from
      */
     public void evaluate(FHEMModel model) {
@@ -75,8 +76,9 @@ public final class RuleChecker {
 
     /**
      * Evaluate a model, given the path to a rules file.
+     *
      * @param model the model to evaluate
-     * @param path the path to the set of rules
+     * @param path  the path to the set of rules
      */
     public void evaluate(FHEMModel model, String path) {
         Optional<Set<Rule>> rules_opt = getRules(path);
@@ -85,6 +87,7 @@ public final class RuleChecker {
 
     /**
      * Evaluate a model given a set of rules.
+     *
      * @param model the model to evaluate
      * @param rules the set of rules
      */
@@ -96,10 +99,11 @@ public final class RuleChecker {
 
     /**
      * Load rule parameters from a given file.
+     *
      * @param path a string containing a path to the rules file
      * @return a collection of rule parameters
      *
-     * @throws IOException if reading the rules file went wrong
+     * @throws IOException         if reading the rules file went wrong
      * @throws JsonSyntaxException if the syntax of the rules file was incorrect json
      */
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {

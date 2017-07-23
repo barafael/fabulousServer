@@ -16,6 +16,7 @@ import java.util.Set;
 public final class RegexpRule extends Rule {
     /**
      * Construct a regexp rule.
+     *
      * @param ruleParam the parameters of the general predicate
      */
     public RegexpRule(RuleParam ruleParam) {
@@ -24,6 +25,7 @@ public final class RegexpRule extends Rule {
 
     /**
      * Specific evaluation of a regexp rule on a model.
+     *
      * @param model the model to use information from
      * @return the rule state, containing violated and passed sensors
      */

@@ -31,9 +31,11 @@ public final class RuleParamCollection {
     @SerializedName("Rules")
     private final Set<RuleParam> ruleParams = new HashSet<>();
 
-    /** TODO: Suppress direct creation
+    /**
+     * TODO: Suppress direct creation
      * Currently open for unit tests
      * Constructs a param collection.
+     *
      * @param ruleParam a varargs list of rule parameters
      */
     public RuleParamCollection(RuleParam... ruleParam) {
@@ -42,8 +44,10 @@ public final class RuleParamCollection {
 
     /**
      * Construct an instance of this class directly from the given JSON.
+     *
      * @param json a string containing a valid rule definition
      * @return a set of rule parameters
+     *
      * @throws JsonSyntaxException if the input string was not valid JSON
      */
     public static RuleParamCollection fromJson(String json) throws JsonSyntaxException {

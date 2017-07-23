@@ -97,6 +97,7 @@ public final class FHEMDeviceInternals {
 
     /**
      * Access the FHEM type attribute.
+     *
      * @return optional of the value of the FHEM type attribute
      */
     public Optional<String> getType() {
@@ -105,6 +106,7 @@ public final class FHEMDeviceInternals {
 
     /**
      * Access the FHEM state attribute.
+     *
      * @return optional of the FHEM state attribute
      */
     public Optional<String> getState() {
@@ -113,6 +115,7 @@ public final class FHEMDeviceInternals {
 
     /**
      * Access the FHEM regexp attribute (in FileLogs).
+     *
      * @return optional of the FHEM regexp attribute
      */
     public Optional<String> getRegexp() {

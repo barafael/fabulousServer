@@ -73,6 +73,7 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
 
     /**
      * Add a sensor to this room.
+     *
      * @param sensor the sensor to add
      */
     public void addSensor(@NotNull FHEMSensor sensor) {

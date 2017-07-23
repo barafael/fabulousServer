@@ -37,6 +37,7 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
 
     /**
      * Construct this serializer, setting the permissions. Any room not permitted for them will be filtered out.
+     *
      * @param permissions the permissions to use as filter
      */
     RoomSerializer(List<String> permissions) {

@@ -62,7 +62,7 @@ public final class RuleInfo {
      *
      * @param name            Name of the rule as shown in app
      * @param isOk            state of the rule; true if ok
-     * @param permissions      necessary permissions
+     * @param permissions     necessary permissions
      * @param message         the message about the state of the rule
      * @param relatedLogNames the set of names of related logfiles
      * @param priority        the priority of this rule, higher number means higher priority

@@ -34,6 +34,7 @@ class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
 
     /**
      * Construct this serializer, setting the permissions. Any RuleInfo not permitted for them will be filtered out.
+     *
      * @param permissions the permissions to use as filter
      */
     RuleInfoSerializer(List<String> permissions) {

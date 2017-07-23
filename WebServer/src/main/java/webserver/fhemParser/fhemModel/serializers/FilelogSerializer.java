@@ -34,6 +34,7 @@ final class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
 
     /**
      * Construct this serializer, setting the permissions. Any filelog not permitted for them will be filtered out.
+     *
      * @param permissions the permissions to use as filter
      */
     FilelogSerializer(List<String> permissions) {

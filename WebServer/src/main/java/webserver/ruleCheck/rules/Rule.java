@@ -166,6 +166,7 @@ public abstract class Rule {
 
     /**
      * A rule can be set invisible to more elegantly define rules which depend on others.
+     *
      * @return whether this rule should directly be shown in the frontend.
      */
     public boolean isVisible() {

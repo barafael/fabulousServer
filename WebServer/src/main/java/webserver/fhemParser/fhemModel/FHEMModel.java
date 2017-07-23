@@ -30,6 +30,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * Construct a new model with given rooms.
+     *
      * @param rooms a set of rooms
      */
     public FHEMModel(HashSet<FHEMRoom> rooms) {
@@ -190,6 +191,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * Generate a report of all the ruleinfos in the sensors of this model.
+     *
      * @return a set of ruleinfos which are set in this model
      */
     public Set<RuleInfo> getReport() {

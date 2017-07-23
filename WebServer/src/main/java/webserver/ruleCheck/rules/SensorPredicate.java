@@ -23,6 +23,7 @@ import java.util.Set;
 public final class SensorPredicate extends Rule {
     /**
      * Construct a sensor predicate.
+     *
      * @param ruleParam the parameters of the general predicate
      */
     public SensorPredicate(RuleParam ruleParam) {
@@ -31,6 +32,7 @@ public final class SensorPredicate extends Rule {
 
     /**
      * Specific evaluation of a sensor predicate rule on a model.
+     *
      * @param model the model to use information from
      * @return the rule state, containing violated and passed sensors
      */

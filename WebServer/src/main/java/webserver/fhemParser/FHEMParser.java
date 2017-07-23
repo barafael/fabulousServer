@@ -93,6 +93,7 @@ public final class FHEMParser {
 
     /**
      * Get a FHEM model as (optional) JSON, using the default rules to evaluate.
+     *
      * @param permissions the permissions to apply to this model, filtering out everything else
      * @return the filtered and evaluated model
      */
@@ -125,6 +126,7 @@ public final class FHEMParser {
 
     /**
      * Use the default rules and no permissions to generate an (optional) FHEM model.
+     *
      * @return an optional FHEM model
      */
     public Optional<FHEMModel> getFHEMModel() {
@@ -361,8 +363,9 @@ public final class FHEMParser {
 
     /**
      * Set a FHEM actuator to a given state, checking for permissions.
-     * @param sensorName the name of the sensor to set
-     * @param state the state to set the sensor to
+     *
+     * @param sensorName  the name of the sensor to set
+     * @param state       the state to set the sensor to
      * @param permissions the permissions of the caller
      * @return true if the operation succeeded
      */

@@ -28,6 +28,7 @@ class State {
 
     /**
      * Update the static state with new results from an evaluation.
+     *
      * @param states the new results
      */
     void update(Set<RuleState> states) {
@@ -63,7 +64,7 @@ class State {
                             rule.getOkMessage(),
                             rule.getRelatedLogs(),
                             rule.getPriority()
-                            );
+                    );
                     sensorRules.put(rule, ruleInfo);
                     continue;
                 }
@@ -114,6 +115,7 @@ class State {
 
     /**
      * Remove sensors which are not in the given FHEM model from the static state.
+     *
      * @param model the model to use to check for sensors
      */
     private void prune(FHEMModel model) {

@@ -32,7 +32,6 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
     private final List<String> permissions;
 
     /**
-     *
      * Prevent direct construction without parameters.
      */
     private ModelSerializer() {
@@ -41,6 +40,7 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
 
     /**
      * Construct this serializer, setting the permissions. Any model not permitted for them will be filtered out.
+     *
      * @param permissions the permissions to use as filter
      */
     public ModelSerializer(List<String> permissions) {

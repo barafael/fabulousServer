@@ -65,10 +65,10 @@ public final class FHEMFileLog {
     /**
      * Constructs a filelog from data obtained in fhemjson.
      *
-     * @param path           path to an timeseries logfile
-     * @param name           name of this filelog
-     * @param switchable     whether this filelog has switchable permissions
-     * @param permissions    the permission ID which this filelog requires to access it
+     * @param path        path to an timeseries logfile
+     * @param name        name of this filelog
+     * @param switchable  whether this filelog has switchable permissions
+     * @param permissions the permission ID which this filelog requires to access it
      */
     public FHEMFileLog(String path, String name, boolean switchable, List<String> permissions) {
         this.path = path;
@@ -189,6 +189,7 @@ public final class FHEMFileLog {
 
     /**
      * This log is 'switchable' if it is in the 'actuators' room.
+     *
      * @return whether this log belongs to a switchable sensor
      */
     public boolean isSwitchable() {
@@ -197,6 +198,7 @@ public final class FHEMFileLog {
 
     /**
      * A log belongs to a permitted switch if the necessary permissions exist and the log is in the 'actuators' room.
+     *
      * @param permissions the list of permissions of the caller
      * @return whether this is can be switched and is permitted
      */
