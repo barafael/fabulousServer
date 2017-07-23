@@ -42,8 +42,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "The windows are closed or it is not raining",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": ["There is no rain", "All windows are closed"],
+            "RequiredTrueRules": ["There is no rain", "All windows are closed"],
+            "RequiredFalseRules": [],
             "ErrorMessages": {
                 "10": "The windows are open during rain!",
                 "60": "The windows are still open and it is still raining!",
