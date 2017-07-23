@@ -67,24 +67,18 @@ public final class RuleParamCollection {
 
         /* RuleName -> { Names of Rules which must be true or false (preconditions) } */
         Map<String, Set<String>> requiredTrueRules = new HashMap<>();
-        Map<String, Set<String>> requiredFalseRules = new HashMap<>();
 
         for (RuleParam ruleParam : ruleParams) {
             /* Filter out the name of the rule itself. Otherwise infinite recursion (self pointer in graph)! */
             Set<String> requiredTrue = ruleParam.getRequiredTrueRules().stream().
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
 
-            Set<String> requiredFalse = ruleParam.getRequiredFalseRules().stream().
-                    filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
-
-            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size()
-                    || requiredFalse.size() != ruleParam.getRequiredFalseRules().size()) {
+            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size()) {
                 System.err.println("Ignoring rule self dependency!");
                 System.err.println("Rule Parameters: " + ruleParam);
             }
 
             requiredTrueRules.put(ruleParam.getName(), requiredTrue);
-            requiredFalseRules.put(ruleParam.getName(), requiredFalse);
 
             RuleType type = ruleParam.getType();
             switch (type) {
@@ -114,15 +108,11 @@ public final class RuleParamCollection {
         for (Rule rule : rules) {
             /* Associate all the rules which must be true or false */
             Set<String> requiredTrueOfThisRule = requiredTrueRules.get(rule.getName());
-            Set<String> requiredFalseOfThisRule = requiredFalseRules.get(rule.getName());
 
             Set<Rule> trueRules = rules.stream().
                     filter((Rule r) -> requiredTrueOfThisRule.contains(r.getName())).collect(Collectors.toSet());
-            Set<Rule> falseRules = rules.stream().
-                    filter(r -> requiredFalseOfThisRule.contains(r.getName())).collect(Collectors.toSet());
 
             rule.setRequiredTrue(trueRules);
-            rule.setRequiredFalse(falseRules);
         }
         return rules;
     }

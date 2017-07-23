@@ -81,10 +81,6 @@ public abstract class Rule {
      * Required true prerequisites.
      */
     private Set<Rule> requiredTrueRules;
-    /**
-     * Required false prerequisites.
-     */
-    private Set<Rule> requiredFalseRules;
 
     /**
      * Construct a rule from rule parameters.
@@ -116,15 +112,6 @@ public abstract class Rule {
      */
     public void setRequiredTrue(Set<Rule> requiredTrue) {
         this.requiredTrueRules = requiredTrue;
-    }
-
-    /**
-     * Set the rules which are false prerequisites.
-     *
-     * @param requiredFalse the rules to set as false prerequisites
-     */
-    public void setRequiredFalse(Set<Rule> requiredFalse) {
-        this.requiredFalseRules = requiredFalse;
     }
 
     /**
@@ -247,7 +234,6 @@ public abstract class Rule {
 
         /* Handle preconditions (rules which are specified to be true or false in order for this rule to even apply */
         boolean trueRulesOK = true;
-        boolean falseRulesOK = true;
 
         for (Rule trueRule : requiredTrueRules) {
             if (!trueRule.eval(model, visited).isOk()) {
@@ -256,15 +242,8 @@ public abstract class Rule {
             }
         }
 
-        for (Rule falseRule : requiredFalseRules) {
-            if (falseRule.eval(model, visited).isOk()) {
-                falseRulesOK = false;
-                break;
-            }
-        }
-
         /* Return early if not all preconditions are met. */
-        if (!trueRulesOK || !falseRulesOK) {
+        if (!trueRulesOK) {
             isEvaluated = true;
             /* Not all preconditions have been met. This rule is violated. */
             ruleState = new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));

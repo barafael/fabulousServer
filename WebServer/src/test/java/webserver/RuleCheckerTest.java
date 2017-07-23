@@ -108,7 +108,6 @@ public class RuleCheckerTest {
     public void testConstructRuleParam() {
         Set<String> sensorlist = new HashSet<>(Arrays.asList("sensor1", "sensor2", "sensor3"));
         Set<String> reqTrue = new HashSet<>(Arrays.asList("testRule", "anotherRule", "yetAnotherRule"));
-        Set<String> reqFalse = new HashSet<>(Arrays.asList("Rule1", "Rule2", "Rule3"));
         Map<Long, String> errorMessages = new HashMap<>();
         errorMessages.put(10L, "There is a 10 second problem");
         errorMessages.put(60L, "wrong for a minute");
@@ -119,7 +118,6 @@ public class RuleCheckerTest {
                 new HashSet<>(Collections.singletonList("permission1")),
                 "Readings contains dry",
                 reqTrue,
-                reqFalse,
                 "All Good",
                 errorMessages,
                 new HashMap<>(),

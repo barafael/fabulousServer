@@ -31,8 +31,6 @@ public final class RuleParam {
     private final String okMessage;
     @SerializedName("RequiredTrueRules")
     private final Set<String> requiredTrueRules;
-    @SerializedName("RequiredFalseRules")
-    private final Set<String> requiredFalseRules;
     @SerializedName("ErrorMessages")
     private final Map<Long, String> errorMessages = new HashMap<>();
     @SerializedName("Escalation")
@@ -50,7 +48,6 @@ public final class RuleParam {
                      Set<String> viewPermissions,
                      String expression,
                      Set<String> requiredTrueRules,
-                     Set<String> requiredFalseRules,
                      String okMessage,
                      Map<Long, String> errorMessages,
                      Map<Long, Set<String>> escalation,
@@ -62,7 +59,6 @@ public final class RuleParam {
         this.viewPermissions = viewPermissions;
         this.expression = expression;
         this.requiredTrueRules = requiredTrueRules;
-        this.requiredFalseRules = requiredFalseRules;
         this.okMessage = okMessage;
         this.errorMessages.putAll(errorMessages);
         this.escalation.putAll(escalation);
@@ -129,15 +125,6 @@ public final class RuleParam {
         return requiredTrueRules != null ? requiredTrueRules : new HashSet<>();
     }
 
-    /**
-     * Returns requiredFalse-Rules, which are rules which must be false as a pre-requisite.
-     *
-     * @return a set of rules which are required to be false
-     */
-    public Set<String> getRequiredFalseRules() {
-        return requiredFalseRules != null ? requiredFalseRules : new HashSet<>();
-    }
-
     public String getExpression() {
         return expression != null ? expression : "";
     }
@@ -193,7 +180,6 @@ public final class RuleParam {
                 + ", sensorNames=" + sensorNames
                 + ", expression='" + expression + '\''
                 + ", requiredTrueRules=" + requiredTrueRules
-                + ", requiredFalseRules=" + requiredFalseRules
                 + '}';
     }
 }
