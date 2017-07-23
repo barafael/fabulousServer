@@ -165,21 +165,22 @@ public final class Timeserie {
                     xs = local_xs;
                     ys = local_ys;
                 } else {
-                    int k = local_xs.size() / MAX_SIZE;
+                    /* Opportunities for better performance all over the place! */
+                    int windowSize = local_xs.size() / MAX_SIZE;
 
-                    long[] timestampQueue = new long[k];
-                    double[] valueQueue = new double[k];
+                    long[] timestampQueue = new long[windowSize];
+                    double[] valueQueue = new double[windowSize];
 
                     List<Long> newTimestamps = new ArrayList<>();
                     List<Double> newValues = new ArrayList<>();
 
                     for (int index = 0; index < local_xs.size(); index++) {
-                        int minIndex = index % k;
-                        timestampQueue[minIndex] = local_xs.get(index);
-                        valueQueue[minIndex] = local_ys.get(index);
-                        if (minIndex == 0) {
-                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).limit(minIndex + 1).average().orElse(0.0)));
-                            newValues.add(Arrays.stream(valueQueue).limit(minIndex + 1).average().orElse(0.0));
+                        int windowIndex = index % windowSize;
+                        timestampQueue[windowIndex] = local_xs.get(index);
+                        valueQueue[windowIndex] = local_ys.get(index);
+                        if (windowIndex == 0) {
+                            newTimestamps.add(Math.round(Arrays.stream(timestampQueue).limit(windowIndex + 1).average().orElse(0.0)));
+                            newValues.add(Arrays.stream(valueQueue).limit(windowIndex + 1).average().orElse(0.0));
                         }
                     }
                     System.out.println("Reduced from " + local_xs.size() + " to "
