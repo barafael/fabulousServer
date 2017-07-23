@@ -49,6 +49,22 @@
                 "60": "The windows are still open and it is still raining!",
                 "600": "hey, close the windows!!!"
             }
+        },
+        {
+            "Name": "NeverTrue",
+            "Expression": "Reading contains noRainNoDry",
+            "ViewPermissions": [
+                "S_Regen"
+            ],
+            "SensorNames": [
+                "HM_4F5DAA_Rain"
+            ],
+            "OkMessage": "all ok",
+            "ErrorMessages": {
+                "10": "something is wrong",
+                "100": "all good",
+                "500": "hey, fix it!"
+            }
         }
     ]
 }
