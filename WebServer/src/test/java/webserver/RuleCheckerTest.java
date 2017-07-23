@@ -142,6 +142,13 @@ public class RuleCheckerTest {
      */
     @Test
     public void testStateCheckerEvaluateDefaultRules() throws IOException {
+        Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
+        assert model_opt.isPresent();
+        FHEMModel model = model_opt.get();
+    }
+
+    @Test
+    public void testStateCheckerEvaluateWindowOpen() throws IOException {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel("jsonRules/windowOpen.json");
         assert model_opt.isPresent();
         FHEMModel model = model_opt.get();
