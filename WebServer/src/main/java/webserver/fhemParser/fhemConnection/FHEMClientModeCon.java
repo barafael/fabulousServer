@@ -104,12 +104,15 @@ public final class FHEMClientModeCon implements FHEMConnection {
             while ((line = stderr.readLine()) != null) {
                 error.append(line);
             }
+            stdin.close();
+            stderr.close();
             throw new FHEMNotFoundException(
                     "FHEM not found at " + fhemPath + " on port " + port + "\n"
                             + error);
         }
         stdin.close();
         stderr.close();
+
         return stringBuilder.toString();
     }
 
