@@ -65,10 +65,31 @@ public final class PredicateCollection {
 
     /**
      * A predicate to check if hours are between 6am and 8pm.
+     *
      * @param _ignored ignored parameter list
      * @return whether the current time is a working hour
      */
     public boolean isWorkingHours(@SuppressWarnings("unused") List<String> _ignored) {
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SATURDAY || day == Calendar.SUNDAY) {
+            return false;
+        }
+        HolidayManager m = HolidayManager.getInstance(HolidayCalendar.GERMANY);
+
+        // For munich and bavaria, jollyday does not do passau
+        Set<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "by", "mu");
+
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDate today = LocalDate.now(zoneId);
+        // City and Region codes:
+        // http://jollyday.sourceforge.net/data/de.html
+        boolean isHoliday = holidays.stream()
+                .map(Holiday::getDate)
+                .filter(localDate -> localDate.equals(today))
+                .count() > 0;
+        if (isHoliday) {
+            return false;
+        }
         long startTime = timeOfTodayInUNIXSeconds(6, 0);
         long endTime = timeOfTodayInUNIXSeconds(20, 0);
         long now = Instant.now().getEpochSecond();
