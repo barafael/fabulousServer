@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.ruleCheck.rules.RuleInfo;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -269,6 +270,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     public HashSet<FHEMFileLog> getLogs() {
         return fileLogs;
+    }
+
+    /**
+     * A predicate which is true only the first 5 minutes every 10 minutes.
+     *
+     * //TODO remove from sensor when general predicates are correctly handled
+     * @param _ignored ignored parameter list
+     * @return whether the current minute is divisible by 2, true if yes
+     */
+    public boolean firstFive(@SuppressWarnings("unused") List<String> _ignored) {
+        Calendar now = Calendar.getInstance();
+        int minute = now.get(Calendar.MINUTE);
+        return minute % 10 < 5;
     }
 
     /**

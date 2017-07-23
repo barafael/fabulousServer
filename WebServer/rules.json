@@ -62,8 +62,21 @@
             "OkMessage": "all ok",
             "ErrorMessages": {
                 "10": "something is wrong",
-                "100": "all good",
+                "100": "long wrong",
                 "500": "hey, fix it!"
+            }
+        },
+        {
+            "Name": "First Five Minutes",
+            "Expression": "Sensor firstFive",
+            "Priority": 100,
+            "ViewPermissions": ["S_Fenster"],
+            "SensorNames": [
+                "HM_56A1EC"
+            ],
+            "OkMessage": "First five minutes!",
+            "ErrorMessages": {
+                "1": "Last five minutes!"
             }
         }
     ]

@@ -1,7 +1,7 @@
 {
     "Rules": [
         {
-            "Name": "sensor predicate",
+            "Name": "general predicate",
             "Expression": "Predicate exampleAlwaysTruePredicate with some arguments",
             "ViewPermissions": ["permission0"],
             "SensorNames": [
