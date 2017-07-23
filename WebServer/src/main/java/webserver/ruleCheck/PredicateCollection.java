@@ -64,6 +64,18 @@ public final class PredicateCollection {
     }
 
     /**
+     * A predicate which is true only every second minute.
+     *
+     * @param _ignored ignored parameter list
+     * @return whether the current minute is divisible by 2, true if yes
+     */
+    public boolean isEvenMinute(@SuppressWarnings("unused") List<String> _ignored) {
+        Calendar now = Calendar.getInstance();
+        int minute = now.get(Calendar.MINUTE);
+        return minute % 2 == 0;
+    }
+
+    /**
      * A predicate to check if hours are between 6am and 8pm.
      *
      * @param _ignored ignored parameter list
