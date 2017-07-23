@@ -23,7 +23,7 @@
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "OkMessage": "all ok",
+            "OkMessage": "No rain",
             "RequiredTrueRules": [],
             "RequiredFalseRules": [],
             "Escalation": {
@@ -36,7 +36,7 @@
         {
             "Name": "There is rain and the windows are open",
             "ViewPermissions": [
-                "S_Fenster, S_Regen"
+                "S_Fenster", "S_Regen"
             ],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
