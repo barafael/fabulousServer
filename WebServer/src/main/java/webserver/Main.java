@@ -19,7 +19,6 @@ public final class Main {
     public static final Vertx vertx = Vertx.vertx();
     static final FHEMParser parser = FHEMParser.getInstance();
     static long parserTimerID;
-    private static FHEMModel fhemModel;
 
     static {
         Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
@@ -27,7 +26,6 @@ public final class Main {
             System.err.println("FHEM could not be parsed.");
             System.exit(42);
         }
-        fhemModel = fhemModel_opt.get();
     }
 
     /**
@@ -54,9 +52,7 @@ public final class Main {
                     future.complete(fhemModel_opt.get());
                 }
             }, res -> {
-                if (res.succeeded()) {
-                    fhemModel = (FHEMModel) res.result();
-                } else {
+                if (!res.succeeded()) {
                     System.out.println("System exiting: Periodic Parser returned with error!");
                     res.cause().printStackTrace();
                     vertx.cancelTimer(parserTimerID);
