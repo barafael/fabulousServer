@@ -10,8 +10,6 @@
                 "netatmo_M03_00_00_00_df_de"
             ],
             "OkMessage": "Air is not pure co2",
-            "RequiredAllTrue": [],
-            "RequiredOneOfTrue": [],
             "Escalation": {
                 "10": ["U_Mitarbeiter"],
                 "600": ["U_Admin"]

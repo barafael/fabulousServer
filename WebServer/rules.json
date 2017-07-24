@@ -61,7 +61,7 @@
             }
         },
         {
-            "Name": "First Five Minutes",
+            "Name": "Five Minute Toggle Rule",
             "Expression": "Sensor firstFive",
             "Priority": 100,
             "ViewPermissions": ["S_Fenster"],

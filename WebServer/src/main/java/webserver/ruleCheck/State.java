@@ -32,7 +32,6 @@ class State {
      * @param states the new results
      */
     void update(Set<RuleState> states) {
-
         for (RuleState state : states) {
 
             Rule rule = state.getRule();
@@ -121,6 +120,22 @@ class State {
     private void prune(FHEMModel model) {
         Set<String> sensorNames = stateMap.keySet();
         sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
+    }
+
+    /**
+     * Prune the stateMap, removing rules which are not present any more.
+     * @param rulesToKeep the new set of rules
+     */
+    public void prune(Set<Rule> rulesToKeep) {
+        Set<String> namesToKeep = rulesToKeep.stream().map(Rule::getName).collect(Collectors.toSet());
+        for (String sensorName : stateMap.keySet()) {
+            Map<Rule, RuleInfo> rulesOfSensor = stateMap.get(sensorName);
+            for (Rule rule : rulesOfSensor.keySet()) {
+                if (!rulesToKeep.contains(rule)) {
+                    rulesOfSensor.remove(rule);
+                }
+            }
+        }
     }
 
     /**
