@@ -374,14 +374,15 @@ public class RuleCheckerTest {
     @Test
     public void testRulePermissionsOnlyRule() {
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
-                "permission1", "S_Regen", "S_Regenregel"), "jsonRules/complexPermissionsRule.json");
+                //TODO make complex again with precondition
+                "permission1", "S_CO2Regel", "S_Regenregel"), "jsonRules/complexPermissionsRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
         FHEMModel model = new Gson().fromJson(json, FHEMModel.class);
 
-        assert model.getSensorByName("HM_4F5DAA_Rain").isPresent();
-        FHEMSensor sensor2 = model.getSensorByName("HM_4F5DAA_Rain").get();
+        assert model.getSensorByName("netatmo_M03_00_00_00_df_de").isPresent();
+        FHEMSensor sensor2 = model.getSensorByName("netatmo_M03_00_00_00_df_de").get();
         assert sensor2.getPassedRules().size() == 1;
         assert sensor2.getViolatedRules().size() == 0;
     }

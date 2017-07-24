@@ -14,7 +14,7 @@
         },
         {
             "Name": "There is no rain",
-            "Expression": "Reading contains dry",
+            "Expression": "Reading equals dry",
             "ViewPermissions": [
                 "S_Regen"
             ],
@@ -24,7 +24,7 @@
             "Invisible": "true"
         },
         {
-            "Name": "There is rain and the windows are open",
+            "Name": "There is no rain or all windows are closed",
             "ViewPermissions": [
                 "S_Fenster", "S_Regen"
             ],
@@ -55,9 +55,9 @@
             ],
             "OkMessage": "all ok",
             "ErrorMessages": {
-                "10": "something is wrong",
-                "100": "long wrong",
-                "500": "hey, fix it!"
+                "10": "this rule is not true",
+                "100": "this rule can never be true",
+                "500": "never ever will this rule be true"
             }
         },
         {
