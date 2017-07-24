@@ -10,9 +10,10 @@ import com.luckycatlabs.sunrisesunset.dto.Location;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -91,7 +92,8 @@ public final class PredicateCollection {
         Set<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "by", "mu");
 
         ZoneId zoneId = ZoneId.systemDefault();
-        LocalDate today = LocalDate.now(zoneId);
+        LocalDate today = LocalDate.now(DateTimeZone.forID("Europe/Berlin"));
+
         // City and Region codes:
         // http://jollyday.sourceforge.net/data/de.html
         boolean isHoliday = holidays.stream()
