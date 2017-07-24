@@ -10,8 +10,6 @@
                 "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
             ],
             "OkMessage": "All windows are closed",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
             "Invisible": "true"
         },
         {
@@ -23,14 +21,6 @@
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
-            "OkMessage": "No rain",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
-            "Escalation": {
-                "10": ["U_Mitarbeiter"],
-                "600": ["U_Admin"]
-            },
-
             "Invisible": "true"
         },
         {
@@ -42,8 +32,12 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "The windows are closed or it is not raining",
-            "RequiredTrueRules": ["There is no rain", "All windows are closed"],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": ["There is no rain", "All windows are closed"],
+            "Escalation": {
+                "10": ["U_Mitarbeiter"],
+                "600": ["U_Admin"]
+            },
             "ErrorMessages": {
                 "10": "The windows are open during rain!",
                 "60": "The windows are still open and it is still raining!",

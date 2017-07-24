@@ -8,8 +8,8 @@
                 "HM_520B89"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",
@@ -25,8 +25,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "(There is rain OR there is no rain) AND the general predicate is true",
-            "RequiredTrueRules": ["general predicate"],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": ["general predicate"],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",

@@ -8,8 +8,8 @@
                 "HM_56A86F"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",
@@ -25,8 +25,8 @@
                 "HM_56A86F"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "Escalation": {
                 "100": ["10"]
             },
@@ -45,8 +45,8 @@
                 "HM_56A86F"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "Escalation": {
                 "100": ["10"]
             },

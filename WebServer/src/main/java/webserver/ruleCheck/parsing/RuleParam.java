@@ -29,8 +29,10 @@ public final class RuleParam {
     private final Set<String> sensorNames;
     @SerializedName("OkMessage")
     private final String okMessage;
-    @SerializedName("RequiredTrueRules")
-    private final Set<String> requiredTrueRules;
+    @SerializedName("RequiredAllTrue")
+    private final Set<String> andRules;
+    @SerializedName("RequiredOneOfTrue")
+    private final Set<String> orRules;
     @SerializedName("ErrorMessages")
     private final Map<Long, String> errorMessages = new HashMap<>();
     @SerializedName("Escalation")
@@ -47,7 +49,8 @@ public final class RuleParam {
                      Set<String> sensorNames,
                      Set<String> viewPermissions,
                      String expression,
-                     Set<String> requiredTrueRules,
+                     Set<String> andRules,
+                     Set<String> orRules,
                      String okMessage,
                      Map<Long, String> errorMessages,
                      Map<Long, Set<String>> escalation,
@@ -58,7 +61,8 @@ public final class RuleParam {
         this.sensorNames = sensorNames;
         this.viewPermissions = viewPermissions;
         this.expression = expression;
-        this.requiredTrueRules = requiredTrueRules;
+        this.andRules = andRules;
+        this.orRules = orRules;
         this.okMessage = okMessage;
         this.errorMessages.putAll(errorMessages);
         this.escalation.putAll(escalation);
@@ -123,8 +127,17 @@ public final class RuleParam {
      *
      * @return a set of rules which are required to be true
      */
-    public Set<String> getRequiredTrueRules() {
-        return requiredTrueRules != null ? requiredTrueRules : new HashSet<>();
+    public Set<String> getAndRules() {
+        return andRules != null ? andRules : new HashSet<>();
+    }
+
+    /**
+     * Returns requiredFalse-Rules, which are rules which must be false as a pre-requisite.
+     *
+     * @return a set of rules which are required to be false
+     */
+    public Set<String> getOrRules() {
+        return orRules != null ? orRules : new HashSet<>();
     }
 
     public String getExpression() {
@@ -182,7 +195,8 @@ public final class RuleParam {
                 + "name='" + name + '\''
                 + ", sensorNames=" + sensorNames
                 + ", expression='" + expression + '\''
-                + ", requiredTrueRules=" + requiredTrueRules
+                + ", andRules=" + andRules
+                + ", requiredFalseRules=" + orRules
                 + '}';
     }
 }

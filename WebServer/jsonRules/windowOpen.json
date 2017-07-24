@@ -8,8 +8,8 @@
                 "HM_56A1E8"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "something is wrong",
                 "100": "all good",

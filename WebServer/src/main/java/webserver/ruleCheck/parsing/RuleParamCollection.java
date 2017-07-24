@@ -69,21 +69,31 @@ public final class RuleParamCollection {
     public Set<Rule> toRules() {
         Set<Rule> rules = new HashSet<>(ruleParams.size() + 5);
 
-        /* RuleName -> { Names of Rules which must be true or false (preconditions) } */
-        Map<String, Set<String>> requiredTrueRules = new HashMap<>();
+        /* rulename -> { names of precondition rules } */
+        Map<String, Set<String>> andRulesOfRule = new HashMap<>();
+        Map<String, Set<String>> orRulesOfRule = new HashMap<>();
 
         for (RuleParam ruleParam : ruleParams) {
             /* Filter out the name of the rule itself. Otherwise infinite recursion (self pointer in graph)! */
-            Set<String> requiredTrue = ruleParam.getRequiredTrueRules().stream().
+            Set<String> andRules = ruleParam.getAndRules().stream().
                     filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
 
-            if (requiredTrue.size() != ruleParam.getRequiredTrueRules().size()) {
+            Set<String> orRules = ruleParam.getOrRules().stream().
+                    filter(s -> !s.equals(ruleParam.getName())).collect(Collectors.toSet());
+
+            if (andRules.size() != ruleParam.getAndRules().size()
+                    || orRules.size() != ruleParam.getOrRules().size()) {
                 System.err.println("Ignoring rule self dependency!");
                 System.err.println("Rule Parameters: " + ruleParam);
             }
 
-            requiredTrueRules.put(ruleParam.getName(), requiredTrue);
+            /* Add the rules to the temporary sets. Required because rule interdependencies
+             * can only be resolved afterwards when all rules are already available.
+             */
+            andRulesOfRule.put(ruleParam.getName(), andRules);
+            orRulesOfRule.put(ruleParam.getName(), orRules);
 
+            /* Get type and parse rules accordingly */
             RuleType type = ruleParam.getType();
             switch (type) {
                 case REGEXP:
@@ -108,15 +118,20 @@ public final class RuleParamCollection {
             }
         }
 
-        /* Use the information from required[True|False]Rules to link a rule back to its preconditions */
+        /* Use the information from requiredTrueRules and atLeastOneOf to link a rule back to its preconditions */
         for (Rule rule : rules) {
             /* Associate all the rules which must be true or false */
-            Set<String> requiredTrueOfThisRule = requiredTrueRules.get(rule.getName());
+            Set<String> requiredAndRuleNames = andRulesOfRule.get(rule.getName());
+            Set<String> requiredOrRuleNames = orRulesOfRule.get(rule.getName());
 
-            Set<Rule> trueRules = rules.stream().
-                    filter((Rule r) -> requiredTrueOfThisRule.contains(r.getName())).collect(Collectors.toSet());
+            /* Filter out the rules to add by name */
+            Set<Rule> andRules = rules.stream().
+                    filter((Rule r) -> requiredAndRuleNames.contains(r.getName())).collect(Collectors.toSet());
+            Set<Rule> orRules = rules.stream().
+                    filter(r -> requiredOrRuleNames.contains(r.getName())).collect(Collectors.toSet());
 
-            rule.setRequiredTrue(trueRules);
+            rule.setAndRules(andRules);
+            rule.setOrRules(orRules);
         }
         return rules;
     }

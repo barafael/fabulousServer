@@ -8,8 +8,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",
@@ -24,8 +24,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "Escalation": {
                 "100": ["10"]
             },
@@ -43,8 +43,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "Escalation": {
                 "100": ["10"]
             },
@@ -62,8 +62,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": ["BasicRule1", "BasicRule2", "BasicRule3"],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": ["BasicRule1", "BasicRule2", "BasicRule3"],
+            "RequiredOneOfTrue": [],
             "Escalation": {
                 "100": ["10"]
             },

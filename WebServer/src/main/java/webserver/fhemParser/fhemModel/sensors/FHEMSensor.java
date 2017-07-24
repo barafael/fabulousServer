@@ -274,8 +274,9 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * A predicate which is true only the first 5 minutes every 10 minutes.
-     *
+     * <p>
      * //TODO remove from sensor when general predicates are correctly handled
+     *
      * @param _ignored ignored parameter list
      * @return whether the current minute is divisible by 2, true if yes
      */

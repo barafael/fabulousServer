@@ -9,8 +9,8 @@
                 "netatmo_D70_ee_50_02_b8_20"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": [],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": [],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",

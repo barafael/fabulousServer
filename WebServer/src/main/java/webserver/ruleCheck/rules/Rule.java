@@ -31,7 +31,7 @@ public abstract class Rule {
     /**
      * The name of the rule.
      */
-    final String name;
+    protected final String name;
     /**
      * The viewPermissions for this rule to be shown.
      */
@@ -80,7 +80,11 @@ public abstract class Rule {
     /**
      * Required true prerequisites.
      */
-    private Set<Rule> requiredTrueRules;
+    private Set<Rule> andRules;
+    /**
+     * Required false prerequisites.
+     */
+    private Set<Rule> orRules;
 
     /**
      * Construct a rule from rule parameters.
@@ -106,12 +110,21 @@ public abstract class Rule {
     }
 
     /**
-     * Set the rules which are true prerequisites.
+     * Set the rules of which all have to be true.
      *
      * @param requiredTrue the rules to set as true prerequisites
      */
-    public void setRequiredTrue(Set<Rule> requiredTrue) {
-        this.requiredTrueRules = requiredTrue;
+    public void setAndRules(Set<Rule> requiredTrue) {
+        this.andRules = requiredTrue;
+    }
+
+    /**
+     * Set the or rules of which only one has to be true.
+     *
+     * @param orRules the rules to set as or prerequisites
+     */
+    public void setOrRules(Set<Rule> orRules) {
+        this.orRules = orRules;
     }
 
     /**
@@ -234,17 +247,25 @@ public abstract class Rule {
         }
 
         /* Handle preconditions (rules which are specified to be true or false in order for this rule to even apply */
-        boolean trueRulesOK = true;
+        boolean andRulesOk = true;
+        boolean orRulesOk = orRules.isEmpty();
 
-        for (Rule trueRule : requiredTrueRules) {
-            if (!trueRule.eval(model, visited).isOk()) {
-                trueRulesOK = false;
+        for (Rule andRule : andRules) {
+            if (!andRule.eval(model, visited).isOk()) {
+                andRulesOk = false;
+                break;
+            }
+        }
+
+        for (Rule orRule : orRules) {
+            if (orRule.eval(model, visited).isOk()) {
+                orRulesOk = true;
                 break;
             }
         }
 
         /* Return early if not all preconditions are met. */
-        if (!trueRulesOK) {
+        if (!andRulesOk || !orRulesOk) {
             isEvaluated = true;
             /* Not all preconditions have been met. This rule is violated. */
             ruleState = new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));

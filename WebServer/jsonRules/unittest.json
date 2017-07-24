@@ -9,12 +9,12 @@
       ],
       "ViewPermissions": ["permission1"],
       "Expression": "STATE contains dry",
-      "RequiredTrueRules": [
+      "RequiredAllTrue": [
         "anotherRule",
         "testRule",
         "yetAnotherRule"
       ],
-      "RequiredFalseRules": [
+      "RequiredOneOfTrue": [
         "Rule2",
         "Rule3",
         "Rule1"

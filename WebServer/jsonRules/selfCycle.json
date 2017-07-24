@@ -8,8 +8,8 @@
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "all ok",
-            "RequiredTrueRules": [],
-            "RequiredFalseRules": ["Self-referencing rule"],
+            "RequiredAllTrue": [],
+            "RequiredOneOfTrue": ["Self-referencing rule"],
             "ErrorMessages": {
                 "10": "bl*",
                 "100": "all good bl*",
