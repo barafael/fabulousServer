@@ -75,10 +75,9 @@ public final class FHEMUtils {
         /* The output of 'whereis' is broken into lines, and the one containing the script is returned */
         Process process = Runtime.getRuntime().exec(new String[]
                 {"bash", "-c", "whereis fhem | sed 's/ /\\n/g' | grep \"fhem.pl\""});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        String line = stdin.readLine();
-        stdin.close();
-        return line;
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            return stdin.readLine();
+        }
     }
 }

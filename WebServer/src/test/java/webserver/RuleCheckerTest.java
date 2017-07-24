@@ -49,11 +49,12 @@ public class RuleCheckerTest {
             return;
         }
         Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./pull.sh"});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        /* To wait until done */
-        stdin.readLine();
-        stdin.close();
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            /* To wait until done */
+            stdin.readLine();
+        }
+        jullData();
     }
 
     /**
@@ -73,11 +74,11 @@ public class RuleCheckerTest {
      */
     private static void jullData() throws IOException {
         Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./jull.sh"});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        /* To wait until done */
-        stdin.readLine();
-        stdin.close();
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            /* To wait until done */
+            stdin.readLine();
+        }
     }
 
     /**

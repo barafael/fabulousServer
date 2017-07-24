@@ -94,8 +94,7 @@ public final class FHEMFileLog {
      */
     private static Optional<String> getUnitInFileLog(String path) {
         String line;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             line = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {
@@ -135,8 +134,7 @@ public final class FHEMFileLog {
      */
     private static Optional<String> getSensorInFileLog(String path) {
         String line;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             line = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {
@@ -162,8 +160,7 @@ public final class FHEMFileLog {
      */
     private LogType guessLogtype(String path) {
         String line;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             line = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {
@@ -234,8 +231,7 @@ public final class FHEMFileLog {
     public Optional<Timeserie> getTimeserie() {
         List<String> lines;
         String line;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             lines = new ArrayList<>();
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
@@ -300,8 +296,7 @@ public final class FHEMFileLog {
     private Optional<Timeserie> getTimeserie(long start, long end) {
         List<String> filelog;
         String line;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             filelog = new ArrayList<>();
             while ((line = bufferedReader.readLine()) != null) {
                 filelog.add(line);

@@ -52,10 +52,11 @@ public class ModelTest {
             return;
         }
         Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", "./pull.sh"});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        stdin.readLine();
-        stdin.close();
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            /* Wait until process is done */
+            stdin.readLine();
+        }
     }
 
     /**

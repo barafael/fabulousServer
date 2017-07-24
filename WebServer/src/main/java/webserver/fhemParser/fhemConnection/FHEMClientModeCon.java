@@ -87,33 +87,32 @@ public final class FHEMClientModeCon implements FHEMConnection {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(command);
 
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
 
-        BufferedReader stderr = new BufferedReader(new
-                InputStreamReader(process.getErrorStream()));
-
-        String line;
-        StringBuilder stringBuilder = new StringBuilder();
-        while ((line = stdin.readLine()) != null) {
-            stringBuilder.append(line);
-        }
-        if (stringBuilder.toString().isEmpty()) {
-            // TODO get this out of the if, try to read, if empty ok
-            StringBuilder error = new StringBuilder();
-            while ((line = stderr.readLine()) != null) {
-                error.append(line);
+        try (
+                BufferedReader stdin = new BufferedReader(new
+                        InputStreamReader(process.getInputStream()))
+        ) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = stdin.readLine()) != null) {
+                stringBuilder.append(line);
             }
-            stdin.close();
-            stderr.close();
-            throw new FHEMNotFoundException(
-                    "FHEM not found at " + fhemPath + " on port " + port + "\n"
-                            + error);
+            return stringBuilder.toString();
+        } catch (IOException ioe) {
+            try (
+                    BufferedReader stderr = new BufferedReader(new
+                            InputStreamReader(process.getErrorStream()))
+            ) {
+                String line;
+                StringBuilder error = new StringBuilder();
+                while ((line = stderr.readLine()) != null) {
+                    error.append(line);
+                }
+                throw new FHEMNotFoundException(
+                        "FHEM not found at " + fhemPath + " on port " + port + "\n"
+                                + error);
+            }
         }
-        stdin.close();
-        stderr.close();
-
-        return stringBuilder.toString();
     }
 
     /**
@@ -126,10 +125,14 @@ public final class FHEMClientModeCon implements FHEMConnection {
      */
     public Optional<String> execCommand(String command) throws IOException {
         Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        String line = stdin.readLine();
-        stdin.close();
+
+        String line = null;
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            line = stdin.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return Optional.of(line == null ? "" : line);
     }
 
@@ -145,10 +148,10 @@ public final class FHEMClientModeCon implements FHEMConnection {
     public boolean perlCommand(String command) throws IOException {
         Process process = Runtime.getRuntime().exec(new String[]
                 {"sudo", "-u", "fhem", "perl", path, "localhost:" + port, command});
-        BufferedReader stdin = new BufferedReader(new
-                InputStreamReader(process.getInputStream()));
-        String line = stdin.readLine();
-        stdin.close();
-        return line == null || line.isEmpty();
+        try (BufferedReader stdin = new BufferedReader(new
+                InputStreamReader(process.getInputStream()))) {
+            String line = stdin.readLine();
+            return line == null || line.isEmpty();
+        }
     }
 }
