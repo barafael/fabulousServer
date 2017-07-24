@@ -128,8 +128,8 @@ class State {
      */
     public void prune(Set<Rule> rulesToKeep) {
         Set<String> namesToKeep = rulesToKeep.stream().map(Rule::getName).collect(Collectors.toSet());
-        for (String sensorName : stateMap.keySet()) {
-            Map<Rule, RuleInfo> rulesOfSensor = stateMap.get(sensorName);
+        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
+            Map<Rule, RuleInfo> rulesOfSensor = stringMapEntry.getValue();
             for (Rule rule : rulesOfSensor.keySet()) {
                 if (!rulesToKeep.contains(rule)) {
                     rulesOfSensor.remove(rule);
