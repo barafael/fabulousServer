@@ -89,6 +89,9 @@ public final class FHEMDevice {
             reading = reading.substring(3) + " Lux";
             sensor.addMeta("Brightness", reading);
         }
+        Optional<String> sub_opt = attributes.getSubType();
+        sub_opt.ifPresent(s ->
+                sensor.addMeta("Subtype", s));
         sensor.addMeta("Reading", internals.getState().orElse("No state supplied by sensor!"));
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
