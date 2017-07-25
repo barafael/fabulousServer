@@ -50,7 +50,6 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * @param room the source room
      * @return a JsonObject or jsonNull instance, depending on the permissions
      */
-
     @Override
     public JsonElement serialize(FHEMRoom room, Type type, JsonSerializationContext jsc) {
         /* All lower serializers need to be reattached here since the custom serializer actually uses

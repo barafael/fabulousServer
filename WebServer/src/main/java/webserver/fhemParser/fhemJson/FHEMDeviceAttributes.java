@@ -2,6 +2,8 @@ package webserver.fhemParser.fhemJson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /* Don't change attribute names or remove attributes! They are needed by Gson to parse jsonList2.
@@ -62,7 +64,20 @@ class FHEMDeviceAttributes {
     /**
      * The alias defined in the custom FHEM userattr.
      */
-    private String alias;
+    private String alias = "NoAlias";
+
+    /**
+     * The german alias defined in the custom FHEM userattr.
+     */
+    private String de_alias = "NoDeAlias";
+    /**
+     * The english alias defined in the custom FHEM userattr.
+     */
+    private String en_alias = "NoEnAlias";
+    /**
+     * The arabic alias defined in the custom FHEM userattr.
+     */
+    private String ar_alias = "NoArAlias";
 
     /**
      * The SubType attribute is set to the sensor type sometimes.
@@ -83,7 +98,7 @@ class FHEMDeviceAttributes {
     }
 
     /**
-     * Accessor for the X coordinates set in FHEM.
+     * Getter for the X coordinates set in FHEM.
      *
      * @return the x coordinates set
      */
@@ -94,7 +109,7 @@ class FHEMDeviceAttributes {
     }
 
     /**
-     * Accessor for the Y coordinates set in FHEM.
+     * Getter for the Y coordinates set in FHEM.
      *
      * @return the y coordinates set
      */
@@ -105,27 +120,39 @@ class FHEMDeviceAttributes {
     }
 
     /**
-     * Accessor for the userattr 'permissions' in FHEM.
-     * ('Field' because getPermission sounds like a permission inquiry.)
+     * Getter for the userattr 'permissions' in FHEM.
+     * Gets a list of permissions for this device, separated by commas.
      *
-     * @return the userattr 'permissions' in FHEM
+     * @return the userattr 'permissions' in FHEM, every comma separated entry as new entry in the list
      */
-    Optional<String> getPermissionField() {
-        //TODO handle comma-separation?
-        return Optional.ofNullable(permissions);
+    List<String> getPermissionList() {
+        return Arrays.asList(
+                (permissions == null ? "" : permissions).split(","));
     }
 
     /**
-     * Acessor for the userattr 'alias' in FHEM.
+     * Getter for the userattr 'alias' in FHEM.
      *
      * @return the userattr 'alias' in FHEM
      */
-    Optional<String> getAlias() {
-        return Optional.ofNullable(alias);
+    String getAlias() {
+        return alias;
+    }
+
+    public String getDeAlias() {
+        return de_alias;
+    }
+
+    public String getEnAlias() {
+        return en_alias;
+    }
+
+    public String getArAlias() {
+        return ar_alias;
     }
 
     /**
-     * Acessor for the userattr 'icon' in FHEM.
+     * Getter for the userattr 'icon' in FHEM.
      *
      * @return the userattr 'icon_in_app' in FHEM
      */

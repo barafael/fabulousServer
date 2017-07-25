@@ -61,13 +61,25 @@ public final class FHEMDevice {
         }
         int coordX = attributes.getCoordX();
         int coordY = attributes.getCoordY();
-        String permissionField = attributes.getPermissionField().orElse("");
-        List<String> permissions = Arrays.asList(permissionField.split(","));
+        List<String> permissions = attributes.getPermissionList();
         HashMap<String, String> meta = new HashMap<>();
 
-        String alias = attributes.getAlias().orElse("Not supplied");
+        String alias = attributes.getAlias();
+        String de_alias = attributes.getDeAlias();
+        String en_alias = attributes.getEnAlias();
+        String ar_alias = attributes.getArAlias();
 
-        FHEMSensor sensor = new FHEMSensor(coordX, coordY, name, alias, permissions, isVisibleInApp(), meta);
+        FHEMSensor sensor = new FHEMSensor(
+                coordX,
+                coordY,
+                name,
+                alias,
+                de_alias,
+                en_alias,
+                ar_alias,
+                permissions,
+                isVisibleInApp(),
+                meta);
 
         sensor.setIcon(attributes.getIcon());
 
@@ -108,10 +120,9 @@ public final class FHEMDevice {
             System.err.println("No logfile specified for log: " + name);
             return Optional.empty();
         }
-        String permissionField = attributes.getPermissionField().orElse("");
+        List<String> permissions = attributes.getPermissionList();
 
         boolean switchable = isInRoom("actuators");
-        List<String> permissions = Arrays.asList(permissionField.split(","));
 
         String path = path_opt.get();
         return Optional.of(new FHEMFileLog(path, name, switchable, permissions));

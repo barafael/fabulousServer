@@ -31,6 +31,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     @SerializedName("alias")
     private final String nameInApp;
+
+    private final String de_alias;
+    private final String en_alias;
+    private final String ar_alias;
+
     /**
      * Coordinates of sensor in percent.
      */
@@ -77,20 +82,32 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * Construct a FHEMSensor.
-     *
      * @param coordX         the x coordinate in percent
      * @param coordY         the y coordinate in percent
      * @param name           the name of the sensor in FHEM
      * @param nameInApp      the name of the sensor in the app, should be the FHEM alias
+     * @param de_alias       german alias translation
+     * @param en_alias       english alias translation
+     * @param ar_alias       arabic alias translation
      * @param permissions    the permissions of this sensor, read from FHEM
      * @param isVisibleInApp whether this sensor should be visible in the app
      * @param metaInfo       meta information like readings and custom variables which are useful for display
      */
-    public FHEMSensor(int coordX, int coordY, String name, String nameInApp, List<String> permissions,
+    public FHEMSensor(int coordX,
+                      int coordY,
+                      String name,
+                      String nameInApp,
+                      String de_alias,
+                      String en_alias,
+                      String ar_alias,
+                      List<String> permissions,
                       boolean isVisibleInApp, HashMap<String, String> metaInfo) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.nameInApp = nameInApp;
+        this.de_alias = de_alias;
+        this.en_alias = en_alias;
+        this.ar_alias = ar_alias;
         this.permissions = permissions;
         this.isVisibleInApp = isVisibleInApp;
         this.metaInfo = metaInfo;
