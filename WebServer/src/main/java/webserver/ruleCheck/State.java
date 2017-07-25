@@ -124,6 +124,7 @@ class State {
 
     /**
      * Prune the stateMap, removing rules which are not present any more.
+     *
      * @param rulesToKeep the new set of rules
      */
     public void prune(Set<Rule> rulesToKeep) {

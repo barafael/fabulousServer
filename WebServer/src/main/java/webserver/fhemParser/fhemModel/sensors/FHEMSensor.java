@@ -82,6 +82,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     /**
      * Construct a FHEMSensor.
+     *
      * @param coordX         the x coordinate in percent
      * @param coordY         the y coordinate in percent
      * @param name           the name of the sensor in FHEM
