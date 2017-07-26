@@ -145,7 +145,7 @@ class State {
      * @param model the model which should be annotated. RuleInfos will be added for the sensors.
      */
     void apply(FHEMModel model) {
-        prune(model);
+        //prune(model);
         for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
             FHEMSensor sensor = model.getSensorByName(stringMapEntry.getKey())
                     .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));

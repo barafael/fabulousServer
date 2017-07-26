@@ -279,7 +279,7 @@ public class ServerTest {
                 .end();
     }
 
-  /*  @Test
+    @Test
     public void testRegister(TestContext testContext) {
         final Async async = testContext.async();
         JsonObject json = new JsonObject();
@@ -300,7 +300,7 @@ public class ServerTest {
                 })
                 .write(msg)
                 .end();
-    }*/
+    }
 
     @Test
     public void testRegisterFail(TestContext testContext) {
