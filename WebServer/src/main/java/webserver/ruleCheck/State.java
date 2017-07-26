@@ -108,7 +108,6 @@ class State {
 
                 RuleInfo ruleInfo = sensorRules.get(rule);
                 ruleInfo.setNotOk();
-                ruleInfo.setMessage(rule.getWarningMessage(ruleInfo.getLastStamp()));
             }
         }
     }

@@ -15,10 +15,6 @@ import java.util.TreeMap;
  */
 public final class RuleInfo {
     /**
-     * How many changes of state will be recorded until the oldest is discarded.
-     */
-    private static final int CHANGE_THRESHHOLD = 15;
-    /**
      * The name of the Rule as shown in the frontend.
      */
     private final String name;
@@ -32,10 +28,6 @@ public final class RuleInfo {
      */
     @SuppressWarnings({"FieldCanBeLocal", "MismatchedQueryAndUpdateOfCollection"})
     private final Set<String> relatedLogNames = new HashSet<>();
-    /**
-     * A map of timestamps to states of rules. False if violated.
-     */
-    private final Map<Long, Boolean> changeStamps = new TreeMap<>();
     /**
      * The priority this rule has over others.
      * (Used through deserialization only)
@@ -79,8 +71,6 @@ public final class RuleInfo {
         this.message = message != null ? message : "";
         this.relatedLogNames.addAll(relatedLogNames);
         this.priority = priority;
-
-        changeStamps.put(Instant.now().getEpochSecond(), isOk);
     }
 
     /**
@@ -127,13 +117,6 @@ public final class RuleInfo {
             return;
         }
         isOk = true;
-        changeStamps.put(Instant.now().getEpochSecond(), true);
-
-        /* TODO: exploit TreeMap */
-        if (changeStamps.size() > CHANGE_THRESHHOLD) {
-            Set<Long> timestamps = changeStamps.keySet();
-            timestamps.removeIf((Long l) -> l.longValue() == Collections.min(timestamps).longValue());
-        }
     }
 
     /**
@@ -147,22 +130,6 @@ public final class RuleInfo {
             return;
         }
         isOk = false;
-        changeStamps.put(Instant.now().getEpochSecond(), false);
-
-        /* TODO: exploit TreeMap */
-        if (changeStamps.size() > CHANGE_THRESHHOLD) {
-            Set<Long> timestamps = changeStamps.keySet();
-            timestamps.removeIf((Long l) -> l.longValue() == Collections.min(timestamps).longValue());
-        }
-    }
-
-    /**
-     * Get the timestamp of the last change.
-     *
-     * @return the timestamp of the last change
-     */
-    public long getLastStamp() {
-        return Collections.max(changeStamps.keySet());
     }
 
     @Override
@@ -192,8 +159,6 @@ public final class RuleInfo {
                 + permissions + '\''
                 + ", message='"
                 + message + '\''
-                + ", changeStamps="
-                + changeStamps
                 + '}';
     }
 }

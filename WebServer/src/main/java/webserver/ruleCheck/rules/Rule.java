@@ -227,14 +227,18 @@ public abstract class Rule {
      * and m being the amount of sensors.
      *
      * @param model   the model to acquire information from
-     * @param visited the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
+     * @param visitedRules the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
      * @return the state of this rule, consisting of passed and violated sensors
      */
-    private RuleState eval(FHEMModel model, Set<Rule> visited) {
-        if (!visited.add(this)) {
-            System.err.println("There was a cyclic rule dependency involving " + visited.size()
+    private RuleState eval(FHEMModel model, Set<Rule> visitedRules) {
+        if (!visitedRules.add(this)) {
+            System.err.println("There was a cyclic rule dependency involving " + visitedRules.size()
                     + " rules! Breaking the cycle by assuming this rule is violated.");
             System.err.println("This will invalidate all rules in the cycle.");
+            Set<String> allSensorNames = new HashSet<>(sensorNames);
+            for (Rule visited : visitedRules) {
+                allSensorNames.addAll(visited.sensorNames);
+            }
             /* Not setting to evaluated because another eval might still pass by */
             return new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));
         }
@@ -251,14 +255,14 @@ public abstract class Rule {
         boolean orRulesOk = orRules.isEmpty();
 
         for (Rule andRule : andRules) {
-            if (!andRule.eval(model, visited).isOk()) {
+            if (!andRule.eval(model, visitedRules).isOk()) {
                 andRulesOk = false;
                 break;
             }
         }
 
         for (Rule orRule : orRules) {
-            if (orRule.eval(model, visited).isOk()) {
+            if (orRule.eval(model, visitedRules).isOk()) {
                 orRulesOk = true;
                 break;
             }
