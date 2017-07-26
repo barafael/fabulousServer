@@ -1,11 +1,7 @@
 package webserver;
 
 import com.google.gson.Gson;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
@@ -22,6 +18,7 @@ import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import webserver.fhemParser.FHEMParser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -167,6 +164,31 @@ public class Server extends AbstractVerticle {
             if (res.succeeded()) {
                 final ResultSet result = res.result();
                 final List<String> list = result.getRows().stream().map(obj -> obj.getString("perm")).collect(Collectors.toList());
+                next.handle(Future.succeededFuture(list));
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+            }
+        });
+    }
+
+    /**
+     * lists all groups an user is participant from the database to a List&lt;String&gt;
+     *
+     * @param user the user given by the RoutingContext on a route
+     * @param next Handler which gets called, whenever the database action has been finished
+     */
+    private void getListOfGroups(JsonObject user, Handler<AsyncResult<List<String>>> next) {
+        final String username = user.getString(Username_PARAM);
+        if (username == null) {
+            next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
+            return;
+        }
+        final String query = "SELECT role FROM `USER_ROLE` WHERE `user`=?";
+        final JsonArray params = new JsonArray().add(username);
+        connection.queryWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                final ResultSet result = res.result();
+                final List<String> list = result.getRows().stream().map(obj -> obj.getString("role")).collect(Collectors.toList());
                 next.handle(Future.succeededFuture(list));
             } else {
                 next.handle(Future.failedFuture(res.cause()));
@@ -439,18 +461,28 @@ public class Server extends AbstractVerticle {
      */
     private void getPermissions(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        getListOfPermissions(routingContext.user().principal(), res -> {
+        final JsonObject user = routingContext.user().principal();
+        Future<List<String>> permissionsFuture = Future.future();
+        getListOfPermissions(user, permissionsFuture);
+        Future<List<String>> groupsFuture = Future.future();
+        getListOfGroups(user, groupsFuture);
+        CompositeFuture.join(permissionsFuture, groupsFuture).setHandler(res -> {
             if (res.succeeded()) {
-                final List<String> perm = res.result();
-                final String permString = new Gson().toJson(perm);
+                final List<String> permissions = res.result().resultAt(0);
+                final List<String> groups = res.result().resultAt(1);
+                final HashMap<String, List<String>> answer = new HashMap<>();
+                answer.put("permissions",permissions);
+                answer.put("groups", groups);
+                final String answerString = new Gson().toJson(answer);
                 routingContext.response().setStatusCode(OK_HTTP_CODE)
                         .putHeader(ContentType_HEADER, ContentType_VALUE)
-                        .end(permString);
+                        .end(answerString);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
                 System.out.println(res.cause().getMessage());
             }
         });
+
     }
 
     /**
