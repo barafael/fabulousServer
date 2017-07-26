@@ -46,7 +46,7 @@ class State {
                 continue;
             }
 
-            boolean isOk = state.getIsOk();
+            boolean isOk = state.isOk();
 
             if (!newStateMap.containsKey(rule.getName())) {
                 newStateMap.put(rule.getName(), state);
@@ -55,20 +55,20 @@ class State {
 
             if (isOk) {
                 /* Was the rule ok previously? */
-                if (newStateMap.get(rule.getName()).getIsOk()) {
+                if (newStateMap.get(rule.getName()).isOk()) {
                     /* If so, do nothing, The stamp is preserved. */
                     continue;
                 }
                 /* Else, the rule changed to ok in this evaluation.
                  * It has to be added as a new event.
                  */
-                RuleEvent event = RuleEvent.fromState(state, rule);
+                RuleEvent event = RuleEvent.fromState(newStateMap.get(rule.getName()), rule);
                 history.add(event);
                 /* Remove the !isOk RuleState and replace it */
-                newStateMap.put(rule.getName(), state.stamp());
+                newStateMap.put(rule.getName(), state);
             } else {
                 /* The rule was not ok, there are violated sensors */
-                if (newStateMap.get(rule.getName()).getIsOk()) {
+                if (newStateMap.get(rule.getName()).isOk()) {
                     /* Previously, rule was ok.
                      * Replace it with freshly stamped notOk state.
                      */
@@ -91,7 +91,7 @@ class State {
                 continue;
             }
 
-            boolean isOk = state.getIsOk();
+            boolean isOk = state.isOk();
 
             Set<FHEMSensor> passedSensors = model.getSensorsByCollection(state.getPassedSensors());
 
@@ -208,6 +208,7 @@ class State {
      */
     void apply(FHEMModel model) {
         //prune(model);
+        model.setHistory(history);
         for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
             FHEMSensor sensor = model.getSensorByName(stringMapEntry.getKey())
                     .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));

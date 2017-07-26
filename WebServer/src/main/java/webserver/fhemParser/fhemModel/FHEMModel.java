@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.ruleCheck.History;
 import webserver.ruleCheck.rules.RuleInfo;
 
 import java.util.Collection;
@@ -27,6 +28,11 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * A set of rooms.
      */
     private final HashSet<FHEMRoom> rooms;
+
+    /**
+     * A history of occurred events.
+     */
+    private History history;
 
     /**
      * Construct a new model with given rooms.
@@ -202,5 +208,11 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
             }
         }
         return report;
+    }
+
+    public void setHistory(History history) {
+        System.out.println("Current history:");
+        System.out.println(history);
+        this.history = history;
     }
 }

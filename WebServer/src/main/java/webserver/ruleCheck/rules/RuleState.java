@@ -84,10 +84,6 @@ public final class RuleState {
         violatedSensors = new HashSet<>();
     }
 
-    boolean isOk() {
-        return isOk;
-    }
-
     public Set<String> getPassedSensors() {
         return passedSensors;
     }
@@ -96,7 +92,7 @@ public final class RuleState {
         return violatedSensors;
     }
 
-    public boolean getIsOk() {
+    public boolean isOk() {
         return isOk;
     }
 
