@@ -92,11 +92,17 @@ public final class FHEMDevice {
         Optional<String> sub_opt = attributes.getSubType();
         sub_opt.ifPresent(s ->
                 sensor.addMeta("Subtype", s));
-        sensor.addMeta("Reading", internals.getState().orElse("No state supplied by sensor!"));
+        String reading = internals.getState().orElse("No state supplied by sensor!");
+        if (reading.startsWith("Usage: ")) {
+            sensor.addMeta("Usage", reading.substring(7));
+        } else if (reading.startsWith("Temperature: ")) {
+            sensor.addMeta("Temperature", reading.substring(13) + "°C");
+        } else {
+            sensor.addMeta("Reading", reading);
+        }
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);
-        //TODO if readings empty, don't include state?
         return Optional.of(sensor);
     }
 

@@ -157,6 +157,6 @@ class FHEMDeviceAttributes {
      * @return the userattr 'icon_in_app' in FHEM
      */
     String getIcon() {
-        return iconInApp;
+        return iconInApp == null ? "" : iconInApp;
     }
 }

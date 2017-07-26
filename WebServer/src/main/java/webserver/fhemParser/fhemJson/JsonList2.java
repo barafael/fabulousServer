@@ -63,7 +63,7 @@ public class JsonList2 {
      */
     public static @NotNull JsonList2 parseFrom(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
+        builder.setPrettyPrinting(); // TODO remove?
 
         Gson gson = builder.create();
 
@@ -76,7 +76,7 @@ public class JsonList2 {
      * @return a FHEMModel generated from the contents of jsonList2.
      */
     public FHEMModel toFHEMModel() {
-        HashSet<FHEMSensor> realSensors = new HashSet<>();
+        HashSet<FHEMSensor> sensors = new HashSet<>();
         HashSet<FHEMRoom> rooms = new HashSet<>();
         HashSet<FHEMDevice> filelogs = new HashSet<>();
 
@@ -104,7 +104,7 @@ public class JsonList2 {
                     appRoom.addSensor(sensor);
                     rooms.add(appRoom);
                 }
-                realSensors.add(sensor);
+                sensors.add(sensor);
             } else if (isFileLog) {
                 if (d.isFakelog()) {
                     continue;
@@ -123,7 +123,7 @@ public class JsonList2 {
                 continue;
             }
             String sensorname = sensorname_opt.get();
-            List<FHEMSensor> associated = realSensors.stream()
+            List<FHEMSensor> associated = sensors.stream()
                     .filter(s -> s.getName().equals(sensorname)).collect(Collectors.toList());
             if (associated.size() != 1) {
                 System.err.println("Found " + associated.size() + " sensors for FileLog " + filelog.getName());

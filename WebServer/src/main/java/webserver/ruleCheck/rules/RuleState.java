@@ -2,6 +2,7 @@ package webserver.ruleCheck.rules;
 
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
