@@ -25,6 +25,7 @@ class State {
      * {@link webserver.ruleCheck.State#prune(FHEMModel) pruned}).
      */
     private final Map<String, Map<Rule, RuleInfo>> stateMap = new HashMap<>();
+    private final Map<String, RuleState> newStateMap = new HashMap<>();
 
     /**
      * Update the static state with new results from an evaluation.
