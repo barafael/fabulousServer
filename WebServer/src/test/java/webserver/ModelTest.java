@@ -151,7 +151,7 @@ public class ModelTest {
      * This test checks the time it takes to parse the raw FHEM model and handle serialization and permissions.
      */
     @Test
-    public void modelParseTimeOnlyPermissions() {
+    public void modelParseTimeWithPermissions() {
         Optional<FHEMModel> model_opt = FHEMParser.getInstance().getFHEMModel();
         if (model_opt.isPresent()) {
             Instant now = Instant.now();
