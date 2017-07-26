@@ -32,12 +32,7 @@ public final class RuleState {
      */
     private final boolean isOk;
 
-    private long lastToggleStamp;
-
-    /**
-     * How many changes of state will be recorded until the oldest is discarded.
-     */
-    private static final int CHANGE_THRESHHOLD = 15;
+    private long stamp;
 
     /**
      * Construct a rule state given a rule, passed, and violated sensors.
@@ -52,7 +47,7 @@ public final class RuleState {
         this.passedSensors = passedSensors;
         this.violatedSensors = violatedSensors;
         isOk = !passedSensors.isEmpty() && violatedSensors.isEmpty();
-        lastToggleStamp = Instant.now().getEpochSecond();
+        stamp = Instant.now().getEpochSecond();
     }
 
     /**
@@ -105,11 +100,19 @@ public final class RuleState {
     }
 
     public RuleState stamp() {
-        lastToggleStamp = Instant.now().getEpochSecond();
+        stamp = Instant.now().getEpochSecond();
         return this;
     }
 
     public String getRuleName() {
         return ruleName;
+    }
+
+    public long getDuration() {
+        return Instant.now().getEpochSecond() - stamp;
+    }
+
+    public long getLastStamp() {
+        return stamp;
     }
 }

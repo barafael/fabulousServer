@@ -2,6 +2,7 @@ package webserver.ruleCheck;
 
 import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.ruleCheck.rules.GeneralPredicate;
 import webserver.ruleCheck.rules.Rule;
 import webserver.ruleCheck.rules.RuleInfo;
 import webserver.ruleCheck.rules.RuleState;
@@ -26,6 +27,7 @@ class State {
      */
     private final Map<String, Map<Rule, RuleInfo>> stateMap = new HashMap<>();
     private final Map<String, RuleState> newStateMap = new HashMap<>();
+    private History history = new History();
 
     /**
      * Update the static state with new results from an evaluation.
@@ -37,12 +39,67 @@ class State {
 
             Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
 
+            /* Ignore invisible rules and general predicates, which both should only serve as
+             * requisites for real rules.
+             */
+            if (!rule.isVisible() || rule instanceof GeneralPredicate) {
+                continue;
+            }
+
             boolean isOk = state.getIsOk();
 
             Set<FHEMSensor> passedSensors = state.getPassedSensors();
 
             if (!newStateMap.containsKey(rule.getName())) {
+                newStateMap.put(rule.getName(), state);
+                continue;
+            }
+
+            if (isOk) {
+                /* Was the rule ok previously? */
+                if (newStateMap.get(rule.getName()).getIsOk()) {
+                    /* If so, do nothing, The stamp is preserved. */
+                    continue;
+                }
+                /* Else, the rule changed to ok in this evaluation.
+                 * It has to be added as a new event.
+                 */
+                RuleEvent event = RuleEvent.fromState(state, rule);
+                history.add(event);
+                /* Remove the !isOk RuleState and replace it */
                 newStateMap.put(rule.getName(), state.stamp());
+            } else {
+                /* The rule was not ok, there are violated sensors */
+                if (newStateMap.get(rule.getName()).getIsOk()) {
+                    /* Previously, rule was ok.
+                     * Replace it with freshly stamped notOk state.
+                     */
+                    newStateMap.put(rule.getName(), state);
+                } else {
+                    /* Rule was not ok and has not changed, so don't do anything for now */
+                    continue;
+                }
+            }
+        }
+
+        for (RuleState state : states) {
+
+            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
+
+            /* Ignore invisible rules and general predicates, which both should only serve as
+             * requisites for real rules.
+             */
+            if (!rule.isVisible() || rule instanceof GeneralPredicate) {
+                continue;
+            }
+
+            boolean isOk = state.getIsOk();
+
+            Set<FHEMSensor> passedSensors = state.getPassedSensors();
+
+            if (!newStateMap.containsKey(rule.getName())) {
+                newStateMap.put(rule.getName(), state);
+                continue;
             }
 
             for (FHEMSensor sensor : passedSensors) {
@@ -123,6 +180,7 @@ class State {
      *
      * @param model the model to use to check for sensors
      */
+
     private void prune(FHEMModel model) {
         Set<String> sensorNames = stateMap.keySet();
         sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
