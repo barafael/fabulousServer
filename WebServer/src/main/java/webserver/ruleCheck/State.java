@@ -32,12 +32,18 @@ class State {
      *
      * @param states the new results
      */
-    void update(Set<RuleState> states) {
+    void update(Set<RuleState> states, Set<Rule> rules) {
         for (RuleState state : states) {
 
-            Rule rule = state.getRule();
+            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
+
+            boolean isOk = state.getIsOk();
 
             Set<FHEMSensor> passedSensors = state.getPassedSensors();
+
+            if (!newStateMap.containsKey(rule.getName())) {
+                newStateMap.put(rule.getName(), state.stamp());
+            }
 
             for (FHEMSensor sensor : passedSensors) {
                 if (!stateMap.containsKey(sensor.getName())) {

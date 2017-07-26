@@ -16,7 +16,7 @@ public final class RuleState {
     /**
      * The rule for which this state applies.
      */
-    private final Rule rule;
+    private final String ruleName;
 
     /**
      * A set of sensors for which this rule holds.
@@ -48,7 +48,7 @@ public final class RuleState {
      * @param violatedSensors the violated sensors
      */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
-        this.rule = rule;
+        this.ruleName = rule.getName();
         this.passedSensors = passedSensors;
         this.violatedSensors = violatedSensors;
         isOk = !passedSensors.isEmpty() && violatedSensors.isEmpty();
@@ -67,7 +67,7 @@ public final class RuleState {
      */
     public RuleState(boolean ruleOK, GeneralPredicate generalPredicate) {
         isOk = ruleOK;
-        this.rule = generalPredicate;
+        this.ruleName = generalPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
     }
@@ -83,13 +83,9 @@ public final class RuleState {
      */
     public RuleState(boolean ruleOK, Meta metaPredicate) {
         isOk = ruleOK;
-        this.rule = metaPredicate;
+        this.ruleName = metaPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
-    }
-
-    public Rule getRule() {
-        return rule;
     }
 
     boolean isOk() {
@@ -102,5 +98,18 @@ public final class RuleState {
 
     public Set<FHEMSensor> getViolatedSensors() {
         return violatedSensors;
+    }
+
+    public boolean getIsOk() {
+        return isOk;
+    }
+
+    public RuleState stamp() {
+        lastToggleStamp = Instant.now().getEpochSecond();
+        return this;
+    }
+
+    public String getRuleName() {
+        return ruleName;
     }
 }
