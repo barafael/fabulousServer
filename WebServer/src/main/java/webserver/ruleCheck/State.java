@@ -34,7 +34,7 @@ class State {
      *
      * @param states the new results
      */
-    void update(Set<RuleState> states, Set<Rule> rules) {
+    void update(Set<RuleState> states, Set<Rule> rules, FHEMModel model) {
         for (RuleState state : states) {
 
             Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
@@ -47,8 +47,6 @@ class State {
             }
 
             boolean isOk = state.getIsOk();
-
-            Set<FHEMSensor> passedSensors = state.getPassedSensors();
 
             if (!newStateMap.containsKey(rule.getName())) {
                 newStateMap.put(rule.getName(), state);
@@ -95,7 +93,7 @@ class State {
 
             boolean isOk = state.getIsOk();
 
-            Set<FHEMSensor> passedSensors = state.getPassedSensors();
+            Set<FHEMSensor> passedSensors = model.getSensorsByCollection(state.getPassedSensors());
 
             if (!newStateMap.containsKey(rule.getName())) {
                 newStateMap.put(rule.getName(), state);
@@ -137,7 +135,7 @@ class State {
                 ruleInfo.setMessage(rule.getOkMessage());
             }
 
-            Set<FHEMSensor> violatedSensors = state.getViolatedSensors();
+            Set<FHEMSensor> violatedSensors = model.getSensorsByCollection(state.getViolatedSensors());
 
             for (FHEMSensor sensor : violatedSensors) {
                 if (!stateMap.containsKey(sensor.getName())) {

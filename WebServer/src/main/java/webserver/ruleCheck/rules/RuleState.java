@@ -5,6 +5,7 @@ import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class holds information about the state of a rule in the form of sets of ok/violated sensors.
@@ -21,12 +22,12 @@ public final class RuleState {
     /**
      * A set of sensors for which this rule holds.
      */
-    private final Set<FHEMSensor> passedSensors;
+    private final Set<String> passedSensors;
 
     /**
      * A set of sensors for which this rule does not hold.
      */
-    private final Set<FHEMSensor> violatedSensors;
+    private final Set<String> violatedSensors;
     /**
      * Whether the corresponding rule was ok.
      */
@@ -44,8 +45,8 @@ public final class RuleState {
      */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
         this.ruleName = rule.getName();
-        this.passedSensors = passedSensors;
-        this.violatedSensors = violatedSensors;
+        this.passedSensors = passedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
+        this.violatedSensors = violatedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
         isOk = !passedSensors.isEmpty() && violatedSensors.isEmpty();
         stamp = Instant.now().getEpochSecond();
     }
@@ -87,11 +88,11 @@ public final class RuleState {
         return isOk;
     }
 
-    public Set<FHEMSensor> getPassedSensors() {
+    public Set<String> getPassedSensors() {
         return passedSensors;
     }
 
-    public Set<FHEMSensor> getViolatedSensors() {
+    public Set<String> getViolatedSensors() {
         return violatedSensors;
     }
 
