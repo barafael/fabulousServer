@@ -1,7 +1,11 @@
 package webserver;
 
 import com.google.gson.Gson;
-import io.vertx.core.*;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
@@ -430,7 +434,7 @@ public class Server extends AbstractVerticle {
                 final List<String> permissions = res.result().resultAt(0);
                 final List<String> groups = res.result().resultAt(1);
                 vertx.executeBlocking(future -> {
-                    final Optional<String> answerData_opt = parser.getFHEMModelJSON(permissions,groups);
+                    final Optional<String> answerData_opt = parser.getFHEMModelJSON(permissions, groups);
                     if (!answerData_opt.isPresent()) {
                         System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
@@ -478,7 +482,7 @@ public class Server extends AbstractVerticle {
                 final List<String> permissions = res.result().resultAt(0);
                 final List<String> groups = res.result().resultAt(1);
                 final HashMap<String, List<String>> answer = new HashMap<>();
-                answer.put("permissions",permissions);
+                answer.put("permissions", permissions);
                 answer.put("groups", groups);
                 final String answerString = new Gson().toJson(answer);
                 routingContext.response().setStatusCode(OK_HTTP_CODE)

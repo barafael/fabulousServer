@@ -1,5 +1,7 @@
 package webserver.ruleCheck.rules;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +15,8 @@ public final class RuleInfo {
     /**
      * The name of the Rule as shown in the frontend.
      */
-    private final String name;
+    @SerializedName("name")
+    private final String ruleName;
 
     /**
      * The necessary permissions to be able to see this information in a sensor.
@@ -48,20 +51,20 @@ public final class RuleInfo {
     /**
      * Construct a RuleInfo instance.
      *
-     * @param name            Name of the rule as shown in app
+     * @param ruleName        Name of the rule as shown in app
      * @param isOk            state of the rule; true if ok
      * @param permissions     necessary permissions
      * @param message         the message about the state of the rule
      * @param relatedLogNames the set of names of related logfiles
      * @param priority        the priority of this rule, higher number means higher priority
      */
-    public RuleInfo(String name,
+    public RuleInfo(String ruleName,
                     boolean isOk,
                     Set<String> permissions,
                     String message,
                     Set<String> relatedLogNames,
                     int priority) {
-        this.name = name;
+        this.ruleName = ruleName;
         this.isOk = isOk;
         this.permissions = permissions;
         this.message = message != null ? message : "";
@@ -79,8 +82,8 @@ public final class RuleInfo {
         this.message = message;
     }
 
-    public String getName() {
-        return name;
+    public String getRuleName() {
+        return ruleName;
     }
 
     public boolean isOk() {
@@ -104,33 +107,21 @@ public final class RuleInfo {
 
     /**
      * Set the state to ok.
-     * If the state is already ok, then the set is ignored.
-     * If the state was not ok, the changestamps are updated.
-     * The changestamps are never more than CHANGE_THRESHHOLD.
      */
     public void setOk() {
-        if (isOk) {
-            return;
-        }
         isOk = true;
     }
 
     /**
      * Set the state to not ok.
-     * If the state is already not ok, then the set is ignored.
-     * If the state was ok, the changestamps are updated.
-     * The changestamps are never more than CHANGE_THRESHHOLD.
      */
     public void setNotOk() {
-        if (!isOk) {
-            return;
-        }
         isOk = false;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return ruleName.hashCode();
     }
 
     @Override
@@ -140,14 +131,14 @@ public final class RuleInfo {
 
         RuleInfo ruleInfo = (RuleInfo) o;
 
-        return name.equals(ruleInfo.name);
+        return ruleName.equals(ruleInfo.ruleName);
     }
 
     @Override
     public String toString() {
         return "RuleInfo{"
-                + "name='"
-                + name
+                + "ruleName='"
+                + ruleName
                 + '\''
                 + ", isOk="
                 + isOk

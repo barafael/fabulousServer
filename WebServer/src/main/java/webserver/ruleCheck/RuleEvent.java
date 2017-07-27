@@ -19,12 +19,12 @@ public class RuleEvent {
     private String ruleName;
     private transient Set<String> groups;
 
-    private RuleEvent(String message,
-                      long startTime,
-                      long endTime,
-                      Set<String> sensors,
-                      String ruleName,
-                      Set<String> groups) {
+    public RuleEvent(String message,
+                     long startTime,
+                     long endTime,
+                     Set<String> sensors,
+                     String ruleName,
+                     Set<String> groups) {
         this.message = message;
         this.startTime = startTime;
         this.endTime = endTime;

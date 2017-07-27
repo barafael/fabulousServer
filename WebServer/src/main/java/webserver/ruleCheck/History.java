@@ -40,4 +40,8 @@ public class History {
         }
         return stringBuilder.toString();
     }
+
+    public void clear() {
+        events.clear();
+    }
 }

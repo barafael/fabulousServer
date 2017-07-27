@@ -94,7 +94,7 @@ public final class RuleParamCollection {
             orRulesOfRule.put(ruleParam.getName(), orRules);
 
             /* Get type and parse rules accordingly */
-            RuleType type = ruleParam.getType();
+            RuleType type = ruleParam.getRuleType();
             switch (type) {
                 case REGEXP:
                     rules.add(new RegexpRule(ruleParam));

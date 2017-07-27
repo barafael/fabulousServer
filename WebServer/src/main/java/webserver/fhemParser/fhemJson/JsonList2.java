@@ -15,6 +15,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /*
+⊂_ヽ
+　 ＼＼ ＿
+　　 ＼(　•_•) F
+　　　 <　⌒ヽ A
+　　　/ 　 へ＼ B
+　　 /　　/　＼＼ U
+　　 ﾚ　ノ　　 ヽ_つ L
+　　/　/ O
+　 /　/    U
+　(　(ヽ S
+　|　|、＼.
+　| 丿 ＼ ⌒)
+　| |　　) /
+ ノ )　　Lﾉ__
+(／___﻿
+ */
+
+/*
  * This class represents the relevant attributes of jsonList2.
  * All the members in this class have attributes which correspond to relevant fields.
  * The names are used by gson to bind them, which means they should not be removed or their name changed

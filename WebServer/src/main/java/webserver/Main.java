@@ -53,7 +53,7 @@ public final class Main {
                 }
             }, res -> {
                 if (!res.succeeded()) {
-                    System.out.println("System exiting: Periodic Parser returned with error!");
+                    System.err.println("System exiting: Periodic Parser returned with error!");
                     res.cause().printStackTrace();
                     vertx.cancelTimer(parserTimerID);
                     vertx.close();
