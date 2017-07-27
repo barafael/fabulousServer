@@ -97,7 +97,8 @@ public final class FHEMParser {
      * @param permissions the permissions to apply to this model, filtering out everything else
      * @return the filtered and evaluated model
      */
-    public Optional<String> getFHEMModelJSON(List<String> permissions) {
+    public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups) {
+        //TODO just do it
         return getFHEMModelJSON(permissions, "rules.json");
     }
 

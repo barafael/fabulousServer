@@ -419,11 +419,18 @@ public class Server extends AbstractVerticle {
      */
     private void getModel(RoutingContext routingContext) {
         printRequestHeaders(routingContext);
-        getListOfPermissions(routingContext.user().principal(), res -> {
+
+        final JsonObject user = routingContext.user().principal();
+        Future<List<String>> permissionsFuture = Future.future();
+        getListOfPermissions(user, permissionsFuture);
+        Future<List<String>> groupsFuture = Future.future();
+        getListOfGroups(user, groupsFuture);
+        CompositeFuture.join(permissionsFuture, groupsFuture).setHandler(res -> {
             if (res.succeeded()) {
-                final List<String> perm = res.result();
+                final List<String> permissions = res.result().resultAt(0);
+                final List<String> groups = res.result().resultAt(1);
                 vertx.executeBlocking(future -> {
-                    final Optional<String> answerData_opt = parser.getFHEMModelJSON(perm);
+                    final Optional<String> answerData_opt = parser.getFHEMModelJSON(permissions,groups);
                     if (!answerData_opt.isPresent()) {
                         System.out.println("Server getModel: answerData is not present");
                         future.handle(Future.failedFuture(future.cause()));
