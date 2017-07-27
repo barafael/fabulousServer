@@ -201,8 +201,8 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     }
 
     public void setHistory(History history) {
-        System.out.println("Current history:");
-        System.out.println(history);
+        //System.out.println("Current history:");
+        //System.out.println(history);
         this.history = history;
     }
 
