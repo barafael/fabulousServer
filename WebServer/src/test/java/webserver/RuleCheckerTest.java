@@ -342,7 +342,7 @@ public class RuleCheckerTest {
     @Test
     public void testRulePermissionsAllowed() {
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
-                "alwaysTruePermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
+                "alwaysTruePermission", "permission1", "S_Fenster"), Collections.emptyList(), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -360,7 +360,7 @@ public class RuleCheckerTest {
     public void testRulePermissionsDisallowed() {
         Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList(
-                        "insufficientPermission", "permission1", "S_Fenster"), "jsonRules/permissionRule.json");
+                        "insufficientPermission", "permission1", "S_Fenster"), Collections.emptyList(),"jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -376,7 +376,7 @@ public class RuleCheckerTest {
     public void testRulePermissionsOnlyRule() {
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
                 //TODO make complex again with precondition
-                "permission1", "S_CO2Regel", "S_Regenregel"), "jsonRules/complexPermissionsRule.json");
+                "permission1", "S_CO2Regel", "S_Regenregel"), Collections.emptyList(), "jsonRules/complexPermissionsRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -395,7 +395,7 @@ public class RuleCheckerTest {
     public void testRulePermissionsDisallowedWithSensor() {
         Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList(
-                        "insufficientPermission", "permission1", "S_Regen"), "jsonRules/permissionRule.json");
+                        "insufficientPermission", "permission1", "S_Regen"), Collections.emptyList(), "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -409,7 +409,7 @@ public class RuleCheckerTest {
     public void testWindowOpenDuringRain() {
         Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList(
-                        "insufficientPermission", "permission1", "S_Regen"), "jsonRules/windowsOpenDuringRain.json");
+                        "insufficientPermission", "permission1", "S_Regen"), Collections.emptyList(), "jsonRules/windowsOpenDuringRain.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 

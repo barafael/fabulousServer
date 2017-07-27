@@ -1,12 +1,8 @@
 package webserver.ruleCheck.rules;
 
-import java.time.Instant;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * A class containing information about a rule.

@@ -87,6 +87,11 @@ public abstract class Rule {
     private Set<Rule> orRules;
 
     /**
+     * The groups for which this rule should be shown.
+     */
+    private Set<String> groups;
+
+    /**
      * Construct a rule from rule parameters.
      * If some values in the rule parameters aren't set, default values are used.
      *
@@ -103,6 +108,11 @@ public abstract class Rule {
         this.priority = ruleParam.getPriority();
         this.errorMessages = ruleParam.getErrorMessages();
         this.escalation = ruleParam.getEscalation();
+        groups = new HashSet<>();
+        for (Map.Entry<Long, Set<String>> longSetEntry : escalation.entrySet()) {
+            Set<String> levelGroups = longSetEntry.getValue();
+            groups.addAll(levelGroups);
+        }
     }
 
     public String getName() {
@@ -314,5 +324,9 @@ public abstract class Rule {
                 + ", viewPermissions='" + viewPermissions + '\''
                 + ", expression='" + expression + '\''
                 + '}';
+    }
+
+    public Set<String> getGroups() {
+        return groups;
     }
 }

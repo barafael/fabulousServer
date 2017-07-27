@@ -4,6 +4,7 @@ import webserver.ruleCheck.rules.Rule;
 import webserver.ruleCheck.rules.RuleState;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,22 +17,30 @@ public class RuleEvent {
     private long endTime;
     private Set<String> sensors;
     private String ruleName;
+    private transient Set<String> groups;
 
-    public RuleEvent(String message, long startTime, long endTime, Set<String> sensors, String ruleName) {
+    private RuleEvent(String message,
+                      long startTime,
+                      long endTime,
+                      Set<String> sensors,
+                      String ruleName,
+                      Set<String> groups) {
         this.message = message;
         this.startTime = startTime;
         this.endTime = endTime;
         this.sensors = sensors;
         this.ruleName = ruleName;
+        this.groups = groups;
     }
 
-    public static RuleEvent fromState(RuleState state, Rule rule) {
+    static RuleEvent fromState(RuleState state, Rule rule) {
         return new RuleEvent(
                 rule.getWarningMessage(state.getLastStamp()),
                 state.getLastStamp(),
                 Instant.now().getEpochSecond(),
                 state.getViolatedSensors(),
-                rule.getName());
+                rule.getName(),
+                rule.getGroups());
     }
 
     @Override
@@ -41,7 +50,16 @@ public class RuleEvent {
                 ((endTime - startTime) / 60L) + " minutes: " + message;
     }
 
-    public long getStartTime() {
+    long getStartTime() {
         return startTime;
+    }
+
+    public boolean isPermittedForGroups(List<String> groups) {
+        for (String group : this.groups) {
+            if (groups.contains(group)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

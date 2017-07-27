@@ -11,8 +11,10 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.serializers.ModelSerializer;
+import webserver.fhemParser.fhemModel.serializers.RuleEventSerializer;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
 import webserver.ruleCheck.RuleChecker;
+import webserver.ruleCheck.RuleEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -98,8 +100,7 @@ public final class FHEMParser {
      * @return the filtered and evaluated model
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups) {
-        //TODO just do it
-        return getFHEMModelJSON(permissions, "rules.json");
+        return getFHEMModelJSON(permissions, groups, "rules.json");
     }
 
     /**
@@ -117,9 +118,11 @@ public final class FHEMParser {
      * @param pathToRules the path to the rules file, relative to the server root directory
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
-    public Optional<String> getFHEMModelJSON(List<String> permissions, String pathToRules) {
+    public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups, String pathToRules) {
+        //TODO just do it
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
+                .registerTypeAdapter(RuleEvent.class, new RuleEventSerializer(groups))
                 .create();
         /* Return the mapped Optional.of if present, empty otherwise */
         return getFHEMModel(pathToRules).map(gson::toJson);
