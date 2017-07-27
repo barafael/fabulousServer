@@ -36,7 +36,6 @@ public final class GeneralPredicate extends Rule {
      */
     @Override
     public RuleState specificEval(FHEMModel model) {
-
         /*
         Input validation
         */

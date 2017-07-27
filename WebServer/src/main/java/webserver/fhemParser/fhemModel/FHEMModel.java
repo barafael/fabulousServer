@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.ruleCheck.rules.RuleInfo;
+import webserver.ruleCheck.History;
+import webserver.ruleCheck.RuleSnapshot;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,6 +28,16 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      * A set of rooms.
      */
     private final HashSet<FHEMRoom> rooms;
+
+    /**
+     * A history of occurred events.
+     */
+    private History history;
+
+    /**
+     * A collection of snapshots of violated rules.
+     */
+    private List<RuleSnapshot> snapshots;
 
     /**
      * Construct a new model with given rooms.
@@ -189,18 +200,27 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
-    /**
-     * Generate a report of all the ruleinfos in the sensors of this model.
-     *
-     * @return a set of ruleinfos which are set in this model
-     */
-    public Set<RuleInfo> getReport() {
-        Set<RuleInfo> report = new HashSet<>();
-        for (FHEMRoom room : this) {
-            for (FHEMSensor sensor : room) {
-                report.addAll(sensor.getRuleInfos());
-            }
+    public void setHistory(History history) {
+        //System.out.println("Current history:");
+        //System.out.println(history);
+        this.history = history;
+    }
+
+    public void addStateSnapshot(List<RuleSnapshot> snapshots) {
+        this.snapshots = snapshots;
+    }
+
+    public List<RuleSnapshot> getSnapshots(int howMany) {
+        if (howMany < 1) {
+            howMany = 1;
         }
-        return report;
+        if (howMany > snapshots.size()) {
+            howMany = snapshots.size();
+        }
+        return snapshots.subList(0, howMany - 1);
+    }
+
+    public List<RuleSnapshot> getSnapshots() {
+        return snapshots;
     }
 }

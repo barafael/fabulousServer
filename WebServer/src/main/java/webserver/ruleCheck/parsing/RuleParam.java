@@ -24,7 +24,7 @@ public final class RuleParam {
     @SerializedName("Expression")
     private final String expression;
     @SerializedName("ViewPermissions")
-    private final Set<String> viewPermissions;
+    private Set<String> viewPermissions;
     @SerializedName("SensorNames")
     private final Set<String> sensorNames;
     @SerializedName("OkMessage")
@@ -36,14 +36,15 @@ public final class RuleParam {
     @SerializedName("ErrorMessages")
     private final Map<Long, String> errorMessages = new HashMap<>();
     @SerializedName("Escalation")
-    private final Map<Long, Set<String>> escalation = new HashMap<>();
+    private Map<Long, Set<String>> escalation = new HashMap<>();
     @SerializedName("Invisible")
     private boolean invisibleInApp = false;
-    /* Must always be sorted after the natural order of keys, therefore TreeSet */
     @SerializedName("RelatedFileLogs")
     private final Set<String> relatedFileLogNames = new HashSet<>();
     @SerializedName("Priority")
     private final int priority;
+    @SerializedName("Important")
+    private final boolean important;
 
     public RuleParam(String name,
                      Set<String> sensorNames,
@@ -56,7 +57,8 @@ public final class RuleParam {
                      Map<Long, Set<String>> escalation,
                      boolean invisibleInApp,
                      Set<String> relatedFileLogNames,
-                     int priority) {
+                     int priority,
+                     boolean important) {
         this.name = name;
         this.sensorNames = sensorNames;
         this.viewPermissions = viewPermissions;
@@ -68,8 +70,8 @@ public final class RuleParam {
         this.escalation.putAll(escalation);
         this.invisibleInApp = invisibleInApp;
         this.relatedFileLogNames.addAll(relatedFileLogNames);
-        System.out.println(priority);
         this.priority = priority;
+        this.important = important;
     }
 
     /**
@@ -77,7 +79,7 @@ public final class RuleParam {
      *
      * @return the type of the rule
      */
-    public RuleType getType() {
+    public RuleType getRuleType() {
 
         if (expression == null || expression.isEmpty()) {
             return RuleType.META;
@@ -111,7 +113,16 @@ public final class RuleParam {
     }
 
     public Set<String> getViewPermissions() {
-        return viewPermissions != null ? viewPermissions : new HashSet<>();
+        if (viewPermissions == null) {
+            viewPermissions = new HashSet<>();
+        }
+        if (escalation == null) {
+            escalation = new HashMap<>();
+        }
+        for (Map.Entry<Long, Set<String>> longSetEntry : escalation.entrySet()) {
+            viewPermissions.addAll(longSetEntry.getValue());
+        }
+        return viewPermissions;
     }
 
     public Set<String> getSensorNames() {
@@ -162,12 +173,17 @@ public final class RuleParam {
         return escalation;
     }
 
+    //TODO invert?
     public boolean getInvisible() {
         return invisibleInApp;
     }
 
     public Set<String> getRelatedLogs() {
         return relatedFileLogNames == null ? new HashSet<>() : relatedFileLogNames;
+    }
+
+    public boolean isImportant() {
+        return important;
     }
 
     public int getPriority() {

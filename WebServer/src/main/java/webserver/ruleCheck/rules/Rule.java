@@ -34,6 +34,7 @@ public abstract class Rule {
     protected final String name;
     /**
      * The viewPermissions for this rule to be shown.
+     * Consists of the given viewpermissions and the permissions defined in the escalation set.
      */
     private final Set<String> viewPermissions;
     /**
@@ -87,6 +88,16 @@ public abstract class Rule {
     private Set<Rule> orRules;
 
     /**
+     * Whether this rule should be shown in the main screen.
+     */
+    private boolean important = false;
+
+    /**
+     * The groups for which this rule should be shown.
+     */
+    private Set<String> groups;
+
+    /**
      * Construct a rule from rule parameters.
      * If some values in the rule parameters aren't set, default values are used.
      *
@@ -94,7 +105,6 @@ public abstract class Rule {
      */
     Rule(RuleParam ruleParam) {
         name = ruleParam.getName();
-        viewPermissions = ruleParam.getViewPermissions();
         sensorNames = ruleParam.getSensorNames();
         expression = ruleParam.getExpression();
         okMessage = ruleParam.getOkMessage();
@@ -103,6 +113,8 @@ public abstract class Rule {
         this.priority = ruleParam.getPriority();
         this.errorMessages = ruleParam.getErrorMessages();
         this.escalation = ruleParam.getEscalation();
+        viewPermissions = ruleParam.getViewPermissions();
+        important = ruleParam.isImportant();
     }
 
     public String getName() {
@@ -151,22 +163,22 @@ public abstract class Rule {
         return errorMessages.get(Collections.max(keys));
     }
 
-    public Optional<Set<String>> getEscalationLevelPermissions(long startTime) {
+    public Set<String> getEscalationLevelPermissions(long startTime) {
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
         if (keys.isEmpty()) {
-            return Optional.empty();
+            return new HashSet<>();
         }
         long hook = Collections.min(keys);
         for (long key : keys) {
             if (elapsedTime < key) {
-                return Optional.of(escalation.get(hook));
+                return escalation.get(hook);
             } else {
                 hook = key;
             }
         }
         /* elapsed time was higher than all keys in list */
-        return Optional.of(escalation.get(Collections.max(keys)));
+        return escalation.get(Collections.max(keys));
     }
 
     public Set<String> getViewPermissions() {
@@ -226,15 +238,19 @@ public abstract class Rule {
      * will cache the result. As a consequence, only n * m rules are evaluated, with n being the number of rules,
      * and m being the amount of sensors.
      *
-     * @param model   the model to acquire information from
-     * @param visited the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
+     * @param model        the model to acquire information from
+     * @param visitedRules the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
      * @return the state of this rule, consisting of passed and violated sensors
      */
-    private RuleState eval(FHEMModel model, Set<Rule> visited) {
-        if (!visited.add(this)) {
-            System.err.println("There was a cyclic rule dependency involving " + visited.size()
+    private RuleState eval(FHEMModel model, Set<Rule> visitedRules) {
+        if (!visitedRules.add(this)) {
+            System.err.println("There was a cyclic rule dependency involving " + visitedRules.size()
                     + " rules! Breaking the cycle by assuming this rule is violated.");
             System.err.println("This will invalidate all rules in the cycle.");
+            Set<String> allSensorNames = new HashSet<>(sensorNames);
+            for (Rule visited : visitedRules) {
+                allSensorNames.addAll(visited.sensorNames);
+            }
             /* Not setting to evaluated because another eval might still pass by */
             return new RuleState(this, new HashSet<>(), model.getSensorsByCollection(sensorNames));
         }
@@ -251,14 +267,14 @@ public abstract class Rule {
         boolean orRulesOk = orRules.isEmpty();
 
         for (Rule andRule : andRules) {
-            if (!andRule.eval(model, visited).isOk()) {
+            if (!andRule.eval(model, visitedRules).isOk()) {
                 andRulesOk = false;
                 break;
             }
         }
 
         for (Rule orRule : orRules) {
-            if (orRule.eval(model, visited).isOk()) {
+            if (orRule.eval(model, visitedRules).isOk()) {
                 orRulesOk = true;
                 break;
             }
@@ -274,8 +290,25 @@ public abstract class Rule {
         return specificEval(model);
     }
 
+    public Set<String> getGroups() {
+        return groups;
+    }
+
+    public boolean isImportant() {
+        return important;
+    }
+
     public int getPriority() {
         return priority;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule{"
+                + "name='" + name + '\''
+                + ", viewPermissions='" + viewPermissions + '\''
+                + ", expression='" + expression + '\''
+                + '}';
     }
 
     @Override
@@ -301,14 +334,5 @@ public abstract class Rule {
         return equals;
         */
         return name.equals(rule.name);
-    }
-
-    @Override
-    public String toString() {
-        return "Rule{"
-                + "name='" + name + '\''
-                + ", viewPermissions='" + viewPermissions + '\''
-                + ", expression='" + expression + '\''
-                + '}';
     }
 }

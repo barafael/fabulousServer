@@ -5,6 +5,7 @@ import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class holds information about the state of a rule in the form of sets of ok/violated sensors.
@@ -16,21 +17,23 @@ public final class RuleState {
     /**
      * The rule for which this state applies.
      */
-    private final Rule rule;
+    private final String ruleName;
 
     /**
      * A set of sensors for which this rule holds.
      */
-    private final Set<FHEMSensor> passedSensors;
+    private final Set<String> passedSensors;
 
     /**
      * A set of sensors for which this rule does not hold.
      */
-    private final Set<FHEMSensor> violatedSensors;
+    private final Set<String> violatedSensors;
     /**
      * Whether the corresponding rule was ok.
      */
     private final boolean isOk;
+
+    private long stamp;
 
     /**
      * Construct a rule state given a rule, passed, and violated sensors.
@@ -41,10 +44,11 @@ public final class RuleState {
      * @param violatedSensors the violated sensors
      */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
-        this.rule = rule;
-        this.passedSensors = passedSensors;
-        this.violatedSensors = violatedSensors;
+        this.ruleName = rule.getName();
+        this.passedSensors = passedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
+        this.violatedSensors = violatedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
         isOk = !passedSensors.isEmpty() && violatedSensors.isEmpty();
+        stamp = Instant.now().getEpochSecond();
     }
 
     /**
@@ -59,7 +63,7 @@ public final class RuleState {
      */
     public RuleState(boolean ruleOK, GeneralPredicate generalPredicate) {
         isOk = ruleOK;
-        this.rule = generalPredicate;
+        this.ruleName = generalPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
     }
@@ -75,24 +79,37 @@ public final class RuleState {
      */
     public RuleState(boolean ruleOK, Meta metaPredicate) {
         isOk = ruleOK;
-        this.rule = metaPredicate;
+        this.ruleName = metaPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
     }
 
-    public Rule getRule() {
-        return rule;
-    }
-
-    boolean isOk() {
-        return isOk;
-    }
-
-    public Set<FHEMSensor> getPassedSensors() {
+    public Set<String> getPassedSensors() {
         return passedSensors;
     }
 
-    public Set<FHEMSensor> getViolatedSensors() {
+    public Set<String> getViolatedSensors() {
         return violatedSensors;
+    }
+
+    public boolean isOk() {
+        return isOk;
+    }
+
+    public RuleState stamp() {
+        stamp = Instant.now().getEpochSecond();
+        return this;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public long getDuration() {
+        return Instant.now().getEpochSecond() - stamp;
+    }
+
+    public long getLastStamp() {
+        return stamp;
     }
 }

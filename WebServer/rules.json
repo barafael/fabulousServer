@@ -58,7 +58,8 @@
                 "10": "this rule is not true",
                 "100": "this rule can never be true",
                 "500": "never ever will this rule be true"
-            }
+            },
+            "Important": "true"
         },
         {
             "Name": "Five Minute Toggle Rule",
