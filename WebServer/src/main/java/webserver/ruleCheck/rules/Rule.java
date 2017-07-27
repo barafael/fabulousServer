@@ -36,8 +36,7 @@ public abstract class Rule {
      * The viewPermissions for this rule to be shown.
      * Consists of the given viewpermissions and the permissions defined in the escalation set.
      */
-    //TODO init
-    private final Set<String> viewPermissions = new HashSet<>();
+    private final Set<String> viewPermissions;
     /**
      * The 'OK' message.
      */
@@ -114,11 +113,8 @@ public abstract class Rule {
         this.priority = ruleParam.getPriority();
         this.errorMessages = ruleParam.getErrorMessages();
         this.escalation = ruleParam.getEscalation();
-        groups = new HashSet<>();
-        for (Map.Entry<Long, Set<String>> longSetEntry : escalation.entrySet()) {
-            Set<String> levelGroups = longSetEntry.getValue();
-            groups.addAll(levelGroups);
-        }
+        viewPermissions = ruleParam.getViewPermissions();
+        important = ruleParam.isImportant();
     }
 
     public String getName() {
@@ -167,7 +163,6 @@ public abstract class Rule {
         return errorMessages.get(Collections.max(keys));
     }
 
-    //TODO non-opt
     public Set<String> getEscalationLevelPermissions(long startTime) {
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
@@ -295,6 +290,14 @@ public abstract class Rule {
         return specificEval(model);
     }
 
+    public Set<String> getGroups() {
+        return groups;
+    }
+
+    public boolean isImportant() {
+        return important;
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -331,9 +334,5 @@ public abstract class Rule {
         return equals;
         */
         return name.equals(rule.name);
-    }
-
-    public Set<String> getGroups() {
-        return groups;
     }
 }

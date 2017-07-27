@@ -113,7 +113,16 @@ public final class RuleParam {
     }
 
     public Set<String> getViewPermissions() {
-        return viewPermissions != null ? viewPermissions : new HashSet<>();
+        if (viewPermissions == null) {
+            viewPermissions = new HashSet<>();
+        }
+        if (escalation == null) {
+            escalation = new HashMap<>();
+        }
+        for (Map.Entry<Long, Set<String>> longSetEntry : escalation.entrySet()) {
+            viewPermissions.addAll(longSetEntry.getValue());
+        }
+        return viewPermissions;
     }
 
     public Set<String> getSensorNames() {

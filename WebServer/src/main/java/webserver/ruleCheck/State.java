@@ -29,9 +29,10 @@ class State {
      * (the sensor may or may not change, but the name will stay the same or be
      * {@link webserver.ruleCheck.State#prune(FHEMModel) pruned}).
      */
-    private final Map<String, Map<Rule, RuleInfo>> stateMap = new HashMap<>();
-    private final Map<String, RuleState> newStateMap = new HashMap<>();
+    private final Map<String, Map<Rule, RuleInfo>> infoMap = new HashMap<>();
+    private final Map<String, RuleState> stateMap = new HashMap<>();
     private History history = new History();
+    private List<RuleSnapshot> snapshots = new ArrayList<>();
 
     /**
      * Update the static state with new results from an evaluation.
@@ -52,31 +53,31 @@ class State {
 
             boolean isOk = state.isOk();
 
-            if (!newStateMap.containsKey(rule.getName())) {
-                newStateMap.put(rule.getName(), state);
+            if (!stateMap.containsKey(rule.getName())) {
+                stateMap.put(rule.getName(), state);
                 continue;
             }
 
             if (isOk) {
                 /* Was the rule ok previously? */
-                if (newStateMap.get(rule.getName()).isOk()) {
+                if (stateMap.get(rule.getName()).isOk()) {
                     /* If so, do nothing, The stamp is preserved. */
                     continue;
                 }
                 /* Else, the rule changed to ok in this evaluation.
                  * It has to be added as a new event.
                  */
-                RuleEvent event = RuleEvent.fromState(newStateMap.get(rule.getName()), rule);
+                RuleEvent event = RuleEvent.fromState(stateMap.get(rule.getName()), rule);
                 history.add(event);
                 /* Remove the !isOk RuleState and replace it */
-                newStateMap.put(rule.getName(), state);
+                stateMap.put(rule.getName(), state);
             } else {
                 /* The rule was not ok, there are violated sensors */
-                if (newStateMap.get(rule.getName()).isOk()) {
+                if (stateMap.get(rule.getName()).isOk()) {
                     /* Previously, rule was ok.
                      * Replace it with freshly stamped notOk state.
                      */
-                    newStateMap.put(rule.getName(), state);
+                    stateMap.put(rule.getName(), state);
                 } else {
                     /* Rule was not ok and has not changed, so don't do anything for now */
                     continue;
@@ -95,17 +96,15 @@ class State {
                 continue;
             }
 
-            boolean isOk = state.isOk();
-
             Set<FHEMSensor> passedSensors = model.getSensorsByCollection(state.getPassedSensors());
 
-            if (!newStateMap.containsKey(rule.getName())) {
-                newStateMap.put(rule.getName(), state);
+            if (!stateMap.containsKey(rule.getName())) {
+                stateMap.put(rule.getName(), state);
                 continue;
             }
 
             for (FHEMSensor sensor : passedSensors) {
-                if (!stateMap.containsKey(sensor.getName())) {
+                if (!infoMap.containsKey(sensor.getName())) {
                     Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
                     newSensorMap.put(rule, new RuleInfo(
                             rule.getName(),
@@ -115,11 +114,11 @@ class State {
                             rule.getRelatedLogs(),
                             rule.getPriority()
                     ));
-                    stateMap.put(sensor.getName(), newSensorMap);
+                    infoMap.put(sensor.getName(), newSensorMap);
                     continue;
                 }
 
-                Map<Rule, RuleInfo> sensorRules = stateMap.get(sensor.getName());
+                Map<Rule, RuleInfo> sensorRules = infoMap.get(sensor.getName());
 
                 if (!sensorRules.containsKey(rule)) {
                     RuleInfo ruleInfo = new RuleInfo(
@@ -142,7 +141,7 @@ class State {
             Set<FHEMSensor> violatedSensors = model.getSensorsByCollection(state.getViolatedSensors());
 
             for (FHEMSensor sensor : violatedSensors) {
-                if (!stateMap.containsKey(sensor.getName())) {
+                if (!infoMap.containsKey(sensor.getName())) {
                     Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
                     newSensorMap.put(rule, new RuleInfo(
                             rule.getName(),
@@ -152,11 +151,11 @@ class State {
                             rule.getRelatedLogs(),
                             rule.getPriority()
                     ));
-                    stateMap.put(sensor.getName(), newSensorMap);
+                    infoMap.put(sensor.getName(), newSensorMap);
                     continue;
                 }
 
-                Map<Rule, RuleInfo> sensorRules = stateMap.get(sensor.getName());
+                Map<Rule, RuleInfo> sensorRules = infoMap.get(sensor.getName());
 
                 if (!sensorRules.containsKey(rule)) {
                     RuleInfo ruleInfo = new RuleInfo(
@@ -175,6 +174,7 @@ class State {
                 ruleInfo.setNotOk();
             }
         }
+        updateSnapshot(rules);
     }
 
     /**
@@ -184,18 +184,18 @@ class State {
      */
 
     private void prune(FHEMModel model) {
-        Set<String> sensorNames = stateMap.keySet();
+        Set<String> sensorNames = infoMap.keySet();
         sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
     }
 
     /**
-     * Prune the stateMap, removing rules which are not present any more.
+     * Prune the infoMap, removing rules which are not present any more.
      *
      * @param rulesToKeep the new set of rules
      */
     public void prune(Set<Rule> rulesToKeep) {
         Set<String> namesToKeep = rulesToKeep.stream().map(Rule::getName).collect(Collectors.toSet());
-        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
+        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : infoMap.entrySet()) {
             Map<Rule, RuleInfo> rulesOfSensor = stringMapEntry.getValue();
             for (Rule rule : rulesOfSensor.keySet()) {
                 if (!rulesToKeep.contains(rule)) {
@@ -213,13 +213,32 @@ class State {
     void apply(FHEMModel model) {
         //prune(model);
         model.setHistory(history);
-        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : stateMap.entrySet()) {
+        /* Apply ruleinfos to sensors */
+        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : infoMap.entrySet()) {
             FHEMSensor sensor = model.getSensorByName(stringMapEntry.getKey())
-                    .orElseThrow(() -> new RuntimeException("Impossible! stateMap was just pruned..."));
+                    /* Highly unlikely */
+                    .orElseThrow(() -> new RuntimeException("Sensor not found in model. " + stringMapEntry.getKey()));
             Set<RuleInfo> shownInApp = stringMapEntry.getValue().keySet().stream().filter(Rule::isVisible)
                     .map(rule -> stringMapEntry.getValue().get(rule)).collect(Collectors.toSet());
             sensor.addRuleInfos(shownInApp);
         }
+        /* Generate and add snapshots */
+        model.addStateSnapshot(snapshots);
+    }
+
+    private void updateSnapshot(Set<Rule> rules) {
+        snapshots.clear();
+        for (RuleState state : stateMap.values()) {
+            if (state.isOk()) {
+                continue;
+            }
+            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().orElseThrow(() ->
+                    new RuntimeException("Rule from statemap not found: " + state.getRuleName())
+            );
+            RuleSnapshot snapshot = new RuleSnapshot(state, rule);
+            snapshots.add(snapshot);
+        }
+        snapshots.sort(Comparator.comparingInt(RuleSnapshot::getPriority));
     }
 
     /**
@@ -228,5 +247,8 @@ class State {
      */
     void clear() {
         stateMap.clear();
+        infoMap.clear();
+        history.clear();
+        snapshots.clear();
     }
 }

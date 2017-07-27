@@ -79,7 +79,8 @@ public class JsonList2 {
      * @param jsonString the input string
      * @return an instance of jsonList2
      */
-    public static @NotNull JsonList2 parseFrom(String jsonString) {
+    public static @NotNull
+    JsonList2 parseFrom(String jsonString) {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting(); // TODO remove?
 
