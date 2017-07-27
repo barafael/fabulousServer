@@ -40,4 +40,8 @@ public class RuleEvent {
                 startTime + " for " +
                 ((endTime - startTime) / 60L) + " minutes: " + message;
     }
+
+    public long getStartTime() {
+        return startTime;
+    }
 }

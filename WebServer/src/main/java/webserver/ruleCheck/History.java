@@ -1,5 +1,6 @@
 package webserver.ruleCheck;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,17 +17,18 @@ public class History {
     /* Linked list because when the list is full old events have to be removed
     This might cause reallocation with other list types.
      */
-    List<RuleEvent> events;
+    private List<RuleEvent> events;
 
     public History() {
         this.events = new LinkedList<>();
     }
 
-    public boolean add(RuleEvent event) {
-        if (events.size() > CHANGE_THRESHHOLD) {
+    public void add(RuleEvent event) {
+        if (events.size() >= CHANGE_THRESHHOLD) {
             events.remove(0);
         }
-        return events.add(event);
+        events.add(event);
+        events.sort(Comparator.comparingLong(RuleEvent::getStartTime));
     }
 
     @Override
