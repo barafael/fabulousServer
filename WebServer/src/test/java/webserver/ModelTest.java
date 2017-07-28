@@ -348,6 +348,23 @@ public class ModelTest {
     }
 
     /**
+     * Test getting a percent timeserie via the same interface that the server uses.
+     */
+    @Test
+    public void testGetTimeseriePercentFromParser() {
+        String sensorName = "RPi_disk_dummy";
+        List<String> permissions = Collections.singletonList("S_Serverstatus");
+        Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
+        assert model.isPresent();
+        Optional<FHEMSensor> sensor = model.get().getSensorByName(sensorName);
+        assert sensor.isPresent();
+        Optional<String> logname = sensor.get().getLogs().stream().findFirst().map(FHEMFileLog::getName);
+        assert logname.isPresent();
+        Optional<String> json_opt = FHEMParser.getInstance().getTimeserie(logname.get(), permissions);
+        assert json_opt.isPresent();
+    }
+
+    /**
      * Test getting a real timeserie using the internal interface.
      */
     @Test

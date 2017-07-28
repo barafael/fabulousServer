@@ -144,6 +144,9 @@ public final class Timeserie {
                 List<Long> local_xs = new ArrayList<>(samples.size() + 5);
                 List<Double> local_ys = new ArrayList<>(samples.size() + 5);
                 for (String entry : samples) {
+                    if (entry.endsWith("%")) {
+                        entry = entry.substring(0, entry.length() - 1);
+                    }
                     String[] items = entry.split(" ");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
