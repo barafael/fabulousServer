@@ -28,7 +28,7 @@ public class History {
             events.remove(0);
         }
         events.add(event);
-        events.sort(Comparator.comparingLong(RuleEvent::getStartTime));
+        events.sort(Comparator.comparingLong(RuleEvent::getStartTime).reversed());
     }
 
     @Override
