@@ -21,6 +21,7 @@ final class FHEMDeviceReadings {
     private ValueTimePair power;
     private ValueTimePair voltage;
     private ValueTimePair current;
+    private ValueTimePair noise;
 
     /**
      * This method returns the readings' useful fields if set.
@@ -54,6 +55,9 @@ final class FHEMDeviceReadings {
         }
         if (current != null) {
             ret.put("Current", current.value + " mA");
+        }
+        if (noise != null) {
+            ret.put("Noise", noise.value + " dB");
         }
         return ret;
     }
