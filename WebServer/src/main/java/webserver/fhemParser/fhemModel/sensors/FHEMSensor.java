@@ -296,12 +296,35 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
+     * A predicate which toggles every n minutes.
+     * <p>
+     * //TODO remove from sensor when general predicates are correctly handled
+     *
+     * @param args a list containing one number
+     * @return whether the current minute is divisible by 2, true if yes
+     */
+    public boolean toggleEveryNMinutes(List<String> args) {
+        int length = 5;
+        if (args.size() > 0) {
+            try {
+                length = Integer.parseInt(args.get(0));
+            } catch (NumberFormatException nfe) {
+                System.err.println("toggleEveryNMinutes: The supplied argument could not be parsed to a number!");
+            }
+        }
+        length = length % 60;
+        Calendar now = Calendar.getInstance();
+        int minute = now.get(Calendar.MINUTE);
+        return (minute / length) % 2 == 0;
+    }
+
+    /**
      * A predicate which is true only the first 5 minutes every 10 minutes.
      * <p>
      * //TODO remove from sensor when general predicates are correctly handled
      *
      * @param _ignored ignored parameter list
-     * @return whether the current minute is divisible by 2, true if yes
+     * @return true if time is within first 5 minutes of each 10
      */
     public boolean firstFive(@SuppressWarnings("unused") List<String> _ignored) {
         Calendar now = Calendar.getInstance();
@@ -324,6 +347,10 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         arguments.forEach(s -> System.out.print(s + " "));
         System.out.println();
         return true;
+    }
+
+    public HashMap<String, String> getMeta() {
+        return metaInfo;
     }
 
     /**
@@ -376,9 +403,5 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
                 + ", coords=" + coords
                 + ", switchable=" + switchable
                 + '}';
-    }
-
-    public HashMap<String, String> getMeta() {
-        return metaInfo;
     }
 }
