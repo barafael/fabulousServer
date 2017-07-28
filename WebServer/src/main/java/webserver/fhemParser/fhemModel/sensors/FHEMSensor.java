@@ -81,6 +81,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     private boolean switchable = false;
 
     /**
+     * Fields in the metamap which should be shown in the frontend main screen.
+     */
+    private List<String> importantFields;
+
+    /**
      * Construct a FHEMSensor.
      *
      * @param coordX         the x coordinate in percent
@@ -330,6 +335,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         fileLogs.forEach(action);
     }
 
+    public void addImportantFields(List<String> importantFields) {
+        if (importantFields != null) {
+            this.importantFields = importantFields;
+        }
+    }
+
     /**
      * This method is necessary to be able to iterate over an internal data structure.
      * while not permitting mutable access.
@@ -365,5 +376,9 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
                 + ", coords=" + coords
                 + ", switchable=" + switchable
                 + '}';
+    }
+
+    public HashMap<String, String> getMeta() {
+        return metaInfo;
     }
 }

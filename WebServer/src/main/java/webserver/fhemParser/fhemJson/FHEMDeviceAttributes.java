@@ -2,6 +2,7 @@ package webserver.fhemParser.fhemJson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +79,8 @@ class FHEMDeviceAttributes {
      * The arabic alias defined in the custom FHEM userattr.
      */
     private String ar_alias = "NoArAlias";
+
+    private String importantFields = "";
 
     /**
      * The SubType attribute is set to the sensor type sometimes.
@@ -158,5 +161,13 @@ class FHEMDeviceAttributes {
      */
     String getIcon() {
         return iconInApp == null ? "" : iconInApp;
+    }
+
+    public List<String> getImportantFields() {
+        if (importantFields == null || importantFields.isEmpty()) {
+            return new ArrayList<>();
+        }
+        String[] fieldNames = importantFields.split(",");
+        return new ArrayList<>(Arrays.asList(fieldNames));
     }
 }

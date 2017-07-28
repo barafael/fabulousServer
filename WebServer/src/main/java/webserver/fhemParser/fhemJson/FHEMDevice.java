@@ -103,6 +103,17 @@ public final class FHEMDevice {
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);
+
+        List<String> importantFields = getAttributes().getImportantFields();
+        for (String field : importantFields) {
+            if (!sensor.getMeta().containsKey(field)) {
+                System.err.println("The field " + field
+                        + " was marked as important in FHEM but was not found in the readings of the sensor "
+                        + sensor.getName());
+            }
+        }
+        sensor.addImportantFields(importantFields);
+
         return Optional.of(sensor);
     }
 
