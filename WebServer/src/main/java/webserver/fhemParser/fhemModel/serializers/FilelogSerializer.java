@@ -1,9 +1,8 @@
 package webserver.fhemParser.fhemModel.serializers;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
@@ -49,14 +48,9 @@ final class FilelogSerializer implements JsonSerializer<FHEMFileLog> {
      */
     @Override
     public JsonElement serialize(FHEMFileLog fileLog, Type type, JsonSerializationContext jsc) {
-        /* All lower serializers need to be reattached here since the custom serializer actually uses
-        a separate instance of gson
-         */
-        JsonObject jObj = (JsonObject) new GsonBuilder()
-                .create().toJsonTree(fileLog);
         if (!fileLog.isPermitted(permissions)) {
             return JsonNull.INSTANCE;
         }
-        return jObj;
+        return new Gson().toJsonTree(fileLog);
     }
 }

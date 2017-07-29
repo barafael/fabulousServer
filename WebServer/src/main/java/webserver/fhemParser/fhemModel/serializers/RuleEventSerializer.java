@@ -3,7 +3,6 @@ package webserver.fhemParser.fhemModel.serializers;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import webserver.ruleCheck.RuleEvent;
@@ -45,11 +44,9 @@ public final class RuleEventSerializer implements JsonSerializer<RuleEvent> {
      */
     @Override
     public JsonElement serialize(RuleEvent event, Type type, JsonSerializationContext jsc) {
-        JsonObject jObj = (JsonObject) new Gson().toJsonTree(event);
-
         if (!event.isPermittedForGroups(groups)) {
             return JsonNull.INSTANCE;
         }
-        return jObj;
+        return new Gson().toJsonTree(event);
     }
 }

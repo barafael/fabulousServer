@@ -104,7 +104,7 @@ public final class FHEMDevice {
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);
 
-        List<String> importantFields = getAttributes().getImportantFields();
+        List<String> importantFields = attributes.getImportantFields();
         for (String field : importantFields) {
             if (!sensor.getMeta().containsKey(field)) {
                 System.err.println("The field " + field

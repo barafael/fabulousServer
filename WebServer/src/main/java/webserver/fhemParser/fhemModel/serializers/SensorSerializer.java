@@ -3,7 +3,6 @@ package webserver.fhemParser.fhemModel.serializers;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
@@ -26,12 +25,14 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
+    private final List<String> groups;
 
     /**
      * Prevent direct construction without parameters.
      */
     private SensorSerializer() {
-        permissions = new ArrayList<>();
+        this.permissions = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
     /**
@@ -39,8 +40,9 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
      *
      * @param permissions the permissions to use as filter
      */
-    SensorSerializer(List<String> permissions) {
+    SensorSerializer(List<String> permissions, List<String> groups) {
         this.permissions = permissions;
+        this.groups = groups;
     }
 
     /**
@@ -51,16 +53,15 @@ class SensorSerializer implements JsonSerializer<FHEMSensor> {
      */
     @Override
     public JsonElement serialize(FHEMSensor sensor, Type type, JsonSerializationContext jsc) {
+        if (!sensor.hasPermittedLogs(permissions)) {
+            return JsonNull.INSTANCE;
+        }
         /* All lower serializers need to be reattached here since the custom serializer actually uses
         a separate instance of gson
          */
-        JsonObject jObj = (JsonObject) new GsonBuilder()
-                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
+        return new GsonBuilder()
+                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(groups))
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .create().toJsonTree(sensor);
-        if (sensor.hasPermittedLogs(permissions) || sensor.hasPermittedRules(permissions)) {
-            return jObj;
-        }
-        return JsonNull.INSTANCE;
     }
 }

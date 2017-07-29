@@ -3,7 +3,6 @@ package webserver.fhemParser.fhemModel.serializers;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
@@ -27,12 +26,14 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
+    private final List<String> groups;
 
     /**
      * Prevent direct construction without parameters.
      */
     private RoomSerializer() {
         permissions = new ArrayList<>();
+        groups = new ArrayList<>();
     }
 
     /**
@@ -40,8 +41,9 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      *
      * @param permissions the permissions to use as filter
      */
-    RoomSerializer(List<String> permissions) {
+    RoomSerializer(List<String> permissions, List<String> groups) {
         this.permissions = permissions;
+        this.groups = groups;
     }
 
     /**
@@ -52,17 +54,16 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      */
     @Override
     public JsonElement serialize(FHEMRoom room, Type type, JsonSerializationContext jsc) {
-        /* All lower serializers need to be reattached here since the custom serializer actually uses
-        a separate instance of gson
-         */
-        JsonObject jObj = (JsonObject) new GsonBuilder()
-                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
-                .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
-                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
-                .create().toJsonTree(room);
         if (!room.hasPermittedSensors(permissions)) {
             return JsonNull.INSTANCE;
         }
-        return jObj;
+        /* All lower serializers need to be reattached here since the custom serializer actually uses
+        a separate instance of gson
+         */
+        return new GsonBuilder()
+                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(groups))
+                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions, groups))
+                .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
+                .create().toJsonTree(room);
     }
 }

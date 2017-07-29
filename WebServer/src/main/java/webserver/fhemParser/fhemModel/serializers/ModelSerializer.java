@@ -11,6 +11,8 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
+import webserver.ruleCheck.RuleEvent;
+import webserver.ruleCheck.RuleSnapshot;
 import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
@@ -30,12 +32,14 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
+    private final List<String> groups;
 
     /**
      * Prevent direct construction without parameters.
      */
     private ModelSerializer() {
         permissions = new ArrayList<>();
+        groups = new ArrayList<>();
     }
 
     /**
@@ -43,8 +47,9 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      *
      * @param permissions the permissions to use as filter
      */
-    public ModelSerializer(List<String> permissions) {
+    public ModelSerializer(List<String> permissions, List<String> groups) {
         this.permissions = permissions;
+        this.groups = groups;
     }
 
     /**
@@ -55,21 +60,30 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      */
     @Override
     public JsonElement serialize(FHEMModel model, Type type, JsonSerializationContext jsc) {
+        if (!model.hasPermittedRooms(permissions)) {
+            return JsonNull.INSTANCE;
+        }
         /* All lower serializers need to be reattached here since the custom serializer actually uses
         a separate instance of gson
          */
         JsonObject jObj = (JsonObject) new GsonBuilder()
-                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(permissions))
+                /* Top-level attributes of the model should be filtered */
+                .registerTypeAdapter(RuleEvent.class, new RuleEventSerializer(groups))
+                .registerTypeAdapter(RuleSnapshot.class, new RuleSnapshotSerializer(groups))
+
+                /* For filtering ruleinfo in sensors */
+                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(groups))
+
+                /* Elements of the FHEM model itself */
+                /* Groups need to be passed so that the lower-level serializers can work with them */
                 .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
-                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions))
-                .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions))
+                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions, groups))
+                .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions, groups))
                 .create()
                 .toJsonTree(model);
 
-        if (!model.hasPermittedRooms(permissions)) {
-            return JsonNull.INSTANCE;
-        }
         cleanNull(jObj);
+
         return jObj;
     }
 
@@ -81,7 +95,7 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      */
     private void cleanNull(JsonElement element) {
         if (element.isJsonNull()) {
-            System.err.println("JsonElement which is instance of JsonNull was not removed!");
+            System.err.println("JsonElement which is instance of JsonNull was not removed (or room was null)!");
         } else if (element.isJsonArray()) {
             JsonArray arr = element.getAsJsonArray();
             /* Hold all elements to be deleted (as to not invalidate the iterator)

@@ -96,7 +96,7 @@ public final class RuleInfo {
      * @param callerPermissions the caller's permissions
      * @return whether the info is permitted
      */
-    public boolean isPermitted(Collection<String> callerPermissions) {
+    public boolean isPermittedForGroups(Collection<String> callerPermissions) {
         for (String permission : callerPermissions) {
             if (this.permissions.contains(permission)) {
                 return true;

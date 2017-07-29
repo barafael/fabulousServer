@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -342,8 +343,9 @@ public class RuleCheckerTest {
      */
     @Test
     public void testRulePermissionsAllowed() {
+        List<String> groups = Arrays.asList("user", "member", "admin");
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
-                "alwaysTruePermission", "permission1", "S_Fenster"), Collections.emptyList(), "jsonRules/permissionRule.json");
+                "alwaysTruePermission", "permission1", "S_Fenster", "S_Regen"), groups, "jsonRules/permissionRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 
@@ -375,9 +377,10 @@ public class RuleCheckerTest {
      */
     @Test
     public void testRulePermissionsOnlyRule() {
+        ArrayList<String> groups = new ArrayList<>(Arrays.asList("user", "member", "admin"));
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
                 //TODO make complex again with precondition
-                "permission1", "S_CO2Regel", "S_Regenregel"), Collections.emptyList(), "jsonRules/complexPermissionsRule.json");
+                "permission1", "S_CO2Regel", "S_Regenregel"), groups, "jsonRules/complexPermissionsRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 

@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,7 +66,7 @@ class State {
                 /* Else, the rule changed to ok in this evaluation.
                  * It has to be added as a new event.
                  */
-                RuleEvent event = RuleEvent.fromState(stateMap.get(rule.getName()), rule);
+                RuleEvent event = new RuleEvent(stateMap.get(rule.getName()), rule);
                 history.add(event);
                 /* Remove the !isOk RuleState and replace it */
                 stateMap.put(rule.getName(), state);

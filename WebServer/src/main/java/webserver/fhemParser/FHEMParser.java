@@ -11,10 +11,8 @@ import webserver.fhemParser.fhemModel.FHEMModel;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.serializers.ModelSerializer;
-import webserver.fhemParser.fhemModel.serializers.RuleEventSerializer;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
 import webserver.ruleCheck.RuleChecker;
-import webserver.ruleCheck.RuleEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -124,8 +122,7 @@ public final class FHEMParser {
     public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups, String pathToRules) {
         //TODO just do it
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions))
-                .registerTypeAdapter(RuleEvent.class, new RuleEventSerializer(groups))
+                .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions, groups))
                 .create();
         /* Return the mapped Optional.of if present, empty otherwise */
         return getFHEMModel(pathToRules).map(gson::toJson);

@@ -263,12 +263,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     public boolean hasPermittedRules(List<String> permissions) {
         for (RuleInfo info : passedRules) {
-            if (info.isPermitted(permissions)) {
+            if (info.isPermittedForGroups(permissions)) {
                 return true;
             }
         }
         for (RuleInfo info : violatedRules) {
-            if (info.isPermitted(permissions)) {
+            if (info.isPermittedForGroups(permissions)) {
                 return true;
             }
         }

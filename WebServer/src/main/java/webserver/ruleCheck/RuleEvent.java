@@ -19,12 +19,12 @@ public class RuleEvent {
     private String ruleName;
     private transient Set<String> groups;
 
-    public RuleEvent(String message,
-                     long startTime,
-                     long endTime,
-                     Set<String> sensors,
-                     String ruleName,
-                     Set<String> groups) {
+    private RuleEvent(String message,
+                      long startTime,
+                      long endTime,
+                      Set<String> sensors,
+                      String ruleName,
+                      Set<String> groups) {
         this.message = message;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -33,22 +33,15 @@ public class RuleEvent {
         this.groups = groups;
     }
 
-    //TODO turn into constructor
-    static RuleEvent fromState(RuleState state, Rule rule) {
-        return new RuleEvent(
+    RuleEvent(RuleState state, Rule rule) {
+        this(
                 rule.getWarningMessage(state.getLastStamp()),
                 state.getLastStamp(),
                 Instant.now().getEpochSecond(),
                 state.getViolatedSensors(),
                 rule.getName(),
-                rule.getGroups());
-    }
-
-    @Override
-    public String toString() {
-        return "Rule " + ruleName + " starting at " +
-                startTime + " for " +
-                ((endTime - startTime) / 60L) + " minutes: " + message;
+                rule.getAllViewGroups()
+        );
     }
 
     long getStartTime() {
@@ -62,5 +55,12 @@ public class RuleEvent {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule " + ruleName + " starting at " +
+                startTime + " for " +
+                ((endTime - startTime) / 60L) + " minutes: " + message;
     }
 }

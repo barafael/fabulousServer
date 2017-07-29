@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -93,11 +92,6 @@ public abstract class Rule {
     private boolean important = false;
 
     /**
-     * The groups for which this rule should be shown.
-     */
-    private Set<String> groups;
-
-    /**
      * Construct a rule from rule parameters.
      * If some values in the rule parameters aren't set, default values are used.
      *
@@ -146,15 +140,14 @@ public abstract class Rule {
      * @return a warning message
      */
     public String getWarningMessage(long startTime) {
-        // TODO <= , reorder
-        long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = errorMessages.keySet().stream().sorted().collect(Collectors.toList());
         if (keys.isEmpty()) {
             return "No warning messages defined!";
         }
+        long elapsedTime = Instant.now().getEpochSecond() - startTime;
         long hook = Collections.min(keys);
         for (long key : keys) {
-            if (elapsedTime < key) {
+            if (elapsedTime <= key) {
                 return errorMessages.get(hook);
             } else {
                 hook = key;
@@ -164,15 +157,15 @@ public abstract class Rule {
         return errorMessages.get(Collections.max(keys));
     }
 
-    public Set<String> getEscalationLevelPermissions(long startTime) {
-        long elapsedTime = Instant.now().getEpochSecond() - startTime;
+    public Set<String> getEscalationLevelViewGroups(long startTime) {
         List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
         if (keys.isEmpty()) {
             return new HashSet<>();
         }
+        long elapsedTime = Instant.now().getEpochSecond() - startTime;
         long hook = Collections.min(keys);
         for (long key : keys) {
-            if (elapsedTime < key) {
+            if (elapsedTime <= key) {
                 return escalation.get(hook);
             } else {
                 hook = key;
@@ -291,8 +284,8 @@ public abstract class Rule {
         return specificEval(model);
     }
 
-    public Set<String> getGroups() {
-        return groups;
+    public Set<String> getAllViewGroups() {
+        return viewPermissions;
     }
 
     public boolean isImportant() {
