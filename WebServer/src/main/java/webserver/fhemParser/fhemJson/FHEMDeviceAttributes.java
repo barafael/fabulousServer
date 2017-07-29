@@ -65,21 +65,25 @@ class FHEMDeviceAttributes {
     /**
      * The alias defined in the custom FHEM userattr.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private String alias = "NoAlias";
 
     /**
      * The german alias defined in the custom FHEM userattr.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private String de_alias = "NoDeAlias";
     /**
      * The english alias defined in the custom FHEM userattr.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private String en_alias = "NoEnAlias";
     /**
      * The arabic alias defined in the custom FHEM userattr.
      */
     private String ar_alias = "NoArAlias";
 
+    @SuppressWarnings("FieldCanBeLocal")
     private String importantFields = "";
 
     /**

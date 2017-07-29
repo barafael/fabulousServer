@@ -32,8 +32,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     @SerializedName("alias")
     private final String nameInApp;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String de_alias;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String en_alias;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String ar_alias;
 
     /**
@@ -83,6 +86,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * Fields in the metamap which should be shown in the frontend main screen.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private List<String> importantFields;
 
     /**

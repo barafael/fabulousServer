@@ -24,8 +24,10 @@ public final class RuleSnapshot {
     /**
      * The latest message of this rule.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private String message;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean important = false;
     private int priority = 0;
 

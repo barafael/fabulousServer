@@ -15,6 +15,7 @@ public class RuleEvent {
     private String message;
     private long startTime;
     private long endTime;
+    @SuppressWarnings("FieldCanBeLocal")
     private Set<String> sensors;
     private String ruleName;
     private transient Set<String> groups;

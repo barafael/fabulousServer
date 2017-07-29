@@ -32,6 +32,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     /**
      * A history of occurred events.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private History history;
 
     /**
