@@ -87,7 +87,6 @@ public final class FHEMClientModeCon implements FHEMConnection {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(command);
 
-
         try (
                 BufferedReader stdin = new BufferedReader(new
                         InputStreamReader(process.getInputStream()))

@@ -17,14 +17,18 @@
             "Invisible": "true"
         },
         {
-            "Name": "Is the lab dry?",
+            "Name": "Rule: The Lab should be dry",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
+            ],
+            "ViewPermissions": [
+                "user", "member", "admin"
             ],
             "OkMessage": "The windows are closed or it is not raining",
             "RequiredOneOfTrue": ["There is no rain", "All windows are closed"],
             "Escalation": {
-                "60": ["member", "user"],
+                "120": ["user"],
+                "150": ["member", "user"],
                 "200": ["admin"]
             },
             "ErrorMessages": {
@@ -34,7 +38,7 @@
             }
         },
         {
-            "Name": "NeverTrue",
+            "Name": "Rule: NeverTrue",
             "Expression": "Reading contains noRainNoDry",
             "ViewPermissions": [
                 "user", "member", "admin"
@@ -45,18 +49,23 @@
             "OkMessage": "all ok",
             "ErrorMessages": {
                 "10": "this rule is not true",
-                "100": "this rule can never be true",
-                "500": "never ever will this rule be true"
+                "100": "this rule will never be true",
+                "500": "never ever will this rule be true, really."
             },
             "Escalation": {
                 "60": ["user"],
-                "200": ["admin"]
+                "200": ["member"],
+                "400": ["admin", "member"]
             },
             "Important": "true"
         },
         {
             "Name": "Five Minute Toggle Rule",
             "Expression": "Sensor firstFive",
+            "SensorNames": [
+                "HM_56A1EC"
+            ],
+            "OkMessage": "First five minutes!",
             "Priority": 100,
             "ErrorMessages": {
                 "60": "First Minute",
@@ -64,19 +73,18 @@
                 "180": "Third Minute",
                 "240": "Fourth Minute"
             },
-            "SensorNames": [
-                "HM_56A1EC"
-            ],
             "Escalation": {
                 "60": ["user"],
-                "200": ["admin"]
-            },
-            "OkMessage": "First five minutes!"
+                "120": ["user", "member"],
+                "180": ["user", "member"],
+                "240": ["user", "member", "admin"]
+            }
         },
         {
             "Name": "Two Minute Toggle Rule",
             "Expression": "Sensor toggleEveryNMinutes 2",
             "Priority": 50,
+            "OkMessage": "toggle 2!",
             "ErrorMessages": {
                 "30": "30 secs",
                 "60": "First Minute",
@@ -86,10 +94,10 @@
                 "HM_56A1EC"
             ],
             "Escalation": {
-                "15": ["user"],
-                "60": ["admin"]
-            },
-            "OkMessage": "toggle 2!"
+                "30": ["user"],
+                "60": ["member"],
+                "90": ["admin"]
+            }
         }
     ]
 }
