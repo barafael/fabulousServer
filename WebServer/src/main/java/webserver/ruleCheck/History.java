@@ -25,7 +25,7 @@ public class History {
 
     public void add(RuleEvent event) {
         if (events.size() >= CHANGE_THRESHOLD) {
-            events.remove(0);
+            events.remove(events.size() - 1);
         }
         events.add(event);
         events.sort(Comparator.comparingLong(RuleEvent::getStartTime).reversed());

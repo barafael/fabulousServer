@@ -41,7 +41,9 @@ class State {
     void update(Set<RuleState> states, Set<Rule> rules, FHEMModel model) {
         for (RuleState state : states) {
 
-            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
+            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().orElseThrow(() ->
+                    new RuntimeException("Rule " + state.getRuleName() + " not found in rules!")
+            );
 
             /* Ignore invisible rules and general predicates, which both should only serve as
              * requisites for real rules.

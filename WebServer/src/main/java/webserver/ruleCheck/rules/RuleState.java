@@ -66,6 +66,7 @@ public final class RuleState {
         this.ruleName = generalPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
+        stamp = Instant.now().getEpochSecond();
     }
 
     /**
@@ -82,6 +83,7 @@ public final class RuleState {
         this.ruleName = metaPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
+        stamp = Instant.now().getEpochSecond();
     }
 
     public Set<String> getPassedSensors() {
