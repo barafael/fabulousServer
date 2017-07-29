@@ -1,7 +1,7 @@
 package webserver.fhemParser.fhemModel.log;
 
 import com.google.gson.GsonBuilder;
-import webserver.fhemParser.fhemModel.serializers.DoubleSerializer;
+import webserver.fhemParser.fhemModel.serializers.RoundingDoubleSerializer;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -210,7 +210,7 @@ public final class Timeserie {
 
     @Override
     public String toString() {
-        return new GsonBuilder().registerTypeAdapter(Double.class, new DoubleSerializer()).create()
+        return new GsonBuilder().registerTypeAdapter(Double.class, new RoundingDoubleSerializer()).create()
                 .toJson(this, Timeserie.class);
     }
 }

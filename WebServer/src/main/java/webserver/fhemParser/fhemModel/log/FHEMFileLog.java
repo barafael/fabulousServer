@@ -1,7 +1,7 @@
 package webserver.fhemParser.fhemModel.log;
 
 import com.google.gson.GsonBuilder;
-import webserver.fhemParser.fhemModel.serializers.DoubleSerializer;
+import webserver.fhemParser.fhemModel.serializers.RoundingDoubleSerializer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -281,7 +281,7 @@ public final class FHEMFileLog {
     public Optional<String> subSection(long startTime, long endTime) {
         Optional<Timeserie> timeserie_opt = getTimeserie(startTime, endTime);
         return timeserie_opt.map(timeserie -> new GsonBuilder()
-                .registerTypeAdapter(Double.class, new DoubleSerializer())
+                .registerTypeAdapter(Double.class, new RoundingDoubleSerializer())
                 .create()
                 .toJson(timeserie, Timeserie.class));
     }

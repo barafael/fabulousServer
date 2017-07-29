@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
  *
  * @author Rafael on 22.06.17.
  */
-public class DoubleSerializer implements JsonSerializer<Double> {
+public class RoundingDoubleSerializer implements JsonSerializer<Double> {
     /**
      * Custom serializer for a Double, rounds a Double to two decimal places.
      *
