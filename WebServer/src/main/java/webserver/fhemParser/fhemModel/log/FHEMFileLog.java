@@ -89,7 +89,7 @@ public final class FHEMFileLog {
      * in the third column (the first being the date). This should be the FHEM default though.
      *
      * @param path the path to the FileLog. This has to be read as a file (instead of parsing it immediately)
-     *             because parsing happens later on demand but the information is necessary now.
+     *             because parsing happens later on demand but some information is necessary now.
      * @return the name of the unit of this log
      */
     private static Optional<String> getUnitInFileLog(String path) {

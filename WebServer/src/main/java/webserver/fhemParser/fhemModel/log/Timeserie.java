@@ -63,15 +63,6 @@ public final class Timeserie {
     private Map<Double, String> legend = new HashMap<>();
 
     /**
-     * The oldest encountered unix timestamp.
-     */
-    private long oldestStamp;
-    /**
-     * The newest encountered unix timestamp.
-     */
-    private long newestStamp;
-
-    /**
      * Constructor for a timeserie, which parses samples given in a list of strings.
      *
      * @param samples a list of strings directly from a FileLog
@@ -126,11 +117,6 @@ public final class Timeserie {
                                 .filter(e -> e.getValue()
                                         .equals(value)).findFirst().get().getKey());
                     }
-                }
-
-                if (xs.size() > 1) {
-                    oldestStamp = xs.get(0);
-                    newestStamp = xs.get(xs.size() - 1);
                 }
 
                 legend.put(Collections.max(ys) + 1, "Upper");
@@ -190,11 +176,6 @@ public final class Timeserie {
                             + newTimestamps.size() + " elements!");
                     xs = newTimestamps;
                     ys = newValues;
-                }
-
-                if (xs.size() > 1) {
-                    oldestStamp = xs.get(0);
-                    newestStamp = xs.get(xs.size() - 1);
                 }
 
                 legend.put(Collections.max(ys) + 1, "Upper");
