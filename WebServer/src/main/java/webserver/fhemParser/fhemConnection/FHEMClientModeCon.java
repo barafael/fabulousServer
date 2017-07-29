@@ -40,7 +40,11 @@ public final class FHEMClientModeCon implements FHEMConnection {
      * (It tries to guess based on `whereis` and global variables in ~/.profile)
      */
     public FHEMClientModeCon() {
-        path = FHEMUtils.getFhemScriptPath();
+        String path = FHEMUtils.getFhemScriptPath();
+        if (path == null) {
+            path = "/opt/fhem/fhem.pl";
+        }
+        this.path = path;
         port = FHEMUtils.getFHEMPort();
     }
 
