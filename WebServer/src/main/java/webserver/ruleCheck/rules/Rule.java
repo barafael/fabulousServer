@@ -146,6 +146,7 @@ public abstract class Rule {
      * @return a warning message
      */
     public String getWarningMessage(long startTime) {
+        // TODO <= , reorder
         long elapsedTime = Instant.now().getEpochSecond() - startTime;
         List<Long> keys = errorMessages.keySet().stream().sorted().collect(Collectors.toList());
         if (keys.isEmpty()) {

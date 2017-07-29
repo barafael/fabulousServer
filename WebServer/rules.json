@@ -3,52 +3,41 @@
         {
             "Name": "All windows are closed",
             "Expression": "Reading equals closed",
-            "ViewPermissions": [
-                "S_Fenster"
-            ],
             "SensorNames": [
                 "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
             ],
-            "OkMessage": "All windows are closed",
             "Invisible": "true"
         },
         {
             "Name": "There is no rain",
             "Expression": "Reading equals dry",
-            "ViewPermissions": [
-                "S_Regen"
-            ],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
             "Invisible": "true"
         },
         {
-            "Name": "There is no rain or all windows are closed",
-            "ViewPermissions": [
-                "S_Fenster", "S_Regen"
-            ],
+            "Name": "Is the lab dry?",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
             "OkMessage": "The windows are closed or it is not raining",
-            "RequiredAllTrue": [],
             "RequiredOneOfTrue": ["There is no rain", "All windows are closed"],
             "Escalation": {
-                "10": ["U_Mitarbeiter"],
-                "600": ["U_Admin"]
+                "60": ["member", "user"],
+                "200": ["admin"]
             },
             "ErrorMessages": {
-                "10": "The windows are open during rain!",
-                "60": "The windows are still open and it is still raining!",
-                "600": "hey, close the windows!!!"
+                "120": "The windows are open during rain!",
+                "150": "The windows are still open and it is still raining!",
+                "200": "Hey, close the windows!!!"
             }
         },
         {
             "Name": "NeverTrue",
             "Expression": "Reading contains noRainNoDry",
             "ViewPermissions": [
-                "S_Regen"
+                "user", "member", "admin"
             ],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
@@ -59,20 +48,48 @@
                 "100": "this rule can never be true",
                 "500": "never ever will this rule be true"
             },
+            "Escalation": {
+                "60": ["user"],
+                "200": ["admin"]
+            },
             "Important": "true"
         },
         {
             "Name": "Five Minute Toggle Rule",
             "Expression": "Sensor firstFive",
             "Priority": 100,
-            "ViewPermissions": ["S_Fenster"],
+            "ErrorMessages": {
+                "60": "First Minute",
+                "120": "Second Minute",
+                "180": "Third Minute",
+                "240": "Fourth Minute"
+            },
             "SensorNames": [
                 "HM_56A1EC"
             ],
-            "OkMessage": "First five minutes!",
+            "Escalation": {
+                "60": ["user"],
+                "200": ["admin"]
+            },
+            "OkMessage": "First five minutes!"
+        },
+        {
+            "Name": "Two Minute Toggle Rule",
+            "Expression": "Sensor toggleEveryNMinutes 2",
+            "Priority": 50,
             "ErrorMessages": {
-                "1": "Last five minutes!"
-            }
+                "30": "30 secs",
+                "60": "First Minute",
+                "90": "90 seconds"
+            },
+            "SensorNames": [
+                "HM_56A1EC"
+            ],
+            "Escalation": {
+                "15": ["user"],
+                "60": ["admin"]
+            },
+            "OkMessage": "toggle 2!"
         }
     ]
 }

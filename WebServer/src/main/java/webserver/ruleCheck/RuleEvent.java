@@ -33,6 +33,7 @@ public class RuleEvent {
         this.groups = groups;
     }
 
+    //TODO turn into constructor
     static RuleEvent fromState(RuleState state, Rule rule) {
         return new RuleEvent(
                 rule.getWarningMessage(state.getLastStamp()),
