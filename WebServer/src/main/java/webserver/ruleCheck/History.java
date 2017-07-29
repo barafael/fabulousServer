@@ -12,7 +12,7 @@ public class History {
     /**
      * How many changes of state will be recorded until the oldest is discarded.
      */
-    private static final int CHANGE_THRESHHOLD = 30;
+    private static final int CHANGE_THRESHOLD = 30;
 
     /* Linked list because when the list is full old events have to be removed
     This might cause reallocation with other list types.
@@ -24,7 +24,7 @@ public class History {
     }
 
     public void add(RuleEvent event) {
-        if (events.size() >= CHANGE_THRESHHOLD) {
+        if (events.size() >= CHANGE_THRESHOLD) {
             events.remove(0);
         }
         events.add(event);
