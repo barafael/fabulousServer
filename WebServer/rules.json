@@ -92,7 +92,26 @@
                 "90": "90 seconds"
             },
             "SensorNames": [
-                "HM_56A1EC, HM_4F5DAA_Rain"
+                "HM_56A1EC", "HM_4F5DAA_Rain"
+            ],
+            "Escalation": {
+                "30": ["user"],
+                "60": ["member"],
+                "90": ["admin"]
+            }
+        },
+        {
+            "Name": "Random Toggle Rule",
+            "Expression": "Sensor toggleRandom",
+            "Priority": 70,
+            "OkMessage": "toggle random!",
+            "ErrorMessages": {
+                "30": "30 secs",
+                "60": "First Minute",
+                "90": "90 seconds"
+            },
+            "SensorNames": [
+                "HM_56A1EC", "HM_4F5DAA_Rain"
             ],
             "Escalation": {
                 "30": ["user"],

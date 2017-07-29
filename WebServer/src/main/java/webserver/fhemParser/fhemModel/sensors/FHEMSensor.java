@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -297,6 +298,18 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     public HashSet<FHEMFileLog> getLogs() {
         return fileLogs;
+    }
+
+    /**
+     * A predicate which toggles every n minutes.
+     * <p>
+     * //TODO remove from sensor when general predicates are correctly handled
+     *
+     * @param _ignored a list containing one number
+     * @return whether the current minute is divisible by 2, true if yes
+     */
+    public boolean toggleRandom(List<String> _ignored) {
+       return new Random(12).nextBoolean();
     }
 
     /**
