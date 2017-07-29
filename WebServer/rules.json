@@ -57,6 +57,7 @@
                 "200": ["member"],
                 "400": ["admin", "member"]
             },
+            "Priority": 100,
             "Important": "true"
         },
         {
@@ -91,7 +92,7 @@
                 "90": "90 seconds"
             },
             "SensorNames": [
-                "HM_56A1EC"
+                "HM_56A1EC, HM_4F5DAA_Rain"
             ],
             "Escalation": {
                 "30": ["user"],

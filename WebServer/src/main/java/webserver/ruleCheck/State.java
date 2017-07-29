@@ -60,7 +60,7 @@ class State {
             if (isOk) {
                 /* Was the rule ok previously? */
                 if (stateMap.get(rule.getName()).isOk()) {
-                    /* If so, do nothing, The stamp is preserved. */
+                    /* If so, do nothing, the stamp is preserved. */
                     continue;
                 }
                 /* Else, the rule changed to ok in this evaluation.
