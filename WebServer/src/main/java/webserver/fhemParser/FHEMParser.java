@@ -100,7 +100,10 @@ public final class FHEMParser {
      * @return the filtered and evaluated model
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups) {
-        return getFHEMModelJSON(permissions, groups, "rules.json");
+        if (System.getProperty("user.home").contains("ra")) {
+            return getFHEMModelJSON(permissions, groups, "rules.json");
+        }
+        return getFHEMModelJSON(permissions, groups, "/home/pi/Server/rules.json");
     }
 
     /**
@@ -134,7 +137,10 @@ public final class FHEMParser {
      * @return an optional FHEM model
      */
     public Optional<FHEMModel> getFHEMModel() {
-        return getFHEMModel("rules.json");
+        if (System.getProperty("user.home").contains("ra")) {
+            return getFHEMModel("rules.json");
+        }
+        return getFHEMModel("/home/pi/Server/rules.json");
     }
 
     /**
