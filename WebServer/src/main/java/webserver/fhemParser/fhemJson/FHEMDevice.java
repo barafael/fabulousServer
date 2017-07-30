@@ -8,6 +8,7 @@ import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -90,19 +91,23 @@ public final class FHEMDevice {
             reading = reading.substring(3) + " Lux";
             sensor.addMeta("Brightness", reading);
         }
-        Optional<String> sub_opt = attributes.getSubType();
+        //Optional<String> sub_opt = attributes.getSubType();
         //sub_opt.ifPresent(s ->
         //        sensor.addMeta("Subtype", s));
-        String reading = internals.getState().orElse("No state supplied by sensor!");
-        if (reading.startsWith("Usage: ")) {
-            sensor.addMeta("Usage", reading.substring(7));
-        } else if (reading.startsWith("Temperature: ")) {
-            sensor.addMeta("Temperature", reading.substring(13) + "°C");
-        } else if (reading.startsWith("Disk_Usage: ")) {
-            sensor.addMeta("Disk Usage", reading.substring(12));
-        } else {
-            if (!reading.equals("???") && !reading.matches("([^:]+:){2,}.*")) {
-                sensor.addMeta("Reading", reading);
+        Optional<String> reading_opt = internals.getState();
+        if (reading_opt.isPresent()) {
+            String reading = reading_opt.get();
+            Map<String, String> map = readings.getReadings();
+            if (!map.values().contains(reading)) {
+                if (reading.startsWith("Usage: ")) {
+                    sensor.addMeta("Usage", reading.substring(7));
+                } else if (reading.startsWith("Temperature: ")) {
+                    sensor.addMeta("Temperature", reading.substring(13) + "°C");
+                } else if (reading.startsWith("Disk_Usage: ")) {
+                    sensor.addMeta("Disk Usage", reading.substring(12));
+                } else if (!reading.equals("???") && !reading.matches("([^:]+:){2,}.*")) {
+                    sensor.addMeta("Reading", reading);
+                }
             }
         }
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
