@@ -106,7 +106,6 @@ public final class PredicateCollection {
         long startTime = timeOfTodayInUNIXSeconds(6, 0);
         long endTime = timeOfTodayInUNIXSeconds(20, 0);
         long now = Instant.now().getEpochSecond();
-        // TODO handle weekdays, weekends, holidays, and free days in own predicate or here
         return now > startTime && now < endTime;
     }
 

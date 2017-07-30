@@ -211,8 +211,14 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         this.history = history;
     }
 
-    public void addStateSnapshot(List<RuleSnapshot> snapshots) {
-        this.snapshots = snapshots;
+    /**
+     * Add a state snapshot, which is a rule that is violated at this very moment.
+     * Used for push notifications in the frontend.
+     *
+     * @param newSnapshots a list of current {@link webserver.ruleCheck.RuleSnapshot RuleSnapshots}
+     */
+    public void addStateSnapshot(List<RuleSnapshot> newSnapshots) {
+        this.snapshots = newSnapshots;
     }
 
     /**

@@ -100,8 +100,6 @@ public final class FHEMDevice {
             sensor.addMeta("Temperature", reading.substring(13) + "°C");
         } else if (reading.startsWith("Disk_Usage: ")) {
             sensor.addMeta("Disk Usage", reading.substring(12));
-        } else if (reading.equals("BatteryPercent")) {
-            sensor.addMeta("Battery Percent", reading);
         } else {
             if (!reading.equals("???") && !reading.matches("([^:]+:){2,}.*")) {
                 sensor.addMeta("Reading", reading);
@@ -212,17 +210,17 @@ public final class FHEMDevice {
      * Manual parsing of a comma-separated line is necessary, because that is how FHEM stores a room.
      * A room exists in FHEM if it is mentioned in the 'room' String in a device's attributes.
      *
-     * @param name name of the room to check.
-     * @return if this device lies in the room given by name
+     * @param roomName roomName of the room to check.
+     * @return if this device lies in the room given by roomName
      */
-    private boolean isInRoom(String name) {
+    private boolean isInRoom(String roomName) {
         Optional<String> rooms_opt = attributes.getRooms();
         if (rooms_opt.isPresent()) {
             String rooms = rooms_opt.get();
-            /* Allow for some commas and whitespace, but include 'name' */
+            /* Allow for some commas and whitespace, but include 'roomName' */
             /* A .contains() is not enough because some room might include it ("app" and "appartment") */
             /* IDEA includes a nifty regex checker (just put cursor in regex). */
-            String pattern = "(.*,\\s?)*" + name + "(,\\s?.*)*";
+            String pattern = "(.*,\\s?)*" + roomName + "(,\\s?.*)*";
             return rooms.matches(pattern);
         }
         return false;

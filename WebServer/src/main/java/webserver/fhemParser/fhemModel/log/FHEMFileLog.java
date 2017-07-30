@@ -196,12 +196,12 @@ public final class FHEMFileLog {
     /**
      * A log belongs to a permitted switch if the necessary permissions exist and the log is in the 'actuators' room.
      *
-     * @param permissions the list of permissions of the caller
+     * @param callerPermissions the list of permissions of the caller
      * @return whether this is can be switched and is permitted
      */
-    public boolean isPermittedSwitch(List<String> permissions) {
+    public boolean isPermittedSwitch(List<String> callerPermissions) {
         for (String permission : this.permissions) {
-            if (permissions.contains(permission) && switchable) {
+            if (callerPermissions.contains(permission) && switchable) {
                 return true;
             }
         }
