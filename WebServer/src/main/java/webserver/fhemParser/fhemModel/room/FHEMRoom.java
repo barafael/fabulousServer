@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemModel.room;
 
 import org.jetbrains.annotations.NotNull;
+import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
 
@@ -9,10 +10,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -69,6 +73,55 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      */
     public Set<FHEMSensor> getSensors() {
         return sensors;
+    }
+
+    public void fuseSensors() {
+        Map<String, Set<FHEMSensor>> toFuse = new HashMap<>();
+        for (FHEMSensor sensor : sensors) {
+            if (sensor.getFuseTag().isEmpty()) {
+                continue;
+            }
+            if (!toFuse.containsKey(sensor.getFuseTag())) {
+                toFuse.put(sensor.getFuseTag(), new HashSet<>());
+            }
+            toFuse.get(sensor.getFuseTag()).add(sensor);
+        }
+        for (Map.Entry<String, Set<FHEMSensor>> entry : toFuse.entrySet()) {
+            String newName = entry.getKey();
+
+            FHEMSensor union = entry.getValue().stream().filter(s -> s.getName().endsWith("_union"))
+                    .findAny().orElseThrow(() ->
+                            new RuntimeException("Union sensor not found! " + newName));
+
+            List<String> permissions = new ArrayList<>();
+            for (FHEMSensor sensor : entry.getValue()) {
+                permissions.addAll(sensor.getPermissions());
+            }
+            HashMap<String, String> meta = new HashMap<>();
+            for (FHEMSensor sensor : entry.getValue()) {
+                meta.putAll(sensor.getMeta());
+            }
+            FHEMSensor newSensor = new FHEMSensor(union.getCoordX(),
+                    union.getCoordY(),
+                    union.getName(),
+                    newName,
+                    union.getDeAlias(),
+                    union.getEnAlias(),
+                    union.getArAlias(),
+                    permissions,
+                    true,
+                    meta,
+                    union.getFuseTag());
+            for (FHEMSensor sensor : entry.getValue()) {
+                for (FHEMFileLog log : sensor.getLogs()) {
+                    newSensor.addLog(log);
+                }
+                newSensor.addRuleInfos(sensor.getRuleInfos());
+            }
+            newSensor.setIcon(union.getIcon());
+            sensors.removeIf(s -> entry.getValue().contains(s));
+            sensors.add(newSensor);
+        }
     }
 
     /**

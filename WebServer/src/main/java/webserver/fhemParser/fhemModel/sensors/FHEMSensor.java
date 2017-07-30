@@ -74,6 +74,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      */
     @SuppressWarnings("FieldCanBeLocal")
     private final boolean isVisibleInApp;
+
+    private transient final String fuseTag;
     /**
      * The icon name of this sensor, which will be deserialized.
      */
@@ -112,7 +114,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
                       String en_alias,
                       String ar_alias,
                       List<String> permissions,
-                      boolean isVisibleInApp, HashMap<String, String> metaInfo) {
+                      boolean isVisibleInApp, HashMap<String, String> metaInfo,
+                      String fuseTag) {
         this.coords = new Coordinates(coordX, coordY);
         this.name = name;
         this.nameInApp = nameInApp;
@@ -122,6 +125,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         this.permissions = permissions;
         this.isVisibleInApp = isVisibleInApp;
         this.metaInfo = metaInfo;
+        this.fuseTag = fuseTag;
     }
 
     /**
@@ -148,6 +152,10 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
 
     public String getName() {
         return name;
+    }
+
+    public String getFuseTag() {
+        return fuseTag;
     }
 
     /**
@@ -420,5 +428,33 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
                 + ", coords=" + coords
                 + ", switchable=" + switchable
                 + '}';
+    }
+
+    public int getCoordX() {
+        return coords.getX();
+    }
+
+    public int getCoordY() {
+        return coords.getY();
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public String getDeAlias() {
+        return de_alias;
+    }
+
+    public String getEnAlias() {
+        return en_alias;
+    }
+
+    public String getArAlias() {
+        return ar_alias;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }

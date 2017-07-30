@@ -352,7 +352,7 @@ public class ModelTest {
      */
     @Test
     public void testGetTimeseriePercentFromParser() {
-        String sensorName = "RPi_disk_dummy";
+        String sensorName = "pi_union";
         List<String> permissions = Collections.singletonList("S_Serverstatus");
         Optional<FHEMModel> model = FHEMParser.getInstance().getFHEMModel();
         assert model.isPresent();

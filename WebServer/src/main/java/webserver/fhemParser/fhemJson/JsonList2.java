@@ -152,6 +152,10 @@ public class JsonList2 {
                 log.ifPresent(sensor::addLog);
             }
         }
+
+        for (FHEMRoom room : rooms) {
+            room.fuseSensors();
+        }
         return new FHEMModel(rooms);
     }
 }

@@ -86,6 +86,9 @@ class FHEMDeviceAttributes {
     @SuppressWarnings("FieldCanBeLocal")
     private String importantFields = "";
 
+    @SerializedName("fuse_as")
+    private String fuseTag;
+
     /**
      * The SubType attribute is set to the sensor type sometimes.
      *
@@ -135,6 +138,10 @@ class FHEMDeviceAttributes {
     List<String> getPermissionList() {
         return Arrays.asList(
                 (permissions == null ? "" : permissions).split(","));
+    }
+
+    public String getFuseTag() {
+        return fuseTag == null ? "" : fuseTag;
     }
 
     /**

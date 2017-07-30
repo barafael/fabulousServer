@@ -55,4 +55,12 @@ final class Coordinates {
         Coordinates that = (Coordinates) o;
         return coordX == that.coordX && coordY == that.coordY;
     }
+
+    public int getX() {
+        return coordX;
+    }
+
+    public int getY() {
+        return coordY;
+    }
 }

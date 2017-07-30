@@ -79,7 +79,8 @@ public final class FHEMDevice {
                 ar_alias,
                 permissions,
                 isVisibleInApp(),
-                meta);
+                meta,
+                attributes.getFuseTag());
 
         sensor.setIcon(attributes.getIcon());
 
@@ -98,7 +99,9 @@ public final class FHEMDevice {
         } else if (reading.startsWith("Temperature: ")) {
             sensor.addMeta("Temperature", reading.substring(13) + "°C");
         } else {
-            sensor.addMeta("Reading", reading);
+            if (!reading.equals("???")) {
+                sensor.addMeta("Reading", reading);
+            }
         }
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
