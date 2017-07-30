@@ -343,7 +343,7 @@ public final class FHEMParser {
     public synchronized Optional<Long> getMutex(String username) {
         if (mutex.isEmpty()) {
             mutex = username;
-            long timer = Main.vertx.setTimer(MUTEX_TIMEOUT, event -> releaseMutex(username));
+            long timer = Main.VERTX.setTimer(MUTEX_TIMEOUT, event -> releaseMutex(username));
             System.out.println("Parser: Set Mutex for user: " + username);
             return Optional.of(timer);
         } else {

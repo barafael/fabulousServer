@@ -67,7 +67,7 @@ public class Server extends AbstractVerticle {
     private static final String Id_PARAM = "ID";
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
-    private final FHEMParser parser = Main.parser;
+    private final FHEMParser parser = Main.PARSER;
     @SuppressWarnings("FieldCanBeLocal")
     private final int DATABASE_KEEP_ALIVE = 15 * 60 * 1000;
     private JDBCAuth authProvider;

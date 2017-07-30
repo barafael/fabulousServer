@@ -16,12 +16,21 @@ import java.util.Optional;
  *         on 16.06.17.
  */
 public final class Main {
-    public static final Vertx vertx = Vertx.vertx();
-    static final FHEMParser parser = FHEMParser.getInstance();
-    static long parserTimerID;
+    /**
+     * The main vertx singleton instance.
+     */
+    public static final Vertx VERTX = Vertx.vertx();
+    /**
+     * The main fhem parser singleton instance.
+     */
+    static final FHEMParser PARSER = FHEMParser.getInstance();
+    /**
+     * The ID of the timer which periodically refreshes the fhem model.
+     */
+    private static long parserTimerID;
 
     static {
-        Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
+        Optional<FHEMModel> fhemModel_opt = PARSER.getFHEMModel();
         if (!fhemModel_opt.isPresent()) {
             System.err.println("FHEM could not be parsed.");
             System.exit(42);
@@ -40,11 +49,11 @@ public final class Main {
         }
         JsonObject config = new JsonObject().put("PORT", defaultPORT).put("HOST", "localhost");
         DeploymentOptions options = new DeploymentOptions().setConfig(config);
-        vertx.deployVerticle(Server.class.getCanonicalName(), options);
+        VERTX.deployVerticle(Server.class.getCanonicalName(), options);
 
-        parserTimerID = vertx.setPeriodic(5000, id -> {
-            vertx.executeBlocking(future -> {
-                Optional<FHEMModel> fhemModel_opt = parser.getFHEMModel();
+        parserTimerID = VERTX.setPeriodic(5000, id -> {
+            VERTX.executeBlocking(future -> {
+                Optional<FHEMModel> fhemModel_opt = PARSER.getFHEMModel();
                 if (!fhemModel_opt.isPresent()) {
                     System.err.println("FHEM could not parsed.");
                     future.handle(Future.failedFuture(future.cause()));
@@ -55,8 +64,8 @@ public final class Main {
                 if (!res.succeeded()) {
                     System.err.println("System exiting: Periodic Parser returned with error!");
                     res.cause().printStackTrace();
-                    vertx.cancelTimer(parserTimerID);
-                    vertx.close();
+                    VERTX.cancelTimer(parserTimerID);
+                    VERTX.close();
                 }
             });
         });
