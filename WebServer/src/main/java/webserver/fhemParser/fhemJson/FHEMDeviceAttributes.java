@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemJson;
 
 import com.google.gson.annotations.SerializedName;
+import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -254,14 +254,14 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * A sensor is a permitted switch if permissions suffice and it is switchable.
+     * A sensor is a permitted switch if callerPermissions suffice and it is switchable.
      *
-     * @param permissions the caller's permissions
+     * @param callerPermissions the caller's callerPermissions
      * @return whether this device can be switched on and off
      */
-    public boolean isPermittedSwitch(List<String> permissions) {
+    public boolean isPermittedSwitch(List<String> callerPermissions) {
         for (FHEMFileLog log : this) {
-            if (log.isPermittedSwitch(permissions)) {
+            if (log.isPermittedSwitch(callerPermissions)) {
                 return true;
             }
         }
@@ -269,14 +269,14 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * Returns whether any of the logs are permitted to be accessed with the given permissions.
+     * Returns whether any of the logs are permitted to be accessed with the given callerPermissions.
      *
-     * @param permissions list of permissions against which to check
+     * @param callerPermissions list of callerPermissions against which to check
      * @return whether this sensor contains viewable timeseries
      */
-    public boolean hasPermittedLogs(List<String> permissions) {
+    public boolean hasPermittedLogs(List<String> callerPermissions) {
         for (FHEMFileLog log : this) {
-            if (log.isPermitted(permissions)) {
+            if (log.isPermitted(callerPermissions)) {
                 return true;
             }
         }
@@ -284,19 +284,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * Returns whether any of the rules are permitted to be accessed with the given permissions.
+     * Returns whether any of the rules are permitted to be accessed with the given callerPermissions.
      *
-     * @param permissions list of permissions against which to check
+     * @param callerPermissions list of callerPermissions against which to check
      * @return whether this sensor contains viewable rules
      */
-    public boolean hasPermittedRules(List<String> permissions) {
+    public boolean hasPermittedRules(List<String> callerPermissions) {
         for (RuleInfo info : passedRules) {
-            if (info.isPermittedForGroups(permissions)) {
+            if (info.isPermittedForGroups(callerPermissions)) {
                 return true;
             }
         }
         for (RuleInfo info : violatedRules) {
-            if (info.isPermittedForGroups(permissions)) {
+            if (info.isPermittedForGroups(callerPermissions)) {
                 return true;
             }
         }

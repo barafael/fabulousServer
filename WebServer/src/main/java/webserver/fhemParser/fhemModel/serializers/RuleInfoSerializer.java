@@ -20,24 +20,24 @@ import java.util.List;
  */
 class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
     /**
-     * A list of permission identifiers that are used to remove/retain json elements.
+     * A list of group identifiers that are used to remove/retain json elements.
      */
-    private final List<String> permissions;
+    private final List<String> groups;
 
     /**
      * Prevent direct construction without parameters.
      */
     private RuleInfoSerializer() {
-        permissions = new ArrayList<>();
+        groups = new ArrayList<>();
     }
 
     /**
      * Construct this serializer, setting the permissions. Any RuleInfo not permitted for them will be filtered out.
      *
-     * @param permissions the permissions to use as filter
+     * @param groups the permissions to use as filter
      */
-    RuleInfoSerializer(List<String> permissions) {
-        this.permissions = permissions;
+    RuleInfoSerializer(List<String> groups) {
+        this.groups = groups;
     }
 
     /**
@@ -48,7 +48,7 @@ class RuleInfoSerializer implements JsonSerializer<RuleInfo> {
      */
     @Override
     public JsonElement serialize(RuleInfo ruleInfo, Type type, JsonSerializationContext jsc) {
-        if (!ruleInfo.isPermittedForGroups(permissions)) {
+        if (!ruleInfo.isPermittedForGroups(groups)) {
             return JsonNull.INSTANCE;
         }
         return new Gson().toJsonTree(ruleInfo);

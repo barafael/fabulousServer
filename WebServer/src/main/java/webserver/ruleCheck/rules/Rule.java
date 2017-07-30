@@ -342,16 +342,6 @@ public abstract class Rule {
 
         Rule rule = (Rule) o;
 
-        /* Due to technical reasons discussed in the rule checker documentation,
-        this ugly hack works but should not be trusted.
-         */
-        /* TODO: Find a better way to do this or don't do it and update the documentation
-        boolean equals = name.equals(rule.name);
-        if (equals) {
-            System.err.println("Duplicate rule detected! " + name);
-        }
-        return equals;
-        */
         return name.equals(rule.name);
     }
 }

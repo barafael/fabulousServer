@@ -93,11 +93,11 @@ public final class RuleInfo {
     /**
      * This rule is permitted to view if it's permissions is contained in the given permissions.
      *
-     * @param callerPermissions the caller's permissions
+     * @param callerGroups the caller's permissions
      * @return whether the info is permitted
      */
-    public boolean isPermittedForGroups(Collection<String> callerPermissions) {
-        for (String permission : callerPermissions) {
+    public boolean isPermittedForGroups(Collection<String> callerGroups) {
+        for (String permission : callerGroups) {
             if (this.permissions.contains(permission)) {
                 return true;
             }
