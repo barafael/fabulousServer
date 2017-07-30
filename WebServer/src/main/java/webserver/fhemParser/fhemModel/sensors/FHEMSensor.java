@@ -428,9 +428,20 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         fileLogs.forEach(action);
     }
 
+    /**
+     * Add important field annotations to this sensor.
+     * @param importantFields a set of strings of which each should be a key of the metaInfo map
+     */
     public void addImportantFields(List<String> importantFields) {
         if (importantFields != null) {
-            this.importantFields = importantFields;
+            for (String key : importantFields) {
+                if (metaInfo.containsKey(key)) {
+                    this.importantFields.add(key);
+                } else {
+                    System.err.println("The key " + key + " was added as important key for the sensor " + name
+                    + " but this sensor does not have a corresponding entry in the metaInfo map. \nIgnoring the key");
+                }
+            }
         }
     }
 
