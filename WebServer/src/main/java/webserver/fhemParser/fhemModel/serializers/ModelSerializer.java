@@ -75,13 +75,8 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
                 .registerTypeAdapter(RuleEvent.class, new RuleEventSerializer(groups))
                 .registerTypeAdapter(RuleSnapshot.class, new RuleSnapshotSerializer(groups))
 
-                /* For filtering ruleinfo in sensors */
-                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(groups))
-
-                /* Elements of the FHEM model itself */
+               /* Elements of the FHEM model itself */
                 /* Groups need to be passed so that the lower-level serializers can work with them */
-                .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
-                .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions, groups))
                 .registerTypeAdapter(FHEMRoom.class, new RoomSerializer(permissions, groups))
                 .create()
                 .toJsonTree(model);

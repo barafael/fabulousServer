@@ -5,10 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
-import webserver.ruleCheck.rules.RuleInfo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -66,9 +64,7 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
         a separate instance of gson
          */
         return new GsonBuilder()
-                .registerTypeAdapter(RuleInfo.class, new RuleInfoSerializer(groups))
                 .registerTypeAdapter(FHEMSensor.class, new SensorSerializer(permissions, groups))
-                .registerTypeAdapter(FHEMFileLog.class, new FilelogSerializer(permissions))
                 .create().toJsonTree(room);
     }
 }
