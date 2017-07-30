@@ -79,14 +79,8 @@ public class JsonList2 {
      * @param jsonString the input string
      * @return an instance of jsonList2
      */
-    public static @NotNull
-    JsonList2 parseFrom(String jsonString) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting(); // TODO remove?
-
-        Gson gson = builder.create();
-
-        return gson.fromJson(jsonString, JsonList2.class);
+    public static @NotNull JsonList2 parseFrom(String jsonString) {
+        return new Gson().fromJson(jsonString, JsonList2.class);
     }
 
     /**

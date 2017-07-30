@@ -44,6 +44,7 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * Construct this serializer, setting the permissions. Any room not permitted for them will be filtered out.
      *
      * @param permissions the permissions to use as filter
+     * @param groups      the groups needed to view this sensor
      */
     RoomSerializer(List<String> permissions, List<String> groups) {
         this.permissions = permissions;

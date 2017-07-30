@@ -56,7 +56,7 @@ class FHEMDeviceAttributes {
     @SerializedName("icon_in_app")
     private String iconInApp;
     /**
-     * SubType as defined in FHEM. TODO read this in metainfo
+     * SubType as defined in FHEM.
      */
     private String subType;
     /**
