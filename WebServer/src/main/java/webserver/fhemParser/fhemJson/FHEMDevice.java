@@ -98,6 +98,8 @@ public final class FHEMDevice {
             sensor.addMeta("Usage", reading.substring(7));
         } else if (reading.startsWith("Temperature: ")) {
             sensor.addMeta("Temperature", reading.substring(13) + "°C");
+        } else if (reading.startsWith("Disk_Usage: ")) {
+            sensor.addMeta("Disk Usage", reading.substring(12));
         } else {
             if (!reading.equals("???")) {
                 sensor.addMeta("Reading", reading);
