@@ -222,7 +222,7 @@ public final class FHEMDevice {
         Optional<String> rooms_opt = attributes.getRooms();
         if (rooms_opt.isPresent()) {
             String rooms = rooms_opt.get();
-            /* Allow for some commas and whitespace, but include 'roomName' */
+            /* Allow for some commas and whitespace, but include 'name' */
             /* A .contains() is not enough because some room might include it ("app" and "appartment") */
             /* IDEA includes a nifty regex checker (just put cursor in regex). */
             String pattern = "(.*,\\s?)*" + roomName + "(,\\s?.*)*";
