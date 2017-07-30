@@ -201,6 +201,10 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         return false;
     }
 
+    /**
+     * Set the history of this model.
+     * @param history the current sequence of events
+     */
     public void setHistory(History history) {
         //System.out.println("Current history:");
         //System.out.println(history);
@@ -211,6 +215,13 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         this.snapshots = snapshots;
     }
 
+    /**
+     * Get the n snapshots with highest priority, sorted.
+     * This method should only be useful in the frontend.
+     *
+     * @param howMany the number of snapshots to return
+     * @return the n most important snapshots in a list, where the lowest index has the highest priority
+     */
     public List<RuleSnapshot> getSnapshots(int howMany) {
         if (howMany < 1) {
             howMany = 1;
@@ -221,6 +232,12 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         return snapshots.subList(0, howMany - 1);
     }
 
+    /**
+     * Get all snapshots, sorted by priority.
+     * This method should only be useful in the frontend.
+     *
+     * @return a list of sorted snapshots
+     */
     public List<RuleSnapshot> getSnapshots() {
         return snapshots;
     }

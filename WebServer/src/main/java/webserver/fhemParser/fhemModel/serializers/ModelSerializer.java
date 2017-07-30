@@ -32,6 +32,9 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
+    /**
+     * The groups with which the model serializer should filter out events and snapshots.
+     */
     private final List<String> groups;
 
     /**
@@ -46,6 +49,7 @@ public final class ModelSerializer implements JsonSerializer<FHEMModel> {
      * Construct this serializer, setting the permissions. Any model not permitted for them will be filtered out.
      *
      * @param permissions the permissions to use as filter
+     * @param groups the groups to apply to sensors, history and snapshots
      */
     public ModelSerializer(List<String> permissions, List<String> groups) {
         this.permissions = permissions;

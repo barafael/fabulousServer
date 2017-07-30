@@ -93,8 +93,11 @@ public final class FHEMParser {
 
     /**
      * Get a FHEM model as (optional) JSON, using the default rules to evaluate.
+     * Permissions are used to filter the outputted fhem model.
+     * Groups are used to filter all rule information.
      *
      * @param permissions the permissions to apply to this model, filtering out everything else
+     * @param groups the groups the caller is in
      * @return the filtered and evaluated model
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups) {
@@ -117,10 +120,10 @@ public final class FHEMParser {
      *
      * @param permissions a list of permissions which limit what information will be given to the caller
      * @param pathToRules the path to the rules file, relative to the server root directory
+     * @param groups the groups the caller is in
      * @return a serialized model which, when deserialized, contains only the permitted filelogs, sensors and rooms
      */
     public Optional<String> getFHEMModelJSON(List<String> permissions, List<String> groups, String pathToRules) {
-        //TODO just do it
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(FHEMModel.class, new ModelSerializer(permissions, groups))
                 .create();

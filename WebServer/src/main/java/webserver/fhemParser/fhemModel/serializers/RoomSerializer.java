@@ -26,6 +26,10 @@ final class RoomSerializer implements JsonSerializer<FHEMRoom> {
      * A list of permission identifiers that are used to remove/retain json elements.
      */
     private final List<String> permissions;
+
+    /**
+     * A list of group identifiers that are used to remove/retain ruleinfo/ruleevent/rulesnapshots.
+     */
     private final List<String> groups;
 
     /**

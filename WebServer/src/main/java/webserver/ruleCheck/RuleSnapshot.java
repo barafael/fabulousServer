@@ -27,8 +27,14 @@ public final class RuleSnapshot {
     @SuppressWarnings("FieldCanBeLocal")
     private String message;
 
+    /**
+     * True to mark this snapshot as important.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private boolean important = false;
+    /**
+     * The priority of the corresponding rule.
+     */
     private int priority = 0;
 
     /**
@@ -46,7 +52,11 @@ public final class RuleSnapshot {
      */
     private long stamp;
 
-
+    /**
+     * Construct a snapshot from a state and a rule.
+     * @param state the state of the rule
+     * @param rule the rule which this is a snapshot of
+     */
     public RuleSnapshot(RuleState state, Rule rule) {
         this.ruleName = state.getRuleName();
         this.violatedSensors = state.getViolatedSensors();
@@ -69,6 +79,10 @@ public final class RuleSnapshot {
         return Instant.now().getEpochSecond() - stamp;
     }
 
+    /**
+     * Get the time of violation of this rule.
+     * @return the unix timestamp at which the corresponding rule was violated
+     */
     public long getLastStamp() {
         return stamp;
     }

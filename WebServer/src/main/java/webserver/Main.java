@@ -27,7 +27,7 @@ public final class Main {
     /**
      * The ID of the timer which periodically refreshes the fhem model.
      */
-    private static long parserTimerID;
+    static long parserTimerID;
 
     static {
         Optional<FHEMModel> fhemModel_opt = PARSER.getFHEMModel();

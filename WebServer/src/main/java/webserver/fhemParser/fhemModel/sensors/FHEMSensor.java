@@ -33,10 +33,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     @SerializedName("alias")
     private final String nameInApp;
 
+    /**
+     * The german alias set in FHEM.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String de_alias;
+    /**
+     * The english alias set in FHEM.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String en_alias;
+    /**
+     * The arabic alias set in FHEM.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final String ar_alias;
 
@@ -75,7 +84,12 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     @SuppressWarnings("FieldCanBeLocal")
     private final boolean isVisibleInApp;
 
-    private transient final String fuseTag;
+    /**
+     * The fuseTag of this sensor.
+     * All sensors tagged with the same fuseTag will be merged in the device also tagged which has 'union' in it's
+     * FHEM name (not alias).
+     */
+    private final transient String fuseTag;
     /**
      * The icon name of this sensor, which will be deserialized.
      */
@@ -105,6 +119,7 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
      * @param permissions    the permissions of this sensor, read from FHEM
      * @param isVisibleInApp whether this sensor should be visible in the app
      * @param metaInfo       meta information like readings and custom variables which are useful for display
+     * @param fuseTag        the fuseTag of this device
      */
     public FHEMSensor(int coordX,
                       int coordY,
@@ -309,21 +324,19 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     }
 
     /**
-     * A predicate which toggles every n minutes.
+     * A predicate which toggles randomly.
      * <p>
-     * //TODO remove from sensor when general predicates are correctly handled
      *
-     * @param _ignored a list containing one number
-     * @return whether the current minute is divisible by 2, true if yes
+     * @param _ignored ignored arguments
+     * @return true or false, randomly
      */
     public boolean toggleRandom(List<String> _ignored) {
-       return new Random(12).nextBoolean();
+        return new Random(12).nextBoolean();
     }
 
     /**
      * A predicate which toggles every n minutes.
      * <p>
-     * //TODO remove from sensor when general predicates are correctly handled
      *
      * @param args a list containing one number
      * @return whether the current minute is divisible by 2, true if yes
@@ -346,7 +359,6 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * A predicate which is true only the first 5 minutes every 10 minutes.
      * <p>
-     * //TODO remove from sensor when general predicates are correctly handled
      *
      * @param _ignored ignored parameter list
      * @return true if time is within first 5 minutes of each 10

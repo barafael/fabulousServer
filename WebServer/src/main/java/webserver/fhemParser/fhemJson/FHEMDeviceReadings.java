@@ -36,6 +36,7 @@ final class FHEMDeviceReadings {
             ret.put("Battery", battery.value);
         }
         if (batteryPercent != null) {
+            /* Should not be separated, because the ruleparser would break */
             ret.put("BatteryPercent", batteryPercent.value + " %");
         }
         if (humidity != null) {

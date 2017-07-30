@@ -83,9 +83,15 @@ class FHEMDeviceAttributes {
      */
     private String ar_alias = "NoArAlias";
 
+    /**
+     * Important fields should be shown in the frontend main screen.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private String importantFields = "";
 
+    /**
+     * A tag used to manually combine multiple fhem sensors into just one device.
+     */
     @SerializedName("fuse_as")
     private String fuseTag;
 
@@ -140,6 +146,10 @@ class FHEMDeviceAttributes {
                 (permissions == null ? "" : permissions).split(","));
     }
 
+    /**
+     * Get the fusetag.
+     * @return the fhem userattr 'fuse_as' of this device
+     */
     public String getFuseTag() {
         return fuseTag == null ? "" : fuseTag;
     }
@@ -153,14 +163,26 @@ class FHEMDeviceAttributes {
         return alias;
     }
 
+    /**
+     * Return the german alias from FHEM.
+     * @return the alias of the device in german, set in FHEM
+     */
     public String getDeAlias() {
         return de_alias;
     }
 
+    /**
+     * Return the english alias from FHEM.
+     * @return the alias of the device in english, set in FHEM
+     */
     public String getEnAlias() {
         return en_alias;
     }
 
+    /**
+     * Return the arabic alias from FHEM.
+     * @return the alias of the device in arabic, set in FHEM
+     */
     public String getArAlias() {
         return ar_alias;
     }
@@ -174,6 +196,10 @@ class FHEMDeviceAttributes {
         return iconInApp == null ? "" : iconInApp;
     }
 
+    /**
+     * Get the important fields as set in FHEM.
+     * @return the keys of entries in the {@link FHEMSensor#metaInfo metaInfo Map} which are set to be important in FHEM
+     */
     public List<String> getImportantFields() {
         if (importantFields == null || importantFields.isEmpty()) {
             return new ArrayList<>();

@@ -75,6 +75,9 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
         return sensors;
     }
 
+    /**
+     * Attempt to manually unify multiple sensors tagged with the same fuseTag to one device.
+     */
     public void fuseSensors() {
         Map<String, Set<FHEMSensor>> toFuse = new HashMap<>();
         for (FHEMSensor sensor : sensors) {

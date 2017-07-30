@@ -30,6 +30,9 @@ public final class RuleChecker {
      */
     private final State fhemState = new State();
 
+    /*
+    prevent empty construction
+     */
     private RuleChecker() {
     }
 

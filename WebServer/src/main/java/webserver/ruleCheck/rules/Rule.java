@@ -157,6 +157,14 @@ public abstract class Rule {
         return errorMessages.get(Collections.max(keys));
     }
 
+    /**
+     * Get the groups which have to be notified now with the given start time.
+     * The escalation maps elapsed time to the set of group names which should be notified.
+     * If the elapsed time is on the boundaries of the map, the outermost element is returned.
+     *
+     * @param startTime the time at which the rule was first violated
+     * @return the set of group names which should be notified now when the rule was violated at the given startTime
+     */
     public Set<String> getEscalationLevelViewGroups(long startTime) {
         List<Long> keys = escalation.keySet().stream().sorted().collect(Collectors.toList());
         if (keys.isEmpty()) {
@@ -175,10 +183,18 @@ public abstract class Rule {
         return escalation.get(Collections.max(keys));
     }
 
+    /**
+     * The viewpermissions are the union of all defined escalation permissions and the explicit view permissions.
+     * @return the set of groups the members of which should be allowed to view this rule
+     */
     public Set<String> getViewPermissions() {
         return viewPermissions;
     }
 
+    /**
+     * Get the message which should be displayed if this rule is ok.
+     * @return the ok message
+     */
     public String getOkMessage() {
         return okMessage;
     }
@@ -233,7 +249,8 @@ public abstract class Rule {
      * and m being the amount of sensors.
      *
      * @param model        the model to acquire information from
-     * @param visitedRules the currently visited rules (initialised to empty set by the {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
+     * @param visitedRules the currently visited rules (initialised to empty set by the
+     * {@link webserver.ruleCheck.rules.Rule#eval(webserver.fhemParser.fhemModel.FHEMModel) helper method})
      * @return the state of this rule, consisting of passed and violated sensors
      */
     private RuleState eval(FHEMModel model, Set<Rule> visitedRules) {
@@ -251,7 +268,6 @@ public abstract class Rule {
 
         /* Prevent repeated calls to eval (which might happen due to interdependencies) to reevaluate a known result */
         if (isEvaluated) {
-            /* TODO: When is this cleared? */
             assert ruleState != null;
             return ruleState;
         }
@@ -288,10 +304,19 @@ public abstract class Rule {
         return viewPermissions;
     }
 
+    /**
+     * This rule can be marked as important in it's definition, which means
+     * it should be shown in the frontend mainscreen.
+     * @return true if this rule is important
+     */
     public boolean isImportant() {
         return important;
     }
 
+    /**
+     * Return the defined priority of this rule.
+     * @return the defined priority
+     */
     public int getPriority() {
         return priority;
     }

@@ -31,7 +31,6 @@ public class Meta extends Rule {
         if (expression != null && !expression.isEmpty()) {
             System.err.println("Something went wrong: expression was not empty. Ignoring expression.");
             System.err.println("(Expressions make no sense for metarules, which only depend on other rules).");
-            //TODO: metarule if getRuleType switch fallthrough? (to ignore specificEval and only care about eval)
         }
 
         isEvaluated = true;
