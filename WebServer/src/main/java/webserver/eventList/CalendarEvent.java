@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class CalendarEvent {
+public final class CalendarEvent {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm");
+    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
+
     private long startStamp;
     private long endStamp;
     private String description;
-
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm");
-    private final static ZoneId zoneId = ZoneId.systemDefault();
 
     public CalendarEvent(String line) throws IllegalArgumentException {
 
@@ -18,7 +18,7 @@ public class CalendarEvent {
             String[] dateAndDescription = line.split(";");
             String firstDate = dateAndDescription[0].split(" ")[0];
             String secondDate = dateAndDescription[0].split(" ")[1];
-            this.description = dateAndDescription[1];
+            this.description = dateAndDescription[1].trim();
 
             startStamp = parseStamp(firstDate);
             endStamp = parseStamp(secondDate);
@@ -36,8 +36,8 @@ public class CalendarEvent {
     }
 
     private long parseStamp(String date) {
-        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-        return dateTime.atZone(zoneId).toEpochSecond();
+        LocalDateTime dateTime = LocalDateTime.parse(date, DATE_TIME_FORMATTER);
+        return dateTime.atZone(ZONE_ID).toEpochSecond();
     }
 
     public long getStartStamp() {
