@@ -118,6 +118,95 @@
                 "60": ["member"],
                 "90": ["admin"]
             }
+        },
+        {
+            "Name": "Door is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A86F"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "IsWorkingHours general predicate",
+            "Expression": "Predicate isWorkingHours",
+            "Invisible": "true"
+        },
+        {
+            "Name": "Rule: Door should be closed outside work hours",
+            "SensorNames": [
+                "HM_56A86F"
+            ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            
+            "OkMessage": "The door is closed or it is working hours",
+            "RequiredOneOfTrue": ["Door is closed", "IsWorkingHours general predicate"],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["member", "user"],
+                "200": ["admin"]
+            },
+            "ErrorMessages": {
+                "120": "The door is open during non working hours.",
+                "150": "The door is still open during non woking hours!",
+                "200": "Hey, close the door!!!"
+            },
+            "Priority": 100
+        },
+        {
+            "Name": "Rule: Windows should be closed outside work hours",
+            "SensorNames": [
+                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
+            ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "OkMessage": "All Windows are closed or it is working hours",
+            "RequiredOneOfTrue": ["All windows are closed", "IsWorkingHours general predicate"],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["member", "user"],
+                "200": ["admin"]
+            },
+            "ErrorMessages": {
+                "120": "A window is open during non working hours.",
+                "150": "A window is still open during non woking hours!",
+                "200": "Hey, close the window!!!"
+            },
+            "Priority": 70
+        },
+        {
+            "Name": "CO2Limit",
+            "comment": "https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms",
+            "Expression": "CO2 < 800",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "netatmo_D70_ee_50_02_b8_20"
+            ],
+            "OkMessage": "air is ok",
+            "ErrorMessages": {
+                "60": "High levels of co2",
+                "300": "High levels of co2 for several minutes!",
+                "600": "High levels of co2 for more than 5 minutes!"
+            },
+            "Priority": 200
+        },
+        {
+            "Name": "Light 1 threshold above",
+            "Expression": "Brightness < 150",
+            "SensorNames": [
+                "HM_521A72"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Light 2 threshold above",
+            "Expression": "Brightness < 200",
+            "SensorNames": [
+                "HM_520B89"
+            ]
         }
     ]
 }
