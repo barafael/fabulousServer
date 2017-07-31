@@ -128,6 +128,13 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
         return logs.iterator();
     }
 
+    public void setEventList(EventList list) {
+        if (list == null) {
+            return;
+        }
+        this.calendarEvents = list;
+    }
+
     /**
      * Returns whether any of the rooms are permitted to be accessed with the given permissions.
      *
@@ -249,11 +256,5 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      */
     public List<RuleSnapshot> getSnapshots() {
         return snapshots;
-    }
-
-    public void setEventList(EventList list) {
-        if (list != null) {
-            this.calendarEvents = list;
-        }
     }
 }

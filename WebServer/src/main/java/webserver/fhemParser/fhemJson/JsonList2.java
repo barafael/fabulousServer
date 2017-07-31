@@ -1,7 +1,6 @@
 package webserver.fhemParser.fhemJson;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.FHEMModel;
