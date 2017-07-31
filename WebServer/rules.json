@@ -17,106 +17,25 @@
             "Invisible": "true"
         },
         {
-            "Name": "Rule: The Lab should be dry",
+            "Name": "Windows closed during rain",
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
             "ViewPermissions": [
                 "user", "member", "admin"
             ],
+            "Priority": 100,
             "OkMessage": "The windows are closed or it is not raining",
             "RequiredOneOfTrue": ["There is no rain", "All windows are closed"],
             "Escalation": {
                 "120": ["user"],
-                "150": ["member", "user"],
-                "200": ["admin"]
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
             },
             "ErrorMessages": {
                 "120": "The windows are open during rain!",
                 "150": "The windows are still open and it is still raining!",
                 "200": "Hey, close the windows!!!"
-            }
-        },
-        {
-            "Name": "Rule: NeverTrue",
-            "Expression": "Reading contains noRainNoDry",
-            "ViewPermissions": [
-                "user", "member", "admin"
-            ],
-            "SensorNames": [
-                "HM_4F5DAA_Rain"
-            ],
-            "OkMessage": "all ok",
-            "ErrorMessages": {
-                "10": "this rule is not true",
-                "100": "this rule will never be true",
-                "500": "never ever will this rule be true, really."
-            },
-            "Escalation": {
-                "60": ["user"],
-                "200": ["member"],
-                "400": ["admin", "member"]
-            },
-            "Priority": 100,
-            "Important": "true"
-        },
-        {
-            "Name": "Five Minute Toggle Rule",
-            "Expression": "Sensor firstFive",
-            "SensorNames": [
-                "HM_56A1EC"
-            ],
-            "OkMessage": "First five minutes!",
-            "Priority": 100,
-            "ErrorMessages": {
-                "60": "First Minute",
-                "120": "Second Minute",
-                "180": "Third Minute",
-                "240": "Fourth Minute"
-            },
-            "Escalation": {
-                "60": ["user"],
-                "120": ["user", "member"],
-                "180": ["user", "member"],
-                "240": ["user", "member", "admin"]
-            }
-        },
-        {
-            "Name": "Two Minute Toggle Rule",
-            "Expression": "Sensor toggleEveryNMinutes 2",
-            "Priority": 50,
-            "OkMessage": "toggle 2!",
-            "ErrorMessages": {
-                "30": "30 secs",
-                "60": "First Minute",
-                "90": "90 seconds"
-            },
-            "SensorNames": [
-                "HM_56A1EC", "HM_4F5DAA_Rain"
-            ],
-            "Escalation": {
-                "30": ["user"],
-                "60": ["member"],
-                "90": ["admin"]
-            }
-        },
-        {
-            "Name": "Random Toggle Rule",
-            "Expression": "Sensor toggleRandom",
-            "Priority": 70,
-            "OkMessage": "toggle random!",
-            "ErrorMessages": {
-                "30": "30 secs",
-                "60": "First Minute",
-                "90": "90 seconds"
-            },
-            "SensorNames": [
-                "HM_56A1EC", "HM_4F5DAA_Rain"
-            ],
-            "Escalation": {
-                "30": ["user"],
-                "60": ["member"],
-                "90": ["admin"]
             }
         },
         {
@@ -128,12 +47,12 @@
             "Invisible": "true"
         },
         {
-            "Name": "IsWorkingHours general predicate",
+            "Name": "IsWorkingHours",
             "Expression": "Predicate isWorkingHours",
             "Invisible": "true"
         },
         {
-            "Name": "Rule: Door should be closed outside work hours",
+            "Name": "Door should be closed outside work hours",
             "SensorNames": [
                 "HM_56A86F"
             ],
@@ -142,21 +61,21 @@
             ],
             
             "OkMessage": "The door is closed or it is working hours",
-            "RequiredOneOfTrue": ["Door is closed", "IsWorkingHours general predicate"],
+            "RequiredOneOfTrue": ["Door is closed", "IsWorkingHours"],
             "Escalation": {
                 "120": ["user"],
                 "150": ["member", "user"],
-                "200": ["admin"]
+                "200": ["member", "user", "admin"]
             },
             "ErrorMessages": {
-                "120": "The door is open during non working hours.",
-                "150": "The door is still open during non woking hours!",
+                "120": "The door is open outside working hours.",
+                "150": "The door is still open outside working hours!",
                 "200": "Hey, close the door!!!"
             },
             "Priority": 100
         },
         {
-            "Name": "Rule: Windows should be closed outside work hours",
+            "Name": "Windows should be closed outside work hours",
             "SensorNames": [
                 "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
             ],
@@ -164,7 +83,51 @@
                 "user", "member", "admin"
             ],
             "OkMessage": "All Windows are closed or it is working hours",
-            "RequiredOneOfTrue": ["All windows are closed", "IsWorkingHours general predicate"],
+            "RequiredOneOfTrue": ["All windows are closed", "IsWorkingHours"],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["member", "user"],
+                "200": ["admin"]
+            },
+            "ErrorMessages": {
+                "120": "A window is open during non working hours.",
+                "150": "A window is still open during non woking hours!",
+                "200": "Hey, close the window!!!"
+            },
+            "Priority": 70
+        },
+        {
+            "Name": "Light 1 threshold",
+            "Expression": "Brightness < 150",
+            "SensorNames": [
+                "HM_521A72"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Light 2 threshold",
+            "Expression": "Brightness < 200",
+            "SensorNames": [
+                "HM_520B89"
+            ]
+        },
+        {
+            "Name": "There is no light in the lab",
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "RequiredAllTrue": ["Light 1 threshold above", "Light 2 threshold above"]
+        },
+        {
+            "Name": "Lights should be off outside work hours",
+            "SensorNames": [
+                "HM_520B89", "HM_521A72"
+            ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "OkMessage": "All Lights are off or it is working hours",
+            "RequiredOneOfTrue": ["There is no light in the lab", "IsWorkingHours"],
             "Escalation": {
                 "120": ["user"],
                 "150": ["member", "user"],
@@ -194,19 +157,100 @@
             "Priority": 200
         },
         {
-            "Name": "Light 1 threshold above",
-            "Expression": "Brightness < 150",
+            "Name": "Outer Right Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
-                "HM_521A72"
+                "HM_56A439"
             ],
-            "Invisible": "true"
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
         },
         {
-            "Name": "Light 2 threshold above",
-            "Expression": "Brightness < 200",
+            "Name": "Outer Right Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
-                "HM_520B89"
-            ]
+                "HM_56A439"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Center Right Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_56A27C"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Center Left Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_56A1E8"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Outer Left Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_56A1EC"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Raspberry pi disk usage",
+            "Expression": "DiskUsage < 80",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "pi_union"
+            ],
+            "OkMessage": "Disk Usage is ok",
+            "ErrorMessages": {
+                "60": "You could delete some logs. (/opt/fhem/logs)",
+                "3000": "You could delete some logs. (/opt/fhem/logs)"
+            }
+        },
+        {
+            "Name": "Raspberry pi temperature",
+            "Expression": "Temperature < 65",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "pi_union"
+            ],
+            "OkMessage": "Pi Temperature is ok",
+            "ErrorMessages": {
+                "300": "Pi is overheating",
+                "3000": "Pi is still hot for more than 5 minutes"
+            }
         }
     ]
 }
