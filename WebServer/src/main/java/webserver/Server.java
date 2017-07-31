@@ -254,7 +254,13 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void printRequestHeaders(RoutingContext routingContext) {
-        System.out.println("Request: "+routingContext.request().absoluteURI()+" | User: \""+routingContext.user().principal().getString(Username_PARAM)+"\"");
+        String username;
+        if (routingContext.user() == null) {
+            username = "registering NEW user";
+        } else {
+            username = "User: \"" + routingContext.user().principal().getString(Username_PARAM) + "\"";
+        }
+        System.out.println("Request: " + routingContext.request().absoluteURI() + " | " + username);
     }
 
     /**
