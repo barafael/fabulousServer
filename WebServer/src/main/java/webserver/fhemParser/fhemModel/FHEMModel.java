@@ -8,6 +8,7 @@ import webserver.fhemParser.fhemModel.room.FHEMRoom;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.ruleCheck.History;
 import webserver.ruleCheck.RuleSnapshot;
+import webserver.eventList.EventList;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,11 +31,12 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
     private final HashSet<FHEMRoom> rooms;
 
     /**
-     * A history of occurred events.
+     * A history of occurred rule events.
      */
     @SuppressWarnings("FieldCanBeLocal")
     private History history;
 
+    private EventList calendarEvents;
     /**
      * A collection of snapshots of violated rules.
      */
@@ -203,6 +205,7 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
 
     /**
      * Set the history of this model.
+     *
      * @param history the current sequence of events
      */
     public void setHistory(History history) {
@@ -246,5 +249,11 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      */
     public List<RuleSnapshot> getSnapshots() {
         return snapshots;
+    }
+
+    public void setEventList(EventList list) {
+        if (list != null) {
+            this.calendarEvents = list;
+        }
     }
 }

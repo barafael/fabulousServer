@@ -3,6 +3,7 @@ package webserver.fhemParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import webserver.Main;
+import webserver.eventList.EventList;
 import webserver.fhemParser.fhemConnection.FHEMClientModeCon;
 import webserver.fhemParser.fhemConnection.FHEMConnection;
 import webserver.fhemParser.fhemConnection.FHEMNotFoundException;
@@ -209,6 +210,7 @@ public final class FHEMParser {
             System.out.println("Made fhem model at: " + Duration.between(one, Instant.now()).toMillis());
         model = fhemModel;
         RuleChecker.getInstance().evaluate(model, pathToRules);
+        model.setEventList(new EventList("events.txt"));
         return Optional.ofNullable(fhemModel);
     }
 
