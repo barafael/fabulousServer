@@ -73,7 +73,7 @@ public final class RuleEvent {
                 rule.getWarningMessage(state.getLastStamp()),
                 state.getLastStamp(),
                 Instant.now().getEpochSecond(),
-                state.getAllViolatedSensors(),
+                state.getViolatedSensors(),
                 rule.getName(),
                 rule.getAllViewGroups()
         );

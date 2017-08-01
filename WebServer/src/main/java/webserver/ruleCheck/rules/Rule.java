@@ -300,10 +300,6 @@ public abstract class Rule {
         return specificEval(model);
     }
 
-    public Set<String> getViolatedSensors() {
-        return ruleState.getViolatedSensors();
-    }
-
     public Set<String> getAllViewGroups() {
         return viewPermissions;
     }
@@ -347,15 +343,5 @@ public abstract class Rule {
         Rule rule = (Rule) o;
 
         return name.equals(rule.name);
-    }
-
-    Set<Rule> getParents() {
-        Set<Rule> parents = new HashSet<>();
-        parents.addAll(orRules);
-        parents.addAll(andRules);
-        for (Rule r : parents) {
-            parents.addAll(r.getParents());
-        }
-        return parents;
     }
 }
