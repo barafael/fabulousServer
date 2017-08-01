@@ -59,7 +59,7 @@ public final class RuleSnapshot {
      */
     public RuleSnapshot(RuleState state, Rule rule) {
         this.ruleName = state.getRuleName();
-        this.violatedSensors = state.getViolatedSensors();
+        this.violatedSensors = state.getAllViolatedSensors();
         this.stamp = state.getLastStamp();
         message = rule.getWarningMessage(stamp);
         escalationPermissions = rule.getEscalationLevelViewGroups(stamp);
