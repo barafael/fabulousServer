@@ -141,9 +141,9 @@
             "Priority": 70
         },
         {
-            "Name": "CO2Limit",
+            "Name": "CO2 Level over 1000 (ppm)",
             "comment": "https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms",
-            "Expression": "CO2 < 800",
+            "Expression": "CO2 < 1000",
             "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
                 "netatmo_D70_ee_50_02_b8_20"
