@@ -39,7 +39,7 @@ public final class GeneralPredicate extends Rule {
         /*
         Input validation
         */
-        String[] tokens = expression.split(" ");
+        String[] tokens = expression.split("\\s+");
         if (tokens.length <= 1 || !tokens[0].equals("Predicate")) {
             System.err.println(
                     "Expression for general predicate rule must have at least"

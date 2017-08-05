@@ -143,7 +143,7 @@ public final class RuleParam {
             return RuleType.META;
         }
 
-        String[] tokens = expression.split(" ");
+        String[] tokens = expression.split("\\s+");
 
         if (tokens.length == 3) {
             if ("!<=>".contains(tokens[1])) {

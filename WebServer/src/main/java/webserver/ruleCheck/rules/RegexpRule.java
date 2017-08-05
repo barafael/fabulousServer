@@ -40,7 +40,7 @@ public final class RegexpRule extends Rule {
         /*
         Input validation
         */
-        String[] tokens = expression.split(" ");
+        String[] tokens = expression.split("\\s+");
         if (tokens.length != 3) {
             System.err.println("Expression for RegexRule must have three elements separated by a space.");
             /* Return false to draw attention to formulation error (?) */

@@ -328,7 +328,7 @@ public final class FHEMDevice {
             return new FHEMRoom("room_orphaned");
         }
         String rooms_str = rooms_opt.get();
-        String[] rooms = rooms_str.split(",");
+        String[] rooms = rooms_str.split("\\s*,\\s*");
         /* Only app rooms start with room_ */
         List<FHEMRoom> appRooms =
                 Arrays.stream(rooms).filter(roomname -> roomname.startsWith("room_"))

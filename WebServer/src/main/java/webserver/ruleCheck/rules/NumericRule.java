@@ -42,7 +42,7 @@ public final class NumericRule extends Rule {
         /*
         Input validation
         */
-        String[] tokens = expression.split(" ");
+        String[] tokens = expression.split("\\s+");
 
         if (tokens.length != 3) {
             System.err.println("Expression for numeric rule must have three elements separated by a space.");

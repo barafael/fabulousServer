@@ -90,7 +90,7 @@ public final class Timeserie {
                 ys = new ArrayList<>(samples.size() + 5);
                 double currentKey = 0;
                 for (String entry : samples) {
-                    String[] items = entry.split(" ");
+                    String[] items = entry.split("\\s+");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
                     long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();
@@ -133,7 +133,7 @@ public final class Timeserie {
                     if (entry.endsWith("%")) {
                         entry = entry.substring(0, entry.length() - 1);
                     }
-                    String[] items = entry.split(" ");
+                    String[] items = entry.split("\\s+");
 
                     LocalDateTime dateTime = LocalDateTime.parse(items[0], FHEM_DATE_FORMATTER);
                     long epochSecond = dateTime.atZone(ZONE_ID).toEpochSecond();

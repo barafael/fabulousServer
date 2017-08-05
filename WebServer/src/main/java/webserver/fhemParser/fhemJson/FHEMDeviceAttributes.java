@@ -144,7 +144,7 @@ class FHEMDeviceAttributes {
      */
     List<String> getPermissionList() {
         return Arrays.asList(
-                (permissions == null ? "" : permissions).split(","));
+                (permissions == null ? "" : permissions).split("\\s*,\\s*"));
     }
 
     /**
@@ -205,7 +205,7 @@ class FHEMDeviceAttributes {
         if (importantFields == null || importantFields.isEmpty()) {
             return new ArrayList<>();
         }
-        String[] fieldNames = importantFields.split(",");
+        String[] fieldNames = importantFields.split("\\s*,\\s*");
         return new ArrayList<>(Arrays.asList(fieldNames));
     }
 }

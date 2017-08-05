@@ -15,9 +15,9 @@ public final class CalendarEvent {
     public CalendarEvent(String line) throws IllegalArgumentException {
 
         try {
-            String[] dateAndDescription = line.split(";");
-            String firstDate = dateAndDescription[0].split(" ")[0];
-            String secondDate = dateAndDescription[0].split(" ")[1];
+            String[] dateAndDescription = line.split("\\s*;\\s*");
+            String firstDate = dateAndDescription[0].split("\\s+")[0];
+            String secondDate = dateAndDescription[0].split("\\s+")[1];
             this.description = dateAndDescription[1].trim();
 
             startStamp = parseStamp(firstDate);

@@ -47,7 +47,7 @@ public final class SensorPredicate extends Rule {
         /*
         Input validation
         */
-        String[] tokens = expression.split(" ");
+        String[] tokens = expression.split("\\s+");
         if (tokens.length <= 1 || !tokens[0].equals("Sensor")) {
             System.err.println(
                     "Expression for sensor predicate rule must have at least "
