@@ -1,6 +1,14 @@
 {
     "Rules": [
         {
+            "Name": "All windows are closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
+            ],
+            "Invisible": "true"
+        },
+        {
             "Name": "Outer Left Window is closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
@@ -144,7 +152,8 @@
                 "200": ["member", "user", "admin"]
             },
             "ErrorMessages": {
-                "120": "The door is The door is still open outside working hours!",
+                "120": "The door is open outside working hours.",
+                "150": "The door is still open outside working hours!",
                 "200": "Hey, close the door!!!"
             },
             "Priority": 100
@@ -246,20 +255,6 @@
             "Priority": 80
         },
         {
-            "Name": "Outer Right Window Battery",
-            "Expression": "Battery equals ok",
-            "ViewPermissions": ["user", "member", "admin"],
-            "SensorNames": [
-                "HM_56A439"
-            ],
-            "OkMessage": "battery is ok",
-            "ErrorMessages": {
-                "60": "Change the battery! AAA type.",
-                "3000": "Change the battery! AAA type."
-            },
-            "Priority": 80
-        },
-        {
             "Name": "Center Right Window Battery",
             "Expression": "Battery equals ok",
             "ViewPermissions": ["user", "member", "admin"],
@@ -298,6 +293,76 @@
             "ErrorMessages": {
                 "60": "Change the battery! AAA type.",
                 "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Door Sensor Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_56A86F"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Light 1 Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_521A72"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AA type.",
+                "3000": "Change the battery! AA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Light 2 Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_520B89"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AA type.",
+                "3000": "Change the battery! AA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "EISLab Innen Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "netatmo_M03_00_00_00_df_de"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "EISLab Außen Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "netatmo_M02_00_00_02_d6_c4"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! ??? type.",
+                "3000": "Change the battery! ??? type."
             },
             "Priority": 80
         },
