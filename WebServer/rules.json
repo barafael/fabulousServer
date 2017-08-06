@@ -1,10 +1,34 @@
 {
     "Rules": [
         {
-            "Name": "All windows are closed",
+            "Name": "Outer Left Window is closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
-                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
+                "HM_56A1EC"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Center Left Window is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A1E8"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Center Right Window is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A439"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Outer Right Window is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A27C"
             ],
             "Invisible": "true"
         },
@@ -26,7 +50,7 @@
             ],
             "Priority": 100,
             "OkMessage": "The windows are closed or it is not raining",
-            "RequiredOneOfTrue": ["There is no rain", "All windows are closed"],
+            "RequiredOneOfTrue": ["All windows are closed", "There is no rain"],
             "Escalation": {
                 "120": ["user"],
                 "150": ["user", "member"],
@@ -37,6 +61,58 @@
                 "150": "The windows are still open and it is still raining!",
                 "200": "Hey, close the windows!!!"
             }
+        },
+        {
+            "Name": "Outer Left Window is closed during rain",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A1EC"
+            ],
+            "ErrorMessages": {
+                "120": "Outer Left Window is open during rain!",
+                "150": "Outer Left Window is still open and it is still raining!",
+                "200": "Hey, close the Outer Left Window!!!"
+            },
+            "RequiredOneOfTrue": ["Outer Left Window is closed", "There is no rain"]
+        },
+        {
+            "Name": "Center Left Window is closed during rain",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A1E8"
+            ],
+            "ErrorMessages": {
+                "120": "Center Left Window is open during rain!",
+                "150": "Center Left Window is still open and it is still raining!",
+                "200": "Hey, close the Center Left Window!!!"
+            },
+            "RequiredOneOfTrue": ["Center Left Window is closed", "There is no rain"]
+        },
+        {
+            "Name": "Center Right Window is closed during rain",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A439"
+            ],
+            "ErrorMessages": {
+                "120": "Center Right Window is open during rain!",
+                "150": "Center Right Window is still open and it is still raining!",
+                "200": "Hey, close the Center Right Window!!!"
+            },
+            "RequiredOneOfTrue": ["Center Right Window is closed", "There is no rain"]
+        },
+        {
+            "Name": "Outer Right Window is closed during rain",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_56A27C"
+            ],
+            "ErrorMessages": {
+                "120": "Outer Right Window is open during rain!",
+                "150": "Outer Right Window is still open and it is still raining!",
+                "200": "Hey, close the Outer Right Window!!!"
+            },
+            "RequiredOneOfTrue": ["Outer Right Window is closed", "There is no rain"]
         },
         {
             "Name": "Door is closed",
@@ -68,8 +144,7 @@
                 "200": ["member", "user", "admin"]
             },
             "ErrorMessages": {
-                "120": "The door is open outside working hours.",
-                "150": "The door is still open outside working hours!",
+                "120": "The door is The door is still open outside working hours!",
                 "200": "Hey, close the door!!!"
             },
             "Priority": 100
