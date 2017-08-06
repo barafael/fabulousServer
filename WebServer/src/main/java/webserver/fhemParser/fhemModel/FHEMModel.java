@@ -9,11 +9,15 @@ import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.ruleCheck.History;
 import webserver.ruleCheck.RuleSnapshot;
 import webserver.eventList.EventList;
+import webserver.ruleCheck.rules.Rule;
+import webserver.ruleCheck.rules.RuleInfo;
+import webserver.ruleCheck.rules.RuleState;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -256,5 +260,26 @@ public final class FHEMModel implements Iterable<FHEMRoom> {
      */
     public List<RuleSnapshot> getSnapshots() {
         return snapshots;
+    }
+
+    public void applyInfo(Map<String, RuleState> stateMap) {
+        for (Map.Entry<String, RuleState> entry : stateMap.entrySet()) {
+            RuleState state = entry.getValue();
+            Rule rule = state.getRule();
+            Set<FHEMSensor> violSensors = getSensorsByCollection(state.getViolatedSensors());
+            Set<FHEMSensor> passedSensors = getSensorsByCollection(state.getPassedSensors());
+            for (FHEMSensor sensor : violSensors) {
+                RuleInfo info = new RuleInfo(rule.getName(), false, rule.getViewPermissions(),
+                        rule.getWarningMessage(state.getLastStamp()),
+                        rule.getRelatedLogs(), rule.getPriority());
+                sensor.addRuleInfo(info);
+            }
+            for (FHEMSensor sensor : passedSensors) {
+                RuleInfo info = new RuleInfo(rule.getName(), true, rule.getViewPermissions(),
+                        rule.getOkMessage(),
+                        rule.getRelatedLogs(), rule.getPriority());
+                sensor.addRuleInfo(info);
+            }
+        }
     }
 }

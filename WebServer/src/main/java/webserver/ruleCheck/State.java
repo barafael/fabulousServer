@@ -85,145 +85,18 @@ class State {
                 }
             }
         }
-
-        for (RuleState state : states) {
-
-            Rule rule = rules.stream().filter(r -> r.getName().equals(state.getRuleName())).findAny().get();
-
-            /* Ignore invisible rules and general predicates, which both should only serve as
-             * requisites for real rules.
-             */
-            if (!rule.isVisible() || rule instanceof GeneralPredicate) {
-                continue;
-            }
-
-            Set<FHEMSensor> passedSensors = model.getSensorsByCollection(state.getPassedSensors());
-
-            if (!stateMap.containsKey(rule.getName())) {
-                stateMap.put(rule.getName(), state);
-                continue;
-            }
-
-            for (FHEMSensor sensor : passedSensors) {
-                if (!infoMap.containsKey(sensor.getName())) {
-                    Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
-                    newSensorMap.put(rule, new RuleInfo(
-                            rule.getName(),
-                            true,
-                            rule.getViewPermissions(),
-                            rule.getOkMessage(),
-                            rule.getRelatedLogs(),
-                            rule.getPriority()
-                    ));
-                    infoMap.put(sensor.getName(), newSensorMap);
-                    continue;
-                }
-
-                Map<Rule, RuleInfo> sensorRules = infoMap.get(sensor.getName());
-
-                if (!sensorRules.containsKey(rule)) {
-                    RuleInfo ruleInfo = new RuleInfo(
-                            rule.getName(),
-                            true,
-                            rule.getViewPermissions(),
-                            rule.getOkMessage(),
-                            rule.getRelatedLogs(),
-                            rule.getPriority()
-                    );
-                    sensorRules.put(rule, ruleInfo);
-                    continue;
-                }
-
-                RuleInfo ruleInfo = sensorRules.get(rule);
-                ruleInfo.setOk();
-                ruleInfo.setMessage(rule.getOkMessage());
-            }
-
-            Set<FHEMSensor> violatedSensors = model.getSensorsByCollection(state.getViolatedSensors());
-
-            for (FHEMSensor sensor : violatedSensors) {
-                if (!infoMap.containsKey(sensor.getName())) {
-                    Map<Rule, RuleInfo> newSensorMap = new HashMap<>();
-                    newSensorMap.put(rule, new RuleInfo(
-                            rule.getName(),
-                            false,
-                            rule.getViewPermissions(),
-                            rule.getWarningMessage(Instant.now().getEpochSecond()),
-                            rule.getRelatedLogs(),
-                            rule.getPriority()
-                    ));
-                    infoMap.put(sensor.getName(), newSensorMap);
-                    continue;
-                }
-
-                Map<Rule, RuleInfo> sensorRules = infoMap.get(sensor.getName());
-
-                if (!sensorRules.containsKey(rule)) {
-                    RuleInfo ruleInfo = new RuleInfo(
-                            rule.getName(),
-                            false,
-                            rule.getViewPermissions(),
-                            rule.getWarningMessage(Instant.now().getEpochSecond()),
-                            rule.getRelatedLogs(),
-                            rule.getPriority()
-                    );
-                    sensorRules.put(rule, ruleInfo);
-                    continue;
-                }
-
-                RuleInfo ruleInfo = sensorRules.get(rule);
-                ruleInfo.setNotOk();
-            }
-        }
         updateSnapshot(rules);
     }
 
-    /**
-     * Remove sensors which are not in the given FHEM model from the static state.
-     *
-     * @param model the model to use to check for sensors
-     */
-
-    private void prune(FHEMModel model) {
-        Set<String> sensorNames = infoMap.keySet();
-        sensorNames.removeIf(s -> !model.getSensorByName(s).isPresent());
-    }
-
-    /**
-     * Prune the infoMap, removing rules which are not present any more.
-     *
-     * @param rulesToKeep the new set of rules
-     */
-    public void prune(Set<Rule> rulesToKeep) {
-        Set<String> namesToKeep = rulesToKeep.stream().map(Rule::getName).collect(Collectors.toSet());
-        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : infoMap.entrySet()) {
-            Map<Rule, RuleInfo> rulesOfSensor = stringMapEntry.getValue();
-            for (Rule rule : rulesOfSensor.keySet()) {
-                if (!rulesToKeep.contains(rule)) {
-                    rulesOfSensor.remove(rule);
-                }
-            }
-        }
-    }
-
-    /**
+   /**
      * Attach RuleInfos to all sensors with current warning messages.
      *
      * @param model the model which should be annotated. RuleInfos will be added for the sensors.
      */
-    void apply(FHEMModel model) {
+    void apply(FHEMModel model, Set<Rule> rules) {
         //prune(model);
         model.setHistory(history);
-        /* Apply ruleinfos to sensors */
-        for (Map.Entry<String, Map<Rule, RuleInfo>> stringMapEntry : infoMap.entrySet()) {
-            FHEMSensor sensor = model.getSensorByName(stringMapEntry.getKey())
-                    /* Highly unlikely */
-                    .orElseThrow(() -> new RuntimeException("Sensor not found in model. " + stringMapEntry.getKey()));
-            Set<RuleInfo> shownInApp = stringMapEntry.getValue().keySet().stream().filter(Rule::isVisible)
-                    .map(rule -> stringMapEntry.getValue().get(rule)).collect(Collectors.toSet());
-            sensor.addRuleInfos(shownInApp);
-        }
-        /* Generate and add snapshots */
+        model.applyInfo(stateMap);
         model.addStateSnapshot(snapshots);
     }
 

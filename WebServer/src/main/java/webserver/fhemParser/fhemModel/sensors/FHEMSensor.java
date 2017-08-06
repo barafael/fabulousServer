@@ -227,21 +227,11 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         return Optional.empty();
     }
 
-    /**
-     * This method adds a set of ruleInfos to this sensor.
-     * It replaces whichever infos were there before.
-     *
-     * @param ruleInfos the set of ruleInfos which will replace the previous one.
-     */
-    public void addRuleInfos(Collection<RuleInfo> ruleInfos) {
-        passedRules.clear();
-        violatedRules.clear();
-        for (RuleInfo ruleInfo : ruleInfos) {
-            if (ruleInfo.isOk()) {
-                passedRules.add(ruleInfo);
-            } else {
-                violatedRules.add(ruleInfo);
-            }
+    public void addRuleInfo(RuleInfo info) {
+        if (info.isOk()) {
+            passedRules.add(info);
+        } else {
+            violatedRules.add(info);
         }
     }
 

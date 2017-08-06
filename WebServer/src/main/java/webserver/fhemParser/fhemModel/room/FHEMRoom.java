@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
+import webserver.ruleCheck.rules.RuleInfo;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -119,7 +120,9 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
                 for (FHEMFileLog log : sensor.getLogs()) {
                     newSensor.addLog(log);
                 }
-                newSensor.addRuleInfos(sensor.getRuleInfos());
+                for (RuleInfo info : sensor.getRuleInfos()) {
+                    newSensor.addRuleInfo(info);
+                }
             }
             newSensor.setIcon(union.getIcon());
             sensors.removeIf(s -> entry.getValue().contains(s));

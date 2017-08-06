@@ -98,7 +98,7 @@ public final class RuleChecker {
         Set<RuleState> states = rules.stream().map(rule -> rule.eval(model)).collect(Collectors.toSet());
         //fhemState.prune(rules);
         fhemState.update(states, rules, model);
-        fhemState.apply(model);
+        fhemState.apply(model, rules);
     }
 
     /**

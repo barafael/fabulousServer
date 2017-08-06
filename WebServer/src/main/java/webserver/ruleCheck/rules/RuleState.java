@@ -32,6 +32,7 @@ public final class RuleState {
      * Whether the corresponding rule was ok.
      */
     private final boolean isOk;
+    private final Rule rule;
 
     private long stamp;
 
@@ -44,6 +45,7 @@ public final class RuleState {
      * @param violatedSensors the violated sensors
      */
     RuleState(Rule rule, Set<FHEMSensor> passedSensors, Set<FHEMSensor> violatedSensors) {
+        this.rule = rule;
         this.ruleName = rule.getName();
         this.passedSensors = passedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
         this.violatedSensors = violatedSensors.stream().map(FHEMSensor::getName).collect(Collectors.toSet());
@@ -62,6 +64,7 @@ public final class RuleState {
      * @param generalPredicate the general predicate which was evaluated
      */
     public RuleState(boolean ruleOK, GeneralPredicate generalPredicate) {
+        this.rule = generalPredicate;
         isOk = ruleOK;
         this.ruleName = generalPredicate.getName();
         passedSensors = new HashSet<>();
@@ -79,11 +82,16 @@ public final class RuleState {
      * @param metaPredicate the meta predicate which was evaluated
      */
     public RuleState(boolean ruleOK, Meta metaPredicate) {
+        this.rule = metaPredicate;
         isOk = ruleOK;
         this.ruleName = metaPredicate.getName();
         passedSensors = new HashSet<>();
         violatedSensors = new HashSet<>();
         stamp = Instant.now().getEpochSecond();
+    }
+
+    public Rule getRule() {
+        return rule;
     }
 
     public Set<String> getPassedSensors() {
