@@ -391,6 +391,33 @@
                 "300": "Pi is overheating",
                 "3000": "Pi is still hot for more than 5 minutes"
             }
+        },
+        {
+            "Name": "Lasercutter is off",
+            "Expression": "Power < 65",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_52CB59_Pwr"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "It is cool enough to operate the lasercutter",
+            "Expression": "Temperature < 35",
+            "SensorNames": [
+                "netatmo_D70_ee_50_02_b8_20"
+            ],
+            "Invisible": "true"
+        },
+        {
+            "Name": "Don't operate Lasercutter when it is too hot",
+            "RequiredOneOfTrue": ["Lasercutter is off", "It is cool enough to operate the lasercutter"],
+            "ViewPermissions": ["user", "member", "admin"],
+            "OkMessage": "Temperature is ok or lasercutter is off",
+            "ErrorMessages": {
+                "60": "It is too hot to operate the lasercutter!",
+                "3000": "It is still too hot to operate the lasercutter!"
+            }
         }
     ]
 }
