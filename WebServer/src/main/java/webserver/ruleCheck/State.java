@@ -28,7 +28,6 @@ class State {
      * (the sensor may or may not change, but the name will stay the same or be
      * {@link webserver.ruleCheck.State#prune(FHEMModel) pruned}).
      */
-    private final Map<String, Map<Rule, RuleInfo>> infoMap = new HashMap<>();
     private final Map<String, RuleState> stateMap = new HashMap<>();
     private History history = new History();
     private List<RuleSnapshot> snapshots = new ArrayList<>();
@@ -121,7 +120,6 @@ class State {
      */
     void clear() {
         stateMap.clear();
-        infoMap.clear();
         history.clear();
         snapshots.clear();
     }
