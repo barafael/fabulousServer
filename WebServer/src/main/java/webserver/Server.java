@@ -417,8 +417,6 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getModel(RoutingContext routingContext) {
-        printRequestHeaders(routingContext);
-
         final JsonObject user = routingContext.user().principal();
         Future<List<String>> permissionsFuture = Future.future();
         getListOfPermissions(user, permissionsFuture);
@@ -466,7 +464,6 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getPermissions(RoutingContext routingContext) {
-        printRequestHeaders(routingContext);
         final JsonObject user = routingContext.user().principal();
         Future<List<String>> permissionsFuture = Future.future();
         getListOfPermissions(user, permissionsFuture);
