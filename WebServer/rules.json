@@ -361,8 +361,8 @@
             ],
             "OkMessage": "battery is ok",
             "ErrorMessages": {
-                "60": "Change the battery! ??? type.",
-                "3000": "Change the battery! ??? type."
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
             },
             "Priority": 80
         },
