@@ -16,28 +16,28 @@ public final class RuleEvent {
     /**
      * The message for this rule, to be shown in the frontend.
      */
-    private String message;
+    private final String message;
     /**
      * The time of violation at which this event started.
      */
-    private long startTime;
+    private final long startTime;
     /**
      * The time at which the rule violation was resolved.
      */
-    private long endTime;
+    private final long endTime;
     /**
      * The names of the sensors which were violating the rule in the end.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private Set<String> sensors;
+    private final Set<String> sensors;
     /**
      * The name of the violated rule.
      */
-    private String ruleName;
+    private final String ruleName;
     /**
      * The groups to which this event should be shown.
      */
-    private transient Set<String> groups;
+    private final transient Set<String> groups;
 
     /**
      * Private constructor which constructs a ruleevent field-by-field.

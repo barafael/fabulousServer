@@ -20,7 +20,7 @@ public final class History {
      * Linked list because when the list is full old events have to be removed
      * This might cause reallocation with other list types.
      */
-    private List<RuleEvent> events;
+    private final List<RuleEvent> events;
 
     public History() {
         this.events = new LinkedList<>();
