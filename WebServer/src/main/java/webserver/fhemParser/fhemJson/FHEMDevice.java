@@ -104,6 +104,10 @@ public final class FHEMDevice {
                     sensor.addMeta("Temperature", reading.substring(13) + "°C");
                 } else if (reading.startsWith("Disk_Usage: ")) {
                     sensor.addMeta("DiskUsage", reading.substring(12));
+                } else if (sensor.getName().endsWith("Pwr")) {
+                    System.out.println("Power sensor: " + sensor.getName());
+                    System.out.println("Adding power meter key.");
+                    sensor.addMeta("PowerMeter", reading);
                 } else if (!reading.equals("???") && !reading.matches("([^:]+:){2,}.*")) {
                     sensor.addMeta("Reading", reading);
                 }
