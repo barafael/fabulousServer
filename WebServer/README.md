@@ -5,8 +5,9 @@ Server program for viewing and controlling the lab status
 ## Prerequisites
 
 * Gradle (v3.4.1) will pull all compile and runtime dependencies as defined in fabulousServer/WebServer/build.gradle.
-* java (1.8.0) or greater.
+* java (1.8.0 or greater)
 * OracleJRE (if running on Raspberry Pi).
+* MySQL (v14.14 or greater)
 
 ## Compilation and Build Targets
 
@@ -17,9 +18,15 @@ Main build target in `fabulousServer/WebServer/build.gradle` is `fatJar`. This w
 `export FHEMMOCKDIR=/tmp` should be in your `.bashrc` or equivalent. Adjust the path to a suitable location.
 The scripts in [Pulling and Pushing Content to the Host](#pullPush) will use this variable too.
 
+## MySQL setup
+
+`createMySQL` contains all SQL commands to set up the needed database structure.
+It also contains a set of dummy data. 
+
 ## Network and Server Setup
 
-// TODO
+`Main.java` contains the default HOST and PORT configuration for the server.
+The server unit tests emulate an client. The HOST and PORT variables have to be the same here.
 
 ## Pulling and Pushing Content to the Host<a name="pullPush"></a>
 

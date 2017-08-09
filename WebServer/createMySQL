@@ -1,3 +1,13 @@
+#in /etc/my.cnf insert:
+#[mysqld]
+#default-time-zone = '+02:00'
+
+#restart service:
+#sudo systemctl  restart mysql.service
+
+
+
+# sql setup
 CREATE DATABASE fhem_userdata;
 USE fhem_userdata;
 
@@ -10,15 +20,18 @@ CREATE TABLE `USER` (
 );
 ALTER TABLE USER ADD CONSTRAINT `pk_username` PRIMARY KEY (username);
 
+
 CREATE TABLE `ROLES` (
   `rolename` VARCHAR(255) NOT NULL
 );
 ALTER TABLE ROLES ADD CONSTRAINT `pk_roles` PRIMARY KEY (rolename);
 
+
 CREATE TABLE `PERMS` (
   `permname` VARCHAR(255) NOT NULL
 );
 ALTER TABLE PERMS ADD CONSTRAINT `pk_perms` PRIMARY KEY (permname);
+
 
 CREATE TABLE `ROLE_PERM` (
   `perm` VARCHAR(255) NOT NULL,
@@ -34,7 +47,6 @@ CREATE TABLE `USER_ROLE` (
 ALTER TABLE USER_ROLE ADD CONSTRAINT `pk_user_role` PRIMARY KEY (role,user);
 
 
-
 ALTER TABLE USER_ROLE ADD CONSTRAINT fk_user FOREIGN KEY (user) REFERENCES USER(username);
 ALTER TABLE USER_ROLE ADD CONSTRAINT fk_role FOREIGN KEY (role) REFERENCES ROLES(rolename);
 
@@ -43,6 +55,21 @@ ALTER TABLE ROLE_PERM ADD CONSTRAINT fk_perm FOREIGN KEY (perm) REFERENCES PERMS
 ALTER TABLE ROLE_PERM ADD CONSTRAINT fk_perm_to_role FOREIGN KEY (role) REFERENCES ROLES(rolename);
 
 
+
+CREATE USER java IDENTIFIED BY '<somepassword>';
+UPDATE mysql.user SET Host='localhost' WHERE User='java';
+
+GRANT ALL PRIVILEGES ON fhem_userdata.* TO 'java'@'localhost';
+
+FLUSH PRIVILEGES;
+
+SET GLOBAL time_zone = '+02:00';
+
+
+
+
+
+# dummy data
 INSERT INTO fhem_userdata.USER VALUES ('hans','180675998BC6C8B287A50326F09CC97DCACA40D21598EBCB47076CF4A849D6031034B489BD4DEDC68BA492F3DF2CA5B49631D490DFFD8B05326CA66BE92764E8','475343BDC2B7D71F688D2D0383A94627869D6FC581E48BC1358F9C877F274A50','Hans','Hut');
 INSERT INTO fhem_userdata.USER VALUES ('peter','1E5BB3E45EF750DEBC9D775881B4A23BCB84EFAA5D3354E4EDE25E6948406AF49755D6693C4383006A6D7C205684489274706AF921DC190911EBFBC14A91F46C','1BD9F5276F89A0DD888D9451D15F17D717409CF10225B4B4F7846A3503320F1E','Peter','Lustig');
 
@@ -91,28 +118,5 @@ INSERT INTO fhem_userdata.ROLE_PERM VALUES ('S_Licht','user');
 
 INSERT INTO fhem_userdata.USER_ROLE VALUE ('admin','hans');
 INSERT INTO fhem_userdata.USER_ROLE VALUE ('user','peter');
-
-
-
-
-
-
-
-CREATE USER java IDENTIFIED BY 'ialsevlhdakkyllosnmnilk';
-UPDATE mysql.user SET Host='localhost' WHERE User='java';
-
-GRANT ALL PRIVILEGES ON fhem_userdata.* TO 'java'@'localhost';
-
-FLUSH PRIVILEGES;
-
-SET GLOBAL time_zone = '+02:00';
-
-
-in /etc/my.cnf: 
-[mysqld]
-default-time-zone = '+02:00'
-
-sudo systemctl	restart mysql.service
-
 
 
