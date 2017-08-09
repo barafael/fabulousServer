@@ -413,7 +413,7 @@ public class RuleCheckerTest {
     public void testWindowOpenDuringRain() {
         Optional<String> json_opt = FHEMParser.getInstance()
                 .getFHEMModelJSON(Arrays.asList(
-                        "insufficientPermission", "permission1", "S_Regen"), Collections.emptyList(), "jsonRules/windowsOpenDuringRain.json");
+                        "insufficientPermission", "permission1", "S_Regen"), Collections.singletonList("user"), "jsonRules/windowsOpenDuringRain.json");
         assert json_opt.isPresent();
         String json = json_opt.get();
 

@@ -3,7 +3,7 @@
         {
             "Name": "PermissionTests",
             "Expression": "Reading matches dry|rain",
-            "ViewPermissions": ["alwaysTruePermission"],
+            "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
                 "HM_4F5DAA_Rain"
             ],
