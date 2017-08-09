@@ -72,10 +72,17 @@
         },
         {
             "Name": "Outer Left Window is closed during rain",
-            "Expression": "Reading equals closed",
             "SensorNames": [
                 "HM_56A1EC"
             ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
             "ErrorMessages": {
                 "120": "Outer Left Window is open during rain!",
                 "150": "Outer Left Window is still open and it is still raining!",
@@ -85,23 +92,37 @@
         },
         {
             "Name": "Center Left Window is closed during rain",
-            "Expression": "Reading equals closed",
             "SensorNames": [
                 "HM_56A1E8"
             ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
             "ErrorMessages": {
                 "120": "Center Left Window is open during rain!",
                 "150": "Center Left Window is still open and it is still raining!",
                 "200": "Hey, close the Center Left Window!!!"
             },
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
             "RequiredOneOfTrue": ["Center Left Window is closed", "There is no rain"]
         },
         {
             "Name": "Center Right Window is closed during rain",
-            "Expression": "Reading equals closed",
             "SensorNames": [
                 "HM_56A439"
             ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
             "ErrorMessages": {
                 "120": "Center Right Window is open during rain!",
                 "150": "Center Right Window is still open and it is still raining!",
@@ -111,10 +132,17 @@
         },
         {
             "Name": "Outer Right Window is closed during rain",
-            "Expression": "Reading equals closed",
             "SensorNames": [
                 "HM_56A27C"
             ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
             "ErrorMessages": {
                 "120": "Outer Right Window is open during rain!",
                 "150": "Outer Right Window is still open and it is still raining!",
@@ -143,7 +171,6 @@
             "ViewPermissions": [
                 "user", "member", "admin"
             ],
-            
             "OkMessage": "The door is closed or it is working hours",
             "RequiredOneOfTrue": ["Door is closed", "IsWorkingHours"],
             "Escalation": {
