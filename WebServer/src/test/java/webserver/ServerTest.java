@@ -52,7 +52,7 @@ public class ServerTest {
                         async.complete();
                     });
                     testContext.assertEquals(200, ans.statusCode());
-                })//TODO add png file
+                })
                 .end();
     }
 

@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  *
  * @author Rafael
  */
-//TODO before final: privatize this, only public for testing
 public final class Timeserie {
     /**
      * A formatter used to parse the FHEM date format.

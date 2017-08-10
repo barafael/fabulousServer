@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Rafael
  */
-//TODO before final: privatize this, only public for testing
 final class Coordinates {
     /**
      * A coordinate in x between 0 (inclusive) and 100 (inclusive).

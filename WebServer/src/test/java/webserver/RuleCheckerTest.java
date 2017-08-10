@@ -379,7 +379,6 @@ public class RuleCheckerTest {
     public void testRulePermissionsOnlyRule() {
         ArrayList<String> groups = new ArrayList<>(Arrays.asList("user", "member", "admin"));
         Optional<String> json_opt = FHEMParser.getInstance().getFHEMModelJSON(Arrays.asList(
-                //TODO make complex again with precondition
                 "permission1", "S_CO2Regel", "S_Regenregel"), groups, "jsonRules/complexPermissionsRule.json");
         assert json_opt.isPresent();
         String json = json_opt.get();

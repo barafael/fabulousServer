@@ -32,8 +32,7 @@ public final class RuleParamCollection {
     private final Set<RuleParam> ruleParams = new HashSet<>();
 
     /**
-     * TODO: Suppress direct creation
-     * Currently open for unit tests
+     * public for unit tests
      * Constructs a param collection.
      *
      * @param ruleParam a varargs list of rule parameters

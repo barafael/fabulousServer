@@ -111,7 +111,6 @@ public final class RuleChecker {
      * @throws JsonSyntaxException if the syntax of the rules file was incorrect json
      */
     private RuleParamCollection loadRuleParams(String path) throws IOException, JsonSyntaxException {
-        /* TODO add translations for rules? */
         String content = new String(Files.readAllBytes(Paths.get(path)));
         return RuleParamCollection.fromJson(content);
     }
