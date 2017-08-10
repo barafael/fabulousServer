@@ -159,14 +159,15 @@ public final class FHEMParser {
         String jsonList2_str = "";
         if (mock) {
             /* Mock jsonlist2! */
-            Optional<String> mockdir_opt = FHEMUtils.getGlobVar("FHEMMOCKDIR");
-            if (!mockdir_opt.isPresent()) {
+            String path = FHEMUtils.getGlobVar("FHEMMOCKDIR").orElse("/tmp/");
+            /* if (!mockdir_opt.isPresent()) {
                 System.err.println("You might have to set the FHEMMOCKDIR variable in your profile!");
                 return Optional.empty();
             }
             String path = mockdir_opt.get();
+            */
             try {
-                jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "jsonList2.json")));
+                jsonList2_str = new String(Files.readAllBytes(Paths.get(path + "/jsonList2.json")));
             } catch (IOException e) {
                 System.err.println("FHEM might not be running or jsonList2 might not be accessible.");
                 System.err.println(
