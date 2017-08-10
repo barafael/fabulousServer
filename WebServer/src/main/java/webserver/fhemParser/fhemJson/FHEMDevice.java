@@ -95,8 +95,7 @@ public final class FHEMDevice {
         //sub_opt.ifPresent(s ->
         //        sensor.addMeta("Subtype", s));
         Optional<String> reading_opt = internals.getState();
-        if (reading_opt.isPresent()) {
-            String reading = reading_opt.get();
+        reading_opt.ifPresent(reading -> {
             Map<String, String> map = readings.getReadings();
             if (!map.values().contains(reading)) {
                 if (reading.startsWith("Usage: ")) {
@@ -113,7 +112,7 @@ public final class FHEMDevice {
                     sensor.addMeta("Reading", reading);
                 }
             }
-        }
+        });
         //sensor.addMeta("Type", internals.getType().orElse("Not supplied"));
         //sensor.addMeta("SubType", internals.getType().orElse("Not supplied"));
         readings.getReadings().forEach(sensor::addMeta);

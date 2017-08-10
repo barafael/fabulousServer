@@ -21,12 +21,10 @@ class State {
     /**
      * Map a sensor name to the rules it passes or violates.
      * The key is a string because the model may reload at any moment
-     * (the sensor may or may not change, but the name will stay the same or be
-     * {@link webserver.ruleCheck.State#prune(FHEMModel) pruned}).
      */
     private final Map<String, RuleState> stateMap = new HashMap<>();
-    private History history = new History();
-    private List<RuleSnapshot> snapshots = new ArrayList<>();
+    private final History history = new History();
+    private final List<RuleSnapshot> snapshots = new ArrayList<>();
 
     /**
      * Update the static state with new results from an evaluation.
