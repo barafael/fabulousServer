@@ -67,29 +67,28 @@ class FHEMDeviceAttributes {
      * The alias defined in the custom FHEM userattr.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private final String alias = "NoAlias";
+    private String alias = "NoAlias";
 
     /**
      * The german alias defined in the custom FHEM userattr.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private final String de_alias = "NoDeAlias";
+    private String de_alias = "NoDeAlias";
     /**
      * The english alias defined in the custom FHEM userattr.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private final String en_alias = "NoEnAlias";
+    private String en_alias = "NoEnAlias";
     /**
      * The arabic alias defined in the custom FHEM userattr.
      */
-    @SuppressWarnings("FieldCanBeLocal")
-    private final String ar_alias = "NoArAlias";
+    private String ar_alias = "NoArAlias";
 
     /**
      * Important fields should be shown in the frontend main screen.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private final String importantFields = "";
+    private String importantFields = "";
 
     /**
      * A tag used to manually combine multiple fhem sensors into just one device.

@@ -103,8 +103,8 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
     /**
      * Fields in the metamap which should be shown in the frontend main screen.
      */
-    @SuppressWarnings({"FieldCanBeLocal", "MismatchedQueryAndUpdateOfCollection"})
-    private final List<String> importantFields = new ArrayList<>();
+    @SuppressWarnings("FieldCanBeLocal")
+    private List<String> importantFields = new ArrayList<>();
 
     /**
      * Construct a FHEMSensor.

@@ -25,7 +25,7 @@ public final class RuleSnapshot {
      * The latest message of this rule.
      */
     @SuppressWarnings("FieldCanBeLocal")
-    private final String message;
+    private String message;
 
     /**
      * True to mark this snapshot as important.
@@ -50,7 +50,7 @@ public final class RuleSnapshot {
     /**
      * The unix timestamp of the latest change.
      */
-    private final long stamp;
+    private long stamp;
 
     /**
      * Construct a snapshot from a state and a rule.
