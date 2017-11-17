@@ -4,7 +4,7 @@
             "Name": "All windows are closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
-                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
+                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C", "HM_577C49", "HM_577C6B"
             ],
             "Invisible": "true"
         },
@@ -37,6 +37,22 @@
             "Expression": "Reading equals closed",
             "SensorNames": [
                 "HM_56A27C"
+            ],
+            "Invisible": "true"
+        },
+	{
+            "Name": "Right Window is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_577C49"
+            ],
+            "Invisible": "true"
+        },
+	{
+            "Name": "Left Window is closed",
+            "Expression": "Reading equals closed",
+            "SensorNames": [
+                "HM_577C6B"
             ],
             "Invisible": "true"
         },
@@ -151,6 +167,46 @@
             "RequiredOneOfTrue": ["Outer Right Window is closed", "There is no rain"]
         },
         {
+            "Name": "Right Window is closed during rain",
+            "SensorNames": [
+                "HM_577C49"
+            ],
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
+            "ErrorMessages": {
+                "120": "Right Window is open during rain!",
+                "150": "Right Window is still open and it is still raining!",
+                "200": "Hey, close the Right Window!!!"
+            },
+            "RequiredOneOfTrue": ["Right Window is closed", "There is no rain"]
+        },
+        {
+            "Name": "Left Window is closed during rain",
+            "SensorNames": [
+                "HM_577C6B"
+            ],
+            "Escalation": {
+                "120": ["user"],
+                "150": ["user", "member"],
+                "200": ["user", "member", "admin"]
+            },
+            "ErrorMessages": {
+                "120": "Left Window is open during rain!",
+                "150": "Left Window is still open and it is still raining!",
+                "200": "Hey, close the Left Window!!!"
+            },
+            "ViewPermissions": [
+                "user", "member", "admin"
+            ],
+            "RequiredOneOfTrue": ["Left Window is closed", "There is no rain"]
+        },
+        {
             "Name": "Door is closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
@@ -188,7 +244,7 @@
         {
             "Name": "Windows should be closed outside work hours",
             "SensorNames": [
-                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C"
+                "HM_56A1EC", "HM_56A1E8", "HM_56A439", "HM_56A27C", "HM_577C49", "HM_577C6B"
             ],
             "ViewPermissions": [
                 "user", "member", "admin"
@@ -296,6 +352,20 @@
             "Priority": 80
         },
         {
+            "Name": "Right Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_577C49"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
             "Name": "Center Left Window Battery",
             "Expression": "Battery equals ok",
             "ViewPermissions": ["user", "member", "admin"],
@@ -315,6 +385,20 @@
             "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
                 "HM_56A1EC"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AAA type.",
+                "3000": "Change the battery! AAA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Left Window Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_577C6B"
             ],
             "OkMessage": "battery is ok",
             "ErrorMessages": {
@@ -357,6 +441,20 @@
             "ViewPermissions": ["user", "member", "admin"],
             "SensorNames": [
                 "HM_520B89"
+            ],
+            "OkMessage": "battery is ok",
+            "ErrorMessages": {
+                "60": "Change the battery! AA type.",
+                "3000": "Change the battery! AA type."
+            },
+            "Priority": 80
+        },
+        {
+            "Name": "Light Battery",
+            "Expression": "Battery equals ok",
+            "ViewPermissions": ["user", "member", "admin"],
+            "SensorNames": [
+                "HM_520BD2"
             ],
             "OkMessage": "battery is ok",
             "ErrorMessages": {

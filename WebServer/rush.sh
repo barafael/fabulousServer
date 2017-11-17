@@ -1,2 +1,2 @@
 #!/bin/sh
-rsync ./rules.json fhem:Server/rules.json
+rsync rules.json innoLabControl:Server/rules.json
