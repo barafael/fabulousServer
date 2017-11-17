@@ -16,6 +16,13 @@ import java.util.Optional;
  *         on 16.06.17.
  */
 public final class Main {
+    /*
+      Debug output flags
+    */
+    public static final boolean SERVER_DBG = false;
+    public static final boolean FHEM_DBG   = false;
+    public static final boolean PARSER_DBG = false;
+
     /**
      * The main vertx singleton instance.
      */

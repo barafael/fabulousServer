@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemModel.log;
 
 import com.google.gson.GsonBuilder;
+import webserver.Main;
 import webserver.fhemParser.fhemModel.serializers.RoundingDoubleSerializer;
 
 import java.io.BufferedReader;
@@ -102,8 +103,10 @@ public final class FHEMFileLog {
             return Optional.empty();
         }
         if (line == null) {
-            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
-            System.err.println("This can happen in the beginning of the month.");
+            if (Main.PARSER_DBG) {
+                System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+                System.err.println("This can happen in the beginning of the month.");
+            }
             return Optional.empty();
         }
         String unit = line.split(" ")[2];
@@ -143,8 +146,10 @@ public final class FHEMFileLog {
         }
 
         if (line == null) {
-            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
-            System.err.println("This can happen in the beginning of the month.");
+            if (Main.PARSER_DBG) {
+                System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+                System.err.println("This can happen in the beginning of the month.");
+            }
             return Optional.empty();
         }
         String name = line.split(" ")[1];
@@ -168,8 +173,10 @@ public final class FHEMFileLog {
             return LogType.UNKNOWN;
         }
         if (line == null) {
-            System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
-            System.err.println("This can happen in the beginning of the month.");
+            if (Main.PARSER_DBG) {
+                System.err.println("Could not read line in " + path + ". Presumably there are no entries in the log.");
+                System.err.println("This can happen in the beginning of the month.");
+            }
             return UNKNOWN;
         }
         if (line.contains("%")) {
