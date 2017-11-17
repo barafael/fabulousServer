@@ -28,7 +28,7 @@
             "Name": "Center Right Window is closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
-                "HM_56A439"
+                "HM_56A27C"
             ],
             "Invisible": "true"
         },
@@ -36,7 +36,7 @@
             "Name": "Outer Right Window is closed",
             "Expression": "Reading equals closed",
             "SensorNames": [
-                "HM_56A27C"
+                "HM_56A439"
             ],
             "Invisible": "true"
         },
