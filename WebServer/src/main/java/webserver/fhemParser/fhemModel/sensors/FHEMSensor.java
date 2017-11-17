@@ -162,7 +162,9 @@ public final class FHEMSensor implements Iterable<FHEMFileLog> {
         if (log.isSwitchable()) {
             switchable = true;
         }
-        fileLogs.add(log);
+        if(log.hasUsefulData){
+            fileLogs.add(log);
+        }
     }
 
     public String getName() {

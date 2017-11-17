@@ -64,6 +64,11 @@ public final class FHEMFileLog {
     private final transient boolean switchable;
 
     /**
+     * False if this filelog has no useful entries
+     */
+    public final transient boolean hasUsefulData;
+
+    /**
      * Constructs a filelog from data obtained in fhemjson.
      *
      * @param path        path to an timeseries logfile
@@ -79,6 +84,15 @@ public final class FHEMFileLog {
         this.sensorName = getSensorInFileLog(path).orElse("No sensor name given");
         this.type = guessLogtype(path);
         this.permissions = permissions;
+        this.hasUsefulData = checkForData();
+    }
+
+    /**
+     * Checks whether this filelog has useful entries
+     * @return False if this filelog has no useful entries
+     */
+    private boolean checkForData() {
+        return !((this.type == LogType.UNKNOWN) || this.unit.equals("No unit given") || this.sensorName.equals("No sensor name given"));
     }
 
     public String getName() {
