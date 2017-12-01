@@ -15,4 +15,5 @@ cat png.base64 | curl -v https://smartcontrol.innolab.eislab.fim.uni-passau.de/a
 GET mutex
 curl -v https://smartcontrol.innolab.eislab.fim.uni-passau.de/api/getEditMutex -H "Authorization:Basic YWRtaW5Ac21hcnRjb250cm9sLmRlOk1FUy1QcmFrdGlrdW1fMjAxNw=="
 
-
+GET release Mutex
+curl -v https://smartcontrol.innolab.eislab.fim.uni-passau.de/api/releaseEditMutex?mutexID=3 -H "Authorization:Basic YWRtaW5Ac21hcnRjb250cm9sLmRlOk1FUy1QcmFrdGlrdW1fMjAxNw=="

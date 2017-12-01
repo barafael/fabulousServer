@@ -1,6 +1,7 @@
 package webserver.fhemParser.fhemModel.room;
 
 import org.jetbrains.annotations.NotNull;
+import webserver.Main;
 import webserver.fhemParser.fhemModel.log.FHEMFileLog;
 import webserver.fhemParser.fhemModel.sensors.FHEMSensor;
 import webserver.fhemParser.fhemUtils.FHEMUtils;
@@ -196,10 +197,11 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * @param request_hash the hash of the caller's file
      * @return the roomplan, if there were changes. Empty otherwise.
      */
-    public Optional<String> getRoomplan(int request_hash) {
+    public Optional<String> getRoomplan(long request_hash) {
         try {
             String hash_str = new String(Files.readAllBytes(pathToHash));
-            int file_hash = Integer.parseInt(hash_str);
+            long file_hash = Long.parseLong(hash_str);
+            if (Main.SERVER_DBG) System.out.println("Hash-check: File: "+file_hash+" vs. Request"+request_hash);
             if (request_hash != file_hash) {
                 return Optional.of(new String(Base64.getEncoder().encode(Files.readAllBytes(pathToPlan))));
             } else {

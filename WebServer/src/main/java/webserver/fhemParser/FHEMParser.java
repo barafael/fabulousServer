@@ -294,7 +294,7 @@ public final class FHEMParser {
      * @param permissions the permissions of the caller
      * @return the roomplan, if caller's permissions suffice.
      */
-    public Optional<String> getRoomplan(String roomName, int hash, List<String> permissions) {
+    public Optional<String> getRoomplan(String roomName, long hash, List<String> permissions) {
         Optional<FHEMRoom> room_opt = model.getRoomByName(roomName);
         if (!room_opt.isPresent()) {
             return Optional.empty();
