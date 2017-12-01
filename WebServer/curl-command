@@ -6,3 +6,13 @@ curl -v localhost:8080/api/setRoomplan?room=room_fablab -H "Authorization:Basic 
 
 POST any file with user Hans
 echo "$(cat Schreibtisch/test.svg)" | curl -v localhost:8080/api/setRoomplan?room=room_FabLab -H "Authorization:Basic aGFuczpzb25uZTEyMw==" -H "Content-Type:application/json" --data-ascii @-
+
+
+
+POST file as admin
+cat png.base64 | curl -v https://smartcontrol.innolab.eislab.fim.uni-passau.de/api/setRoomplan?room=Testing -H "Authorization:Basic YWRtaW5Ac21hcnRjb250cm9sLmRlOk1FUy1QcmFrdGlrdW1fMjAxNw==" --data-ascii @-
+
+GET mutex
+curl -v https://smartcontrol.innolab.eislab.fim.uni-passau.de/api/getEditMutex -H "Authorization:Basic YWRtaW5Ac21hcnRjb250cm9sLmRlOk1FUy1QcmFrdGlrdW1fMjAxNw=="
+
+

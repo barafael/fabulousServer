@@ -8,18 +8,11 @@ import webserver.ruleCheck.rules.RuleInfo;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -225,15 +218,21 @@ public final class FHEMRoom implements Iterable<FHEMSensor> {
      * @return whether the operation succeeded
      */
     public boolean setRoomplan(String picture) {
-        try (BufferedWriter filewrite = Files.newBufferedWriter(pathToPlan);
-             BufferedWriter hashwrite = Files.newBufferedWriter(pathToHash)) {
-            byte[] file = Base64.getDecoder().decode(picture);
-            filewrite.write(java.util.Arrays.toString(file));
+        System.out.println("FHEMRoom: "+this.getName() + " setRoomplan");
+        try{
+            System.out.println("Writing Plan to: "+pathToPlan);
+            byte[] decodedImg = Base64.getDecoder().decode(picture.getBytes(StandardCharsets.UTF_8));
+            Files.write(pathToPlan, decodedImg);
+            System.out.print("Writing Hash to: "+pathToHash);
+            BufferedWriter hashwrite = Files.newBufferedWriter(pathToHash);
             hashwrite.write(String.valueOf(picture.hashCode()));
-        } catch (IOException e) {
+            hashwrite.close();
+        } catch (Exception e) {
+            System.err.println("Failed to save Roomplan!");
             e.printStackTrace();
             return false;
         }
+        System.out.println("finished setRoomplan with success");
         return true;
     }
 
