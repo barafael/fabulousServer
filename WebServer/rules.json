@@ -75,17 +75,11 @@
             "Priority": 100,
             "OkMessage": "The windows are closed or it is not raining",
             "RequiredOneOfTrue": ["All windows are closed", "There is no rain"],
-            "Escalation": {
-                "120": ["user"],
-                "150": ["user", "member"],
-                "200": ["user", "member", "admin"]
-            },
             "ErrorMessages": {
                 "120": "The windows are open during rain!",
                 "150": "The windows are still open and it is still raining!",
                 "200": "Hey, close the windows!!!"
-            },
-	    "Invisible": "true"
+            }
         },
         {
             "Name": "Outer Left Window is closed during rain",
