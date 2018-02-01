@@ -129,7 +129,7 @@
         {
             "Name": "Center Right Window is closed during rain",
             "SensorNames": [
-                "HM_56A439"
+                "HM_56A27C"
             ],
             "ViewPermissions": [
                 "user", "member", "admin"
@@ -149,7 +149,7 @@
         {
             "Name": "Outer Right Window is closed during rain",
             "SensorNames": [
-                "HM_56A27C"
+                "HM_56A439"
             ],
             "ViewPermissions": [
                 "user", "member", "admin"
