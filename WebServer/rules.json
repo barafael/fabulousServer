@@ -84,7 +84,8 @@
                 "120": "The windows are open during rain!",
                 "150": "The windows are still open and it is still raining!",
                 "200": "Hey, close the windows!!!"
-            }
+            },
+	    "Invisible": "true"
         },
         {
             "Name": "Outer Left Window is closed during rain",
