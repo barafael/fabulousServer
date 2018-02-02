@@ -67,6 +67,7 @@ public class Server extends AbstractVerticle {
     private static final String Id_PARAM = "ID";
     private static final String startTime_PARAM = "startTime";
     private static final String endTime_PARAM = "endTime";
+    private static final String newPassword_HEADER = "rawpw";
     private final FHEMParser parser = Main.PARSER;
     @SuppressWarnings("FieldCanBeLocal")
     private final int DATABASE_KEEP_ALIVE = 15 * 60 * 1000;
@@ -104,6 +105,7 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
         router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
+        router.route(HttpMethod.GET, "/api/updatePassword").handler(this::updatePassword);
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
@@ -147,6 +149,34 @@ public class Server extends AbstractVerticle {
                     });
                 }
             });
+        });
+    }
+
+    /**
+     * updates an users password in the database
+     *
+     * @param requestUser the authenticated user
+     * @param newPassword the new password to set
+     * @param next        Handler which gets called, whenever the database action has been finished
+     */
+    private void updateUserPassword(JsonObject requestUser, String newPassword, Handler<AsyncResult> next) {
+        final String username = requestUser.getString(Username_PARAM);
+        if (username == null) {
+            next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
+            return;
+        }
+        final String query = "UPDATE `USER` SET `password`=?, `password_salt`=? WHERE `username`=?";
+        final String salt = authProvider.generateSalt();
+        final String hash = authProvider.computeHash(newPassword, salt);
+
+        final JsonArray params = new JsonArray().add(hash).add(salt).add(username);
+        connection.updateWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                res.cause().printStackTrace();
+                next.handle(Future.failedFuture(res.cause()));
+            }
         });
     }
 
@@ -486,6 +516,30 @@ public class Server extends AbstractVerticle {
                 System.out.println(res.cause().getMessage());
             }
         });
+    }
+
+
+    /**
+     * handles the REST-Api call for Route /api/updatePassword
+     * needs header 'rawpw' containing the new password
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void updatePassword(RoutingContext routingContext) {
+        final JsonObject user = routingContext.user().principal();
+        final String newPassword = routingContext.request().headers().get(newPassword_HEADER);
+
+        if (newPassword == null || newPassword.isEmpty()) {
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+        updateUserPassword(user, newPassword, asyncResult -> {
+            if (asyncResult.succeeded()) {
+                routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+            } else {
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+            }
+        });
 
     }
 
@@ -613,7 +667,8 @@ public class Server extends AbstractVerticle {
         final long timerID = Long.parseLong(mutexID);
         vertx.executeBlocking(future -> {
             if (timerID != TimerofMutexID) {
-                if (Main.SERVER_DBG) System.out.println("Server not matching: timerID=" + timerID + ", TimerofMutexID=" + TimerofMutexID);
+                if (Main.SERVER_DBG)
+                    System.out.println("Server not matching: timerID=" + timerID + ", TimerofMutexID=" + TimerofMutexID);
                 routingContext.response()
                         .setStatusCode(Unavailable_HTTP_CODE)
                         .end(Unavailable_SERVER_RESPONSE);
