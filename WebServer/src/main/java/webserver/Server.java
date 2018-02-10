@@ -22,6 +22,7 @@ import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import webserver.fhemParser.FHEMParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -111,6 +112,7 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
         router.route(HttpMethod.GET, "/api/setActuator").handler(this::setActuator);
+        router.route(HttpMethod.GET, "/api/deleteAccount").handler(this::deleteAccount);
 
         /* Server */
         server = getVertx().createHttpServer();
@@ -312,6 +314,29 @@ public class Server extends AbstractVerticle {
                 next.handle(Future.succeededFuture());
             } else {
                 next.handle(Future.failedFuture(res.cause()));
+                res.cause().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * removes an registered user from database
+     *
+     * @param username the unique username
+     * @param next     Handler which gets called, whenever the database action has been finished
+     */
+    protected void deleteUserFromDatabase(String username, Handler<AsyncResult<Void>> next) {
+        final List<String> queries = new ArrayList<>();
+        queries.add("START TRANSACTION;");
+        queries.add("DELETE FROM `USER_ROLE` WHERE `user`="+"'"+username+"';");
+        queries.add("DELETE FROM `USER`  WHERE `username`="+"'"+username+"';");
+        queries.add("COMMIT;");
+        connection.batch(queries, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+                res.cause().printStackTrace();
             }
         });
     }
@@ -540,7 +565,23 @@ public class Server extends AbstractVerticle {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
             }
         });
+    }
 
+    /**
+     * handles the REST-Api call for Route /api/deleteAccount
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void deleteAccount(RoutingContext routingContext) {
+        final String username = routingContext.user().principal().getString(Username_PARAM);
+
+        deleteUserFromDatabase(username, asyncResult -> {
+            if (asyncResult.succeeded()) {
+                routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+            } else {
+                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+            }
+        });
     }
 
     /**
