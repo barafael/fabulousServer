@@ -154,13 +154,12 @@ public class Server extends AbstractVerticle {
     /**
      * updates an users password in the database
      *
-     * @param requestUser the authenticated user
+     * @param username    the username of the account
      * @param newPassword the new password to set
      * @param next        Handler which gets called, whenever the database action has been finished
      */
-    private void updateUserPassword(JsonObject requestUser, String newPassword, Handler<AsyncResult> next) {
-        final String username = requestUser.getString(Username_PARAM);
-        if (username == null) {
+    private void updateUserPassword(String username, String newPassword, Handler<AsyncResult> next) {
+        if (username == null || username.isEmpty()) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
             return;
         }
@@ -593,23 +592,43 @@ public class Server extends AbstractVerticle {
     /**
      * handles the REST-Api call for Route /api/updatePassword
      * needs header 'rawpw' containing the new password
+     * optional parameter username
      *
      * @param routingContext the context in a route given by the router
      */
     private void updatePassword(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printRequestHeaders(routingContext);
-        final JsonObject user = routingContext.user().principal();
+        final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
+        String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
         final String newPassword = routingContext.request().headers().get(newPassword_HEADER);
 
         if (newPassword == null || newPassword.isEmpty()) {
             routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
             return;
         }
-        updateUserPassword(user, newPassword, asyncResult -> {
+        if (toUpdateUserName == null || toUpdateUserName.isEmpty()) {
+            // update own account
+            toUpdateUserName = requestingUserName;
+        } else {
+            // check permissions
+            final boolean[] permitted = {false};
+            darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+                if (res.succeeded() && res.result()) {
+                    permitted[0] = true;
+                } else {
+                    routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                }
+            });
+            if (!permitted[0]) {
+                return;
+            }
+        }
+        updateUserPassword(toUpdateUserName, newPassword, asyncResult -> {
             if (asyncResult.succeeded()) {
                 routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                asyncResult.cause().printStackTrace();
             }
         });
     }
