@@ -271,7 +271,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void register(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final JsonObject body = routingContext.getBodyAsJson();
         final String username = body.getString(Username_PARAM, "");
         final String password = body.getString(Password_PARAM, "");
@@ -300,7 +300,7 @@ public class Server extends AbstractVerticle {
      *
      * @param routingContext the context in a route given by the router
      */
-    private void printRequestHeaders(RoutingContext routingContext) {
+    private void printDebugInfo(RoutingContext routingContext) {
         String username;
         if (routingContext.user() == null) {
             username = "registering NEW user";
@@ -365,7 +365,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void setRoomplan(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String room = routingContext.request().getParam(Room_PARAM);
         if (room == null || room.isEmpty()) {
             routingContext.response()
@@ -431,7 +431,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void setSensorPosition(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String sensorName = routingContext.request().getParam(SensorName_PARAM);
         final String coordX_string = routingContext.request().getParam(coordX_PARAM);
         final String coordY_string = routingContext.request().getParam(coordY_PARAM);
@@ -487,7 +487,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getModel(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final JsonObject user = routingContext.user().principal();
         Future<List<String>> permissionsFuture = Future.future();
         getListOfPermissions(user, permissionsFuture);
@@ -535,7 +535,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getPermissions(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final JsonObject user = routingContext.user().principal();
         Future<List<String>> permissionsFuture = Future.future();
         getListOfPermissions(user, permissionsFuture);
@@ -567,7 +567,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getUserlist(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
             if (res.succeeded() && res.result()) {
                 getListOfUsers(res2 -> {
@@ -597,7 +597,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void updatePassword(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
         String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
         final String newPassword = routingContext.request().headers().get(newPassword_HEADER);
@@ -642,7 +642,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void deleteAccount(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
         String toDeleteUserName = routingContext.request().getParam(Username_PARAM);
         if (toDeleteUserName == null || toDeleteUserName.isEmpty()) {
@@ -684,7 +684,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getRoomplan(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String room = routingContext.request().getParam(Room_PARAM);
         if (room == null || room.isEmpty()) {
             routingContext.response()
@@ -746,7 +746,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getEditMutex(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
             if (res.succeeded() && res.result()) {
                 vertx.executeBlocking(future -> {
@@ -786,7 +786,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void releaseEditMutex(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String mutexID = routingContext.request().getParam(MutexID_PARAM);
         if (mutexID == null || mutexID.isEmpty()) {
             routingContext.response()
@@ -835,7 +835,7 @@ public class Server extends AbstractVerticle {
      */
 
     private void setActuator(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String sensorName = routingContext.request().getParam(SensorName_PARAM);
         final String state_param = routingContext.request().getParam(State_PARAM);
         if (sensorName == null || sensorName.isEmpty()
@@ -885,7 +885,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getTimeSeries(RoutingContext routingContext) {
-        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String id_param = routingContext.request().getParam(Id_PARAM);
         final String startTime_param = routingContext.request().getParam(startTime_PARAM);
         final String endTime_param = routingContext.request().getParam(endTime_PARAM);
