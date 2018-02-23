@@ -536,6 +536,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getPermissions(RoutingContext routingContext) {
+        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
         final JsonObject user = routingContext.user().principal();
         Future<List<String>> permissionsFuture = Future.future();
         getListOfPermissions(user, permissionsFuture);
@@ -567,6 +568,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void getUserlist(RoutingContext routingContext) {
+        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
         darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
             if (res.succeeded() && res.result()) {
                 getListOfUsers(res2 -> {
@@ -595,6 +597,7 @@ public class Server extends AbstractVerticle {
      * @param routingContext the context in a route given by the router
      */
     private void updatePassword(RoutingContext routingContext) {
+        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
         final JsonObject user = routingContext.user().principal();
         final String newPassword = routingContext.request().headers().get(newPassword_HEADER);
 
@@ -613,17 +616,37 @@ public class Server extends AbstractVerticle {
 
     /**
      * handles the REST-Api call for Route /api/deleteAccount
+     * optional parameter username
      *
      * @param routingContext the context in a route given by the router
      */
     private void deleteAccount(RoutingContext routingContext) {
-        final String username = routingContext.user().principal().getString(Username_PARAM);
-
-        deleteUserFromDatabase(username, asyncResult -> {
+        if (Main.SERVER_DBG) printRequestHeaders(routingContext);
+        final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
+        String toDeleteUserName = routingContext.request().getParam(Username_PARAM);
+        if (toDeleteUserName == null || toDeleteUserName.isEmpty()) {
+            // delete own account
+            toDeleteUserName = requestingUserName;
+        } else {
+            // check permissions
+            final boolean[] permitted = {false};
+            darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+                if (res.succeeded() && res.result()) {
+                    permitted[0] = true;
+                } else {
+                    routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                }
+            });
+            if (!permitted[0]) {
+                return;
+            }
+        }
+        deleteUserFromDatabase(toDeleteUserName, asyncResult -> {
             if (asyncResult.succeeded()) {
                 routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
             } else {
                 routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                asyncResult.cause().printStackTrace();
             }
         });
     }
