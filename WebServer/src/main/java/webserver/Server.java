@@ -608,29 +608,31 @@ public class Server extends AbstractVerticle {
         }
         if (toUpdateUserName == null || toUpdateUserName.isEmpty()) {
             // update own account
-            toUpdateUserName = requestingUserName;
+            updateUserPassword(requestingUserName, newPassword, asyncResult -> {
+                if (asyncResult.succeeded()) {
+                    routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                } else {
+                    routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                    asyncResult.cause().printStackTrace();
+                }
+            });
         } else {
             // check permissions
-            final boolean[] permitted = {false};
             darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
                 if (res.succeeded() && res.result()) {
-                    permitted[0] = true;
+                    updateUserPassword(toUpdateUserName, newPassword, asyncResult -> {
+                        if (asyncResult.succeeded()) {
+                            routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                        } else {
+                            routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                            asyncResult.cause().printStackTrace();
+                        }
+                    });
                 } else {
                     routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                 }
             });
-            if (!permitted[0]) {
-                return;
-            }
         }
-        updateUserPassword(toUpdateUserName, newPassword, asyncResult -> {
-            if (asyncResult.succeeded()) {
-                routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
-            } else {
-                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                asyncResult.cause().printStackTrace();
-            }
-        });
     }
 
     /**
@@ -645,29 +647,30 @@ public class Server extends AbstractVerticle {
         String toDeleteUserName = routingContext.request().getParam(Username_PARAM);
         if (toDeleteUserName == null || toDeleteUserName.isEmpty()) {
             // delete own account
-            toDeleteUserName = requestingUserName;
+            deleteUserFromDatabase(requestingUserName, asyncResult -> {
+                if (asyncResult.succeeded()) {
+                    routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                } else {
+                    routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                    asyncResult.cause().printStackTrace();
+                }
+            });
         } else {
-            // check permissions
-            final boolean[] permitted = {false};
             darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
                 if (res.succeeded() && res.result()) {
-                    permitted[0] = true;
+                    deleteUserFromDatabase(toDeleteUserName, asyncResult -> {
+                        if (asyncResult.succeeded()) {
+                            routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                        } else {
+                            routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                            asyncResult.cause().printStackTrace();
+                        }
+                    });
                 } else {
                     routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                 }
             });
-            if (!permitted[0]) {
-                return;
-            }
         }
-        deleteUserFromDatabase(toDeleteUserName, asyncResult -> {
-            if (asyncResult.succeeded()) {
-                routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
-            } else {
-                routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                asyncResult.cause().printStackTrace();
-            }
-        });
     }
 
     /**
