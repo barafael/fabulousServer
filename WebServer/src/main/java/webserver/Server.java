@@ -1,11 +1,7 @@
 package webserver;
 
 import com.google.gson.Gson;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
@@ -106,6 +102,7 @@ public class Server extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
         router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
         router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
+        router.route(HttpMethod.GET, "/api/getUserlist").handler(this::getUserlist);
         router.route(HttpMethod.GET, "/api/updatePassword").handler(this::updatePassword);
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
@@ -232,6 +229,25 @@ public class Server extends AbstractVerticle {
         });
     }
 
+    /**
+     * lists all users with their user-, pre- and surnames
+     *
+     * @param next Handler which gets called, whenever the database action has been finished
+     */
+    private void getListOfUsers(Handler<AsyncResult<List>> next) {
+        final String query = "SELECT prename,surname,username FROM `USER`";
+        connection.query(query, res -> {
+            if (res.succeeded()) {
+                final ResultSet result = res.result();
+                List<Object> table = new ArrayList<>();
+                result.getResults().forEach(row -> table.add(row.getList()));
+                next.handle(Future.succeededFuture(table));
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+            }
+        });
+    }
+
     @Override
     public void stop() throws Exception {
         vertx.cancelTimer(Main.parserTimerID);
@@ -328,8 +344,8 @@ public class Server extends AbstractVerticle {
     protected void deleteUserFromDatabase(String username, Handler<AsyncResult<Void>> next) {
         final List<String> queries = new ArrayList<>();
         queries.add("START TRANSACTION;");
-        queries.add("DELETE FROM `USER_ROLE` WHERE `user`="+"'"+username+"';");
-        queries.add("DELETE FROM `USER`  WHERE `username`="+"'"+username+"';");
+        queries.add("DELETE FROM `USER_ROLE` WHERE `user`=" + "'" + username + "';");
+        queries.add("DELETE FROM `USER`  WHERE `username`=" + "'" + username + "';");
         queries.add("COMMIT;");
         connection.batch(queries, res -> {
             if (res.succeeded()) {
@@ -538,6 +554,34 @@ public class Server extends AbstractVerticle {
                         .end(answerString);
             } else {
                 routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                System.out.println(res.cause().getMessage());
+            }
+        });
+    }
+
+    /**
+     * handles the REST-Api call for Route /api/getUserlist
+     * lists all users with their user-, pre- and surname;
+     * which is returned as Json in the response body
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void getUserlist(RoutingContext routingContext) {
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
+                getListOfUsers(res2 -> {
+                    if (res2.succeeded()) {
+                        final String answerString = new Gson().toJson(res2.result());
+                        routingContext.response().setStatusCode(OK_HTTP_CODE)
+                                .putHeader(ContentType_HEADER, ContentType_VALUE)
+                                .end(answerString);
+                    } else {
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                        System.out.println(res2.cause().getMessage());
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
                 System.out.println(res.cause().getMessage());
             }
         });
