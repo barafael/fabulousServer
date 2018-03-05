@@ -133,7 +133,7 @@ public class Server extends AbstractVerticle {
 
     private void databaseKeepAlive() {
         DatabaseAliveTimer = vertx.setPeriodic(DATABASE_KEEP_ALIVE, id -> {
-            getListOfPermissions(new JsonObject().put(Username_PARAM, "noperms"), res -> {
+            getListOfPermissions("noperms", res -> {
                 if (!res.succeeded()) {
                     System.err.println("database connection died, trying to reconnect!");
                     /* reconnect Database  */
@@ -181,11 +181,10 @@ public class Server extends AbstractVerticle {
     /**
      * lists all permissions an user has from the database to a List&lt;String&gt;
      *
-     * @param user the user given by the RoutingContext on a route
-     * @param next Handler which gets called, whenever the database action has been finished
+     * @param username the username (email)
+     * @param next     Handler which gets called, whenever the database action has been finished
      */
-    private void getListOfPermissions(JsonObject user, Handler<AsyncResult<List<String>>> next) {
-        final String username = user.getString(Username_PARAM);
+    private void getListOfPermissions(String username, Handler<AsyncResult<List<String>>> next) {
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
             return;
@@ -206,11 +205,10 @@ public class Server extends AbstractVerticle {
     /**
      * lists all groups an user is participant from the database to a List&lt;String&gt;
      *
-     * @param user the user given by the RoutingContext on a route
-     * @param next Handler which gets called, whenever the database action has been finished
+     * @param username the username (email)
+     * @param next     Handler which gets called, whenever the database action has been finished
      */
-    private void getListOfGroups(JsonObject user, Handler<AsyncResult<List<String>>> next) {
-        final String username = user.getString(Username_PARAM);
+    private void getListOfGroups(String username, Handler<AsyncResult<List<String>>> next) {
         if (username == null) {
             next.handle(Future.failedFuture(new IllegalArgumentException("no username specified")));
             return;
@@ -412,7 +410,7 @@ public class Server extends AbstractVerticle {
      * @param resultHandler Handler which gets called, whenever the database action has been finished
      */
     private void darfErDas(User user, String permission, Handler<AsyncResult<Boolean>> resultHandler) {
-        getListOfPermissions(user.principal(), res -> {
+        getListOfPermissions(user.principal().getString(Username_PARAM), res -> {
             if (res.succeeded()) {
                 resultHandler.handle(Future.succeededFuture(res.result().contains(permission)));
             } else {
@@ -488,11 +486,11 @@ public class Server extends AbstractVerticle {
      */
     private void getModel(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printDebugInfo(routingContext);
-        final JsonObject user = routingContext.user().principal();
+        final String username = routingContext.user().principal().getString(Username_PARAM);
         Future<List<String>> permissionsFuture = Future.future();
-        getListOfPermissions(user, permissionsFuture);
+        getListOfPermissions(username, permissionsFuture);
         Future<List<String>> groupsFuture = Future.future();
-        getListOfGroups(user, groupsFuture);
+        getListOfGroups(username, groupsFuture);
         CompositeFuture.join(permissionsFuture, groupsFuture).setHandler(res -> {
             if (res.succeeded()) {
                 final List<String> permissions = res.result().resultAt(0);
@@ -536,11 +534,31 @@ public class Server extends AbstractVerticle {
      */
     private void getPermissions(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printDebugInfo(routingContext);
-        final JsonObject user = routingContext.user().principal();
+
+        //TODO check for query parameter "username"
+        final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
+        final String queryUserName = routingContext.request().getParam(Username_PARAM);
+
         Future<List<String>> permissionsFuture = Future.future();
-        getListOfPermissions(user, permissionsFuture);
         Future<List<String>> groupsFuture = Future.future();
-        getListOfGroups(user, groupsFuture);
+
+        if (queryUserName == null || queryUserName.isEmpty()) {
+            // read own account
+            getListOfPermissions(requestingUserName, permissionsFuture);
+            getListOfGroups(requestingUserName, groupsFuture);
+        } else {
+            // check permissions
+            darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+                if (res.succeeded() && res.result()) {
+                    getListOfPermissions(queryUserName, permissionsFuture);
+                    getListOfGroups(queryUserName, groupsFuture);
+                } else {
+                    permissionsFuture.fail(Unauthorized_SERVER_RESPONSE);
+                    groupsFuture.fail(Unauthorized_SERVER_RESPONSE);
+                }
+            });
+        }
+
         CompositeFuture.join(permissionsFuture, groupsFuture).setHandler(res -> {
             if (res.succeeded()) {
                 final List<String> permissions = res.result().resultAt(0);
@@ -553,8 +571,12 @@ public class Server extends AbstractVerticle {
                         .putHeader(ContentType_HEADER, ContentType_VALUE)
                         .end(answerString);
             } else {
-                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
-                System.out.println(res.cause().getMessage());
+                if (res.cause().getMessage().equals(Unauthorized_SERVER_RESPONSE)) {
+                    routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+                } else {
+                    routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                    System.out.println(res.cause().getMessage());
+                }
             }
         });
     }
@@ -599,7 +621,7 @@ public class Server extends AbstractVerticle {
     private void updatePassword(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
-        String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
+        final String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
         final String newPassword = routingContext.request().headers().get(newPassword_HEADER);
 
         if (newPassword == null || newPassword.isEmpty()) {
@@ -644,7 +666,7 @@ public class Server extends AbstractVerticle {
     private void deleteAccount(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printDebugInfo(routingContext);
         final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
-        String toDeleteUserName = routingContext.request().getParam(Username_PARAM);
+        final String toDeleteUserName = routingContext.request().getParam(Username_PARAM);
         if (toDeleteUserName == null || toDeleteUserName.isEmpty()) {
             // delete own account
             deleteUserFromDatabase(requestingUserName, asyncResult -> {
@@ -702,7 +724,7 @@ public class Server extends AbstractVerticle {
             hash = Long.parseLong(hash_string);
             hasHash = true;
         }
-        getListOfPermissions(routingContext.user().principal(), res -> {
+        getListOfPermissions(routingContext.user().principal().getString(Username_PARAM), res -> {
             if (res.succeeded()) {
                 final List<String> perm = res.result();
                 vertx.executeBlocking(future -> {
@@ -848,7 +870,7 @@ public class Server extends AbstractVerticle {
 
         final boolean state = Boolean.parseBoolean(state_param);
 
-        getListOfPermissions(routingContext.user().principal(), res -> {
+        getListOfPermissions(routingContext.user().principal().getString(Username_PARAM), res -> {
             if (res.succeeded()) {
                 List<String> perm = res.result();
                 vertx.executeBlocking(future -> {
@@ -909,7 +931,7 @@ public class Server extends AbstractVerticle {
             endTime = Long.parseLong(endTime_param);
             hasTargetTime = true;
         }
-        getListOfPermissions(routingContext.user().principal(), res -> {
+        getListOfPermissions(routingContext.user().principal().getString(Username_PARAM), res -> {
             if (res.succeeded()) {
                 vertx.executeBlocking(future -> {
                     List<String> perm = res.result();
