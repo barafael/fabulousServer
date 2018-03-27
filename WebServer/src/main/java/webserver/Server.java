@@ -333,6 +333,52 @@ public class Server extends AbstractVerticle {
     }
 
     /**
+     * modifies the groups a user is associated with in the database
+     *
+     * @param username the unique username of the user
+     * @param groups   list of groups to set
+     * @param next     Handler which gets called, whenever the database action has been finished
+     */
+    private void addGroupsForUserInDatabase(String username, List<String> groups, Handler<AsyncResult<List<Integer>>> next) {
+        final String query = "INSERT INTO `USER_ROLE` VALUES (?,?)";
+        final List<JsonArray> params = new ArrayList<>();
+        for (String group : groups) {
+            params.add(new JsonArray().add(group).add(username));
+        }
+        connection.batchWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+                res.cause().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * modifies the groups a user is associated with in the database
+     *
+     * @param username the unique username of the user
+     * @param groups   list of groups to set
+     * @param next     Handler which gets called, whenever the database action has been finished
+     */
+    private void removeGroupsFromUserInDatabase(String username, List<String> groups, Handler<AsyncResult<List<Integer>>> next) {
+        final String query = "DELETE FROM `USER_ROLE` WHERE `user`=? AND `role`=?";
+        final List<JsonArray> params = new ArrayList<>();
+        for (String group : groups) {
+            params.add(new JsonArray().add(username).add(group));
+        }
+        connection.batchWithParams(query, params, res -> {
+            if (res.succeeded()) {
+                next.handle(Future.succeededFuture());
+            } else {
+                next.handle(Future.failedFuture(res.cause()));
+                res.cause().printStackTrace();
+            }
+        });
+    }
+
+    /**
      * removes an registered user from database
      *
      * @param username the unique username
