@@ -18,10 +18,7 @@ import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import webserver.fhemParser.FHEMParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +48,7 @@ public class Server extends AbstractVerticle {
     private static final String ContentType_VALUE = "application/json";
     private static final String Edit_PERMISSION = "E_Änderung";
     private static final String Username_PARAM = "username";
+    private static final String groups_PARAM = "groups";
     private static final String MutexID_PARAM = MutexID_HEADER;
     private static final String Password_PARAM = "password";
     private static final String Prename_PARAM = "prename";
@@ -98,18 +96,20 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/api/*").handler(authHandler);
         router.route(HttpMethod.POST, "/register").handler(this::register);
-        router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
+        router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
+        router.route(HttpMethod.GET, "/api/user/groups/add").handler(this::addGroupsForUser);
+        router.route(HttpMethod.GET, "/api/user/groups/remove").handler(this::removeGroupsForUser);
+        router.route(HttpMethod.GET, "/api/deleteAccount").handler(this::deleteAccount);
+        router.route(HttpMethod.GET, "/api/updatePassword").handler(this::updatePassword);
+        router.route(HttpMethod.GET, "/api/getUserlist").handler(this::getUserlist);
         router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
         router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
-        router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
-        router.route(HttpMethod.GET, "/api/getUserlist").handler(this::getUserlist);
-        router.route(HttpMethod.GET, "/api/updatePassword").handler(this::updatePassword);
         router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
         router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
         router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
         router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
         router.route(HttpMethod.GET, "/api/setActuator").handler(this::setActuator);
-        router.route(HttpMethod.GET, "/api/deleteAccount").handler(this::deleteAccount);
+        router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
 
         /* Server */
         server = getVertx().createHttpServer();
@@ -658,6 +658,93 @@ public class Server extends AbstractVerticle {
         });
     }
 
+
+    /**
+     * handles the REST-Api call for Route /api/user/groups/add
+     * needs parameter username
+     * needs parameter groups ?groups=group1|group2|...
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void addGroupsForUser(RoutingContext routingContext) {
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
+        final String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
+        final String groupsParam = routingContext.request().getParam(groups_PARAM);
+        List<String> groups;
+        if (toUpdateUserName == null || toUpdateUserName.isEmpty()) {
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+        if (groupsParam == null || groupsParam.isEmpty()) {
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+            return;
+        } else {
+            groups = Arrays.asList(groupsParam.split("|"));
+            if (groups.isEmpty()) {
+                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                return;
+            }
+        }
+
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
+                addGroupsForUserInDatabase(toUpdateUserName, groups, asyncResult -> {
+                    if (asyncResult.succeeded()) {
+                        routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                    } else {
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                        asyncResult.cause().printStackTrace();
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+            }
+        });
+    }
+
+
+    /**
+     * handles the REST-Api call for Route /api/user/groups/remove
+     * needs parameter username
+     * needs parameter groups ?groups=group1|group2|...
+     *
+     * @param routingContext the context in a route given by the router
+     */
+    private void removeGroupsForUser(RoutingContext routingContext) {
+        if (Main.SERVER_DBG) printDebugInfo(routingContext);
+        final String toUpdateUserName = routingContext.request().getParam(Username_PARAM);
+        final String groupsParam = routingContext.request().getParam(groups_PARAM);
+        List<String> groups;
+        if (toUpdateUserName == null || toUpdateUserName.isEmpty()) {
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+            return;
+        }
+        if (groupsParam == null || groupsParam.isEmpty()) {
+            routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+            return;
+        } else {
+            groups = Arrays.asList(groupsParam.split("|"));
+            if (groups.isEmpty()) {
+                routingContext.response().setStatusCode(BadRequest_HTTP_CODE).end(BadRequest_SERVER_RESPONSE);
+                return;
+            }
+        }
+
+        darfErDas(routingContext.user(), Edit_PERMISSION, res -> {
+            if (res.succeeded() && res.result()) {
+                removeGroupsFromUserInDatabase(toUpdateUserName, groups, asyncResult -> {
+                    if (asyncResult.succeeded()) {
+                        routingContext.response().setStatusCode(OK_HTTP_CODE).end(OK_SERVER_RESPONSE);
+                    } else {
+                        routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
+                        asyncResult.cause().printStackTrace();
+                    }
+                });
+            } else {
+                routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
+            }
+        });
+    }
 
     /**
      * handles the REST-Api call for Route /api/updatePassword
