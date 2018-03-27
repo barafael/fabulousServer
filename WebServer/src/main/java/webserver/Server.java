@@ -246,13 +246,17 @@ public class Server extends AbstractVerticle {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         vertx.cancelTimer(Main.parserTimerID);
         vertx.cancelTimer(DatabaseAliveTimer);
         router.clear();
         connection.close();
         server.close();
-        super.stop();
+        try {
+            super.stop();
+        } catch (Exception e) {
+            //don't care
+        }
     }
 
     private void exceptionHandler(Throwable throwable) {
