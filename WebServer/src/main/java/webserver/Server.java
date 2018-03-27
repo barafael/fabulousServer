@@ -535,7 +535,6 @@ public class Server extends AbstractVerticle {
     private void getPermissions(RoutingContext routingContext) {
         if (Main.SERVER_DBG) printDebugInfo(routingContext);
 
-        //TODO check for query parameter "username"
         final String requestingUserName = routingContext.user().principal().getString(Username_PARAM);
         final String queryUserName = routingContext.request().getParam(Username_PARAM);
 
@@ -600,12 +599,11 @@ public class Server extends AbstractVerticle {
                                 .end(answerString);
                     } else {
                         routingContext.response().setStatusCode(Unavailable_HTTP_CODE).end(Unavailable_SERVER_RESPONSE);
-                        System.out.println(res2.cause().getMessage());
+                        res2.cause().printStackTrace();
                     }
                 });
             } else {
                 routingContext.response().setStatusCode(Unauthorized_HTTP_CODE).end(Unauthorized_SERVER_RESPONSE);
-                System.out.println(res.cause().getMessage());
             }
         });
     }
