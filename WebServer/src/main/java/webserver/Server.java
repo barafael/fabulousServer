@@ -96,20 +96,20 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/api/*").handler(authHandler);
         router.route(HttpMethod.POST, "/register").handler(this::register);
-        router.route(HttpMethod.GET, "/api/getPermissions").handler(this::getPermissions);
+        router.route(HttpMethod.GET, "/api/user/list").handler(this::getUserlist);
+        router.route(HttpMethod.GET, "/api/user/permissions").handler(this::getPermissions);
         router.route(HttpMethod.GET, "/api/user/groups/add").handler(this::addGroupsForUser);
         router.route(HttpMethod.GET, "/api/user/groups/remove").handler(this::removeGroupsForUser);
-        router.route(HttpMethod.GET, "/api/deleteAccount").handler(this::deleteAccount);
-        router.route(HttpMethod.GET, "/api/updatePassword").handler(this::updatePassword);
-        router.route(HttpMethod.GET, "/api/getUserlist").handler(this::getUserlist);
-        router.route(HttpMethod.GET, "/api/setSensorPosition").handler(this::setSensorPosition);
-        router.route(HttpMethod.GET, "/api/getModel").handler(this::getModel);
-        router.route(HttpMethod.GET, "/api/getEditMutex").handler(this::getEditMutex);
-        router.route(HttpMethod.GET, "/api/releaseEditMutex").handler(this::releaseEditMutex);
-        router.route(HttpMethod.GET, "/api/getTimeSeries").handler(this::getTimeSeries);
-        router.route(HttpMethod.GET, "/api/getRoomplan").handler(this::getRoomplan);
-        router.route(HttpMethod.GET, "/api/setActuator").handler(this::setActuator);
-        router.route(HttpMethod.POST, "/api/setRoomplan").handler(this::setRoomplan);
+        router.route(HttpMethod.GET, "/api/user/password").handler(this::updatePassword);
+        router.route(HttpMethod.GET, "/api/user/delete").handler(this::deleteAccount);
+        router.route(HttpMethod.GET, "/api/model").handler(this::getModel);
+        router.route(HttpMethod.GET, "/api/model/sensor/position").handler(this::setSensorPosition);
+        router.route(HttpMethod.GET, "/api/model/actuator/toggle").handler(this::setActuator);
+        router.route(HttpMethod.GET, "/api/model/timeseries").handler(this::getTimeSeries);
+        router.route(HttpMethod.GET, "/api/model/roomplan").handler(this::getRoomplan);
+        router.route(HttpMethod.POST, "/api/model/roomplan").handler(this::setRoomplan);
+        router.route(HttpMethod.GET, "/api/mutex/get").handler(this::getEditMutex);
+        router.route(HttpMethod.GET, "/api/mutex/release").handler(this::releaseEditMutex);
 
         /* Server */
         server = getVertx().createHttpServer();
